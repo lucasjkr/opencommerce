@@ -231,7 +231,7 @@ function setup_db($data) {
 
 		$db->query("DELETE FROM `oc_user` WHERE user_id = '1'");
 
-		$db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', username = '" . $db->escape($data['username']) . "', salt = '" . $db->escape($salt = token(9)) . "', password = '" . $db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1', date_added = NOW()");
+		$db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', username = '" . $db->escape($data['username']) . "', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1', date_added = NOW()");
 
 		$db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_email'");
 		$db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = '" . $db->escape($data['email']) . "'");
@@ -257,29 +257,28 @@ function write_config_files($options) {
 	$output .= "define('HTTP_SERVER', '" . $options['http_server'] . "');\n";
 
 	$output .= "// DIR\n";
-	$output .= "define('DIR_APPLICATION', '" . DIR_OPENCART . "app/catalog/');\n";
-	$output .= "define('DIR_SYSTEM', '"      . DIR_OPENCART . "system/');\n";
-	$output .= "define('DIR_IMAGE', '"       . DIR_OPENCART . "public_html/image/');\n";
-	$output .= "define('DIR_STORAGE', '"     . DIR_SYSTEM   . "storage/');\n";
-	$output .= "define('DIR_LANGUAGE', DIR_APPLICATION . 'language/');\n";
-	$output .= "define('DIR_TEMPLATE', DIR_APPLICATION . 'view/theme/');\n";
-	$output .= "define('DIR_CONFIG',   DIR_SYSTEM . 'config/');\n";
-	$output .= "define('DIR_CACHE',    DIR_STORAGE . 'cache/');\n";
-	$output .= "define('DIR_DOWNLOAD', DIR_STORAGE . 'download/');\n";
-	$output .= "define('DIR_LOGS',     DIR_STORAGE . 'logs/');\n";
-	$output .= "define('DIR_MODIFICATION', DIR_STORAGE . 'modification/');\n";
-	$output .= "define('DIR_SESSION', DIR_STORAGE . 'session/');\n";
-	$output .= "define('DIR_UPLOAD', DIR_STORAGE . 'upload/');\n\n";
+	$output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/catalog/');\n";
+	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
+	$output .= "define('DIR_SYSTEM',        '" . DIR_OPENCART . "system/');\n";
+	$output .= "define('DIR_STORAGE',       '" . DIR_SYSTEM   . "storage/');\n";
+	$output .= "define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');\n";
+	$output .= "define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/theme/');\n";
+	$output .= "define('DIR_CONFIG',        DIR_SYSTEM . 'config/');\n";
+	$output .= "define('DIR_CACHE',         DIR_STORAGE . 'cache/');\n";
+	$output .= "define('DIR_DOWNLOAD',      DIR_STORAGE . 'download/');\n";
+	$output .= "define('DIR_LOGS',          DIR_STORAGE . 'logs/');\n";
+	$output .= "define('DIR_MODIFICATION',  DIR_STORAGE . 'modification/');\n";
+	$output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
+	$output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n\n";
 
 	$output .= "// DB\n";
-	$output .= "define('DB_HOSTNAME', '" . $options['db_hostname'] . "');\n";
-	$output .= "define('DB_USERNAME', '" . $options['db_username'] . "');\n";
-	$output .= "define('DB_PASSWORD', '" . $options['db_password'] . "');\n";
-	$output .= "define('DB_DATABASE', '" . $options['db_database'] . "');\n";
-    $output .= "define('DB_DRIVER', 'mpdo');\n";
-    $output .= "define('DB_PREFIX', 'oc_');\n";
-    $output .= "define('DB_PORT', '" . $options['db_port'] ."');\n";
-
+	$output .= "define('DB_HOSTNAME',       '" . $options['db_hostname'] . "');\n";
+	$output .= "define('DB_USERNAME',       '" . $options['db_username'] . "');\n";
+	$output .= "define('DB_PASSWORD',       '" . $options['db_password'] . "');\n";
+	$output .= "define('DB_DATABASE',       '" . $options['db_database'] . "');\n";
+    $output .= "define('DB_DRIVER',         'mpdo');\n";
+    $output .= "define('DB_PREFIX',         'oc_');\n";
+    $output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n";
 
 	$file = fopen(DIR_OPENCART . 'config/config.php', 'w');
 
@@ -289,36 +288,36 @@ function write_config_files($options) {
 
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
-	$output .= "define('HTTP_SERVER', '" . $options['http_server'] . "admin/');\n";
-	$output .= "define('HTTP_CATALOG', '" . $options['http_server'] . "');\n";
+	$output .= "define('HTTP_ADMIN',       '" . $options['http_server'] . "admin/');\n";
+	$output .= "define('HTTP_CATALOG',     '" . $options['http_server'] . "');\n\n";
 
 	$output .= "// DIR\n";
-	$output .= "define('DIR_APPLICATION', '" . DIR_OPENCART . "admin/');\n";
-	$output .= "define('DIR_SYSTEM', '" . DIR_OPENCART . "system/');\n";
-	$output .= "define('DIR_IMAGE', '" . DIR_OPENCART . "image/');\n";
-	$output .= "define('DIR_STORAGE', DIR_SYSTEM . 'storage/');\n";
-	$output .= "define('DIR_CATALOG', '" . DIR_OPENCART . "catalog/');\n";
-	$output .= "define('DIR_LANGUAGE', DIR_APPLICATION . 'language/');\n";
-	$output .= "define('DIR_TEMPLATE', DIR_APPLICATION . 'view/template/');\n";
-	$output .= "define('DIR_CONFIG', DIR_SYSTEM . 'config/');\n";
-	$output .= "define('DIR_CACHE', DIR_STORAGE . 'cache/');\n";
-	$output .= "define('DIR_DOWNLOAD', DIR_STORAGE . 'download/');\n";
-	$output .= "define('DIR_LOGS', DIR_STORAGE . 'logs/');\n";
-	$output .= "define('DIR_MODIFICATION', DIR_STORAGE . 'modification/');\n";
-	$output .= "define('DIR_SESSION', DIR_STORAGE . 'session/');\n";
-	$output .= "define('DIR_UPLOAD', DIR_STORAGE . 'upload/');\n\n";
+	$output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/admin/');\n";
+	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
+	$output .= "define('DIR_SYSTEM',        '" . DIR_OPENCART . "system/');\n";
+	$output .= "define('DIR_STORAGE',       DIR_SYSTEM . 'storage/');\n";
+	$output .= "define('DIR_CATALOG',       '" . DIR_OPENCART . "catalog/');\n";
+	$output .= "define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');\n";
+	$output .= "define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/template/');\n";
+	$output .= "define('DIR_CONFIG',        DIR_SYSTEM . 'config/');\n";
+	$output .= "define('DIR_CACHE',         DIR_STORAGE . 'cache/');\n";
+	$output .= "define('DIR_DOWNLOAD',      DIR_STORAGE . 'download/');\n";
+	$output .= "define('DIR_LOGS',          DIR_STORAGE . 'logs/');\n";
+	$output .= "define('DIR_MODIFICATION',  DIR_STORAGE . 'modification/');\n";
+	$output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
+	$output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n\n";
 
 	$output .= "// DB\n";
-	$output .= "define('DB_HOSTNAME', '" . $options['db_hostname'] . "');\n";
-	$output .= "define('DB_USERNAME', '" . $options['db_username'] . "');\n";
-	$output .= "define('DB_PASSWORD', '" . $options['db_password'] . "');\n";
-	$output .= "define('DB_DATABASE', '" . $options['db_database'] . "');\n";
-    $output .= "define('DB_DRIVER', 'mpdo');\n";
-    $output .= "define('DB_PREFIX', 'oc_');\n";
-	$output .= "define('DB_PORT', '" . $options['db_port'] ."');\n";
+	$output .= "define('DB_HOSTNAME',       '" . $options['db_hostname'] . "');\n";
+	$output .= "define('DB_USERNAME',       '" . $options['db_username'] . "');\n";
+	$output .= "define('DB_PASSWORD',       '" . $options['db_password'] . "');\n";
+	$output .= "define('DB_DATABASE',       '" . $options['db_database'] . "');\n";
+    $output .= "define('DB_DRIVER',         'mpdo');\n";
+    $output .= "define('DB_PREFIX',         'oc_');\n";
+	$output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n\n";
 
-	$output .= '// OpenCart API' . "\n";
-	$output .= 'define(\'OPENCART_SERVER\', \'https://www.opencart.com/\');' . "\n";
+	$output .= "// OpenCart API \n";
+	$output .= "define('OPENCART_SERVER',  'https://www.opencart.com/');\n";
 
 	$file = fopen(DIR_PUBLIC . 'admin/config.php', 'w');
 
