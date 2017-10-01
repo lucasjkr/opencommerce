@@ -257,6 +257,7 @@ function write_config_files($options) {
 	$output .= "define('HTTP_SERVER', '" . $options['http_server'] . "');\n";
 
 	$output .= "// DIR\n";
+    $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
 	$output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/catalog/');\n";
 	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
 	$output .= "define('DIR_SYSTEM',        '" . DIR_OPENCART . "system/');\n";
@@ -292,7 +293,8 @@ function write_config_files($options) {
 	$output .= "define('HTTP_CATALOG',     '" . $options['http_server'] . "');\n\n";
 
 	$output .= "// DIR\n";
-	$output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/admin/');\n";
+    $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
+    $output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/admin/');\n";
 	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
 	$output .= "define('DIR_SYSTEM',        '" . DIR_OPENCART . "system/');\n";
 	$output .= "define('DIR_STORAGE',       DIR_SYSTEM . 'storage/');\n";

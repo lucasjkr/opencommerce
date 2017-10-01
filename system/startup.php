@@ -1,5 +1,8 @@
 <?php
 // Error Reporting
+// TODO: Turn off error reporting if global MODE is defined and set to 'production'
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // Check Version
@@ -36,15 +39,6 @@ if (!isset($_SERVER['HTTP_HOST'])) {
 	$_SERVER['HTTP_HOST'] = getenv('HTTP_HOST');
 }
 
-// Check if SSL
-if ((isset($_SERVER['HTTPS']) && (($_SERVER['HTTPS'] == 'on') || ($_SERVER['HTTPS'] == '1'))) || (isset($_SERVER['HTTPS']) && (isset($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443))) {
-	$_SERVER['HTTPS'] = true;
-} elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https' || !empty($_SERVER['HTTP_X_FORWARDED_SSL']) && $_SERVER['HTTP_X_FORWARDED_SSL'] == 'on') {
-	$_SERVER['HTTPS'] = true;
-} else {
-	$_SERVER['HTTPS'] = false;
-}
-
 // Modification Override
 function modification($filename) {
 	if (defined('DIR_CATALOG')) {
@@ -67,8 +61,8 @@ function modification($filename) {
 }
 
 // Autoloader
-if (is_file(DIR_STORAGE . 'vendor/autoload.php')) {
-	require_once(DIR_STORAGE . 'vendor/autoload.php');
+if (is_file(DIR_ROOT . 'vendor/autoload.php')) {
+	require_once(DIR_ROOT. 'vendor/autoload.php');
 }
 
 function library($class) {
