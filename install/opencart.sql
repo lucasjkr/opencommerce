@@ -1,11 +1,3 @@
------------------------------------------------------------
-
---
--- Database: `opencart`
---
-
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_address`
 --
@@ -24,11 +16,11 @@ CREATE TABLE `oc_address` (
   `country_id` int(11) NOT NULL DEFAULT '0',
   `zone_id` int(11) NOT NULL DEFAULT '0',
   `custom_field` text NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`address_id`),
   KEY `customer_id` (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_api`
@@ -40,11 +32,10 @@ CREATE TABLE `oc_api` (
   `username` varchar(64) NOT NULL,
   `key` text NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`api_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_api_ip`
@@ -55,10 +46,10 @@ CREATE TABLE `oc_api_ip` (
   `api_ip_id` int(11) NOT NULL AUTO_INCREMENT,
   `api_id` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`api_ip_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_api_session`
@@ -70,8 +61,8 @@ CREATE TABLE `oc_api_session` (
   `api_id` int(11) NOT NULL,
   `session_id` varchar(32) NOT NULL,
   `ip` varchar(40) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`api_session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -86,10 +77,10 @@ CREATE TABLE `oc_attribute` (
   `attribute_id` int(11) NOT NULL AUTO_INCREMENT,
   `attribute_group_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`attribute_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_attribute_description`
@@ -100,10 +91,10 @@ CREATE TABLE `oc_attribute_description` (
   `attribute_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`attribute_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_attribute_group`
@@ -113,10 +104,10 @@ DROP TABLE IF EXISTS `oc_attribute_group`;
 CREATE TABLE `oc_attribute_group` (
   `attribute_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`attribute_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_attribute_group_description`
@@ -127,10 +118,10 @@ CREATE TABLE `oc_attribute_group_description` (
   `attribute_group_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`attribute_group_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_banner`
@@ -141,10 +132,10 @@ CREATE TABLE `oc_banner` (
   `banner_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `status` tinyint(1) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`banner_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_banner_image`
@@ -159,10 +150,10 @@ CREATE TABLE `oc_banner_image` (
   `link` varchar(255) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`banner_image_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_cart`
@@ -178,12 +169,11 @@ CREATE TABLE `oc_cart` (
   `recurring_id` int(11) NOT NULL,
   `option` text NOT NULL,
   `quantity` int(5) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cart_id`),
   KEY `cart_id` (`api_id`,`customer_id`,`session_id`,`product_id`,`recurring_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_category`
@@ -198,13 +188,11 @@ CREATE TABLE `oc_category` (
   `column` int(3) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`category_id`),
   KEY `parent_id` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_category_description`
@@ -219,11 +207,11 @@ CREATE TABLE `oc_category_description` (
   `meta_title` varchar(255) NOT NULL,
   `meta_description` varchar(255) NOT NULL,
   `meta_keyword` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`category_id`,`language_id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_category_filter`
@@ -233,10 +221,10 @@ DROP TABLE IF EXISTS `oc_category_filter`;
 CREATE TABLE `oc_category_filter` (
   `category_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`category_id`,`filter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_category_path`
@@ -250,8 +238,6 @@ CREATE TABLE `oc_category_path` (
   PRIMARY KEY (`category_id`,`path_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_category_to_layout`
 --
@@ -261,10 +247,10 @@ CREATE TABLE `oc_category_to_layout` (
   `category_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`category_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_category_to_store`
@@ -274,10 +260,10 @@ DROP TABLE IF EXISTS `oc_category_to_store`;
 CREATE TABLE `oc_category_to_store` (
   `category_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`category_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_country`
@@ -292,6 +278,8 @@ CREATE TABLE `oc_country` (
   `address_format` text NOT NULL,
   `postcode_required` tinyint(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`country_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -554,8 +542,6 @@ INSERT INTO `oc_country` (`country_id`, `name`, `iso_code_2`, `iso_code_3`, `add
 (256, 'Guernsey', 'GG', 'GGY', '', 0, 1),
 (257, 'Jersey', 'JE', 'JEY', '', 0, 1);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_coupon`
 --
@@ -575,11 +561,10 @@ CREATE TABLE `oc_coupon` (
   `uses_total` int(11) NOT NULL,
   `uses_customer` varchar(11) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`coupon_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_coupon_category`
@@ -589,10 +574,10 @@ DROP TABLE IF EXISTS `oc_coupon_category`;
 CREATE TABLE `oc_coupon_category` (
   `coupon_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`coupon_id`,`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_coupon_history`
@@ -605,11 +590,10 @@ CREATE TABLE `oc_coupon_history` (
   `order_id` int(11) NOT NULL,
   `customer_id` int(11) NOT NULL,
   `amount` decimal(15,4) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`coupon_history_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_coupon_product`
@@ -623,8 +607,6 @@ CREATE TABLE `oc_coupon_product` (
   PRIMARY KEY (`coupon_product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_cron`
 --
@@ -636,12 +618,10 @@ CREATE TABLE `oc_cron` (
   `cycle` varchar(12) NOT NULL,
   `action` text NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`cron_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_currency`
@@ -657,7 +637,8 @@ CREATE TABLE `oc_currency` (
   `decimal_place` char(1) NOT NULL,
   `value` double(15,8) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`currency_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -669,8 +650,6 @@ INSERT INTO `oc_currency` (`currency_id`, `title`, `code`, `symbol_left`, `symbo
 (1, 'Pound Sterling', 'GBP', '£', '', '2', 0.61250001, 1, '2014-09-25 14:40:00'),
 (2, 'US Dollar', 'USD', '$', '', '2', 1.00000000, 1, '2014-09-25 14:40:00'),
 (3, 'Euro', 'EUR', '', '€', '2', 0.78460002, 1, '2014-09-25 14:40:00');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer`
@@ -699,11 +678,10 @@ CREATE TABLE `oc_customer` (
   `safe` tinyint(1) NOT NULL,
   `token` text NOT NULL,
   `code` varchar(40) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_activity`
@@ -716,11 +694,10 @@ CREATE TABLE `oc_customer_activity` (
   `key` varchar(64) NOT NULL,
   `data` text NOT NULL,
   `ip` varchar(40) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_activity_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_affiliate`
@@ -744,11 +721,10 @@ CREATE TABLE `oc_customer_affiliate` (
   `bank_account_number` varchar(64) NOT NULL,
   `custom_field` text NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_affiliate_report`
@@ -765,8 +741,6 @@ CREATE TABLE `oc_customer_affiliate_report` (
   PRIMARY KEY (`customer_affiliate_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_customer_approval`
 --
@@ -776,11 +750,10 @@ CREATE TABLE `oc_customer_approval` (
   `customer_approval_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `type` varchar(9) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  PRIMARY KEY (`customer_approval_id`)
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (`customer_approval_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_group`
@@ -791,6 +764,8 @@ CREATE TABLE `oc_customer_group` (
   `customer_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `approval` int(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -800,8 +775,6 @@ CREATE TABLE `oc_customer_group` (
 
 INSERT INTO `oc_customer_group` (`customer_group_id`, `approval`, `sort_order`) VALUES
 (1, 0, 1);
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_group_description`
@@ -813,6 +786,8 @@ CREATE TABLE `oc_customer_group_description` (
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
   `description` text NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_group_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -823,8 +798,6 @@ CREATE TABLE `oc_customer_group_description` (
 INSERT INTO `oc_customer_group_description` (`customer_group_id`, `language_id`, `name`, `description`) VALUES
 (1, 1, 'Default', 'test');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_customer_history`
 --
@@ -834,11 +807,10 @@ CREATE TABLE `oc_customer_history` (
   `customer_history_id` int(11) NOT NULL AUTO_INCREMENT,
   `customer_id` int(11) NOT NULL,
   `comment` text NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_history_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_login`
@@ -850,14 +822,12 @@ CREATE TABLE `oc_customer_login` (
   `email` varchar(96) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `total` int(4) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_login_id`),
   KEY `email` (`email`),
   KEY `ip` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_ip`
@@ -870,12 +840,11 @@ CREATE TABLE `oc_customer_ip` (
   `store_id` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `country` varchar(2) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_ip_id`),
   KEY `ip` (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_online`
@@ -887,11 +856,10 @@ CREATE TABLE `oc_customer_online` (
   `customer_id` int(11) NOT NULL,
   `url` text NOT NULL,
   `referer` text NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`ip`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_reward`
@@ -904,11 +872,10 @@ CREATE TABLE `oc_customer_reward` (
   `order_id` int(11) NOT NULL DEFAULT '0',
   `description` text NOT NULL,
   `points` int(8) NOT NULL DEFAULT '0',
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_reward_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_transaction`
@@ -921,11 +888,10 @@ CREATE TABLE `oc_customer_transaction` (
   `order_id` int(11) NOT NULL,
   `description` text NOT NULL,
   `amount` decimal(15,4) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_transaction_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_search`
@@ -943,11 +909,10 @@ CREATE TABLE `oc_customer_search` (
   `description` tinyint(1) NOT NULL,
   `products` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_search_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_customer_wishlist`
@@ -957,11 +922,10 @@ DROP TABLE IF EXISTS `oc_customer_wishlist`;
 CREATE TABLE `oc_customer_wishlist` (
   `customer_id` int(11) NOT NULL,
   `product_id` int(11) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`customer_id`,`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_custom_field`
@@ -976,10 +940,10 @@ CREATE TABLE `oc_custom_field` (
   `location` varchar(10) NOT NULL,
   `status` tinyint(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`custom_field_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_custom_field_customer_group`
@@ -990,10 +954,10 @@ CREATE TABLE `oc_custom_field_customer_group` (
   `custom_field_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
   `required` tinyint(1) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`custom_field_id`,`customer_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_custom_field_description`
@@ -1004,10 +968,10 @@ CREATE TABLE `oc_custom_field_description` (
   `custom_field_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`custom_field_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_custom_field_value`
@@ -1018,10 +982,10 @@ CREATE TABLE `oc_custom_field_value` (
   `custom_field_value_id` int(11) NOT NULL AUTO_INCREMENT,
   `custom_field_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`custom_field_value_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_custom_field_value_description`
@@ -1033,10 +997,10 @@ CREATE TABLE `oc_custom_field_value_description` (
   `language_id` int(11) NOT NULL,
   `custom_field_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`custom_field_value_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_download`
@@ -1047,11 +1011,10 @@ CREATE TABLE `oc_download` (
   `download_id` int(11) NOT NULL AUTO_INCREMENT,
   `filename` varchar(160) NOT NULL,
   `mask` varchar(128) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`download_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_download_description`
@@ -1062,10 +1025,10 @@ CREATE TABLE `oc_download_description` (
   `download_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`download_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_download_report`
@@ -1078,11 +1041,10 @@ CREATE TABLE `oc_download_report` (
   `store_id` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `country` varchar(2) NOT NULL,
-  `date_added` datetime NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`download_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_event`
@@ -1096,6 +1058,8 @@ CREATE TABLE `oc_event` (
   `action` text NOT NULL,
   `status` tinyint(1) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`event_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1170,8 +1134,6 @@ INSERT INTO `oc_event` (`event_id`, `code`, `trigger`, `action`, `status`) VALUE
 INSERT INTO `oc_event` (`event_id`, `code`, `trigger`, `action`, `status`) VALUES
 (33, 'admin_mail_forgotten', 'admin/model/user/user/editCode/after', 'mail/forgotten', 1);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_extension`
 --
@@ -1181,6 +1143,8 @@ CREATE TABLE `oc_extension` (
   `extension_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) NOT NULL,
   `code` varchar(32) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`extension_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1230,8 +1194,6 @@ INSERT INTO `oc_extension` (`extension_id`, `type`, `code`) VALUES
 (40, 'report', 'customer_order'),
 (41, 'report', 'customer_reward');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_extension_install`
 --
@@ -1242,11 +1204,10 @@ CREATE TABLE `oc_extension_install` (
   `extension_id` int(11) NOT NULL,
   `extension_download_id` int(11) NOT NULL,
   `filename` varchar(255) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`extension_install_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_extension_path`
@@ -1257,11 +1218,10 @@ CREATE TABLE `oc_extension_path` (
   `extension_path_id` int(11) NOT NULL AUTO_INCREMENT,
   `extension_install_id` int(11) NOT NULL,
   `path` varchar(255) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`extension_path_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_filter`
@@ -1272,10 +1232,10 @@ CREATE TABLE `oc_filter` (
   `filter_id` int(11) NOT NULL AUTO_INCREMENT,
   `filter_group_id` int(11) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`filter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_filter_description`
@@ -1287,10 +1247,10 @@ CREATE TABLE `oc_filter_description` (
   `language_id` int(11) NOT NULL,
   `filter_group_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`filter_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_filter_group`
@@ -1300,10 +1260,10 @@ DROP TABLE IF EXISTS `oc_filter_group`;
 CREATE TABLE `oc_filter_group` (
   `filter_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`filter_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_filter_group_description`
@@ -1314,10 +1274,10 @@ CREATE TABLE `oc_filter_group_description` (
   `filter_group_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`filter_group_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_geo_zone`
@@ -1328,8 +1288,8 @@ CREATE TABLE `oc_geo_zone` (
   `geo_zone_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`geo_zone_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1341,8 +1301,6 @@ INSERT INTO `oc_geo_zone` (`geo_zone_id`, `name`, `description`, `date_modified`
 (3, 'UK VAT Zone', 'UK VAT', '2010-02-26 22:33:24', '2009-01-06 23:26:25'),
 (4, 'UK Shipping', 'UK Shipping Zones', '2010-12-15 15:18:13', '2009-06-23 01:14:53');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_information`
 --
@@ -1353,6 +1311,8 @@ CREATE TABLE `oc_information` (
   `bottom` int(1) NOT NULL DEFAULT '0',
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '1',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`information_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1365,8 +1325,6 @@ INSERT INTO `oc_information` (`information_id`, `bottom`, `sort_order`, `status`
 (4, 1, 1, 1),
 (5, 1, 4, 1),
 (6, 1, 2, 1);
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_information_description`
@@ -1381,6 +1339,8 @@ CREATE TABLE `oc_information_description` (
   `meta_title` varchar(255) NOT NULL,
   `meta_description` varchar(255) NOT NULL,
   `meta_keyword` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`information_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1394,8 +1354,6 @@ INSERT INTO `oc_information_description` (`information_id`, `language_id`, `titl
 (3, 1, 'Privacy Policy', '&lt;p&gt;\r\n	Privacy Policy&lt;/p&gt;\r\n', 'Privacy Policy', '', ''),
 (6, 1, 'Delivery Information', '&lt;p&gt;\r\n	Delivery Information&lt;/p&gt;\r\n', 'Delivery Information', '', '');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_information_to_layout`
 --
@@ -1405,10 +1363,10 @@ CREATE TABLE `oc_information_to_layout` (
   `information_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `layout_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`information_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_information_to_store`
@@ -1431,8 +1389,6 @@ INSERT INTO `oc_information_to_store` (`information_id`, `store_id`) VALUES
 (5, 0),
 (6, 0);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_language`
 --
@@ -1447,6 +1403,8 @@ CREATE TABLE `oc_language` (
   `directory` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`language_id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
@@ -1458,8 +1416,6 @@ CREATE TABLE `oc_language` (
 INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `image`, `directory`, `sort_order`, `status`) VALUES
 (1, 'English', 'en-gb', 'en-gb,en', 'gb.png', 'english', 1, 1);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_layout`
 --
@@ -1468,6 +1424,8 @@ DROP TABLE IF EXISTS `oc_layout`;
 CREATE TABLE `oc_layout` (
   `layout_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`layout_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1490,8 +1448,6 @@ INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
 (12, 'Compare'),
 (13, 'Search');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_layout_module`
 --
@@ -1503,6 +1459,8 @@ CREATE TABLE `oc_layout_module` (
   `code` varchar(64) NOT NULL,
   `position` varchar(14) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`layout_module_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1522,8 +1480,6 @@ INSERT INTO `oc_layout_module` (`layout_module_id`, `layout_id`, `code`, `positi
 (72, 3, 'category', 'column_left', 1),
 (73, 3, 'banner.30', 'column_left', 2);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_layout_route`
 --
@@ -1534,6 +1490,8 @@ CREATE TABLE `oc_layout_route` (
   `layout_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
   `route` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`layout_route_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1556,8 +1514,6 @@ INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `rout
 (52, 12, 0, 'product/compare'),
 (53, 13, 0, 'product/search');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_length_class`
 --
@@ -1566,6 +1522,8 @@ DROP TABLE IF EXISTS `oc_length_class`;
 CREATE TABLE `oc_length_class` (
   `length_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `value` decimal(15,8) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`length_class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1578,8 +1536,6 @@ INSERT INTO `oc_length_class` (`length_class_id`, `value`) VALUES
 (2, '10.00000000'),
 (3, '0.39370000');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_length_class_description`
 --
@@ -1590,6 +1546,8 @@ CREATE TABLE `oc_length_class_description` (
   `language_id` int(11) NOT NULL,
   `title` varchar(32) NOT NULL,
   `unit` varchar(4) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`length_class_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1601,8 +1559,6 @@ INSERT INTO `oc_length_class_description` (`length_class_id`, `language_id`, `ti
 (1, 1, 'Centimeter', 'cm'),
 (2, 1, 'Millimeter', 'mm'),
 (3, 1, 'Inch', 'in');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_location`
@@ -1619,11 +1575,11 @@ CREATE TABLE `oc_location` (
   `image` varchar(255) DEFAULT NULL,
   `open` text NOT NULL,
   `comment` text NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`location_id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_manufacturer`
@@ -1635,10 +1591,10 @@ CREATE TABLE `oc_manufacturer` (
   `name` varchar(64) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`manufacturer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_manufacturer_to_store`
@@ -1648,11 +1604,10 @@ DROP TABLE IF EXISTS `oc_manufacturer_to_store`;
 CREATE TABLE `oc_manufacturer_to_store` (
   `manufacturer_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`manufacturer_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_marketing`
@@ -1665,11 +1620,10 @@ CREATE TABLE `oc_marketing` (
   `description` text NOT NULL,
   `code` varchar(64) NOT NULL,
   `clicks` int(5) NOT NULL DEFAULT '0',
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`marketing_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--------------------------------------------------------------
 
 --
 -- Table structure for table `oc_marketing_report`
@@ -1682,11 +1636,10 @@ CREATE TABLE `oc_marketing_report` (
   `store_id` int(11) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `country` varchar(2) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`marketing_report_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--------------------------------------------------------------
 
 --
 -- Table structure for table `oc_modification`
@@ -1703,12 +1656,12 @@ CREATE TABLE `oc_modification` (
   `link` varchar(255) NOT NULL,
   `xml` mediumtext NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`modification_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--------------------------------------------------------------
-
+--
 -- Table structure for table `oc_module`
 --
 
@@ -1718,6 +1671,8 @@ CREATE TABLE `oc_module` (
   `name` varchar(64) NOT NULL,
   `code` varchar(32) NOT NULL,
   `setting` text NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`module_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1732,8 +1687,6 @@ INSERT INTO `oc_module` (`module_id`, `name`, `code`, `setting`) VALUES
 (27, 'Home Page', 'slideshow', '{"name":"Home Page","banner_id":"7","width":"1140","height":"380","status":"1"}'),
 (31, 'Banner 1', 'banner', '{"name":"Banner 1","banner_id":"6","width":"182","height":"182","status":"1"}');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_option`
 --
@@ -1743,6 +1696,8 @@ CREATE TABLE `oc_option` (
   `option_id` int(11) NOT NULL AUTO_INCREMENT,
   `type` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1763,8 +1718,6 @@ INSERT INTO `oc_option` (`option_id`, `type`, `sort_order`) VALUES
 (11, 'select', 10),
 (12, 'date', 11);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_option_description`
 --
@@ -1774,6 +1727,8 @@ CREATE TABLE `oc_option_description` (
   `option_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`option_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1794,8 +1749,6 @@ INSERT INTO `oc_option_description` (`option_id`, `language_id`, `name`) VALUES
 (12, 1, 'Delivery Date'),
 (11, 1, 'Size');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_option_value`
 --
@@ -1806,6 +1759,8 @@ CREATE TABLE `oc_option_value` (
   `option_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`option_value_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -1829,8 +1784,6 @@ INSERT INTO `oc_option_value` (`option_value_id`, `option_id`, `image`, `sort_or
 (47, 11, '', 2),
 (48, 11, '', 3);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_option_value_description`
 --
@@ -1841,8 +1794,11 @@ CREATE TABLE `oc_option_value_description` (
   `language_id` int(11) NOT NULL,
   `option_id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`option_value_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 --
 -- Dumping data for table `oc_option_value_description`
 --
@@ -1862,8 +1818,6 @@ INSERT INTO `oc_option_value_description` (`option_value_id`, `language_id`, `op
 (48, 1, 11, 'Large'),
 (47, 1, 11, 'Medium'),
 (46, 1, 11, 'Small');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order`
@@ -1930,12 +1884,10 @@ CREATE TABLE `oc_order` (
   `forwarded_ip` varchar(40) NOT NULL,
   `user_agent` varchar(255) NOT NULL,
   `accept_language` varchar(255) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_history`
@@ -1948,11 +1900,10 @@ CREATE TABLE `oc_order_history` (
   `order_status_id` int(11) NOT NULL,
   `notify` tinyint(1) NOT NULL DEFAULT '0',
   `comment` text NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_history_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_option`
@@ -1968,10 +1919,10 @@ CREATE TABLE `oc_order_option` (
   `name` varchar(255) NOT NULL,
   `value` text NOT NULL,
   `type` varchar(32) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_product`
@@ -1989,11 +1940,11 @@ CREATE TABLE `oc_order_product` (
   `total` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `tax` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `reward` int(8) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_product_id`),
   KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_recurring`
@@ -2020,11 +1971,10 @@ CREATE TABLE `oc_order_recurring` (
   `trial_duration` smallint(6) NOT NULL,
   `trial_price` decimal(10,4) NOT NULL,
   `status` tinyint(4) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_recurring_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_recurring_transaction`
@@ -2037,11 +1987,10 @@ CREATE TABLE `oc_order_recurring_transaction` (
   `reference` varchar(255) NOT NULL,
   `type` varchar(255) NOT NULL,
   `amount` decimal(10,4) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_recurring_transaction_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_shipment`
@@ -2051,13 +2000,12 @@ DROP TABLE IF EXISTS `oc_order_shipment`;
 CREATE TABLE `oc_order_shipment` (
   `order_shipment_id` int(11) NOT NULL AUTO_INCREMENT,
   `order_id` int(11) NOT NULL,
-  `date_added` timestamp NOT NULL,
   `shipping_courier_id` varchar(255) NOT NULL DEFAULT '',
   `tracking_number` varchar(255) NOT NULL DEFAULT '',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_shipment_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
--- --------------------------------------------------------
 
 --
 -- Table structure for table `oc_shipping_courier`
@@ -2068,6 +2016,8 @@ CREATE TABLE `oc_shipping_courier` (
   `shipping_courier_id` int(11) NOT NULL,
   `shipping_courier_code` varchar(255) NOT NULL DEFAULT '',
   `shipping_courier_name` varchar(255) NOT NULL DEFAULT '',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`shipping_courier_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2084,8 +2034,6 @@ INSERT INTO `oc_shipping_courier` (`shipping_courier_id`, `shipping_courier_code
   (6, 'auspost', 'Australia Post'),
   (7, 'citylink', 'Citylink');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_order_status`
 --
@@ -2095,6 +2043,8 @@ CREATE TABLE `oc_order_status` (
   `order_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_status_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2103,22 +2053,20 @@ CREATE TABLE `oc_order_status` (
 --
 
 INSERT INTO `oc_order_status` (`order_status_id`, `language_id`, `name`) VALUES
+(1, 1, 'Pending'),
 (2, 1, 'Processing'),
 (3, 1, 'Shipped'),
-(7, 1, 'Canceled'),
 (5, 1, 'Complete'),
+(7, 1, 'Canceled'),
 (8, 1, 'Denied'),
 (9, 1, 'Canceled Reversal'),
 (10, 1, 'Failed'),
 (11, 1, 'Refunded'),
 (12, 1, 'Reversed'),
 (13, 1, 'Chargeback'),
-(1, 1, 'Pending'),
-(16, 1, 'Voided'),
-(15, 1, 'Processed'),
 (14, 1, 'Expired');
-
------------------------------------------------------------
+(15, 1, 'Processed'),
+(16, 1, 'Voided'),
 
 --
 -- Table structure for table `oc_order_total`
@@ -2132,11 +2080,11 @@ CREATE TABLE `oc_order_total` (
   `title` varchar(255) NOT NULL,
   `value` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `sort_order` int(3) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`order_total_id`),
   KEY `order_id` (`order_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_order_voucher`
@@ -2158,8 +2106,6 @@ CREATE TABLE `oc_order_voucher` (
   `amount` decimal(15,4) NOT NULL,
   PRIMARY KEY (`order_voucher_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product`
@@ -2196,12 +2142,10 @@ CREATE TABLE `oc_product` (
   `sort_order` int(11) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL DEFAULT '0',
   `viewed` int(5) NOT NULL DEFAULT '0',
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_attribute`
@@ -2213,10 +2157,10 @@ CREATE TABLE `oc_product_attribute` (
   `attribute_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `text` text NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`attribute_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_description`
@@ -2232,11 +2176,11 @@ CREATE TABLE `oc_product_description` (
   `meta_title` varchar(255) NOT NULL,
   `meta_description` varchar(255) NOT NULL,
   `meta_keyword` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`language_id`),
   KEY `name` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_discount`
@@ -2252,11 +2196,11 @@ CREATE TABLE `oc_product_discount` (
   `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `date_start` date NOT NULL DEFAULT '0000-00-00',
   `date_end` date NOT NULL DEFAULT '0000-00-00',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_discount_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_filter`
@@ -2266,10 +2210,10 @@ DROP TABLE IF EXISTS `oc_product_filter`;
 CREATE TABLE `oc_product_filter` (
   `product_id` int(11) NOT NULL,
   `filter_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`filter_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_image`
@@ -2281,11 +2225,11 @@ CREATE TABLE `oc_product_image` (
   `product_id` int(11) NOT NULL,
   `image` varchar(255) DEFAULT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_image_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_option`
@@ -2298,10 +2242,10 @@ CREATE TABLE `oc_product_option` (
   `option_id` int(11) NOT NULL,
   `value` text NOT NULL,
   `required` tinyint(1) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_option_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_option_value`
@@ -2322,10 +2266,10 @@ CREATE TABLE `oc_product_option_value` (
   `points_prefix` varchar(1) NOT NULL,
   `weight` decimal(15,8) NOT NULL,
   `weight_prefix` varchar(1) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_option_value_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_recurring`
@@ -2336,10 +2280,10 @@ CREATE TABLE `oc_product_recurring` (
   `product_id` int(11) NOT NULL,
   `recurring_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`recurring_id`,`customer_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_related`
@@ -2349,10 +2293,10 @@ DROP TABLE IF EXISTS `oc_product_related`;
 CREATE TABLE `oc_product_related` (
   `product_id` int(11) NOT NULL,
   `related_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`related_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_reward`
@@ -2364,10 +2308,10 @@ CREATE TABLE `oc_product_reward` (
   `product_id` int(11) NOT NULL DEFAULT '0',
   `customer_group_id` int(11) NOT NULL DEFAULT '0',
   `points` int(8) NOT NULL DEFAULT '0',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_reward_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_special`
@@ -2382,11 +2326,11 @@ CREATE TABLE `oc_product_special` (
   `price` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `date_start` date NOT NULL DEFAULT '0000-00-00',
   `date_end` date NOT NULL DEFAULT '0000-00-00',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_special_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_to_category`
@@ -2396,11 +2340,11 @@ DROP TABLE IF EXISTS `oc_product_to_category`;
 CREATE TABLE `oc_product_to_category` (
   `product_id` int(11) NOT NULL,
   `category_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`category_id`),
   KEY `category_id` (`category_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_to_download`
@@ -2410,10 +2354,10 @@ DROP TABLE IF EXISTS `oc_product_to_download`;
 CREATE TABLE `oc_product_to_download` (
   `product_id` int(11) NOT NULL,
   `download_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`download_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_product_to_layout`
@@ -2427,8 +2371,6 @@ CREATE TABLE `oc_product_to_layout` (
   PRIMARY KEY (`product_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_product_to_store`
 --
@@ -2437,10 +2379,10 @@ DROP TABLE IF EXISTS `oc_product_to_store`;
 CREATE TABLE `oc_product_to_store` (
   `product_id` int(11) NOT NULL,
   `store_id` int(11) NOT NULL DEFAULT '0',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_recurring`
@@ -2460,10 +2402,10 @@ CREATE TABLE `oc_recurring` (
   `trial_cycle` int(10) unsigned NOT NULL,
   `status` tinyint(4) NOT NULL,
   `sort_order` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`recurring_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_recurring_description`
@@ -2474,10 +2416,10 @@ CREATE TABLE `oc_recurring_description` (
   `recurring_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`recurring_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_return`
@@ -2502,12 +2444,10 @@ CREATE TABLE `oc_return` (
   `return_status_id` int(11) NOT NULL,
   `comment` text,
   `date_ordered` date NOT NULL DEFAULT '0000-00-00',
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`return_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_return_action`
@@ -2518,6 +2458,8 @@ CREATE TABLE `oc_return_action` (
   `return_action_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(64) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`return_action_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2530,8 +2472,6 @@ INSERT INTO `oc_return_action` (`return_action_id`, `language_id`, `name`) VALUE
 (2, 1, 'Credit Issued'),
 (3, 1, 'Replacement Sent');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_return_history`
 --
@@ -2543,11 +2483,10 @@ CREATE TABLE `oc_return_history` (
   `return_status_id` int(11) NOT NULL,
   `notify` tinyint(1) NOT NULL,
   `comment` text NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`return_history_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_return_reason`
@@ -2558,6 +2497,8 @@ CREATE TABLE `oc_return_reason` (
   `return_reason_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(128) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`return_reason_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2572,8 +2513,6 @@ INSERT INTO `oc_return_reason` (`return_reason_id`, `language_id`, `name`) VALUE
 (4, 1, 'Faulty, please supply details'),
 (5, 1, 'Other, please supply details');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_return_status`
 --
@@ -2583,6 +2522,8 @@ CREATE TABLE `oc_return_status` (
   `return_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL DEFAULT '0',
   `name` varchar(32) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`return_status_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2594,8 +2535,6 @@ INSERT INTO `oc_return_status` (`return_status_id`, `language_id`, `name`) VALUE
 (1, 1, 'Pending'),
 (3, 1, 'Complete'),
 (2, 1, 'Awaiting Products');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_review`
@@ -2610,13 +2549,11 @@ CREATE TABLE `oc_review` (
   `text` text NOT NULL,
   `rating` int(1) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '0',
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`review_id`),
   KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_statistics`
@@ -2627,6 +2564,8 @@ CREATE TABLE `oc_statistics` (
   `statistics_id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(64) NOT NULL,
   `value` decimal(15,4) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`statistics_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2643,8 +2582,6 @@ INSERT INTO `oc_statistics` (`statistics_id`, `code`, `value`) VALUES
 (6, 'product', 0),
 (7, 'review', 0);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_session`
 --
@@ -2654,10 +2591,10 @@ CREATE TABLE `oc_session` (
   `session_id` varchar(32) NOT NULL,
   `data` text NOT NULL,
   `expire` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`session_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_setting`
@@ -2671,6 +2608,8 @@ CREATE TABLE `oc_setting` (
   `key` varchar(128) NOT NULL,
   `value` text NOT NULL,
   `serialized` tinyint(1) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`setting_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2880,8 +2819,6 @@ INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`) VALU
 (0, 'developer', 'developer_theme', '1', 0),
 (0, 'developer', 'developer_sass', '1', 0);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_stock_status`
 --
@@ -2891,6 +2828,8 @@ CREATE TABLE `oc_stock_status` (
   `stock_status_id` int(11) NOT NULL AUTO_INCREMENT,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`stock_status_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2904,7 +2843,6 @@ INSERT INTO `oc_stock_status` (`stock_status_id`, `language_id`, `name`) VALUES
 (2, 1, 'Out Of Stock'),
 (3, 1, '2-3 Days'),
 (4, 1, 'Discontinued');
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_store`
@@ -2916,10 +2854,10 @@ CREATE TABLE `oc_store` (
   `name` varchar(64) NOT NULL,
   `url` varchar(255) NOT NULL,
   `ssl` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_tax_class`
@@ -2930,8 +2868,8 @@ CREATE TABLE `oc_tax_class` (
   `tax_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(32) NOT NULL,
   `description` varchar(255) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tax_class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2942,8 +2880,6 @@ CREATE TABLE `oc_tax_class` (
 INSERT INTO `oc_tax_class` (`tax_class_id`, `title`, `description`, `date_added`, `date_modified`) VALUES
 (1, 'Taxable Goods', 'Taxed goods', '2009-01-06 23:21:53', '2011-09-23 14:07:50'),
 (2, 'Downloadable Products', 'Downloadable', '2011-09-21 22:19:39', '2011-09-22 10:27:36');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_tax_rate`
@@ -2956,8 +2892,8 @@ CREATE TABLE `oc_tax_rate` (
   `name` varchar(32) NOT NULL,
   `rate` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `type` char(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tax_rate_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2969,8 +2905,6 @@ INSERT INTO `oc_tax_rate` (`tax_rate_id`, `geo_zone_id`, `name`, `rate`, `type`,
 (86, 3, 'VAT (20%)', '20.0000', 'P', '2011-03-09 21:17:10', '2011-09-22 22:24:29'),
 (87, 3, 'Eco Tax (-2.00)', '2.0000', 'F', '2011-09-21 21:49:23', '2011-09-23 00:40:19');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_tax_rate_to_customer_group`
 --
@@ -2979,6 +2913,8 @@ DROP TABLE IF EXISTS `oc_tax_rate_to_customer_group`;
 CREATE TABLE `oc_tax_rate_to_customer_group` (
   `tax_rate_id` int(11) NOT NULL,
   `customer_group_id` int(11) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tax_rate_id`,`customer_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -2989,8 +2925,6 @@ CREATE TABLE `oc_tax_rate_to_customer_group` (
 INSERT INTO `oc_tax_rate_to_customer_group` (`tax_rate_id`, `customer_group_id`) VALUES
 (86, 1),
 (87, 1);
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_tax_rule`
@@ -3003,6 +2937,8 @@ CREATE TABLE `oc_tax_rule` (
   `tax_rate_id` int(11) NOT NULL,
   `based` varchar(10) NOT NULL,
   `priority` int(5) NOT NULL DEFAULT '1',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`tax_rule_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -3016,8 +2952,6 @@ INSERT INTO `oc_tax_rule` (`tax_rule_id`, `tax_class_id`, `tax_rate_id`, `based`
 (128, 9, 86, 'shipping', 1),
 (127, 9, 87, 'shipping', 2);
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_theme`
 --
@@ -3029,11 +2963,10 @@ CREATE TABLE `oc_theme` (
   `theme` varchar(64) NOT NULL,
   `route` varchar(64) NOT NULL,
   `code` mediumtext NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`theme_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_translation`
@@ -3047,11 +2980,10 @@ CREATE TABLE `oc_translation` (
   `route` varchar(64) NOT NULL,
   `key` varchar(64) NOT NULL,
   `value` text NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`translation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_upload`
@@ -3063,11 +2995,10 @@ CREATE TABLE `oc_upload` (
   `name` varchar(255) NOT NULL,
   `filename` varchar(255) NOT NULL,
   `code` varchar(255) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`upload_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_seo_url`
@@ -3080,6 +3011,8 @@ CREATE TABLE `oc_seo_url` (
   `language_id` int(11) NOT NULL,  
   `query` varchar(255) NOT NULL,
   `keyword` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`seo_url_id`),
   KEY `query` (`query`),
   KEY `keyword` (`keyword`)
@@ -3094,8 +3027,6 @@ INSERT INTO `oc_seo_url` (`seo_url_id`, `store_id`, `language_id`, `query`, `key
 (2, 0, 1, 'information_id=6', 'delivery'),
 (3, 0, 1, 'information_id=3', 'privacy'),
 (4, 0, 1, 'information_id=5', 'terms');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_user`
@@ -3115,11 +3046,10 @@ CREATE TABLE `oc_user` (
   `code` varchar(40) NOT NULL,
   `ip` varchar(40) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_user_group`
@@ -3130,6 +3060,8 @@ CREATE TABLE `oc_user_group` (
   `user_group_id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(64) NOT NULL,
   `permission` text NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`user_group_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -3140,8 +3072,6 @@ CREATE TABLE `oc_user_group` (
 INSERT INTO `oc_user_group` (`user_group_id`, `name`, `permission`) VALUES
 (1, 'Administrator', '{"access":["catalog\\/attribute","catalog\\/attribute_group","catalog\\/category","catalog\\/download","catalog\\/filter","catalog\\/information","catalog\\/manufacturer","catalog\\/option","catalog\\/product","catalog\\/recurring","catalog\\/review","common\\/column_left","common\\/developer","common\\/filemanager","common\\/profile","common\\/security","customer\\/custom_field","customer\\/customer","customer\\/customer_approval","customer\\/customer_group","design\\/banner","design\\/layout","design\\/theme","design\\/translation","design\\/seo_url","event\\/statistics","event\\/theme","extension\\/analytics\\/google","extension\\/captcha\\/basic","extension\\/captcha\\/google","extension\\/dashboard\\/activity","extension\\/dashboard\\/chart","extension\\/dashboard\\/customer","extension\\/dashboard\\/map","extension\\/dashboard\\/online","extension\\/dashboard\\/order","extension\\/dashboard\\/recent","extension\\/dashboard\\/sale","extension\\/extension\\/analytics","extension\\/extension\\/captcha","extension\\/extension\\/dashboard","extension\\/extension\\/feed","extension\\/extension\\/fraud","extension\\/extension\\/menu","extension\\/extension\\/module","extension\\/extension\\/payment","extension\\/extension\\/report","extension\\/extension\\/shipping","extension\\/extension\\/theme","extension\\/extension\\/total","extension\\/feed\\/google_base","extension\\/feed\\/google_sitemap","extension\\/feed\\/openbaypro","extension\\/fraud\\/fraudlabspro","extension\\/fraud\\/ip","extension\\/fraud\\/maxmind","extension\\/marketing\\/remarketing","extension\\/module\\/account","extension\\/module\\/amazon_login","extension\\/module\\/amazon_pay","extension\\/module\\/banner","extension\\/module\\/bestseller","extension\\/module\\/carousel","extension\\/module\\/category","extension\\/module\\/divido_calculator","extension\\/module\\/ebay_listing","extension\\/module\\/featured","extension\\/module\\/filter","extension\\/module\\/google_hangouts","extension\\/module\\/html","extension\\/module\\/information","extension\\/module\\/klarna_checkout_module","extension\\/module\\/latest","extension\\/module\\/laybuy_layout","extension\\/module\\/pilibaba_button","extension\\/module\\/pp_button","extension\\/module\\/pp_login","extension\\/module\\/sagepay_direct_cards","extension\\/module\\/sagepay_server_cards","extension\\/module\\/slideshow","extension\\/module\\/special","extension\\/module\\/store","extension\\/openbay\\/amazon","extension\\/openbay\\/amazon_listing","extension\\/openbay\\/amazon_product","extension\\/openbay\\/amazonus","extension\\/openbay\\/amazonus_listing","extension\\/openbay\\/amazonus_product","extension\\/openbay\\/ebay","extension\\/openbay\\/ebay_profile","extension\\/openbay\\/ebay_template","extension\\/openbay\\/etsy","extension\\/openbay\\/etsy_product","extension\\/openbay\\/etsy_shipping","extension\\/openbay\\/etsy_shop","extension\\/openbay\\/fba","extension\\/payment\\/amazon_login_pay","extension\\/payment\\/authorizenet_aim","extension\\/payment\\/authorizenet_sim","extension\\/payment\\/bank_transfer","extension\\/payment\\/bluepay_hosted","extension\\/payment\\/bluepay_redirect","extension\\/payment\\/cardconnect","extension\\/payment\\/cardinity","extension\\/payment\\/cheque","extension\\/payment\\/cod","extension\\/payment\\/divido","extension\\/payment\\/eway","extension\\/payment\\/firstdata","extension\\/payment\\/firstdata_remote","extension\\/payment\\/free_checkout","extension\\/payment\\/g2apay","extension\\/payment\\/globalpay","extension\\/payment\\/globalpay_remote","extension\\/payment\\/klarna_account","extension\\/payment\\/klarna_checkout","extension\\/payment\\/klarna_invoice","extension\\/payment\\/laybuy","extension\\/payment\\/liqpay","extension\\/payment\\/nochex","extension\\/payment\\/paymate","extension\\/payment\\/paypoint","extension\\/payment\\/payza","extension\\/payment\\/perpetual_payments","extension\\/payment\\/pilibaba","extension\\/payment\\/pp_express","extension\\/payment\\/pp_payflow","extension\\/payment\\/pp_payflow_iframe","extension\\/payment\\/pp_pro","extension\\/payment\\/pp_pro_iframe","extension\\/payment\\/pp_standard","extension\\/payment\\/realex","extension\\/payment\\/realex_remote","extension\\/payment\\/sagepay_direct","extension\\/payment\\/sagepay_server","extension\\/payment\\/sagepay_us","extension\\/payment\\/securetrading_pp","extension\\/payment\\/securetrading_ws","extension\\/payment\\/skrill","extension\\/payment\\/twocheckout","extension\\/payment\\/web_payment_software","extension\\/payment\\/worldpay","extension\\/module\\/pp_braintree_button","extension\\/payment\\/pp_braintree","extension\\/report\\/customer_activity","extension\\/report\\/customer_order","extension\\/report\\/customer_reward","extension\\/report\\/customer_search","extension\\/report\\/customer_transaction","extension\\/report\\/marketing","extension\\/report\\/product_purchased","extension\\/report\\/product_viewed","extension\\/report\\/sale_coupon","extension\\/report\\/sale_order","extension\\/report\\/sale_return","extension\\/report\\/sale_shipping","extension\\/report\\/sale_tax","extension\\/shipping\\/auspost","extension\\/shipping\\/citylink","extension\\/shipping\\/ec_ship","extension\\/shipping\\/fedex","extension\\/shipping\\/flat","extension\\/shipping\\/free","extension\\/shipping\\/item","extension\\/shipping\\/parcelforce_48","extension\\/shipping\\/pickup","extension\\/shipping\\/royal_mail","extension\\/shipping\\/ups","extension\\/shipping\\/usps","extension\\/shipping\\/weight","extension\\/theme\\/default","extension\\/total\\/coupon","extension\\/total\\/credit","extension\\/total\\/handling","extension\\/total\\/klarna_fee","extension\\/total\\/low_order_fee","extension\\/total\\/reward","extension\\/total\\/shipping","extension\\/total\\/sub_total","extension\\/total\\/tax","extension\\/total\\/total","extension\\/total\\/voucher","localisation\\/country","localisation\\/currency","localisation\\/geo_zone","localisation\\/language","localisation\\/length_class","localisation\\/location","localisation\\/order_status","localisation\\/return_action","localisation\\/return_reason","localisation\\/return_status","localisation\\/stock_status","localisation\\/tax_class","localisation\\/tax_rate","localisation\\/weight_class","localisation\\/zone","mail\\/affiliate","mail\\/customer","mail\\/forgotten","mail\\/return","mail\\/reward","mail\\/transaction","marketing\\/contact","marketing\\/coupon","marketing\\/marketing","marketplace\\/api","marketplace\\/event","marketplace\\/cron","marketplace\\/extension","marketplace\\/install","marketplace\\/installer","marketplace\\/marketplace","marketplace\\/modification","marketplace\\/openbay","report\\/online","report\\/report","report\\/statistics","sale\\/order","sale\\/recurring","sale\\/return","sale\\/voucher","sale\\/voucher_theme","setting\\/setting","setting\\/store","startup\\/error","startup\\/event","startup\\/login","startup\\/permission","startup\\/router","startup\\/sass","startup\\/startup","tool\\/backup","tool\\/log","tool\\/upload","user\\/api","user\\/user","user\\/user_permission"],"modify":["catalog\\/attribute","catalog\\/attribute_group","catalog\\/category","catalog\\/download","catalog\\/filter","catalog\\/information","catalog\\/manufacturer","catalog\\/option","catalog\\/product","catalog\\/recurring","catalog\\/review","common\\/column_left","common\\/developer","common\\/filemanager","common\\/profile","common\\/security","customer\\/custom_field","customer\\/customer","customer\\/customer_approval","customer\\/customer_group","design\\/banner","design\\/layout","design\\/theme","design\\/translation","design\\/seo_url","event\\/statistics","event\\/theme","extension\\/analytics\\/google","extension\\/captcha\\/basic","extension\\/captcha\\/google","extension\\/dashboard\\/activity","extension\\/dashboard\\/chart","extension\\/dashboard\\/customer","extension\\/dashboard\\/map","extension\\/dashboard\\/online","extension\\/dashboard\\/order","extension\\/dashboard\\/recent","extension\\/dashboard\\/sale","extension\\/extension\\/analytics","extension\\/extension\\/captcha","extension\\/extension\\/dashboard","extension\\/extension\\/feed","extension\\/extension\\/fraud","extension\\/extension\\/menu","extension\\/extension\\/module","extension\\/extension\\/payment","extension\\/extension\\/report","extension\\/extension\\/shipping","extension\\/extension\\/theme","extension\\/extension\\/total","extension\\/feed\\/google_base","extension\\/feed\\/google_sitemap","extension\\/feed\\/openbaypro","extension\\/fraud\\/fraudlabspro","extension\\/fraud\\/ip","extension\\/fraud\\/maxmind","extension\\/marketing\\/remarketing","extension\\/module\\/account","extension\\/module\\/amazon_login","extension\\/module\\/amazon_pay","extension\\/module\\/banner","extension\\/module\\/bestseller","extension\\/module\\/carousel","extension\\/module\\/category","extension\\/module\\/divido_calculator","extension\\/module\\/ebay_listing","extension\\/module\\/featured","extension\\/module\\/filter","extension\\/module\\/google_hangouts","extension\\/module\\/html","extension\\/module\\/information","extension\\/module\\/klarna_checkout_module","extension\\/module\\/latest","extension\\/module\\/laybuy_layout","extension\\/module\\/pilibaba_button","extension\\/module\\/pp_button","extension\\/module\\/pp_login","extension\\/module\\/sagepay_direct_cards","extension\\/module\\/sagepay_server_cards","extension\\/module\\/slideshow","extension\\/module\\/special","extension\\/module\\/store","extension\\/openbay\\/amazon","extension\\/openbay\\/amazon_listing","extension\\/openbay\\/amazon_product","extension\\/openbay\\/amazonus","extension\\/openbay\\/amazonus_listing","extension\\/openbay\\/amazonus_product","extension\\/openbay\\/ebay","extension\\/openbay\\/ebay_profile","extension\\/openbay\\/ebay_template","extension\\/openbay\\/etsy","extension\\/openbay\\/etsy_product","extension\\/openbay\\/etsy_shipping","extension\\/openbay\\/etsy_shop","extension\\/openbay\\/fba","extension\\/payment\\/amazon_login_pay","extension\\/payment\\/authorizenet_aim","extension\\/payment\\/authorizenet_sim","extension\\/payment\\/bank_transfer","extension\\/payment\\/bluepay_hosted","extension\\/payment\\/bluepay_redirect","extension\\/payment\\/cardconnect","extension\\/payment\\/cardinity","extension\\/payment\\/cheque","extension\\/payment\\/cod","extension\\/payment\\/divido","extension\\/payment\\/eway","extension\\/payment\\/firstdata","extension\\/payment\\/firstdata_remote","extension\\/payment\\/free_checkout","extension\\/payment\\/g2apay","extension\\/payment\\/globalpay","extension\\/payment\\/globalpay_remote","extension\\/payment\\/klarna_account","extension\\/payment\\/klarna_checkout","extension\\/payment\\/klarna_invoice","extension\\/payment\\/laybuy","extension\\/payment\\/liqpay","extension\\/payment\\/nochex","extension\\/payment\\/paymate","extension\\/payment\\/paypoint","extension\\/payment\\/payza","extension\\/payment\\/perpetual_payments","extension\\/payment\\/pilibaba","extension\\/payment\\/pp_express","extension\\/payment\\/pp_payflow","extension\\/payment\\/pp_payflow_iframe","extension\\/payment\\/pp_pro","extension\\/payment\\/pp_pro_iframe","extension\\/payment\\/pp_standard","extension\\/payment\\/realex","extension\\/payment\\/realex_remote","extension\\/payment\\/sagepay_direct","extension\\/payment\\/sagepay_server","extension\\/payment\\/sagepay_us","extension\\/payment\\/securetrading_pp","extension\\/payment\\/securetrading_ws","extension\\/payment\\/skrill","extension\\/payment\\/twocheckout","extension\\/payment\\/web_payment_software","extension\\/payment\\/worldpay","extension\\/module\\/pp_braintree_button","extension\\/payment\\/pp_braintree","extension\\/report\\/customer_activity","extension\\/report\\/customer_order","extension\\/report\\/customer_reward","extension\\/report\\/customer_search","extension\\/report\\/customer_transaction","extension\\/report\\/marketing","extension\\/report\\/product_purchased","extension\\/report\\/product_viewed","extension\\/report\\/sale_coupon","extension\\/report\\/sale_order","extension\\/report\\/sale_return","extension\\/report\\/sale_shipping","extension\\/report\\/sale_tax","extension\\/shipping\\/auspost","extension\\/shipping\\/citylink","extension\\/shipping\\/ec_ship","extension\\/shipping\\/fedex","extension\\/shipping\\/flat","extension\\/shipping\\/free","extension\\/shipping\\/item","extension\\/shipping\\/parcelforce_48","extension\\/shipping\\/pickup","extension\\/shipping\\/royal_mail","extension\\/shipping\\/ups","extension\\/shipping\\/usps","extension\\/shipping\\/weight","extension\\/theme\\/default","extension\\/total\\/coupon","extension\\/total\\/credit","extension\\/total\\/handling","extension\\/total\\/klarna_fee","extension\\/total\\/low_order_fee","extension\\/total\\/reward","extension\\/total\\/shipping","extension\\/total\\/sub_total","extension\\/total\\/tax","extension\\/total\\/total","extension\\/total\\/voucher","localisation\\/country","localisation\\/currency","localisation\\/geo_zone","localisation\\/language","localisation\\/length_class","localisation\\/location","localisation\\/order_status","localisation\\/return_action","localisation\\/return_reason","localisation\\/return_status","localisation\\/stock_status","localisation\\/tax_class","localisation\\/tax_rate","localisation\\/weight_class","localisation\\/zone","mail\\/affiliate","mail\\/customer","mail\\/forgotten","mail\\/return","mail\\/reward","mail\\/transaction","marketing\\/contact","marketing\\/coupon","marketing\\/marketing","marketplace\\/event","marketplace\\/cron","marketplace\\/api","marketplace\\/extension","marketplace\\/install","marketplace\\/installer","marketplace\\/marketplace","marketplace\\/modification","marketplace\\/openbay","report\\/online","report\\/report","report\\/statistics","sale\\/order","sale\\/recurring","sale\\/return","sale\\/voucher","sale\\/voucher_theme","setting\\/setting","setting\\/store","startup\\/error","startup\\/event","startup\\/login","startup\\/permission","startup\\/router","startup\\/sass","startup\\/startup","tool\\/backup","tool\\/log","tool\\/upload","user\\/api","user\\/user","user\\/user_permission"]}'),
 (10, 'Demonstration', '');
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_voucher`
@@ -3160,11 +3090,10 @@ CREATE TABLE `oc_voucher` (
   `message` text NOT NULL,
   `amount` decimal(15,4) NOT NULL,
   `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`voucher_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_voucher_history`
@@ -3176,11 +3105,10 @@ CREATE TABLE `oc_voucher_history` (
   `voucher_id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
   `amount` decimal(15,4) NOT NULL,
-  `date_added` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`voucher_history_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_voucher_theme`
@@ -3190,10 +3118,10 @@ DROP TABLE IF EXISTS `oc_voucher_theme`;
 CREATE TABLE `oc_voucher_theme` (
   `voucher_theme_id` int(11) NOT NULL AUTO_INCREMENT,
   `image` varchar(255) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`voucher_theme_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_voucher_theme_description`
@@ -3204,10 +3132,10 @@ CREATE TABLE `oc_voucher_theme_description` (
   `voucher_theme_id` int(11) NOT NULL,
   `language_id` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`voucher_theme_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
------------------------------------------------------------
 
 --
 -- Table structure for table `oc_weight_class`
@@ -3217,6 +3145,8 @@ DROP TABLE IF EXISTS `oc_weight_class`;
 CREATE TABLE `oc_weight_class` (
   `weight_class_id` int(11) NOT NULL AUTO_INCREMENT,
   `value` decimal(15,8) NOT NULL DEFAULT '0.00000000',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`weight_class_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -3230,8 +3160,6 @@ INSERT INTO `oc_weight_class` (`weight_class_id`, `value`) VALUES
 (5, '2.20460000'),
 (6, '35.27400000');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_weight_class_description`
 --
@@ -3242,6 +3170,8 @@ CREATE TABLE `oc_weight_class_description` (
   `language_id` int(11) NOT NULL,
   `title` varchar(32) NOT NULL,
   `unit` varchar(4) NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`weight_class_id`,`language_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -3255,8 +3185,6 @@ INSERT INTO `oc_weight_class_description` (`weight_class_id`, `language_id`, `ti
 (5, 1, 'Pound ', 'lb'),
 (6, 1, 'Ounce', 'oz');
 
------------------------------------------------------------
-
 --
 -- Table structure for table `oc_zone`
 --
@@ -3268,6 +3196,8 @@ CREATE TABLE `oc_zone` (
   `name` varchar(128) NOT NULL,
   `code` varchar(32) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`zone_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -7399,8 +7329,8 @@ CREATE TABLE `oc_zone_to_geo_zone` (
   `country_id` int(11) NOT NULL,
   `zone_id` int(11) NOT NULL DEFAULT '0',
   `geo_zone_id` int(11) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  `date_modified` timestamp NOT NULL,
+  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`zone_to_geo_zone_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
