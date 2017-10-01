@@ -37,6 +37,7 @@ define('DIR_OPENCART', str_replace('\\', '/', realpath(DIR_APPLICATION . '../'))
 define('DIR_DATABASE', DIR_SYSTEM . 'database/');
 define('DIR_CONFIG', DIR_SYSTEM . 'config/');
 define('DIR_MODIFICATION', DIR_SYSTEM . 'modification/');
+define('DIR_PUBLIC', DIR_OPENCART . "public_html/");
 
 echo "Pre-Install Diagnostics:\n";
 echo "DIR_APPLICATION:  " . DIR_APPLICATION . "\n";
@@ -46,6 +47,7 @@ echo "DIR_OPENCART:     " . DIR_OPENCART . "\n";
 echo "DIR_DATABASE:     " . DIR_DATABASE . "\n";
 echo "DIR_CONFIG:       " . DIR_CONFIG . "\n";
 echo "DIR_MODIFICATION: " . DIR_MODIFICATION . "\n";
+echo "DIR_PUBLIC:       " . DIR_PUBLIC . "\n";
 
 // Startup
 require_once(DIR_SYSTEM . 'startup.php');
@@ -318,8 +320,7 @@ function write_config_files($options) {
 	$output .= '// OpenCart API' . "\n";
 	$output .= 'define(\'OPENCART_SERVER\', \'https://www.opencart.com/\');' . "\n";
 
-
-	$file = fopen(DIR_OPENCART . 'config/admin.php', 'w');
+	$file = fopen(DIR_PUBLIC . 'admin/config.php', 'w');
 
 	fwrite($file, $output);
 
@@ -329,12 +330,12 @@ function write_config_files($options) {
 
 function dir_permissions() {
 	$dirs = array(
-		DIR_OPENCART . 'image/',
-		DIR_OPENCART . 'system/storage/download/',
-		DIR_OPENCART . 'system/storage/upload/',
-		DIR_OPENCART . 'system/storage/cache/',
-		DIR_OPENCART . 'system/storage/logs/',
-		DIR_OPENCART . 'system/storage/modification/',
+		DIR_PUBLIC . 'image/',
+		DIR_SYSTEM . '/storage/download/',
+        DIR_SYSTEM . '/storage/upload/',
+        DIR_SYSTEM . '/storage/cache/',
+        DIR_SYSTEM . '/storage/logs/',
+        DIR_SYSTEM . '/storage/modification/',
 	);
 	exec('chmod o+w -R ' . implode(' ', $dirs));
 }
