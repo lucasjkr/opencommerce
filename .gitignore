@@ -1,50 +1,49 @@
-# Config and Htaccess Files
-/upload/.htaccess
-/upload/config.php
-/upload/admin/config.php
+# Config files
+/public_html/config.php
+/public_html/admin/config.php
 
 # Image File
-!/upload/image/no_image.jpg
+!/public_html/image/no_image.jpg
 
 # Image Cache Files
-/upload/image/cache/*
-!/upload/image/cache/index.html
+/public_html/image/cache/*
+!/public_html/image/cache/index.html
 
 # System Cache Files
-/upload/system/storage/cache/*
-!/upload/system/storage/cache/index.html
+/public_html/system/storage/cache/*
+!/public_html/system/storage/cache/index.html
 
 # Modification Files
-/upload/system/storage/modification/*
-!/upload/system/storage/modification/index.html
+/public_html/system/storage/modification/*
+!/public_html/system/storage/modification/index.html
 
 # Templates Files
-/upload/image/templates/*
-/upload/image/templates/default.jpg
+/public_html/image/templates/*
+/public_html/image/templates/default.jpg
 
 # Download Files
-/upload/system/storage/download/*
-!/upload/system/storage/download/index.html
+/public_html/system/storage/download/*
+!/public_html/system/storage/download/index.html
 
 # Session Files
-/upload/system/storage/session/*
-!/upload/system/storage/session/index.html
+/public_html/system/storage/session/*
+!/public_html/system/storage/session/index.html
 
 # Upload Files
-/upload/system/storage/upload/*
-!/upload/system/storage/upload/index.html
+/public_html/system/storage/upload/*
+!/public_html/system/storage/upload/index.html
 
 # Flags 
 # remove sharp char if you want to add flags to gitignore
-# /upload/flags/*
+# /public_html/flags/*
 
 # Log Files
 /upload/system/storage/logs/*
 !/upload/system/storage/logs/index.html
 
 # If you want to ignore install file use following lines [on development mode]
-# /upload/backup.install/*
-# /upload/install/*
+# /public_html/backup.install/*
+# /public_html/install/*
 
 /tests/phpunit/vendor/*
 /tests/phpunit/composer.lock
@@ -52,3 +51,6 @@
 
 # IDE Project files
 /.idea
+
+# Config files
+config.php
