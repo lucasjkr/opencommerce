@@ -52,5 +52,9 @@
 # IDE Project files
 /.idea
 
+vendor/*
+system/storage/cache/*
+
 # Config files
-config.php
+config/config.php
+public_html/admin/config.php
