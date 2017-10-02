@@ -15,7 +15,7 @@ class ModelExtensionModuleLaybuyLayout extends Model {
 	}
 
 	public function getTransactionByOrderId($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "' ORDER BY `laybuy_ref_no` DESC LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "' ORDER BY `laybuy_ref_no` DESC LIMIT 1");
 
 		return $query->row;
 	}
@@ -50,7 +50,7 @@ class ModelExtensionModuleLaybuyLayout extends Model {
 	}
 
 	public function isLayBuyOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
 
 		if ($query->num_rows) {
 			return true;

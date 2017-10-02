@@ -1,37 +1,37 @@
 <?php
 class ModelSettingCron extends Model {
 	public function addCron($code, $cycle = 'day', $action, $status) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "cron` SET `code` = '" . $this->db->escape($code) . "', `cycle` = '" . $this->db->escape($cycle) . "', `action` = '" . $this->db->escape($action) . "', `status` = '" . (int)$status . "', `date_added` = NOW(), `date_modified` = NOW()");
+		$this->db->query("INSERT INTO `oc_cron` SET `code` = '" . $this->db->escape($code) . "', `cycle` = '" . $this->db->escape($cycle) . "', `action` = '" . $this->db->escape($action) . "', `status` = '" . (int)$status . "', `date_added` = NOW(), `date_modified` = NOW()");
 
 		return $this->db->getLastId();
 	}
 
 	public function deleteCron($cron_id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "cron` WHERE `cron_id` = '" . (int)$cron_id . "'");
+		$this->db->query("DELETE FROM `oc_cron` WHERE `cron_id` = '" . (int)$cron_id . "'");
 	}
 	
 	public function deleteCronByCode($code) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "cron` WHERE `code` = '" . $this->db->escape($code) . "'");
+		$this->db->query("DELETE FROM `oc_cron` WHERE `code` = '" . $this->db->escape($code) . "'");
 	}
 
 	public function editStatus($cron_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "cron` SET `status` = '" . (int)$status . "' WHERE cron_id = '" . (int)$cron_id . "'");
+		$this->db->query("UPDATE `oc_cron` SET `status` = '" . (int)$status . "' WHERE cron_id = '" . (int)$cron_id . "'");
 	}
 
 	public function getCron($cron_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "cron` WHERE `cron_id` = '" . (int)$cron_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM `oc_cron` WHERE `cron_id` = '" . (int)$cron_id . "'");
 
 		return $query->row;
 	}
 
 	public function getCronByCode($code) {
-		$query = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "cron` WHERE `code` = '" . $this->db->escape($code) . "' LIMIT 1");
+		$query = $this->db->query("SELECT DISTINCT * FROM `oc_cron` WHERE `code` = '" . $this->db->escape($code) . "' LIMIT 1");
 
 		return $query->row;
 	}
 		
 	public function getCrons($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "cron`";
+		$sql = "SELECT * FROM `oc_cron`";
 
 		$sort_data = array(
 			'code',
@@ -72,7 +72,7 @@ class ModelSettingCron extends Model {
 	}
 
 	public function getTotalCrons() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "cron`");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_cron`");
 
 		return $query->row['total'];
 	}

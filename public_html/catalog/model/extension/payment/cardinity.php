@@ -5,11 +5,11 @@ use Cardinity\Exception as CardinityException;
 
 class ModelExtensionPaymentCardinity extends Model {
 	public function addOrder($data) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "cardinity_order` SET `order_id` = '" . (int)$data['order_id'] . "', `payment_id` = '" . $this->db->escape((string)$data['payment_id']) . "'");
+		$this->db->query("INSERT INTO `oc_cardinity_order` SET `order_id` = '" . (int)$data['order_id'] . "', `payment_id` = '" . $this->db->escape((string)$data['payment_id']) . "'");
 	}
 
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "cardinity_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_cardinity_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		return $query->row;
 	}
@@ -55,7 +55,7 @@ class ModelExtensionPaymentCardinity extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/cardinity');
 
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_cardinity_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_cardinity_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 
 		if ($this->config->get('payment_cardinity_total') > 0 && $this->config->get('payment_cardinity_total') > $total) {
 			$status = false;

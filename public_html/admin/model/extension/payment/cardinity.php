@@ -5,7 +5,7 @@ use Cardinity\Method\Refund;
 
 class ModelExtensionPaymentCardinity extends Model {
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "cardinity_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_cardinity_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		return $query->row;
 	}
@@ -83,7 +83,7 @@ class ModelExtensionPaymentCardinity extends Model {
 
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "cardinity_order` (
+			CREATE TABLE IF NOT EXISTS `oc_cardinity_order` (
 			  `cardinity_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `payment_id` VARCHAR(255),
@@ -93,6 +93,6 @@ class ModelExtensionPaymentCardinity extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "cardinity_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_cardinity_order`;");
 	}
 }

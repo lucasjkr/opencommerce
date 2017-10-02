@@ -2,7 +2,7 @@
 class ModelExtensionPaymentPPPayflowIFrame extends Model {
 	public function install() {
 		$this->db->query("
-			CREATE TABLE `" . DB_PREFIX . "paypal_payflow_iframe_order` (
+			CREATE TABLE `oc_paypal_payflow_iframe_order` (
 				`order_id` int(11) DEFAULT NULL,
 				`secure_token_id` varchar(255) NOT NULL,
 				`transaction_reference` varchar(255) DEFAULT NULL,
@@ -13,7 +13,7 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci");
 
 		$this->db->query("
-			CREATE TABLE `" . DB_PREFIX . "paypal_payflow_iframe_order_transaction` (
+			CREATE TABLE `oc_paypal_payflow_iframe_order_transaction` (
 				`order_id` int(11) NOT NULL,
 				`transaction_reference` varchar(255) NOT NULL,
 				`transaction_type` char(1) NOT NULL,
@@ -25,8 +25,8 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "paypal_payflow_iframe_order`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "paypal_payflow_iframe_order_transaction`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_paypal_payflow_iframe_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_paypal_payflow_iframe_order_transaction`;");
 	}
 
 	public function log($message) {
@@ -37,7 +37,7 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 	}
 
 	public function getOrder($order_id) {
-		$result = $this->db->query("SELECT * FROM " . DB_PREFIX . "paypal_payflow_iframe_order WHERE order_id = " . (int)$order_id);
+		$result = $this->db->query("SELECT * FROM oc_paypal_payflow_iframe_order WHERE order_id = " . (int)$order_id);
 
 		if ($result->num_rows) {
 			$order = $result->row;
@@ -58,7 +58,7 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 
 	public function addTransaction($data) {
 		$this->db->query("
-			INSERT INTO " . DB_PREFIX . "paypal_payflow_iframe_order_transaction
+			INSERT INTO oc_paypal_payflow_iframe_order_transaction
 			SET order_id = " . (int)$data['order_id'] . ",
 				transaction_reference = '" . $this->db->escape((string)$data['transaction_reference']) . "',
 				transaction_type = '" . $this->db->escape((string)$data['type']) . "',
@@ -70,7 +70,7 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 	public function getTransactions($order_id) {
 		return $this->db->query("
 			SELECT *
-			FROM " . DB_PREFIX . "paypal_payflow_iframe_order_transaction
+			FROM oc_paypal_payflow_iframe_order_transaction
 			WHERE order_id = " . (int)$order_id . "
 			ORDER BY `time` ASC")->rows;
 	}
@@ -78,7 +78,7 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 	public function getTransaction($transaction_reference) {
 		$result = $this->db->query("
 			SELECT *
-			FROM " . DB_PREFIX . "paypal_payflow_iframe_order_transaction
+			FROM oc_paypal_payflow_iframe_order_transaction
 			WHERE transaction_reference = '" . $this->db->escape($transaction_reference) . "'")->row;
 
 		if ($result) {

@@ -5,7 +5,7 @@ class ModelExtensionOpenBayEbayProfile extends Model{
 			$this->clearDefault($data['type']);
 		}
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "ebay_profile` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `description` = '" . $this->db->escape((string)$data['description']) . "', `type` = '" . (int)$data['type'] . "', `default` = '" . (int)$data['default'] . "', `data` = '" . $this->db->escape(serialize($data['data'])) . "'");
+		$this->db->query("INSERT INTO `oc_ebay_profile` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `description` = '" . $this->db->escape((string)$data['description']) . "', `type` = '" . (int)$data['type'] . "', `default` = '" . (int)$data['default'] . "', `data` = '" . $this->db->escape(serialize($data['data'])) . "'");
 
 		return $this->db->getLastId();
 	}
@@ -15,11 +15,11 @@ class ModelExtensionOpenBayEbayProfile extends Model{
 			$this->clearDefault($data['type']);
 		}
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "ebay_profile` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `description` = '" . $this->db->escape((string)$data['description']) . "', `data` = '" . $this->db->escape(serialize($data['data'])) . "', `default` = '" . (int)$data['default'] . "' WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
+		$this->db->query("UPDATE `oc_ebay_profile` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `description` = '" . $this->db->escape((string)$data['description']) . "', `data` = '" . $this->db->escape(serialize($data['data'])) . "', `default` = '" . (int)$data['default'] . "' WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
 	}
 
 	public function delete($id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "ebay_profile` WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
+		$this->db->query("DELETE FROM `oc_ebay_profile` WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
 
 		if ($this->db->countAffected() > 0) {
 			return true;
@@ -29,7 +29,7 @@ class ModelExtensionOpenBayEbayProfile extends Model{
 	}
 
 	public function get($id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_profile` WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_ebay_profile` WHERE `ebay_profile_id` = '" . (int)$id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$row                = $qry->row;
@@ -44,7 +44,7 @@ class ModelExtensionOpenBayEbayProfile extends Model{
 	}
 
 	public function getAll($type = '') {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "ebay_profile`";
+		$sql = "SELECT * FROM `oc_ebay_profile`";
 
 		if ($type !== '') {
 			$sql .= " WHERE `type` = '" . (int)$type . "'";
@@ -91,7 +91,7 @@ class ModelExtensionOpenBayEbayProfile extends Model{
 	}
 
 	public function getDefault($type) {
-		$qry = $this->db->query("SELECT `ebay_profile_id` FROM `" . DB_PREFIX . "ebay_profile` WHERE `type` = '" . (int)$type . "' AND `default` = '1'LIMIT 1");
+		$qry = $this->db->query("SELECT `ebay_profile_id` FROM `oc_ebay_profile` WHERE `type` = '" . (int)$type . "' AND `default` = '1'LIMIT 1");
 
 		if ($qry->num_rows) {
 			return (int)$qry->row['ebay_profile_id'];
@@ -101,6 +101,6 @@ class ModelExtensionOpenBayEbayProfile extends Model{
 	}
 
 	private function clearDefault($type) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "ebay_profile` SET `default` = '0' WHERE `type` = '" . (int)$type . "'");
+		$this->db->query("UPDATE `oc_ebay_profile` SET `default` = '0' WHERE `type` = '" . (int)$type . "'");
 	}
 }

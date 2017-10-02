@@ -263,7 +263,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$this->openbay->ebay->log('create() - Offset: ' . $offset);
 		$this->openbay->ebay->log('create() - Server time: ' . date("Y-m-d H:i:s"));
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "order` SET
+		$this->db->query("INSERT INTO `oc_order` SET
 		   `store_id`                 = '" . (int)$this->config->get('config_store_id') . "',
 		   `store_name`               = '" . $this->db->escape($this->config->get('config_name') . ' / eBay') . "',
 		   `store_url`                = '" . $this->db->escape($this->config->get('config_url')) . "',
@@ -345,7 +345,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				}
 			}
 
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "order_product` SET
+			$this->db->query("INSERT INTO `oc_order_product` SET
 					`order_id`            = '" . (int)$order_id . "',
 					`product_id`          = '" . (int)$product_id . "',
 					`name`                = '" . $this->db->escape($order_product_name) . "',
@@ -377,11 +377,11 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 									`ovd`.`name` as `value`,
 									`o`.`option_id`,
 									`o`.`type`
-									FROM `" . DB_PREFIX . "product_option_value` `pv`
-									LEFT JOIN `" . DB_PREFIX . "option_value` `ov` ON (`pv`.`option_value_id` = `ov`.`option_value_id`)
-									LEFT JOIN `" . DB_PREFIX . "option_value_description` `ovd` ON (`ovd`.`option_value_id` = `ov`.`option_value_id`)
-									LEFT JOIN `" . DB_PREFIX . "option_description` `od` ON (`ov`.`option_id` = `od`.`option_id`)
-									LEFT JOIN `" . DB_PREFIX . "option` `o` ON (`o`.`option_id` = `od`.`option_id`)
+									FROM `oc_product_option_value` `pv`
+									LEFT JOIN `oc_option_value` `ov` ON (`pv`.`option_value_id` = `ov`.`option_value_id`)
+									LEFT JOIN `oc_option_value_description` `ovd` ON (`ovd`.`option_value_id` = `ov`.`option_value_id`)
+									LEFT JOIN `oc_option_description` `od` ON (`ov`.`option_id` = `od`.`option_id`)
+									LEFT JOIN `oc_option` `o` ON (`o`.`option_id` = `od`.`option_id`)
 									WHERE `pv`.`product_option_value_id` = '" . (int)$part . "'
 									AND `pv`.`product_id` = '" . (int)$product_id . "'";
 							$option_qry = $this->db->query($sql);
@@ -400,7 +400,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 						//insert into order_option table
 						foreach ($p_options as $option) {
 							$this->db->query("
-								INSERT INTO `" . DB_PREFIX . "order_option`
+								INSERT INTO `oc_order_option`
 								SET
 								`order_id`                  = '" . (int)$order_id . "',
 								`order_product_id`          = '" . (int)$order_product_id . "',
@@ -433,7 +433,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 		/** get the iso2 code from the data and pull out the correct country for the details. */
 		if (!empty($order->address->iso2)) {
-			$country_qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE `iso_code_2` = '" . $this->db->escape($order->address->iso2) . "'");
+			$country_qry = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($order->address->iso2) . "'");
 		}
 
 		if (!empty($country_qry->num_rows)) {
@@ -467,7 +467,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		}
 
 		$this->db->query("
-			UPDATE `" . DB_PREFIX . "order`
+			UPDATE `oc_order`
 			SET
 			   `customer_id`              = '" . (int)$user['id'] . "',
 			   `firstname`                = '" . $this->db->escape($user['fname']) . "',
@@ -592,7 +592,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		);
 
 		foreach ($data['totals'] as $total) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "order_total` SET `order_id` = '" . (int)$order_id . "', `code` = '" . $this->db->escape($total['code']) . "', `title` = '" . $this->db->escape($total['title']) . "', `value` = '" . (double)$total['value'] . "', `sort_order` = '" . (int)$total['sort_order'] . "'");
+			$this->db->query("INSERT INTO `oc_order_total` SET `order_id` = '" . (int)$order_id . "', `code` = '" . $this->db->escape($total['code']) . "', `title` = '" . $this->db->escape($total['title']) . "', `value` = '" . (double)$total['value'] . "', `sort_order` = '" . (int)$total['sort_order'] . "'");
 		}
 	}
 
@@ -611,7 +611,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				$product_id = $this->openbay->ebay->getProductId($data['item_id']);
 				/* add to the transaction table */
 				$this->db->query("
-					INSERT INTO `" . DB_PREFIX . "ebay_transaction`
+					INSERT INTO `oc_ebay_transaction`
 					SET
 					`order_id`                  = '" . (int)$order_id . "',
 					`txn_id`                    = '" . $this->db->escape((string)$data['txn_id']) . "',
@@ -638,7 +638,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 			if ($order_id != $order_line['order_id']) {
 				$this->openbay->ebay->log('addOrderLine() - Order ID has changed from "' . $order_line['order_id'] . '" to "' . $order_id . '"');
-				$this->db->query("UPDATE `" . DB_PREFIX . "ebay_transaction` SET `order_id` = '" . (int)$order_id . "', `modified` = now() WHERE `txn_id` = '" . $this->db->escape((string)$data['txn_id']) . "' AND `item_id` = '" . $this->db->escape((string)$data['item_id']) . "' LIMIT 1");
+				$this->db->query("UPDATE `oc_ebay_transaction` SET `order_id` = '" . (int)$order_id . "', `modified` = now() WHERE `txn_id` = '" . $this->db->escape((string)$data['txn_id']) . "' AND `item_id` = '" . $this->db->escape((string)$data['item_id']) . "' LIMIT 1");
 
 				//if the order id has changed then remove the old order details
 				$this->delete($order_line['order_id']);
@@ -646,12 +646,12 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 			if ($order_line['smp_id'] != $data['smp_id']) {
 				$this->openbay->ebay->log('addOrderLine() - SMP ID for orderLine has changed from "' . $order_line['smp_id'] . '" to "' . $data['smp_id'] . '"');
-				$this->db->query("UPDATE `" . DB_PREFIX . "ebay_transaction` SET `smp_id` = '" . $data['smp_id'] . "', `modified` = now() WHERE `txn_id` = '" . $this->db->escape((string)$data['txn_id']) . "' AND `item_id` = '" . $this->db->escape((string)$data['item_id']) . "' LIMIT 1");
+				$this->db->query("UPDATE `oc_ebay_transaction` SET `smp_id` = '" . $data['smp_id'] . "', `modified` = now() WHERE `txn_id` = '" . $this->db->escape((string)$data['txn_id']) . "' AND `item_id` = '" . $this->db->escape((string)$data['item_id']) . "' LIMIT 1");
 			}
 
 			if ($order_line['containing_order_id'] != $data['containing_order_id']) {
 				$this->openbay->ebay->log('addOrderLine() - Containing order ID for orderLine has changed from "' . $order_line['containing_order_id'] . '" to "' . $data['containing_order_id'] . '"');
-				$this->db->query("UPDATE `" . DB_PREFIX . "ebay_transaction` SET `containing_order_id` = '" . $this->db->escape((string)$data['containing_order_id']) . "', `modified` = now() WHERE `txn_id` = '" . $this->db->escape((string)$data['txn_id']) . "' AND `item_id` = '" . $this->db->escape((string)$data['item_id']) . "' LIMIT 1");
+				$this->db->query("UPDATE `oc_ebay_transaction` SET `containing_order_id` = '" . $this->db->escape((string)$data['containing_order_id']) . "', `modified` = now() WHERE `txn_id` = '" . $this->db->escape((string)$data['txn_id']) . "' AND `item_id` = '" . $this->db->escape((string)$data['item_id']) . "' LIMIT 1");
 			}
 		}
 		$this->openbay->ebay->log('addOrderLine() - Done');
@@ -675,7 +675,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 	public function getOrderLine($txn_id, $item_id) {
 		$this->openbay->ebay->log('getOrderLine() - Testing for order line txn: ' . $txn_id . ', item: ' . $item_id);
-		$res = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_transaction` WHERE `txn_id` = '" . $this->db->escape($txn_id) . "' AND `item_id` = '" . $this->db->escape($item_id) . "' LIMIT 1");
+		$res = $this->db->query("SELECT * FROM `oc_ebay_transaction` WHERE `txn_id` = '" . $this->db->escape($txn_id) . "' AND `item_id` = '" . $this->db->escape($item_id) . "' LIMIT 1");
 
 		if ($res->num_rows == 0) {
 			return false;
@@ -687,7 +687,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 	public function getOrderLines($order_id) {
 		$this->openbay->ebay->log('getOrderLines() - Testing for order lines id: ' . $order_id);
 
-		$result = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
+		$result = $this->db->query("SELECT * FROM `oc_ebay_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
 
 		$lines = array();
 
@@ -715,7 +715,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 	private function removeOrderLine($txn_id, $item_id, $line) {
 		$this->openbay->ebay->log('Removing order line, txn: ' . $txn_id . ',item id: ' . $item_id);
 
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "ebay_transaction` WHERE `txn_id` = '" . $this->db->escape($txn_id) . "' AND `item_id` = '" . $this->db->escape($item_id) . "' LIMIT 1");
+		$this->db->query("DELETE FROM `oc_ebay_transaction` WHERE `txn_id` = '" . $this->db->escape($txn_id) . "' AND `item_id` = '" . $this->db->escape($item_id) . "' LIMIT 1");
 
 		if ($this->db->countAffected() > 0) {
 			$this->modifyStock($line['product_id'], $line['qty'], '+', $line['sku']);
@@ -731,13 +731,13 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 	}
 
 	public function updatePaymentDetails($order_id, $order) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET `payment_method` = '" . $this->db->escape($order->payment->method) . "', `total` = '" . (double)$order->order->total . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_order` SET `payment_method` = '" . $this->db->escape($order->payment->method) . "', `total` = '" . (double)$order->order->total . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function getHistory($order_id) {
 		$this->openbay->ebay->log('Getting order history for ID: ' . $order_id);
 
-		$query = $this->db->query("SELECT `order_status_id` FROM `" . DB_PREFIX . "order_history` WHERE `order_id` = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT `order_status_id` FROM `oc_order_history` WHERE `order_id` = '" . (int)$order_id . "'");
 
 		$status = array();
 
@@ -752,7 +752,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 	public function hasAddress($order_id) {
 		// check if the first name, address 1 and country are set
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order` WHERE `order_id` = '" . (int)$order_id . "' AND `payment_firstname` != '' AND `payment_address_1` != '' AND `payment_country` != ''");
+		$query = $this->db->query("SELECT * FROM `oc_order` WHERE `order_id` = '" . (int)$order_id . "' AND `payment_firstname` != '' AND `payment_address_1` != '' AND `payment_country` != ''");
 
 		if ($query->num_rows == 0) {
 			return false;
@@ -767,9 +767,9 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$notify = $this->config->get('ebay_update_notify');
 
 		if ($order_info) {
-			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
 
-			$this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
+			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
 
 			if ($notify) {
 				if (version_compare(VERSION, '2.2', '>') == true) {
@@ -787,7 +787,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				$message  = $language->get('text_update_order') . ' ' . $order_id . "\n";
 				$message .= $language->get('text_update_date_added') . ' ' . date($language->get('date_format_short'), strtotime($order_info['date_added'])) . "\n\n";
 
-				$order_status_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
+				$order_status_query = $this->db->query("SELECT * FROM oc_order_status WHERE order_status_id = '" . (int)$order_status_id . "' AND language_id = '" . (int)$order_info['language_id'] . "'");
 
 				if ($order_status_query->num_rows) {
 					$message .= $language->get('text_update_order_status') . "\n\n";
@@ -833,16 +833,16 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$notify = $this->config->get('ebay_confirm_notify');
 
 		if ($order_info && !$order_info['order_status_id']) {
-			$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
-			$this->db->query("INSERT INTO " . DB_PREFIX . "order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
+			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
 
 			if (isset($order_info['email']) && !empty($order_info['email']) && $notify == 1){
-				$order_product_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_product` WHERE `order_id` = '" . (int)$order_id . "'");
+				$order_product_query = $this->db->query("SELECT * FROM `oc_order_product` WHERE `order_id` = '" . (int)$order_id . "'");
 
 				$this->cache->delete('product');
 
 				// Order Totals
-				$order_total_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_total` WHERE `order_id` = '" . (int)$order_id . "' ORDER BY `sort_order` ASC");
+				$order_total_query = $this->db->query("SELECT * FROM `oc_order_total` WHERE `order_id` = '" . (int)$order_id . "' ORDER BY `sort_order` ASC");
 
 				foreach ($order_total_query->rows as $order_total) {
 					$this->load->model('extension/total/' . $order_total['code']);
@@ -863,7 +863,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				$language->load($language_code);
 				$language->load('mail/order');
 
-				$order_status_query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order_status` WHERE `order_status_id` = '" . (int)$order_status_id . "' AND `language_id` = '" . (int)$order_info['language_id'] . "'");
+				$order_status_query = $this->db->query("SELECT * FROM `oc_order_status` WHERE `order_status_id` = '" . (int)$order_status_id . "' AND `language_id` = '" . (int)$order_info['language_id'] . "'");
 
 				if ($order_status_query->num_rows) {
 					$order_status = $order_status_query->row['name'];
@@ -1000,7 +1000,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				foreach ($order_product_query->rows as $product) {
 					$option_data = array();
 
-					$order_option_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
+					$order_option_query = $this->db->query("SELECT * FROM oc_order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
 
 					foreach ($order_option_query->rows as $option) {
 						if ($option['type'] != 'file') {
@@ -1051,7 +1051,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				foreach ($order_product_query->rows as $product) {
 					$text .= $product['quantity'] . 'x ' . $product['name'] . ' (' . $product['model'] . ') ' . html_entity_decode($this->currency->format($product['total'] + ($this->config->get('config_tax') ? ($product['tax'] * $product['quantity']) : 0), $order_info['currency_code'], $order_info['currency_value']), ENT_NOQUOTES, 'UTF-8') . "\n";
 
-					$order_option_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
+					$order_option_query = $this->db->query("SELECT * FROM oc_order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
 
 					foreach ($order_option_query->rows as $option) {
 						$text .= chr(9) . '-' . $option['name'] . ' ' . (utf8_strlen($option['value']) > 20) ? utf8_substr($option['value'], 0, 20) . '..' : $option['value'] . "\n";
@@ -1107,7 +1107,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$item_id = $this->openbay->ebay->getEbayItemId($product_id);
 
 		if ($this->openbay->addonLoad('openstock') && !empty($sku)) {
-			$this->db->query("UPDATE `" . DB_PREFIX . "product_option_variant` SET `stock` = (`stock` " . $this->db->escape((string)$symbol) . " " . (int)$qty . ") WHERE `sku` = '" . (string)$sku . "' AND `product_id` = '" . (int)$product_id . "' AND `subtract` = '1'");
+			$this->db->query("UPDATE `oc_product_option_variant` SET `stock` = (`stock` " . $this->db->escape((string)$symbol) . " " . (int)$qty . ") WHERE `sku` = '" . (string)$sku . "' AND `product_id` = '" . (int)$product_id . "' AND `subtract` = '1'");
 
 			$stock = $this->openbay->ebay->getProductStockLevel($product_id, $sku);
 
@@ -1115,7 +1115,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 			$this->openbay->ebay->putStockUpdate($item_id, $stock['quantity'], $sku);
 		} else {
-			$this->db->query("UPDATE `" . DB_PREFIX . "product` SET `quantity` = (`quantity` " . $this->db->escape((string)$symbol) . " " . (int)$qty . ") WHERE `product_id` = '" . (int)$product_id . "' AND `subtract` = '1'");
+			$this->db->query("UPDATE `oc_product` SET `quantity` = (`quantity` " . $this->db->escape((string)$symbol) . " " . (int)$qty . ") WHERE `product_id` = '" . (int)$product_id . "' AND `subtract` = '1'");
 
 			$stock = $this->openbay->ebay->getProductStockLevel($product_id);
 
@@ -1129,7 +1129,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 	public function getCountryAddressFormat($iso2) {
 		$this->openbay->ebay->log('getCountryAddressFormat() - Getting country from ISO2: ' . $iso2);
 
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE `iso_code_2` = '" . $this->db->escape($iso2) . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($iso2) . "' LIMIT 1");
 
 		if (!isset($query->row['address_format']) || $query->row['address_format'] == '') {
 			$this->openbay->ebay->log('getCountryAddressFormat() - No country found, default');
@@ -1143,32 +1143,32 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 	public function orderLinkCreate($order_id, $smp_id) {
 		$this->openbay->ebay->log('orderLinkCreate() - order_id: ' . $order_id . ', smp_id: ' . $smp_id);
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "ebay_order` SET `order_id` = '" . (int)$order_id . "', `smp_id` = '" . (int)$smp_id . "', `parent_ebay_order_id` = 0");
+		$this->db->query("INSERT INTO `oc_ebay_order` SET `order_id` = '" . (int)$order_id . "', `smp_id` = '" . (int)$smp_id . "', `parent_ebay_order_id` = 0");
 
 		return $this->db->getLastId();
 	}
 
 	public function delete($order_id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order_product` WHERE `order_id` = '" . (int)$order_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order_option` WHERE `order_id` = '" . (int)$order_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order_history` WHERE `order_id` = '" . (int)$order_id . "'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order_total` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$this->db->query("DELETE FROM `oc_order_product` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_order_option` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_order_history` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_order_total` WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function lockAdd($smp_id) {
 		$this->openbay->ebay->log('lockAdd() - Added lock, smp_id: ' . $smp_id);
-		$this->db->query("INSERT INTO`" . DB_PREFIX . "ebay_order_lock` SET `smp_id` = '" . (int)$smp_id . "'");
+		$this->db->query("INSERT INTO`oc_ebay_order_lock` SET `smp_id` = '" . (int)$smp_id . "'");
 	}
 
 	public function lockDelete($smp_id) {
 		$this->openbay->ebay->log('lockDelete() - Delete lock, smp_id: ' . $smp_id);
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "ebay_order_lock` WHERE `smp_id` = '" . (int)$smp_id . "'");
+		$this->db->query("DELETE FROM `oc_ebay_order_lock` WHERE `smp_id` = '" . (int)$smp_id . "'");
 	}
 
 	public function lockExists($smp_id) {
 		$this->openbay->ebay->log('lockExists() - Check lock, smp_id: ' . (int)$smp_id);
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_order_lock` WHERE `smp_id` = '" . (int)$smp_id . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_ebay_order_lock` WHERE `smp_id` = '" . (int)$smp_id . "' LIMIT 1");
 
 		if ($query->num_rows > 0) {
 			$this->openbay->ebay->log('lockExists() - Lock found, stopping order . ');
@@ -1185,7 +1185,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 			$order_products = $this->openbay->getOrderProducts($order_id);
 
 			foreach($order_products as $order_product) {
-				$product = $this->db->query("SELECT * FROM `" . DB_PREFIX . "product` WHERE `product_id` = '" . (int)$order_product['product_id'] . "' LIMIT 1")->row;
+				$product = $this->db->query("SELECT * FROM `oc_product` WHERE `product_id` = '" . (int)$order_product['product_id'] . "' LIMIT 1")->row;
 
 				if ($this->openbay->addonLoad('openstock') && (isset($product['has_option']) && $product['has_option'] == 1)) {
 					$order_product_variant = $this->openbay->getOrderProductVariant($order_id, $order_product['product_id'], $order_product['order_product_id']);

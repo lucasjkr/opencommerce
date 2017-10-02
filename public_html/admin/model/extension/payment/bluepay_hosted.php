@@ -2,7 +2,7 @@
 class ModelExtensionPaymentBluePayHosted extends Model {
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "bluepay_hosted_order` (
+			CREATE TABLE IF NOT EXISTS `oc_bluepay_hosted_order` (
 			  `bluepay_hosted_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `transaction_id` VARCHAR(50),
@@ -17,7 +17,7 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "bluepay_hosted_order_transaction` (
+			CREATE TABLE IF NOT EXISTS `oc_bluepay_hosted_order_transaction` (
 			  `bluepay_hosted_order_transaction_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `bluepay_hosted_order_id` INT(11) NOT NULL,
 			  `date_added` DATETIME NOT NULL,
@@ -27,7 +27,7 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "bluepay_hosted_card` (
+			CREATE TABLE IF NOT EXISTS `oc_bluepay_hosted_card` (
 			  `card_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `customer_id` INT(11) NOT NULL,
 			  `token` VARCHAR(50) NOT NULL,
@@ -39,9 +39,9 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "bluepay_hosted_order`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "bluepay_hosted_order_transaction`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "bluepay_hosted_card`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_bluepay_hosted_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_bluepay_hosted_order_transaction`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_bluepay_hosted_card`;");
 	}
 
 	public function void($order_id) {
@@ -81,7 +81,7 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 	public function updateVoidStatus($bluepay_hosted_order_id, $status) {
 		$this->logger('$bluepay_hosted_order_id:\r\n' . print_r($bluepay_hosted_order_id, 1));
 		$this->logger('$status:\r\n' . print_r($status, 1));
-		$this->db->query("UPDATE `" . DB_PREFIX . "bluepay_hosted_order` SET `void_status` = '" . (int)$status . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
+		$this->db->query("UPDATE `oc_bluepay_hosted_order` SET `void_status` = '" . (int)$status . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
 	}
 
 	public function release($order_id, $amount) {
@@ -117,7 +117,7 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 	}
 
 	public function updateReleaseStatus($bluepay_hosted_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "bluepay_hosted_order` SET `release_status` = '" . (int)$status . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
+		$this->db->query("UPDATE `oc_bluepay_hosted_order` SET `release_status` = '" . (int)$status . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
 	}
 
 	public function rebate($order_id, $amount) {
@@ -152,16 +152,16 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 	}
 
 	public function updateRebateStatus($bluepay_hosted_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "bluepay_hosted_order` SET `rebate_status` = '" . (int)$status . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
+		$this->db->query("UPDATE `oc_bluepay_hosted_order` SET `rebate_status` = '" . (int)$status . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
 	}
 
 	public function updateTransactionId($bluepay_hosted_order_id, $transaction_id) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "bluepay_hosted_order` SET `transaction_id` = '" . (int)$transaction_id . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
+		$this->db->query("UPDATE `oc_bluepay_hosted_order` SET `transaction_id` = '" . (int)$transaction_id . "' WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
 	}
 
 	public function getOrder($order_id) {
 
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "bluepay_hosted_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_bluepay_hosted_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -174,7 +174,7 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 	}
 
 	private function getTransactions($bluepay_hosted_order_id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "bluepay_hosted_order_transaction` WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
+		$qry = $this->db->query("SELECT * FROM `oc_bluepay_hosted_order_transaction` WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "'");
 
 		if ($qry->num_rows) {
 			return $qry->rows;
@@ -186,17 +186,17 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 	public function addTransaction($bluepay_hosted_order_id, $type, $total) {
 		$this->logger('$type:\r\n' . print_r($type, 1));
 		$this->logger('$total:\r\n' . print_r($total, 1));
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "bluepay_hosted_order_transaction` SET `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
+		$this->db->query("INSERT INTO `oc_bluepay_hosted_order_transaction` SET `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
 	}
 
 	public function getTotalReleased($bluepay_hosted_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "bluepay_hosted_order_transaction` WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "' AND (`type` = 'payment' OR `type` = 'rebate')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_bluepay_hosted_order_transaction` WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "' AND (`type` = 'payment' OR `type` = 'rebate')");
 
 		return (float)$query->row['total'];
 	}
 
 	public function getTotalRebated($bluepay_hosted_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "bluepay_hosted_order_transaction` WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "' AND 'rebate'");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_bluepay_hosted_order_transaction` WHERE `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "' AND 'rebate'");
 
 		return (float)$query->row['total'];
 	}

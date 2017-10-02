@@ -1,37 +1,37 @@
 <?php
 class ModelExtensionOpenBayAmazonProduct extends Model {
 	public function setStatus($insertion_id, $status_string) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "amazon_product` SET `status` = '" . $this->db->escape($status_string) . "' WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'");
+		$this->db->query("UPDATE `oc_amazon_product` SET `status` = '" . $this->db->escape($status_string) . "' WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'");
 	}
 
 	public function getProductRows($insertion_id) {
-		return $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazon_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->rows;
+		return $this->db->query("SELECT * FROM `oc_amazon_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->rows;
 	}
 
 	public function getProduct($insertion_id) {
-		return $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazon_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->row;
+		return $this->db->query("SELECT * FROM `oc_amazon_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->row;
 	}
 
 	public function linkItems(array $data) {
 		foreach ($data as $amazon_sku => $product_id) {
-			$var_row = $this->db->query("SELECT `var` FROM `" . DB_PREFIX . "amazon_product` WHERE `sku` = '" . $this->db->escape($amazon_sku) . "' AND `product_id` = '" . (int)$product_id . "'")->row;
+			$var_row = $this->db->query("SELECT `var` FROM `oc_amazon_product` WHERE `sku` = '" . $this->db->escape($amazon_sku) . "' AND `product_id` = '" . (int)$product_id . "'")->row;
 			$var = isset($var_row['var']) ? $var_row['var'] : '';
 			$this->linkProduct($amazon_sku, $product_id, $var);
 		}
 	}
 
 	public function insertError($data) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "amazon_product_error` SET `sku` = '" . $this->db->escape((string)$data['sku']) . "', `error_code` = '" . (int)$data['error_code'] . "', `message` = '" . $this->db->escape((string)$data['message']) . "', `insertion_id` = '" . $this->db->escape((string)$data['insertion_id']) . "'");
+		$this->db->query("INSERT INTO `oc_amazon_product_error` SET `sku` = '" . $this->db->escape((string)$data['sku']) . "', `error_code` = '" . (int)$data['error_code'] . "', `message` = '" . $this->db->escape((string)$data['message']) . "', `insertion_id` = '" . $this->db->escape((string)$data['insertion_id']) . "'");
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "amazon_product`SET `status` = 'error' WHERE `sku` = '" . $this->db->escape((string)$data['sku']) . "' AND `insertion_id` = '" . $this->db->escape((string)$data['insertion_id']) . "'");
+		$this->db->query("UPDATE `oc_amazon_product`SET `status` = 'error' WHERE `sku` = '" . $this->db->escape((string)$data['sku']) . "' AND `insertion_id` = '" . $this->db->escape((string)$data['insertion_id']) . "'");
 	}
 
 	public function deleteErrors($insertion_id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "amazon_product_error` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'");
+		$this->db->query("DELETE FROM `oc_amazon_product_error` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'");
 	}
 
 	public function setSubmitError($insertion_id, $message) {
-		$sku_rows = $this->db->query("SELECT `sku` FROM `" . DB_PREFIX . "amazon_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->rows;
+		$sku_rows = $this->db->query("SELECT `sku` FROM `oc_amazon_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->rows;
 
 		foreach ($sku_rows as $sku_row) {
 			$data = array(
@@ -45,9 +45,9 @@ class ModelExtensionOpenBayAmazonProduct extends Model {
 	}
 
 	public function linkProduct($amazon_sku, $product_id, $var = '') {
-		$count = $this->db->query("SELECT COUNT(*) as 'count' FROM `" . DB_PREFIX . "amazon_product_link` WHERE `product_id` = '" . (int)$product_id . "' AND `amazon_sku` = '" . $this->db->escape($amazon_sku) . "' AND `var` = '" . $this->db->escape($var) . "' LIMIT 1")->row;
+		$count = $this->db->query("SELECT COUNT(*) as 'count' FROM `oc_amazon_product_link` WHERE `product_id` = '" . (int)$product_id . "' AND `amazon_sku` = '" . $this->db->escape($amazon_sku) . "' AND `var` = '" . $this->db->escape($var) . "' LIMIT 1")->row;
 		if ($count['count'] == 0) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "amazon_product_link` SET `product_id` = '" . (int)$product_id . "', `amazon_sku` = '" . $this->db->escape($amazon_sku) . "', `var` = '" . $this->db->escape($var) . "'");
+			$this->db->query("INSERT INTO `oc_amazon_product_link` SET `product_id` = '" . (int)$product_id . "', `amazon_sku` = '" . $this->db->escape($amazon_sku) . "', `var` = '" . $this->db->escape($var) . "'");
 		}
 	}
 
@@ -88,7 +88,7 @@ class ModelExtensionOpenBayAmazonProduct extends Model {
 			$data = json_encode($result['results']);
 
 			$this->db->query("
-				UPDATE " . DB_PREFIX . "amazon_product_search
+				UPDATE oc_amazon_product_search
 				SET matches = " . (int)$results_found . ",
 					`data` = '" . $this->db->escape((string)$data) . "',
 					`status` = 'finished'
@@ -100,7 +100,7 @@ class ModelExtensionOpenBayAmazonProduct extends Model {
 	}
 
 	public function addListingReport($data) {
-		$sql = "INSERT INTO " . DB_PREFIX . "amazon_listing_report (marketplace, sku, quantity, asin, price) VALUES ";
+		$sql = "INSERT INTO oc_amazon_listing_report (marketplace, sku, quantity, asin, price) VALUES ";
 
 		$sql_values = array();
 
@@ -121,7 +121,7 @@ class ModelExtensionOpenBayAmazonProduct extends Model {
 
 			$this->config->set('openbay_amazon_processing_listing_reports', $marketplaces);
 
-			$this->db->query("UPDATE " . DB_PREFIX . "setting SET `value` = '" . $this->db->escape(serialize($marketplaces)) . "', serialized = 1 WHERE `key` = 'openbay_amazon_processing_listing_reports'");
+			$this->db->query("UPDATE oc_setting SET `value` = '" . $this->db->escape(serialize($marketplaces)) . "', serialized = 1 WHERE `key` = 'openbay_amazon_processing_listing_reports'");
 		}
 	}
 }

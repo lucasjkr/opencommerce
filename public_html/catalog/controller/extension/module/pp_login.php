@@ -86,12 +86,12 @@ class ControllerExtensionModulePPLogin extends Controller {
 					echo '<script type="text/javascript">window.opener.location = "' . $this->url->link('account/login', '', true) . '"; window.close();</script>';
 				}
 			} else {
-				$country = $this->db->query("SELECT `country_id` FROM `" . DB_PREFIX . "country` WHERE iso_code_2 = '" . $this->db->escape($user->address->country) . "'");
+				$country = $this->db->query("SELECT `country_id` FROM `oc_country` WHERE iso_code_2 = '" . $this->db->escape($user->address->country) . "'");
 
 				if ($country->num_rows) {
 					$country_id = $country->row['country_id'];
 
-					$zone = $this->db->query("SELECT `zone_id` FROM `" . DB_PREFIX . "zone` WHERE country_id = '" . (int)$country_id . "' AND name = '" . $this->db->escape($user->address->region) . "'");
+					$zone = $this->db->query("SELECT `zone_id` FROM `oc_zone` WHERE country_id = '" . (int)$country_id . "' AND name = '" . $this->db->escape($user->address->region) . "'");
 
 					if ($zone->num_rows) {
 						$zone_id = $zone->row['zone_id'];

@@ -1,7 +1,7 @@
 <?php
 class ModelExtensionPaymentPilibaba extends Model {
 	public function install() {
-		$this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "pilibaba_order` (
+		$this->db->query("CREATE TABLE IF NOT EXISTS `oc_pilibaba_order` (
 			`pilibaba_order_id` int(11) NOT NULL AUTO_INCREMENT,
 			`order_id` int(11) NOT NULL DEFAULT '0',
 			`amount` double NOT NULL,
@@ -13,7 +13,7 @@ class ModelExtensionPaymentPilibaba extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "pilibaba_order`");
+		$this->db->query("DROP TABLE IF EXISTS `oc_pilibaba_order`");
 
 		$this->disablePiliExpress();
 
@@ -49,7 +49,7 @@ class ModelExtensionPaymentPilibaba extends Model {
 	}
 
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "pilibaba_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_pilibaba_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($query->num_rows) {
 			return $query->row;
@@ -140,19 +140,19 @@ class ModelExtensionPaymentPilibaba extends Model {
 		}
 		curl_close($ch);
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "pilibaba_order` SET `tracking` = '" . $this->db->escape($tracking_number) . "' WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_pilibaba_order` SET `tracking` = '" . $this->db->escape($tracking_number) . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function enablePiliExpress() {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "extension` WHERE `type` = 'shipping' AND `code` = 'pilibaba'");
+		$query = $this->db->query("SELECT * FROM `oc_extension` WHERE `type` = 'shipping' AND `code` = 'pilibaba'");
 
 		if (!$query->num_rows) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "extension` SET `type` = 'shipping', `code` = 'pilibaba'");
+			$this->db->query("INSERT INTO `oc_extension` SET `type` = 'shipping', `code` = 'pilibaba'");
 		}
 	}
 
 	public function disablePiliExpress() {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "extension` WHERE `type` = 'shipping' AND `code` = 'pilibaba'");
+		$this->db->query("DELETE FROM `oc_extension` WHERE `type` = 'shipping' AND `code` = 'pilibaba'");
 	}
 
 	public function log($data) {

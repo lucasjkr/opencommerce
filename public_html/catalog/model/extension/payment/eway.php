@@ -4,7 +4,7 @@ class ModelExtensionPaymentEway extends Model {
 		$this->load->language('extension/payment/eway');
 
 		if ($this->config->get('payment_eway_status')) {
-			$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_eway_standard_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+			$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_eway_standard_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 			if (!$this->config->get('payment_eway_standard_geo_zone_id')) {
 				$status = true;
 			} elseif ($query->num_rows) {
@@ -36,20 +36,20 @@ class ModelExtensionPaymentEway extends Model {
 		if ($this->config->get('payment_eway_transaction_method') == 'payment') {
 			$cap = ",`capture_status` = '1'";
 		}
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "eway_order` SET `order_id` = '" . (int)$order_data['order_id'] . "', `created` = NOW(), `modified` = NOW(), `debug_data` = '" . $this->db->escape($order_data['debug_data']) . "', `amount` = '" . $this->currency->format($order_data['amount'], $order_data['currency_code'], false, false) . "', `currency_code` = '" . $this->db->escape($order_data['currency_code']) . "', `transaction_id` = '" . $this->db->escape($order_data['transaction_id']) . "'{$cap}");
+		$this->db->query("INSERT INTO `oc_eway_order` SET `order_id` = '" . (int)$order_data['order_id'] . "', `created` = NOW(), `modified` = NOW(), `debug_data` = '" . $this->db->escape($order_data['debug_data']) . "', `amount` = '" . $this->currency->format($order_data['amount'], $order_data['currency_code'], false, false) . "', `currency_code` = '" . $this->db->escape($order_data['currency_code']) . "', `transaction_id` = '" . $this->db->escape($order_data['transaction_id']) . "'{$cap}");
 
 		return $this->db->getLastId();
 	}
 
 	public function addTransaction($eway_order_id, $type, $transactionid, $order_info) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "eway_transactions` SET `eway_order_id` = '" . (int)$eway_order_id . "', `created` = NOW(), `transaction_id` = '" . $this->db->escape($transactionid) . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_eway_transactions` SET `eway_order_id` = '" . (int)$eway_order_id . "', `created` = NOW(), `transaction_id` = '" . $this->db->escape($transactionid) . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
 
 		return $this->db->getLastId();
 	}
 
 	public function getCards($customer_id) {
 
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "eway_card WHERE customer_id = '" . (int)$customer_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_eway_card WHERE customer_id = '" . (int)$customer_id . "'");
 
 		$card_data = array();
 
@@ -70,7 +70,7 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	public function checkToken($token_id) {
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "eway_card WHERE token_id = '" . (int)$token_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_eway_card WHERE token_id = '" . (int)$token_id . "'");
 		if ($query->num_rows) {
 			return true;
 		} else {
@@ -79,19 +79,19 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	public function addCard($order_id, $card_data) {
-		$this->db->query("INSERT into " . DB_PREFIX . "eway_card SET customer_id = '" . $this->db->escape($card_data['customer_id']) . "', order_id = '" . $this->db->escape($order_id) . "', digits = '" . $this->db->escape($card_data['Last4Digits']) . "', expiry = '" . $this->db->escape($card_data['ExpiryDate']) . "', type = '" . $this->db->escape($card_data['CardType']) . "'");
+		$this->db->query("INSERT into oc_eway_card SET customer_id = '" . $this->db->escape($card_data['customer_id']) . "', order_id = '" . $this->db->escape($order_id) . "', digits = '" . $this->db->escape($card_data['Last4Digits']) . "', expiry = '" . $this->db->escape($card_data['ExpiryDate']) . "', type = '" . $this->db->escape($card_data['CardType']) . "'");
 	}
 
 	public function updateCard($order_id, $token) {
-		$this->db->query("UPDATE " . DB_PREFIX . "eway_card SET token = '" . $this->db->escape($token) . "' WHERE order_id = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE oc_eway_card SET token = '" . $this->db->escape($token) . "' WHERE order_id = '" . (int)$order_id . "'");
 	}
 
 	public function updateFullCard($card_id, $token, $card_data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "eway_card SET token = '" . $this->db->escape($token) . "', digits = '" . $this->db->escape($card_data['Last4Digits']) . "', expiry = '" . $this->db->escape($card_data['ExpiryDate']) . "', type = '" . $this->db->escape($card_data['CardType']) . "' WHERE card_id = '" . (int)$card_id . "'");
+		$this->db->query("UPDATE oc_eway_card SET token = '" . $this->db->escape($token) . "', digits = '" . $this->db->escape($card_data['Last4Digits']) . "', expiry = '" . $this->db->escape($card_data['ExpiryDate']) . "', type = '" . $this->db->escape($card_data['CardType']) . "' WHERE card_id = '" . (int)$card_id . "'");
 	}
 
 	public function deleteCard($order_id) {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "eway_card WHERE order_id = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM oc_eway_card WHERE order_id = '" . (int)$order_id . "'");
 	}
 
 	public function getAccessCode($request) {

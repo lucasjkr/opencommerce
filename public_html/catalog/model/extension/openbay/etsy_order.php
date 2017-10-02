@@ -77,9 +77,9 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 	public function updateOrderStatus($order_id, $status_id) {
 		$this->openbay->etsy->log("Model updateOrderStatus Order ID: " . $order_id . ", Status ID: " . $status_id);
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "order_history` (`order_id`, `order_status_id`, `notify`, `comment`, `date_added`) VALUES (" . (int)$order_id . ", " . (int)$status_id . ", 0, '', NOW())");
+		$this->db->query("INSERT INTO `oc_order_history` (`order_id`, `order_status_id`, `notify`, `comment`, `date_added`) VALUES (" . (int)$order_id . ", " . (int)$status_id . ", 0, '', NOW())");
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET `order_status_id` = " . (int)$status_id . " WHERE `order_id` = " . (int)$order_id);
+		$this->db->query("UPDATE `oc_order` SET `order_status_id` = " . (int)$status_id . " WHERE `order_id` = " . (int)$order_id);
 	}
 
 	public function updatePaid($order_id, $status) {
@@ -89,7 +89,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 			$this->updateOrderStatus($order_id, $this->config->get('etsy_order_status_paid'));
 		}
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "etsy_order` SET `paid` = " . (int)$status . " WHERE `order_id` = " . (int)$order_id);
+		$this->db->query("UPDATE `oc_etsy_order` SET `paid` = " . (int)$status . " WHERE `order_id` = " . (int)$order_id);
 	}
 
 	public function updateShipped($order_id, $status) {
@@ -99,28 +99,28 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 			$this->updateOrderStatus($order_id, $this->config->get('etsy_order_status_shipped'));
 		}
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "etsy_order` SET `shipped` = " . (int)$status . " WHERE `order_id` = " . (int)$order_id);
+		$this->db->query("UPDATE `oc_etsy_order` SET `shipped` = " . (int)$status . " WHERE `order_id` = " . (int)$order_id);
 	}
 
 	public function modifyStock($product_id, $qty, $symbol = '-') {
 		$this->openbay->etsy->log("Model modifyStock Product ID: " . $product_id . ", Qty: " . $qty . ", Symbol: " . $symbol);
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "product` SET `quantity` = (`quantity` " . $this->db->escape((string)$symbol) . " " . (int)$qty . ") WHERE `product_id` = '" . (int)$product_id . "' AND `subtract` = '1'");
+		$this->db->query("UPDATE `oc_product` SET `quantity` = (`quantity` " . $this->db->escape((string)$symbol) . " " . (int)$qty . ") WHERE `product_id` = '" . (int)$product_id . "' AND `subtract` = '1'");
 	}
 
 	private function lockAdd($order_id) {
 		$this->openbay->etsy->log("Model lockAdd Order ID: " . $order_id);
-		$this->db->query("INSERT INTO`" . DB_PREFIX . "etsy_order_lock` SET `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("INSERT INTO`oc_etsy_order_lock` SET `order_id` = '" . (int)$order_id . "'");
 	}
 
 	private function lockDelete($order_id) {
 		$this->openbay->etsy->log("Model lockDelete Order ID: " . $order_id);
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "etsy_order_lock` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_etsy_order_lock` WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	private function lockExists($order_id) {
 		$this->openbay->etsy->log("Model lockExists Order ID: " . $order_id);
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "etsy_order_lock` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_etsy_order_lock` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($query->num_rows > 0) {
 			$this->openbay->etsy->log("Yes");
@@ -139,7 +139,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 		$customer_name = $this->openbay->splitName($order->name);
 
 		if (!empty($order->country->iso)){
-			$country_qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE `iso_code_2` = '" . $this->db->escape($order->country->iso) . "'");
+			$country_qry = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($order->country->iso) . "'");
 		}
 
 		if (!empty($country_qry->num_rows)){
@@ -154,7 +154,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 			$country_address_format = $this->config->get('etsy_address_format');
 		}
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "order` SET
+		$this->db->query("INSERT INTO `oc_order` SET
 		   `invoice_prefix`           = '" . $this->db->escape($this->config->get('config_invoice_prefix')) . "',
 		   `store_id`                 = '" . (int)$this->config->get('config_store_id') . "',
 		   `store_name`               = '" . $this->db->escape($this->config->get('config_name') . ' / Etsy') . "',
@@ -230,7 +230,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 				$product_model = '';
 			}
 
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "order_product` SET
+			$this->db->query("INSERT INTO `oc_order_product` SET
 			   `order_id`		= '" . (int)$order_id . "',
 			   `product_id`		= '" . (int)$product_id . "',
 			   `name`			= '" . $this->db->escape((string)$transaction->title) . "',
@@ -247,7 +247,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 			}
 		}
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "etsy_order` SET `order_id` = '" . (int)$order_id . "', `receipt_id` = '" . (int)$order->receipt_id . "'");
+		$this->db->query("INSERT INTO `oc_etsy_order` SET `order_id` = '" . (int)$order_id . "', `receipt_id` = '" . (int)$order->receipt_id . "'");
 
 		$totals = array();
 
@@ -289,7 +289,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 		);
 
 		foreach ($totals as $total) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "order_total` SET `order_id` = '" . (int)$order_id . "', `code` = '" . $this->db->escape($total['code']) . "', `title` = '" . $this->db->escape($total['title']) . "', `value` = '" . (double)$total['value'] . "', `sort_order` = '" . (int)$total['sort_order'] . "'");
+			$this->db->query("INSERT INTO `oc_order_total` SET `order_id` = '" . (int)$order_id . "', `code` = '" . $this->db->escape($total['code']) . "', `title` = '" . $this->db->escape($total['title']) . "', `value` = '" . (double)$total['value'] . "', `sort_order` = '" . (int)$total['sort_order'] . "'");
 		}
 
 		$this->openbay->etsy->log("Setting order to new order status ID: " . $this->config->get('etsy_order_status_new'));

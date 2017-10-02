@@ -1,7 +1,7 @@
 <?php
 class ModelAccountTransaction extends Model {
 	public function getTransactions($data = array()) {
-		$sql = "SELECT * FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'";
+		$sql = "SELECT * FROM `oc_customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'";
 
 		$sort_data = array(
 			'amount',
@@ -39,13 +39,13 @@ class ModelAccountTransaction extends Model {
 	}
 
 	public function getTotalTransactions() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalAmount() {
-		$query = $this->db->query("SELECT SUM(amount) AS total FROM `" . DB_PREFIX . "customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "' GROUP BY customer_id");
+		$query = $this->db->query("SELECT SUM(amount) AS total FROM `oc_customer_transaction` WHERE customer_id = '" . (int)$this->customer->getId() . "' GROUP BY customer_id");
 
 		if ($query->num_rows) {
 			return $query->row['total'];

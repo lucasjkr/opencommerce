@@ -1,16 +1,16 @@
 <?php
 class ModelExtensionOpenBayEbayTemplate extends Model {
 	public function add($data) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "ebay_template` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `html` = '" . $this->db->escape((string)$data['html']) . "'");
+		$this->db->query("INSERT INTO `oc_ebay_template` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `html` = '" . $this->db->escape((string)$data['html']) . "'");
 		return $this->db->getLastId();
 	}
 
 	public function edit($id, $data) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "ebay_template` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `html` = '" . $this->db->escape((string)$data['html']) . "' WHERE `template_id` = '" . (int)$id . "' LIMIT 1");
+		$this->db->query("UPDATE `oc_ebay_template` SET `name` = '" . $this->db->escape((string)$data['name']) . "', `html` = '" . $this->db->escape((string)$data['html']) . "' WHERE `template_id` = '" . (int)$id . "' LIMIT 1");
 	}
 
 	public function delete($id) {
-		$qry = $this->db->query("DELETE FROM `" . DB_PREFIX . "ebay_template` WHERE `template_id` = '" . (int)$id . "' LIMIT 1");
+		$qry = $this->db->query("DELETE FROM `oc_ebay_template` WHERE `template_id` = '" . (int)$id . "' LIMIT 1");
 
 		if ($qry->countAffected() > 0) {
 			return true;
@@ -20,7 +20,7 @@ class ModelExtensionOpenBayEbayTemplate extends Model {
 	}
 
 	public function get($id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_template` WHERE `template_id` = '" . (int)$id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_ebay_template` WHERE `template_id` = '" . (int)$id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$row = $qry->row;
@@ -34,7 +34,7 @@ class ModelExtensionOpenBayEbayTemplate extends Model {
 	}
 
 	public function getAll() {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_template`");
+		$qry = $this->db->query("SELECT * FROM `oc_ebay_template`");
 
 		$templates = array();
 

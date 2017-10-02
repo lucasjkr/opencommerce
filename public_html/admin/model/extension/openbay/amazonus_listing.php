@@ -95,7 +95,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 
 		if ($response['status'] === 1) {
 			$this->db->query("
-			REPLACE INTO `" . DB_PREFIX . "amazonus_product`
+			REPLACE INTO `oc_amazonus_product`
 			SET `product_id` = " . (int)$data['product_id'] . ",
 				`status` = 'uploaded',
 				`version` = 3,
@@ -163,7 +163,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 			if ($response['status'] == 1) {
 				foreach ($request as $product) {
 					$this->db->query("
-						REPLACE INTO `" . DB_PREFIX . "amazonus_product`
+						REPLACE INTO `oc_amazonus_product`
 						SET `product_id` = " . (int)$product['product_id'] . ",
 							`status` = 'uploaded',
 							`var` = '',
@@ -182,7 +182,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 		foreach ($search_data as $products) {
 			foreach ($products as $product) {
 				$this->db->query("
-					REPLACE INTO " . DB_PREFIX . "amazonus_product_search (product_id, `status`)
+					REPLACE INTO oc_amazonus_product_search (product_id, `status`)
 					VALUES (" . (int)$product['product_id'] . ", 'searching')");
 			}
 		}
