@@ -12,9 +12,9 @@ class ControllerExtensionPaymentSquareup extends Controller {
         $this->load->library('squareup');
 
         if ($this->request->server['HTTPS']) {
-            $server = HTTPS_SERVER;
+            $server = HTTP_ADMIN;
         } else {
-            $server = HTTP_SERVER;
+            $server = HTTP_ADMIN;
         }
 
         $previous_setting = $this->model_setting_setting->getSetting('payment_squareup');
