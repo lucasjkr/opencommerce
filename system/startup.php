@@ -5,9 +5,12 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+// Version
+define('VERSION', '0.9');
+
 // Check Version
-if (version_compare(phpversion(), '5.5.0', '<') == true) {
-	exit('PHP5.5+ Required');
+if (version_compare(phpversion(), '7.0.0', '<') == true) {
+	exit('PHP7.0+ Required');
 }
 
 if (!ini_get('date.timezone')) {
