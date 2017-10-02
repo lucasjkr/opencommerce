@@ -1,16 +1,16 @@
 <?php
 class ModelExtensionPaymentAmazonLoginPay extends Model {
 	public function getCountry($iso2) {
-		return $this->db->query("SELECT `country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format` FROM `" . DB_PREFIX . "country` WHERE `iso_code_2` = '" . $this->db->escape(strtoupper($iso2)) . "' AND `status` = 1 LIMIT 1")->row;
+		return $this->db->query("SELECT `country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format` FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape(strtoupper($iso2)) . "' AND `status` = 1 LIMIT 1")->row;
 	}
 
 	public function getZone($name, $country_id) {
-		return $this->db->query("SELECT `zone_id`, `code` FROM `" . DB_PREFIX . "zone` WHERE (LOWER(`name`) LIKE '" . $this->db->escape(strtolower($name)) . "' OR `code` LIKE '" . $this->db->escape(strtolower($name)) . "') AND `country_id` = " . (int)$country_id . " LIMIT 1")->row;
+		return $this->db->query("SELECT `zone_id`, `code` FROM `oc_zone` WHERE (LOWER(`name`) LIKE '" . $this->db->escape(strtolower($name)) . "' OR `code` LIKE '" . $this->db->escape(strtolower($name)) . "') AND `country_id` = " . (int)$country_id . " LIMIT 1")->row;
 	}
 
 	public function addTaxesForTotals($order_id, $totals) {
 		foreach ($totals as $total) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "amazon_login_pay_order_total_tax` (`order_total_id`, `code`, `tax`) SELECT `order_total_id`, `code`, " . (float)$total['lpa_tax'] . " FROM `" . DB_PREFIX . "order_total` WHERE `order_id` = " . (int)$order_id . " AND `code` = '" . $this->db->escape($total['code']) . "' AND `title` = '" . $this->db->escape($total['title']) . "'");
+			$this->db->query("INSERT INTO `oc_amazon_login_pay_order_total_tax` (`order_total_id`, `code`, `tax`) SELECT `order_total_id`, `code`, " . (float)$total['lpa_tax'] . " FROM `oc_order_total` WHERE `order_id` = " . (int)$order_id . " AND `code` = '" . $this->db->escape($total['code']) . "' AND `title` = '" . $this->db->escape($total['title']) . "'");
 		}
 	}
 
@@ -21,7 +21,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer SET customer_group_id = '" . (int)$customer_group_id . "', store_id = '" . (int)$this->config->get('config_store_id') . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', fax = '" . $this->db->escape((string)$data['fax']) . "', custom_field = '" . $this->db->escape(isset($data['custom_field']['account']) ? json_encode($data['custom_field']['account']) : '') . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', newsletter = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '1', approved = '" . (int)!$customer_group_info['approval'] . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_customer SET customer_group_id = '" . (int)$customer_group_id . "', store_id = '" . (int)$this->config->get('config_store_id') . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', fax = '" . $this->db->escape((string)$data['fax']) . "', custom_field = '" . $this->db->escape(isset($data['custom_field']['account']) ? json_encode($data['custom_field']['account']) : '') . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', newsletter = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '1', approved = '" . (int)!$customer_group_info['approval'] . "', date_added = NOW()");
 
 		$customer_id = $this->db->getLastId();
 
@@ -106,7 +106,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	public function addAddress($address) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "address` WHERE `firstname` = '" . $this->db->escape($address['firstname']) . "' AND `lastname` = '" . $this->db->escape($address['lastname']) . "' AND `address_1` = '" . $this->db->escape($address['address_1']) . "' AND `address_2` = '" . $this->db->escape($address['address_2']) . "' AND `postcode` = '" . $this->db->escape($address['postcode']) . "' AND `city` = '" . $this->db->escape($address['city']) . "' AND `zone_id` = '" . $this->db->escape($address['zone_id']) . "' AND `country_id` = '" . $this->db->escape($address['country_id']) . "'");
+		$query = $this->db->query("SELECT * FROM `oc_address` WHERE `firstname` = '" . $this->db->escape($address['firstname']) . "' AND `lastname` = '" . $this->db->escape($address['lastname']) . "' AND `address_1` = '" . $this->db->escape($address['address_1']) . "' AND `address_2` = '" . $this->db->escape($address['address_2']) . "' AND `postcode` = '" . $this->db->escape($address['postcode']) . "' AND `city` = '" . $this->db->escape($address['city']) . "' AND `zone_id` = '" . $this->db->escape($address['zone_id']) . "' AND `country_id` = '" . $this->db->escape($address['country_id']) . "'");
 		if (!$query->num_rows) {
 			$this->load->model('account/address');
 			$this->model_account_address->addAddress($this->session->data['lpa']['address']);
@@ -114,31 +114,31 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	public function setOrderShipping($order_id, $has_free_shipping) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "amazon_login_pay_order` SET `order_id` = '" . (int)$order_id . "', `free_shipping` = '" . (int)$has_free_shipping . "',`date_added` = now(), `modified` = now() ");
+		$this->db->query("INSERT INTO `oc_amazon_login_pay_order` SET `order_id` = '" . (int)$order_id . "', `free_shipping` = '" . (int)$has_free_shipping . "',`date_added` = now(), `modified` = now() ");
 		return $this->db->getLastId();
 	}
 
 	public function hasFreeShipping($order_id) {
-		return $this->db->query("SELECT `free_shipping` FROM `" . DB_PREFIX . "amazon_login_pay_order` WHERE `order_id` = " . (int)$order_id)->row['free_shipping'] == '1';
+		return $this->db->query("SELECT `free_shipping` FROM `oc_amazon_login_pay_order` WHERE `order_id` = " . (int)$order_id)->row['free_shipping'] == '1';
 	}
 
 	public function getShippingPrice($order_id) {
-		$query = $this->db->query("SELECT `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `" . DB_PREFIX . "order_total` `ot` LEFT JOIN `" . DB_PREFIX . "amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`) WHERE `ot`.`code` = 'shipping' AND `order_id` = " . (int)$order_id);
+		$query = $this->db->query("SELECT `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `oc_order_total` `ot` LEFT JOIN `oc_amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`) WHERE `ot`.`code` = 'shipping' AND `order_id` = " . (int)$order_id);
 		if ($query->num_rows) {
 			return $query->row['price'];
 		}
 	}
 
 	public function getAdditionalCharges($order_id) {
-		return $this->db->query("SELECT `ot`.`title`, `ot`.`order_total_id`, `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `" . DB_PREFIX . "order_total` `ot` LEFT JOIN `" . DB_PREFIX . "amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`)  WHERE `ott`.`code` NOT IN ('shipping', 'total', 'sub_total', 'tax') AND `order_id` = " . (int)$order_id)->rows;
+		return $this->db->query("SELECT `ot`.`title`, `ot`.`order_total_id`, `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `oc_order_total` `ot` LEFT JOIN `oc_amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`)  WHERE `ott`.`code` NOT IN ('shipping', 'total', 'sub_total', 'tax') AND `order_id` = " . (int)$order_id)->rows;
 	}
 
 	public function addAmazonOrderId($order_id, $amazon_authorization_id, $capture_status, $total, $currency_code) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "amazon_login_pay_order` SET `amazon_order_reference_id` = '" . $this->db->escape($this->session->data['lpa']['AmazonOrderReferenceId']) . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "', `currency_code` = '" . $this->db->escape($currency_code) . "', `total` = '" . $total . "' WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_amazon_login_pay_order` SET `amazon_order_reference_id` = '" . $this->db->escape($this->session->data['lpa']['AmazonOrderReferenceId']) . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "', `currency_code` = '" . $this->db->escape($currency_code) . "', `total` = '" . $total . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function addTransaction($amazon_login_pay_order_id, $amazon_authorization_id, $amazon_capture_id, $type, $status, $total) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "amazon_login_pay_order_transaction` SET `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `amazon_capture_id` = '" . $this->db->escape($amazon_capture_id) . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `status` = '" . $this->db->escape($status) . "', `amount` = '" . $total . "'");
+		$this->db->query("INSERT INTO `oc_amazon_login_pay_order_transaction` SET `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `amazon_capture_id` = '" . $this->db->escape($amazon_capture_id) . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `status` = '" . $this->db->escape($status) . "', `amount` = '" . $total . "'");
 	}
 
 	public function closeOrderRef($amazon_order_reference_id) {
@@ -217,11 +217,11 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	public function editOrder($order_id, $order) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET  payment_firstname = '" . $this->db->escape($order['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($order['payment_lastname']) . "', payment_address_1 = '" . $this->db->escape($order['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($order['payment_address_2']) . "', payment_city = '" . $this->db->escape($order['payment_city']) . "', payment_zone = '" . $this->db->escape($order['payment_zone']) . "', payment_zone_id = " . (int)$order['payment_zone_id'] . ", payment_country = '" . $this->db->escape($order['payment_country']) . "', payment_country_id = " . (int)$order['payment_country_id'] . ", payment_postcode = '" . $this->db->escape($order['payment_postcode']) . "' WHERE order_id = " . (int)$order_id);
+		$this->db->query("UPDATE `oc_order` SET  payment_firstname = '" . $this->db->escape($order['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($order['payment_lastname']) . "', payment_address_1 = '" . $this->db->escape($order['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($order['payment_address_2']) . "', payment_city = '" . $this->db->escape($order['payment_city']) . "', payment_zone = '" . $this->db->escape($order['payment_zone']) . "', payment_zone_id = " . (int)$order['payment_zone_id'] . ", payment_country = '" . $this->db->escape($order['payment_country']) . "', payment_country_id = " . (int)$order['payment_country_id'] . ", payment_postcode = '" . $this->db->escape($order['payment_postcode']) . "' WHERE order_id = " . (int)$order_id);
 	}
 
 	public function updateStatus($amazon_id, $type, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "amazon_login_pay_order_transaction` SET `status` = '" . $this->db->escape($status) . "' WHERE `amazon_" . $type . "_id` = '" . $this->db->escape($amazon_id) . "' AND `type` = '" . $this->db->escape($type) . "'");
+		$this->db->query("UPDATE `oc_amazon_login_pay_order_transaction` SET `status` = '" . $this->db->escape($status) . "' WHERE `amazon_" . $type . "_id` = '" . $this->db->escape($amazon_id) . "' AND `type` = '" . $this->db->escape($type) . "'");
 	}
 
 	public function authorizationIpn($xml) {
@@ -278,12 +278,12 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	public function updateCaptureStatus($amazon_login_pay_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "amazon_login_pay_order` SET `capture_status` = '" . (int)$status . "' WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "'");
+		$this->db->query("UPDATE `oc_amazon_login_pay_order` SET `capture_status` = '" . (int)$status . "' WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "'");
 	}
 
 	public function getOrder($order_id) {
 
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazon_login_pay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_amazon_login_pay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -295,7 +295,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	private function getTransactions($amazon_login_pay_order_id, $currency_code) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazon_login_pay_order_transaction` WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_amazon_login_pay_order_transaction` WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "'");
 
 		$transactions = array();
 

@@ -3,7 +3,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/pp_express');
 
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone_to_geo_zone` WHERE `geo_zone_id` = '" . (int)$this->config->get('payment_pp_express_geo_zone_id') . "' AND `country_id` = '" . (int)$address['country_id'] . "' AND (`zone_id` = '" . (int)$address['zone_id'] . "' OR `zone_id` = '0')");
+		$query = $this->db->query("SELECT * FROM `oc_zone_to_geo_zone` WHERE `geo_zone_id` = '" . (int)$this->config->get('payment_pp_express_geo_zone_id') . "' AND `country_id` = '" . (int)$address['country_id'] . "' AND (`zone_id` = '" . (int)$address['zone_id'] . "' OR `zone_id` = '0')");
 
 		if ($this->config->get('payment_pp_express_total') > $total) {
 			$status = false;
@@ -34,7 +34,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 		 * 1 to 1 relationship with order table (extends order info)
 		 */
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "paypal_order` SET
+		$this->db->query("INSERT INTO `oc_paypal_order` SET
 			`order_id` = '" . (int)$order_data['order_id'] . "',
 			`date_added` = NOW(),
 			`date_modified` = NOW(),
@@ -51,7 +51,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 		 * 1 to many relationship with paypal order table, many transactions per 1 order
 		 */
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "paypal_order_transaction` SET
+		$this->db->query("INSERT INTO `oc_paypal_order_transaction` SET
 			`paypal_order_id` = '" . (int)$transaction_data['paypal_order_id'] . "',
 			`transaction_id` = '" . $this->db->escape($transaction_data['transaction_id']) . "',
 			`parent_id` = '" . $this->db->escape($transaction_data['parent_id']) . "',
@@ -234,19 +234,19 @@ class ModelExtensionPaymentPPExpress extends Model {
 	}
 
 	public function getTotalCaptured($paypal_order_id) {
-		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `" . DB_PREFIX . "paypal_order_transaction` WHERE `paypal_order_id` = '" . (int)$paypal_order_id . "' AND `pending_reason` != 'authorization' AND `pending_reason` != 'paymentreview' AND (`payment_status` = 'Partially-Refunded' OR `payment_status` = 'Completed' OR `payment_status` = 'Pending') AND `transaction_entity` = 'payment'");
+		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `oc_paypal_order_transaction` WHERE `paypal_order_id` = '" . (int)$paypal_order_id . "' AND `pending_reason` != 'authorization' AND `pending_reason` != 'paymentreview' AND (`payment_status` = 'Partially-Refunded' OR `payment_status` = 'Completed' OR `payment_status` = 'Pending') AND `transaction_entity` = 'payment'");
 
 		return $qry->row['amount'];
 	}
 
 	public function getTotalRefunded($paypal_order_id) {
-		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `" . DB_PREFIX . "paypal_order_transaction` WHERE `paypal_order_id` = '" . (int)$paypal_order_id . "' AND `payment_status` = 'Refunded'");
+		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `oc_paypal_order_transaction` WHERE `paypal_order_id` = '" . (int)$paypal_order_id . "' AND `payment_status` = 'Refunded'");
 
 		return $qry->row['amount'];
 	}
 
 	public function getTransactionRow($transaction_id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "paypal_order_transaction` `pt` LEFT JOIN `" . DB_PREFIX . "paypal_order` `po` ON `pt`.`paypal_order_id` = `po`.`paypal_order_id`  WHERE `pt`.`transaction_id` = '" . $this->db->escape($transaction_id) . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_paypal_order_transaction` `pt` LEFT JOIN `oc_paypal_order` `po` ON `pt`.`paypal_order_id` = `po`.`paypal_order_id`  WHERE `pt`.`transaction_id` = '" . $this->db->escape($transaction_id) . "' LIMIT 1");
 
 		if ($qry->num_rows > 0) {
 			return $qry->row;
@@ -256,7 +256,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 	}
 
 	public function updateOrder($capture_status, $order_id) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "paypal_order` SET `date_modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_paypal_order` SET `date_modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function call($data) {

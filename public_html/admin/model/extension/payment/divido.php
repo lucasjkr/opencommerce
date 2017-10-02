@@ -51,12 +51,12 @@ class ModelExtensionPaymentDivido extends Model {
 	}
 
 	public function getLookupByOrderId($order_id) {
-		return $this->db->query("SELECT * FROM `" . DB_PREFIX . "divido_lookup` WHERE `order_id` = " . (int)$order_id);
+		return $this->db->query("SELECT * FROM `oc_divido_lookup` WHERE `order_id` = " . (int)$order_id);
 	}
 
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "divido_product` (
+			CREATE TABLE IF NOT EXISTS `oc_divido_product` (
 				`product_id` INT(11) NOT NULL,
 				`display` CHAR(7) NOT NULL,
 				`plans` text,
@@ -64,7 +64,7 @@ class ModelExtensionPaymentDivido extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "divido_lookup` (
+			CREATE TABLE IF NOT EXISTS `oc_divido_lookup` (
 				`order_id` INT(11) NOT NULL,
 				`salt` CHAR(64) NOT NULL,
 				`proposal_id` CHAR(40),
@@ -75,7 +75,7 @@ class ModelExtensionPaymentDivido extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "divido_product`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "divido_lookup`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_divido_product`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_divido_lookup`;");
 	}
 }

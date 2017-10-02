@@ -5,17 +5,17 @@ class ModelExtensionPaymentLaybuy extends Model {
 
 		$this->log('Status: ' . $status, '1');
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "laybuy_transaction` SET `order_id` = '" . (int)$data['order_id'] . "', `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `address` = '" . $this->db->escape((string)$data['address']) . "', `suburb` = '" . $this->db->escape((string)$data['suburb']) . "', `state` = '" . $this->db->escape((string)$data['state']) . "', `country` = '" . $this->db->escape((string)$data['country']) . "', `postcode` = '" . $this->db->escape((string)$data['postcode']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `amount` = '" . (float)$data['amount'] . "', `currency` = '" . $this->db->escape((string)$data['currency']) . "', `downpayment` = '" . $this->db->escape((string)$data['downpayment']) . "', `months` = '" . (int)$data['months'] . "', `downpayment_amount` = '" . (float)$data['downpayment_amount'] . "', `payment_amounts` = '" . (float)$data['payment_amounts'] . "', `first_payment_due` = '" . $this->db->escape((string)$data['first_payment_due']) . "', `last_payment_due` = '" . $this->db->escape((string)$data['last_payment_due']) . "', `store_id` = '" . (int)$data['store_id'] . "', `status` = '" . (int)$status . "', `report` = '" . $this->db->escape((string)$data['report']) . "', `paypal_profile_id` = '" . $this->db->escape((string)$data['paypal_profile_id']) . "', `laybuy_ref_no` = '" . (int)$data['laybuy_ref_no'] . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_laybuy_transaction` SET `order_id` = '" . (int)$data['order_id'] . "', `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `address` = '" . $this->db->escape((string)$data['address']) . "', `suburb` = '" . $this->db->escape((string)$data['suburb']) . "', `state` = '" . $this->db->escape((string)$data['state']) . "', `country` = '" . $this->db->escape((string)$data['country']) . "', `postcode` = '" . $this->db->escape((string)$data['postcode']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `amount` = '" . (float)$data['amount'] . "', `currency` = '" . $this->db->escape((string)$data['currency']) . "', `downpayment` = '" . $this->db->escape((string)$data['downpayment']) . "', `months` = '" . (int)$data['months'] . "', `downpayment_amount` = '" . (float)$data['downpayment_amount'] . "', `payment_amounts` = '" . (float)$data['payment_amounts'] . "', `first_payment_due` = '" . $this->db->escape((string)$data['first_payment_due']) . "', `last_payment_due` = '" . $this->db->escape((string)$data['last_payment_due']) . "', `store_id` = '" . (int)$data['store_id'] . "', `status` = '" . (int)$status . "', `report` = '" . $this->db->escape((string)$data['report']) . "', `paypal_profile_id` = '" . $this->db->escape((string)$data['paypal_profile_id']) . "', `laybuy_ref_no` = '" . (int)$data['laybuy_ref_no'] . "', `date_added` = NOW()");
 	}
 
 	public function deleteRevisedTransaction($id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "laybuy_revise_request` WHERE `laybuy_revise_request_id` = '" . (int)$id . "'");
+		$this->db->query("DELETE FROM `oc_laybuy_revise_request` WHERE `laybuy_revise_request_id` = '" . (int)$id . "'");
 	}
 
 	public function deleteTransactionByOrderId($order_id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
 
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "laybuy_revise_request` WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("DELETE FROM `oc_laybuy_revise_request` WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function getInitialPayments() {
@@ -35,7 +35,7 @@ class ModelExtensionPaymentLaybuy extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/laybuy');
 
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone_to_geo_zone` WHERE `geo_zone_id` = '" . (int)$this->config->get('payment_laybuy_geo_zone_id') . "' AND `country_id` = '" . (int)$address['country_id'] . "' AND (`zone_id` = '" . (int)$address['zone_id'] . "' OR `zone_id` = '0')");
+		$query = $this->db->query("SELECT * FROM `oc_zone_to_geo_zone` WHERE `geo_zone_id` = '" . (int)$this->config->get('payment_laybuy_geo_zone_id') . "' AND `country_id` = '" . (int)$address['country_id'] . "' AND (`zone_id` = '" . (int)$address['zone_id'] . "' OR `zone_id` = '0')");
 
 		if ($this->config->get('payment_laybuy_total') > 0 && $this->config->get('payment_laybuy_total') > $total) {
 			$status = false;
@@ -83,7 +83,7 @@ class ModelExtensionPaymentLaybuy extends Model {
 					$status = false;
 					break;
 				} else {
-					$product = $this->db->query("SELECT GROUP_CONCAT(`category_id`) as `categories` FROM `" . DB_PREFIX . "product_to_category` WHERE `product_id` = '" . (int)$cart_product['product_id'] . "'");
+					$product = $this->db->query("SELECT GROUP_CONCAT(`category_id`) as `categories` FROM `oc_product_to_category` WHERE `product_id` = '" . (int)$cart_product['product_id'] . "'");
 
 					$product = $product->row;
 
@@ -137,25 +137,25 @@ class ModelExtensionPaymentLaybuy extends Model {
 	}
 
 	public function getPayPalProfileIds() {
-		$query = $this->db->query("SELECT `paypal_profile_id` FROM `" . DB_PREFIX . "laybuy_transaction` WHERE `status` = '1'");
+		$query = $this->db->query("SELECT `paypal_profile_id` FROM `oc_laybuy_transaction` WHERE `status` = '1'");
 
 		return $query->rows;
 	}
 
 	public function getRevisedTransaction($id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "laybuy_revise_request` WHERE `laybuy_revise_request_id` = '" . (int)$id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_laybuy_revise_request` WHERE `laybuy_revise_request_id` = '" . (int)$id . "'");
 
 		return $query->row;
 	}
 
 	public function getTransaction($id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "laybuy_transaction` WHERE `laybuy_transaction_id` = '" . (int)$id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_laybuy_transaction` WHERE `laybuy_transaction_id` = '" . (int)$id . "'");
 
 		return $query->row;
 	}
 
 	public function getTransactionByLayBuyRefId($laybuy_ref_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "laybuy_transaction` WHERE `laybuy_ref_no` = '" . (int)$laybuy_ref_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_laybuy_transaction` WHERE `laybuy_ref_no` = '" . (int)$laybuy_ref_id . "'");
 
 		return $query->row;
 	}
@@ -222,12 +222,12 @@ class ModelExtensionPaymentLaybuy extends Model {
 	}
 
 	public function updateCronRunTime() {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `key` = 'laybuy_cron_time'");
+		$this->db->query("DELETE FROM `oc_setting` WHERE `key` = 'laybuy_cron_time'");
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "setting` SET `store_id` = '0', `code` = 'laybuy', `key` = 'laybuy_cron_time', `value` = NOW(), `serialized` = '0'");
+		$this->db->query("INSERT INTO `oc_setting` SET `store_id` = '0', `code` = 'laybuy', `key` = 'laybuy_cron_time', `value` = NOW(), `serialized` = '0'");
 	}
 
 	public function updateTransaction($id, $status, $report, $transaction) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "laybuy_transaction` SET `status` = '" . (int)$status . "', `report` = '" . $this->db->escape($report) . "', `transaction` = '" . (int)$transaction . "' WHERE `laybuy_transaction_id` = '" . (int)$id . "'");
+		$this->db->query("UPDATE `oc_laybuy_transaction` SET `status` = '" . (int)$status . "', `report` = '" . $this->db->escape($report) . "', `transaction` = '" . (int)$transaction . "' WHERE `laybuy_transaction_id` = '" . (int)$id . "'");
 	}
 }

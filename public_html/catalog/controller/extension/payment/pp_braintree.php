@@ -580,7 +580,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 
 				$this->session->data['shipping_postcode'] = $this->request->post['details']['shippingAddress']['postalCode'];
 
-				$country_info = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE `iso_code_2` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['countryCode']) . "' AND `status` = '1' LIMIT 1")->row;
+				$country_info = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['countryCode']) . "' AND `status` = '1' LIMIT 1")->row;
 
 				if ($country_info) {
 					$this->session->data['guest']['shipping']['country_id'] = $country_info['country_id'];
@@ -601,7 +601,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 						$returned_shipping_zone = '';
 					}
 
-					$zone_info = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE (`name` = '" . $this->db->escape($returned_shipping_zone) . "' OR `code` = '" . $this->db->escape($returned_shipping_zone) . "') AND `status` = '1' AND `country_id` = '" . (int)$country_info['country_id'] . "' LIMIT 1")->row;
+					$zone_info = $this->db->query("SELECT * FROM `oc_zone` WHERE (`name` = '" . $this->db->escape($returned_shipping_zone) . "' OR `code` = '" . $this->db->escape($returned_shipping_zone) . "') AND `status` = '1' AND `country_id` = '" . (int)$country_info['country_id'] . "' LIMIT 1")->row;
 				} else {
 					$this->session->data['guest']['shipping']['country_id'] = '';
 					$this->session->data['guest']['shipping']['country'] = '';
@@ -702,8 +702,8 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 					unset($shipping_name[0]);
 					$shipping_last_name = implode(' ', $shipping_name);
 
-					$country_info = $this->db->query("SELECT * FROM `" . DB_PREFIX . "country` WHERE `iso_code_2` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['countryCode']) . "' AND `status` = '1' LIMIT 1")->row;
-					$zone_info = $this->db->query("SELECT * FROM `" . DB_PREFIX . "zone` WHERE (`name` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['state']) . "' OR `code` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['state']) . "') AND `status` = '1' AND `country_id` = '" . (int)$country_info['country_id'] . "'")->row;
+					$country_info = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['countryCode']) . "' AND `status` = '1' LIMIT 1")->row;
+					$zone_info = $this->db->query("SELECT * FROM `oc_zone` WHERE (`name` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['state']) . "' OR `code` = '" . $this->db->escape($this->request->post['details']['shippingAddress']['state']) . "') AND `status` = '1' AND `country_id` = '" . (int)$country_info['country_id'] . "'")->row;
 
 					$address_data = array(
 						'firstname'  => $shipping_first_name,

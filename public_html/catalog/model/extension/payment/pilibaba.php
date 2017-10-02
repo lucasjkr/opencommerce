@@ -24,7 +24,7 @@ class ModelExtensionPaymentPilibaba extends Model {
 	}
 
 	public function getOrderTaxAmount($order_id) {
-		$query = $this->db->query("SELECT SUM(`value`) AS `value` FROM `" . DB_PREFIX . "order_total` WHERE `order_id` = '" . (int)$order_id . "' AND `code` = 'tax'");
+		$query = $this->db->query("SELECT SUM(`value`) AS `value` FROM `oc_order_total` WHERE `order_id` = '" . (int)$order_id . "' AND `code` = 'tax'");
 
 		if ($query->num_rows) {
 			return intval(round($query->row['value'], 2) * 100);
@@ -34,7 +34,7 @@ class ModelExtensionPaymentPilibaba extends Model {
 	}
 
 	public function addPilibabaOrder($response_data) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "pilibaba_order` SET `order_id` = '" . (int)$response_data['orderNo'] . "', `amount` = '" . (float)$response_data['orderAmount'] . "', `fee` = '" . (float)$response_data['fee'] . "', `tracking` = '', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_pilibaba_order` SET `order_id` = '" . (int)$response_data['orderNo'] . "', `amount` = '" . (float)$response_data['orderAmount'] . "', `fee` = '" . (float)$response_data['fee'] . "', `tracking` = '', `date_added` = NOW()");
 	}
 
 	public function getConsumerInfo($order_id) {
@@ -75,7 +75,7 @@ class ModelExtensionPaymentPilibaba extends Model {
 
 		$data['firstname'] = implode(' ', $parts);
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `telephone` = '" . $this->db->escape((string)$data['mobile']) . "', `payment_firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `payment_lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `payment_address_1` = '" . $this->db->escape((string)$data['address']) . "', `payment_city` = '" . $this->db->escape((string)$data['city']) . "', `payment_postcode` = '" . $this->db->escape((string)$data['zipcode']) . "', `payment_country` = '" . $this->db->escape((string)$data['country']) . "', `payment_zone` = '" . $this->db->escape((string)$data['district']) . "', `shipping_firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `shipping_lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `shipping_address_1` = '" . $this->db->escape((string)$data['address']) . "', `shipping_city` = '" . $this->db->escape((string)$data['city']) . "', `shipping_postcode` = '" . $this->db->escape((string)$data['zipcode']) . "', `shipping_country` = '" . $this->db->escape((string)$data['country']) . "', `shipping_zone` = '" . $this->db->escape((string)$data['district']) . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_order` SET `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `telephone` = '" . $this->db->escape((string)$data['mobile']) . "', `payment_firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `payment_lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `payment_address_1` = '" . $this->db->escape((string)$data['address']) . "', `payment_city` = '" . $this->db->escape((string)$data['city']) . "', `payment_postcode` = '" . $this->db->escape((string)$data['zipcode']) . "', `payment_country` = '" . $this->db->escape((string)$data['country']) . "', `payment_zone` = '" . $this->db->escape((string)$data['district']) . "', `shipping_firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `shipping_lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `shipping_address_1` = '" . $this->db->escape((string)$data['address']) . "', `shipping_city` = '" . $this->db->escape((string)$data['city']) . "', `shipping_postcode` = '" . $this->db->escape((string)$data['zipcode']) . "', `shipping_country` = '" . $this->db->escape((string)$data['country']) . "', `shipping_zone` = '" . $this->db->escape((string)$data['district']) . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function log($data) {

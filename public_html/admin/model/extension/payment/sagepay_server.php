@@ -2,7 +2,7 @@
 class ModelExtensionPaymentSagepayServer extends Model {
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "sagepay_server_order` (
+			CREATE TABLE IF NOT EXISTS `oc_sagepay_server_order` (
 			  `sagepay_server_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `customer_id` INT(11) NOT NULL,
@@ -22,7 +22,7 @@ class ModelExtensionPaymentSagepayServer extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "sagepay_server_order_transaction` (
+			CREATE TABLE IF NOT EXISTS `oc_sagepay_server_order_transaction` (
 			  `sagepay_server_order_transaction_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `sagepay_server_order_id` INT(11) NOT NULL,
 			  `date_added` DATETIME NOT NULL,
@@ -32,7 +32,7 @@ class ModelExtensionPaymentSagepayServer extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "sagepay_server_order_recurring` (
+			CREATE TABLE IF NOT EXISTS `oc_sagepay_server_order_recurring` (
 			  `sagepay_server_order_recurring_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `order_recurring_id` INT(11) NOT NULL,
@@ -51,7 +51,7 @@ class ModelExtensionPaymentSagepayServer extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "sagepay_server_card` (
+			CREATE TABLE IF NOT EXISTS `oc_sagepay_server_card` (
 			  `card_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `customer_id` INT(11) NOT NULL,
 			  `order_id` INT(11) NOT NULL,
@@ -64,10 +64,10 @@ class ModelExtensionPaymentSagepayServer extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "sagepay_server_order`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "sagepay_server_order_transaction`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "sagepay_server_order_recurring`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "sagepay_server_card`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_sagepay_server_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_sagepay_server_order_transaction`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_sagepay_server_order_recurring`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_sagepay_server_card`;");
 	}
 
 	public function void($order_id) {
@@ -104,7 +104,7 @@ class ModelExtensionPaymentSagepayServer extends Model {
 	}
 
 	public function updateVoidStatus($sagepay_server_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "sagepay_server_order` SET `void_status` = '" . (int)$status . "' WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "'");
+		$this->db->query("UPDATE `oc_sagepay_server_order` SET `void_status` = '" . (int)$status . "' WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "'");
 	}
 
 	public function release($order_id, $amount) {
@@ -142,11 +142,11 @@ class ModelExtensionPaymentSagepayServer extends Model {
 	}
 
 	public function updateReleaseStatus($sagepay_server_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "sagepay_server_order` SET `release_status` = '" . (int)$status . "' WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "'");
+		$this->db->query("UPDATE `oc_sagepay_server_order` SET `release_status` = '" . (int)$status . "' WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "'");
 	}
 
 	public function updateForRebate($sagepay_server_order_id, $order_ref) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "sagepay_server_order` SET `order_ref_previous` = '_multisettle_" . $this->db->escape($order_ref) . "' WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "' LIMIT 1");
+		$this->db->query("UPDATE `oc_sagepay_server_order` SET `order_ref_previous` = '_multisettle_" . $this->db->escape($order_ref) . "' WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "' LIMIT 1");
 	}
 
 	public function rebate($order_id, $amount) {
@@ -188,7 +188,7 @@ class ModelExtensionPaymentSagepayServer extends Model {
 
 	public function getOrder($order_id) {
 
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sagepay_server_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_sagepay_server_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -201,7 +201,7 @@ class ModelExtensionPaymentSagepayServer extends Model {
 	}
 
 	private function getTransactions($sagepay_server_order_id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "sagepay_server_order_transaction` WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "'");
+		$qry = $this->db->query("SELECT * FROM `oc_sagepay_server_order_transaction` WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "'");
 
 		if ($qry->num_rows) {
 			return $qry->rows;
@@ -211,17 +211,17 @@ class ModelExtensionPaymentSagepayServer extends Model {
 	}
 
 	public function addTransaction($sagepay_server_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "sagepay_server_order_transaction` SET `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
+		$this->db->query("INSERT INTO `oc_sagepay_server_order_transaction` SET `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
 	}
 
 	public function getTotalReleased($sagepay_server_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "sagepay_server_order_transaction` WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "' AND (`type` = 'payment' OR `type` = 'rebate')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_sagepay_server_order_transaction` WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "' AND (`type` = 'payment' OR `type` = 'rebate')");
 
 		return (float)$query->row['total'];
 	}
 
 	public function getTotalRebated($sagepay_server_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "sagepay_server_order_transaction` WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "' AND 'rebate'");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_sagepay_server_order_transaction` WHERE `sagepay_server_order_id` = '" . (int)$sagepay_server_order_id . "' AND 'rebate'");
 
 		return (float)$query->row['total'];
 	}

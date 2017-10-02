@@ -118,7 +118,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 
 	if (($response['status'] === 1)) {
 			$this->db->query("
-				REPLACE INTO `" . DB_PREFIX . "amazon_product`
+				REPLACE INTO `oc_amazon_product`
 				SET `product_id` = " . (int)$data['product_id'] . ",
 					`status` = 'uploaded',
 					`marketplaces` = '" . $this->db->escape((string)$data['marketplace']) . "',
@@ -138,7 +138,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 		foreach ($search_data as $products) {
 			foreach ($products as $product) {
 				$this->db->query("
-					REPLACE INTO " . DB_PREFIX . "amazon_product_search (product_id, `status`, marketplace)
+					REPLACE INTO oc_amazon_product_search (product_id, `status`, marketplace)
 					VALUES (" . (int)$product['product_id'] . ", 'searching', '" . $this->db->escape($product['marketplace']) . "')");
 			}
 		}
@@ -213,7 +213,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 			if ($response['status'] == 1) {
 				foreach ($request as $product) {
 					$this->db->query("
-						REPLACE INTO `" . DB_PREFIX . "amazon_product`
+						REPLACE INTO `oc_amazon_product`
 						SET `product_id` = " . (int)$product['product_id'] . ",
 							`status` = 'uploaded',
 							`marketplaces` = '" . $this->db->escape((string)$data['marketplace']) . "',

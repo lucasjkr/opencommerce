@@ -145,7 +145,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			$address_line_2 .= ', ' . (string)$order_xml->Shipping->AddressLine3;
 		}
 
-		$customer_info = $this->db->query("SELECT `customer_id` FROM " . DB_PREFIX . "customer WHERE email = '" . $this->db->escape((string)$order_xml->Payment->Email) . "'")->row;
+		$customer_info = $this->db->query("SELECT `customer_id` FROM oc_customer WHERE email = '" . $this->db->escape((string)$order_xml->Payment->Email) . "'")->row;
 		$customer_id = '0';
 
 		if(isset($customer_info['customer_id'])) {
@@ -164,7 +164,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			);
 
 			$this->db->query("
-				INSERT INTO " . DB_PREFIX . "customer
+				INSERT INTO oc_customer
 				SET firstname = '" . $this->db->escape($customer_data['firstname']) . "',
 					lastname = '" . $this->db->escape($customer_data['lastname']) . "',
 					email = '" . $this->db->escape($customer_data['email']) . "',
@@ -553,7 +553,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			$product_id = trim((string)$data_xml->product_id);
 
 			if ($product_id === "all") {
-				$all_rows = $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazon_product`")->rows;
+				$all_rows = $this->db->query("SELECT * FROM `oc_amazon_product`")->rows;
 
 				$response = array();
 				foreach ($all_rows as $row) {
@@ -564,7 +564,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 				$this->response->setOutput(print_r($response, true));
 				return;
 			} else {
-				$response = $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazon_product` WHERE `product_id` = '" . (int)$product_id . "'")->rows;
+				$response = $this->db->query("SELECT * FROM `oc_amazon_product` WHERE `product_id` = '" . (int)$product_id . "'")->rows;
 
 				$this->response->setOutput(print_r($response, true));
 				return;

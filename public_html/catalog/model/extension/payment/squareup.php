@@ -20,7 +20,7 @@ class ModelExtensionPaymentSquareup extends Model {
     const TRANSACTION_EXPIRED = 9;
 
     public function getMethod($address, $total) {
-        $geo_zone_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_squareup_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+        $geo_zone_query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_squareup_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
 
         $squareup_display_name = $this->config->get('payment_squareup_display_name');
 
@@ -63,7 +63,7 @@ class ModelExtensionPaymentSquareup extends Model {
     public function addTransaction($transaction, $merchant_id, $address, $order_id, $user_agent, $ip) {
         $amount = $this->squareup->standardDenomination($transaction['tenders'][0]['amount_money']['amount'], $transaction['tenders'][0]['amount_money']['currency']);
 
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "squareup_transaction` SET transaction_id='" . $this->db->escape($transaction['id']) . "', merchant_id='" . $this->db->escape($merchant_id) . "', location_id='" . $this->db->escape($transaction['location_id']) . "', order_id='" . (int)$order_id . "', transaction_type='" . $this->db->escape($transaction['tenders'][0]['card_details']['status']) . "', transaction_amount='" . (float)$amount . "', transaction_currency='" . $this->db->escape($transaction['tenders'][0]['amount_money']['currency']) . "', billing_address_city='" . $this->db->escape($address['locality']) . "', billing_address_country='" . $this->db->escape($address['country']) . "', billing_address_postcode='" . $this->db->escape($address['postal_code']) . "', billing_address_province='" . $this->db->escape($address['sublocality']) . "', billing_address_street_1='" . $this->db->escape($address['address_line_1']) . "', billing_address_street_2='" . $this->db->escape($address['address_line_2']) . "', device_browser='" . $this->db->escape($user_agent) . "', device_ip='" . $this->db->escape($ip) . "', created_at='" . $this->db->escape($transaction['created_at']) . "', is_refunded='" . (int)(!empty($transaction['refunds'])) . "', refunded_at='" . $this->db->escape(!empty($transaction['refunds']) ? $transaction['refunds'][0]['created_at'] : '') . "', tenders='" . $this->db->escape(json_encode($transaction['tenders'])) . "', refunds='" . $this->db->escape(json_encode(!empty($transaction['refunds']) ? $transaction['refunds'] : array())) . "'");
+        $this->db->query("INSERT INTO `oc_squareup_transaction` SET transaction_id='" . $this->db->escape($transaction['id']) . "', merchant_id='" . $this->db->escape($merchant_id) . "', location_id='" . $this->db->escape($transaction['location_id']) . "', order_id='" . (int)$order_id . "', transaction_type='" . $this->db->escape($transaction['tenders'][0]['card_details']['status']) . "', transaction_amount='" . (float)$amount . "', transaction_currency='" . $this->db->escape($transaction['tenders'][0]['amount_money']['currency']) . "', billing_address_city='" . $this->db->escape($address['locality']) . "', billing_address_country='" . $this->db->escape($address['country']) . "', billing_address_postcode='" . $this->db->escape($address['postal_code']) . "', billing_address_province='" . $this->db->escape($address['sublocality']) . "', billing_address_street_1='" . $this->db->escape($address['address_line_1']) . "', billing_address_street_2='" . $this->db->escape($address['address_line_2']) . "', device_browser='" . $this->db->escape($user_agent) . "', device_ip='" . $this->db->escape($ip) . "', created_at='" . $this->db->escape($transaction['created_at']) . "', is_refunded='" . (int)(!empty($transaction['refunds'])) . "', refunded_at='" . $this->db->escape(!empty($transaction['refunds']) ? $transaction['refunds'][0]['created_at'] : '') . "', tenders='" . $this->db->escape(json_encode($transaction['tenders'])) . "', refunds='" . $this->db->escape(json_encode(!empty($transaction['refunds']) ? $transaction['refunds'] : array())) . "'");
     }
 
     public function tokenExpiredEmail() {
@@ -186,7 +186,7 @@ class ModelExtensionPaymentSquareup extends Model {
     }
 
     public function createRecurring($recurring, $order_id, $description, $reference) {
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "order_recurring` SET `order_id` = '" . (int)$order_id . "', `date_added` = NOW(), `status` = '" . self::RECURRING_ACTIVE . "', `product_id` = '" . (int)$recurring['product_id'] . "', `product_name` = '" . $this->db->escape($recurring['name']) . "', `product_quantity` = '" . $this->db->escape($recurring['quantity']) . "', `recurring_id` = '" . (int)$recurring['recurring']['recurring_id'] . "', `recurring_name` = '" . $this->db->escape($recurring['recurring']['name']) . "', `recurring_description` = '" . $this->db->escape($description) . "', `recurring_frequency` = '" . $this->db->escape($recurring['recurring']['frequency']) . "', `recurring_cycle` = '" . (int)$recurring['recurring']['cycle'] . "', `recurring_duration` = '" . (int)$recurring['recurring']['duration'] . "', `recurring_price` = '" . (float)$recurring['recurring']['price'] . "', `trial` = '" . (int)$recurring['recurring']['trial'] . "', `trial_frequency` = '" . $this->db->escape($recurring['recurring']['trial_frequency']) . "', `trial_cycle` = '" . (int)$recurring['recurring']['trial_cycle'] . "', `trial_duration` = '" . (int)$recurring['recurring']['trial_duration'] . "', `trial_price` = '" . (float)$recurring['recurring']['trial_price'] . "', `reference` = '" . $this->db->escape($reference) . "'");
+        $this->db->query("INSERT INTO `oc_order_recurring` SET `order_id` = '" . (int)$order_id . "', `date_added` = NOW(), `status` = '" . self::RECURRING_ACTIVE . "', `product_id` = '" . (int)$recurring['product_id'] . "', `product_name` = '" . $this->db->escape($recurring['name']) . "', `product_quantity` = '" . $this->db->escape($recurring['quantity']) . "', `recurring_id` = '" . (int)$recurring['recurring']['recurring_id'] . "', `recurring_name` = '" . $this->db->escape($recurring['recurring']['name']) . "', `recurring_description` = '" . $this->db->escape($description) . "', `recurring_frequency` = '" . $this->db->escape($recurring['recurring']['frequency']) . "', `recurring_cycle` = '" . (int)$recurring['recurring']['cycle'] . "', `recurring_duration` = '" . (int)$recurring['recurring']['duration'] . "', `recurring_price` = '" . (float)$recurring['recurring']['price'] . "', `trial` = '" . (int)$recurring['recurring']['trial'] . "', `trial_frequency` = '" . $this->db->escape($recurring['recurring']['trial_frequency']) . "', `trial_cycle` = '" . (int)$recurring['recurring']['trial_cycle'] . "', `trial_duration` = '" . (int)$recurring['recurring']['trial_duration'] . "', `trial_price` = '" . (float)$recurring['recurring']['trial_price'] . "', `reference` = '" . $this->db->escape($reference) . "'");
 
         return $this->db->getLastId();
     }
@@ -231,7 +231,7 @@ class ModelExtensionPaymentSquareup extends Model {
 
         $this->load->library('squareup');
 
-        $recurring_sql = "SELECT * FROM `" . DB_PREFIX . "order_recurring` `or` INNER JOIN `" . DB_PREFIX . "squareup_transaction` st ON (st.transaction_id = `or`.reference) WHERE `or`.status='" . self::RECURRING_ACTIVE . "'";
+        $recurring_sql = "SELECT * FROM `oc_order_recurring` `or` INNER JOIN `oc_squareup_transaction` st ON (st.transaction_id = `or`.reference) WHERE `or`.status='" . self::RECURRING_ACTIVE . "'";
 
         $this->load->model('checkout/order');
 
@@ -291,7 +291,7 @@ class ModelExtensionPaymentSquareup extends Model {
             $type = self::TRANSACTION_FAILED;
         }
 
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "order_recurring_transaction` SET order_recurring_id='" . (int)$order_recurring_id . "', reference='" . $this->db->escape($reference) . "', type='" . (int)$type . "', amount='" . (float)$amount . "', date_added=NOW()");
+        $this->db->query("INSERT INTO `oc_order_recurring_transaction` SET order_recurring_id='" . (int)$order_recurring_id . "', reference='" . $this->db->escape($reference) . "', type='" . (int)$type . "', amount='" . (float)$amount . "', date_added=NOW()");
     }
 
     public function updateRecurringExpired($order_recurring_id) {
@@ -313,7 +313,7 @@ class ModelExtensionPaymentSquareup extends Model {
             
             // If successful payments exceed total_duration
             if ($number_of_successful_payments >= $total_duration) {
-                $this->db->query("UPDATE `" . DB_PREFIX . "order_recurring` SET status='" . self::RECURRING_EXPIRED . "' WHERE order_recurring_id='" . (int)$order_recurring_id . "'");
+                $this->db->query("UPDATE `oc_order_recurring` SET status='" . self::RECURRING_EXPIRED . "' WHERE order_recurring_id='" . (int)$order_recurring_id . "'");
 
                 return true;
             }
@@ -331,7 +331,7 @@ class ModelExtensionPaymentSquareup extends Model {
 
             // If successful payments exceed trial_duration
             if ($number_of_successful_payments >= $recurring_info['trial_duration']) {
-                $this->db->query("UPDATE `" . DB_PREFIX . "order_recurring` SET trial='0' WHERE order_recurring_id='" . (int)$order_recurring_id . "'");
+                $this->db->query("UPDATE `oc_order_recurring` SET trial='0' WHERE order_recurring_id='" . (int)$order_recurring_id . "'");
 
                 return true;
             }
@@ -341,23 +341,23 @@ class ModelExtensionPaymentSquareup extends Model {
     }
 
     public function suspendRecurringProfile($order_recurring_id) {
-        $this->db->query("UPDATE `" . DB_PREFIX . "order_recurring` SET status='" . self::RECURRING_SUSPENDED . "' WHERE order_recurring_id='" . (int)$order_recurring_id . "'");
+        $this->db->query("UPDATE `oc_order_recurring` SET status='" . self::RECURRING_SUSPENDED . "' WHERE order_recurring_id='" . (int)$order_recurring_id . "'");
 
         return true;
     }
 
     private function getLastSuccessfulRecurringPaymentDate($order_recurring_id) {
-        return $this->db->query("SELECT date_added FROM `" . DB_PREFIX . "order_recurring_transaction` WHERE order_recurring_id='" . (int)$order_recurring_id . "' AND type='" . self::TRANSACTION_PAYMENT . "' ORDER BY date_added DESC LIMIT 0,1")->row['date_added'];
+        return $this->db->query("SELECT date_added FROM `oc_order_recurring_transaction` WHERE order_recurring_id='" . (int)$order_recurring_id . "' AND type='" . self::TRANSACTION_PAYMENT . "' ORDER BY date_added DESC LIMIT 0,1")->row['date_added'];
     }
 
     private function getRecurring($order_recurring_id) {
-        $recurring_sql = "SELECT * FROM `" . DB_PREFIX . "order_recurring` WHERE order_recurring_id='" . (int)$order_recurring_id . "'";
+        $recurring_sql = "SELECT * FROM `oc_order_recurring` WHERE order_recurring_id='" . (int)$order_recurring_id . "'";
 
         return $this->db->query($recurring_sql)->row;
     }
 
     private function getTotalSuccessfulPayments($order_recurring_id) {
-        return $this->db->query("SELECT COUNT(*) as total FROM `" . DB_PREFIX . "order_recurring_transaction` WHERE order_recurring_id='" . (int)$order_recurring_id . "' AND type='" . self::TRANSACTION_PAYMENT . "'")->row['total'];
+        return $this->db->query("SELECT COUNT(*) as total FROM `oc_order_recurring_transaction` WHERE order_recurring_id='" . (int)$order_recurring_id . "' AND type='" . self::TRANSACTION_PAYMENT . "'")->row['total'];
     }
 
     private function paymentIsDue($order_recurring_id) {
@@ -395,9 +395,9 @@ class ModelExtensionPaymentSquareup extends Model {
 
     private function editTokenSetting($settings) {
         foreach ($settings as $key => $value) {
-            $this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `code`='payment_squareup' AND `key`='" . $key . "'");
+            $this->db->query("DELETE FROM `oc_setting` WHERE `code`='payment_squareup' AND `key`='" . $key . "'");
 
-            $this->db->query("INSERT INTO `" . DB_PREFIX . "setting` SET `code`='payment_squareup', `key`='" . $key . "', `value`='" . $this->db->escape($value) . "', serialized=0, store_id=0");
+            $this->db->query("INSERT INTO `oc_setting` SET `code`='payment_squareup', `key`='" . $key . "', `value`='" . $this->db->escape($value) . "', serialized=0, store_id=0");
         }
     }
 

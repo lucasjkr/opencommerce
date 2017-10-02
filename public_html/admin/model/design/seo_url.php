@@ -1,25 +1,25 @@
 <?php
 class ModelDesignSeoUrl extends Model {
 	public function addSeoUrl($data) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET store_id = '" . (int)$data['store_id'] . "', language_id = '" . (int)$data['language_id'] . "', query = '" . $this->db->escape((string)$data['query']) . "', keyword = '" . $this->db->escape((string)$data['keyword']) . "'");
+		$this->db->query("INSERT INTO `oc_seo_url` SET store_id = '" . (int)$data['store_id'] . "', language_id = '" . (int)$data['language_id'] . "', query = '" . $this->db->escape((string)$data['query']) . "', keyword = '" . $this->db->escape((string)$data['keyword']) . "'");
 	}
 
 	public function editSeoUrl($seo_url_id, $data) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "seo_url` SET store_id = '" . (int)$data['store_id'] . "', language_id = '" . (int)$data['language_id'] . "', query = '" . $this->db->escape((string)$data['query']) . "', keyword = '" . $this->db->escape((string)$data['keyword']) . "' WHERE seo_url_id = '" . (int)$seo_url_id . "'");
+		$this->db->query("UPDATE `oc_seo_url` SET store_id = '" . (int)$data['store_id'] . "', language_id = '" . (int)$data['language_id'] . "', query = '" . $this->db->escape((string)$data['query']) . "', keyword = '" . $this->db->escape((string)$data['keyword']) . "' WHERE seo_url_id = '" . (int)$seo_url_id . "'");
 	}
 
 	public function deleteSeoUrl($seo_url_id) {
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE seo_url_id = '" . (int)$seo_url_id . "'");
+		$this->db->query("DELETE FROM `oc_seo_url` WHERE seo_url_id = '" . (int)$seo_url_id . "'");
 	}
 	
 	public function getSeoUrl($seo_url_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "seo_url` WHERE seo_url_id = '" . (int)$seo_url_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_seo_url` WHERE seo_url_id = '" . (int)$seo_url_id . "'");
 
 		return $query->row;
 	}
 
 	public function getSeoUrls($data = array()) {
-		$sql = "SELECT *, (SELECT `name` FROM `" . DB_PREFIX . "store` s WHERE s.store_id = su.store_id) AS store, (SELECT `name` FROM `" . DB_PREFIX . "language` l WHERE l.language_id = su.language_id) AS language FROM `" . DB_PREFIX . "seo_url` su";
+		$sql = "SELECT *, (SELECT `name` FROM `oc_store` s WHERE s.store_id = su.store_id) AS store, (SELECT `name` FROM `oc_language` l WHERE l.language_id = su.language_id) AS language FROM `oc_seo_url` su";
 
 		$implode = array();
 
@@ -80,7 +80,7 @@ class ModelDesignSeoUrl extends Model {
 	}
 
 	public function getTotalSeoUrls($data = array()) {
-		$sql = "SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "seo_url`";
+		$sql = "SELECT COUNT(*) AS total FROM `oc_seo_url`";
 		
 		$implode = array();
 
@@ -110,13 +110,13 @@ class ModelDesignSeoUrl extends Model {
 	}
 	
 	public function getSeoUrlsByKeyword($keyword) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "seo_url` WHERE keyword = '" . $this->db->escape($keyword) . "'");
+		$query = $this->db->query("SELECT * FROM `oc_seo_url` WHERE keyword = '" . $this->db->escape($keyword) . "'");
 
 		return $query->rows;
 	}	
 	
 	public function getSeoUrlsByQuery($keyword) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "seo_url` WHERE keyword = '" . $this->db->escape($keyword) . "'");
+		$query = $this->db->query("SELECT * FROM `oc_seo_url` WHERE keyword = '" . $this->db->escape($keyword) . "'");
 
 		return $query->rows;
 	}	

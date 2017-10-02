@@ -4,7 +4,7 @@ class ModelExtensionPaymentEway extends Model {
 
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "eway_order` (
+			CREATE TABLE IF NOT EXISTS `oc_eway_order` (
 			  `eway_order_id` int(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` int(11) NOT NULL,
 			  `created` DATETIME NOT NULL,
@@ -20,7 +20,7 @@ class ModelExtensionPaymentEway extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "eway_transactions` (
+			CREATE TABLE IF NOT EXISTS `oc_eway_transactions` (
 			  `eway_order_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
 			  `eway_order_id` int(11) NOT NULL,
 			  `transaction_id` VARCHAR(24) NOT NULL,
@@ -31,7 +31,7 @@ class ModelExtensionPaymentEway extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "eway_card` (
+			CREATE TABLE IF NOT EXISTS `oc_eway_card` (
 			  `card_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `customer_id` INT(11) NOT NULL,
 			  `order_id` INT(11) NOT NULL,
@@ -45,13 +45,13 @@ class ModelExtensionPaymentEway extends Model {
 
 	public function uninstall() {
 		//$this->model_setting_setting->deleteSetting($this->request->get['extension']);
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "eway_order`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "eway_transactions`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "eway_card`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_eway_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_eway_transactions`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_eway_card`;");
 	}
 
 	public function getOrder($order_id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "eway_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_eway_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -72,7 +72,7 @@ class ModelExtensionPaymentEway extends Model {
 		}
 		$order['refund_transaction_id'] .= $transaction_id;
 
-		$this->db->query("UPDATE `" . DB_PREFIX . "eway_order` SET `modified` = NOW(), refund_amount = '" . (double)$refund_amount . "', `refund_transaction_id` = '" . $this->db->escape($order['refund_transaction_id']) . "' WHERE eway_order_id = '" . $order['eway_order_id'] . "'");
+		$this->db->query("UPDATE `oc_eway_order` SET `modified` = NOW(), refund_amount = '" . (double)$refund_amount . "', `refund_transaction_id` = '" . $this->db->escape($order['refund_transaction_id']) . "' WHERE eway_order_id = '" . $order['eway_order_id'] . "'");
 	}
 
 	public function capture($order_id, $capture_amount, $currency) {
@@ -102,11 +102,11 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	public function updateCaptureStatus($eway_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "eway_order` SET `capture_status` = '" . (int)$status . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
+		$this->db->query("UPDATE `oc_eway_order` SET `capture_status` = '" . (int)$status . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
 	}
 
 	public function updateTransactionId($eway_order_id, $transaction_id) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "eway_order` SET `transaction_id` = '" . $transaction_id . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
+		$this->db->query("UPDATE `oc_eway_order` SET `transaction_id` = '" . $transaction_id . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
 	}
 
 	public function void($order_id) {
@@ -132,7 +132,7 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	public function updateVoidStatus($eway_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "eway_order` SET `void_status` = '" . (int)$status . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
+		$this->db->query("UPDATE `oc_eway_order` SET `void_status` = '" . (int)$status . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
 	}
 
 	public function refund($order_id, $refund_amount) {
@@ -160,7 +160,7 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	public function updateRefundStatus($eway_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "eway_order` SET `refund_status` = '" . (int)$status . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
+		$this->db->query("UPDATE `oc_eway_order` SET `refund_status` = '" . (int)$status . "' WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
 	}
 
 	public function sendCurl($url, $data) {
@@ -198,7 +198,7 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	private function getTransactions($eway_order_id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "eway_transactions` WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
+		$qry = $this->db->query("SELECT * FROM `oc_eway_transactions` WHERE `eway_order_id` = '" . (int)$eway_order_id . "'");
 
 		if ($qry->num_rows) {
 			return $qry->rows;
@@ -208,17 +208,17 @@ class ModelExtensionPaymentEway extends Model {
 	}
 
 	public function addTransaction($eway_order_id, $transactionid, $type, $total, $currency) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "eway_transactions` SET `eway_order_id` = '" . (int)$eway_order_id . "', `created` = NOW(), `transaction_id` = '" . $this->db->escape($transactionid) . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($total, $currency, false, false) . "'");
+		$this->db->query("INSERT INTO `oc_eway_transactions` SET `eway_order_id` = '" . (int)$eway_order_id . "', `created` = NOW(), `transaction_id` = '" . $this->db->escape($transactionid) . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($total, $currency, false, false) . "'");
 	}
 
 	public function getTotalCaptured($eway_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "eway_transactions` WHERE `eway_order_id` = '" . (int)$eway_order_id . "' AND `type` = 'payment' ");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_eway_transactions` WHERE `eway_order_id` = '" . (int)$eway_order_id . "' AND `type` = 'payment' ");
 
 		return (double)$query->row['total'];
 	}
 
 	public function getTotalRefunded($eway_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "eway_transactions` WHERE `eway_order_id` = '" . (int)$eway_order_id . "' AND `type` = 'refund'");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_eway_transactions` WHERE `eway_order_id` = '" . (int)$eway_order_id . "' AND `type` = 'refund'");
 
 		return (double)$query->row['total'];
 	}

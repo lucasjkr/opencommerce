@@ -192,18 +192,18 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 	}
 
 	public function getOrder($order_id) {
-		return $this->db->query("SELECT * FROM `" . DB_PREFIX . "klarna_checkout_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1")->row;
+		return $this->db->query("SELECT * FROM `oc_klarna_checkout_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1")->row;
 	}
 
 	public function checkForPaymentTaxes() {
-		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM " . DB_PREFIX . "product p LEFT JOIN " . DB_PREFIX . "tax_rule tr ON (`tr`.`tax_class_id` = `p`.`tax_class_id`) WHERE `tr`.`based` = 'payment'");
+		$query = $this->db->query("SELECT COUNT(*) AS `total` FROM oc_product p LEFT JOIN oc_tax_rule tr ON (`tr`.`tax_class_id` = `p`.`tax_class_id`) WHERE `tr`.`based` = 'payment'");
 
 		return $query->row['total'];
 	}
 
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "klarna_checkout_order` (
+			CREATE TABLE IF NOT EXISTS `oc_klarna_checkout_order` (
 			  `klarna_checkout_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `order_ref` VARCHAR(255) NOT NULL,
@@ -213,7 +213,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "klarna_checkout_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_klarna_checkout_order`;");
 	}
 
 	public function log($data) {

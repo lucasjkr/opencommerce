@@ -15,7 +15,7 @@ class ModelExtensionOpenBayEtsy extends Model{
 		$this->model_setting_setting->editSetting('etsy', $settings);
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "etsy_setting_option` (
+				CREATE TABLE IF NOT EXISTS `oc_etsy_setting_option` (
 					`etsy_setting_option_id` INT(11) NOT NULL AUTO_INCREMENT,
 					`key` VARCHAR(100) NOT NULL,
 					`last_updated` DATETIME NOT NULL,
@@ -24,7 +24,7 @@ class ModelExtensionOpenBayEtsy extends Model{
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "etsy_listing` (
+				CREATE TABLE IF NOT EXISTS `oc_etsy_listing` (
 				  `etsy_listing_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `etsy_item_id` char(100) NOT NULL,
 				  `product_id` int(11) NOT NULL,
@@ -35,7 +35,7 @@ class ModelExtensionOpenBayEtsy extends Model{
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "etsy_order` (
+				CREATE TABLE IF NOT EXISTS `oc_etsy_order` (
 				  `etsy_order_id` int(11) NOT NULL AUTO_INCREMENT,
 				  `order_id` int(11) NOT NULL,
 				  `receipt_id` int(11) NOT NULL,
@@ -46,7 +46,7 @@ class ModelExtensionOpenBayEtsy extends Model{
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "etsy_order_lock` (
+				CREATE TABLE IF NOT EXISTS `oc_etsy_order_lock` (
 				  `order_id` int(11) NOT NULL,
 				  PRIMARY KEY (`order_id`)
 				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");

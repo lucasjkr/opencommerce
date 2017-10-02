@@ -9,11 +9,11 @@ class ModelExtensionPaymentSquareup extends Model {
     const RECURRING_PENDING = 6;
     
     public function getTransaction($squareup_transaction_id) {
-        return $this->db->query("SELECT * FROM `" . DB_PREFIX . "squareup_transaction` WHERE squareup_transaction_id='" . (int)$squareup_transaction_id . "'")->row;
+        return $this->db->query("SELECT * FROM `oc_squareup_transaction` WHERE squareup_transaction_id='" . (int)$squareup_transaction_id . "'")->row;
     }
     
     public function getTransactions($data) {
-        $sql = "SELECT * FROM `" . DB_PREFIX . "squareup_transaction`";
+        $sql = "SELECT * FROM `oc_squareup_transaction`";
 
         if (isset($data['order_id'])) {
             $sql .= " WHERE order_id='" . (int)$data['order_id'] . "'";
@@ -29,7 +29,7 @@ class ModelExtensionPaymentSquareup extends Model {
     }
 
     public function getTotalTransactions($data) {
-        $sql = "SELECT COUNT(*) as total FROM `" . DB_PREFIX . "squareup_transaction`";
+        $sql = "SELECT COUNT(*) as total FROM `oc_squareup_transaction`";
         
         if (isset($data['order_id'])) {
             $sql .= " WHERE order_id='" . (int)$data['order_id'] . "'";
@@ -39,7 +39,7 @@ class ModelExtensionPaymentSquareup extends Model {
     }
     
     public function updateTransaction($squareup_transaction_id, $type, $refunds = array()) {
-        $this->db->query("UPDATE `" . DB_PREFIX . "squareup_transaction` SET transaction_type='" . $this->db->escape($type) . "', is_refunded='" . (int)!empty($refunds) . "', refunds='" . $this->db->escape(json_encode($refunds)) . "' WHERE squareup_transaction_id='" . (int)$squareup_transaction_id . "'");
+        $this->db->query("UPDATE `oc_squareup_transaction` SET transaction_type='" . $this->db->escape($type) . "', is_refunded='" . (int)!empty($refunds) . "', refunds='" . $this->db->escape(json_encode($refunds)) . "' WHERE squareup_transaction_id='" . (int)$squareup_transaction_id . "'");
     }
 
     public function getOrderStatusId($order_id, $transaction_status = null) {
@@ -55,11 +55,11 @@ class ModelExtensionPaymentSquareup extends Model {
     }
 
     public function editOrderRecurringStatus($order_recurring_id, $status) {
-        $this->db->query("UPDATE `" . DB_PREFIX . "order_recurring` SET `status` = '" . (int)$status . "' WHERE `order_recurring_id` = '" . (int)$order_recurring_id . "'");
+        $this->db->query("UPDATE `oc_order_recurring` SET `status` = '" . (int)$status . "' WHERE `order_recurring_id` = '" . (int)$order_recurring_id . "'");
     }
 
     public function createTables() {
-        $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "squareup_transaction` (
+        $this->db->query("CREATE TABLE IF NOT EXISTS `oc_squareup_transaction` (
           `squareup_transaction_id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
           `transaction_id` char(40) NOT NULL,
           `merchant_id` char(32) NOT NULL,
@@ -87,7 +87,7 @@ class ModelExtensionPaymentSquareup extends Model {
           KEY `transaction_id` (`transaction_id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "squareup_token` (
+        $this->db->query("CREATE TABLE IF NOT EXISTS `oc_squareup_token` (
          `squareup_token_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
          `customer_id` int(11) NOT NULL,
          `sandbox` tinyint(1) NOT NULL,
@@ -101,7 +101,7 @@ class ModelExtensionPaymentSquareup extends Model {
          KEY `cardExists` (`customer_id`, `brand`, `ends_in`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
-        $this->db->query("CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "squareup_customer` (
+        $this->db->query("CREATE TABLE IF NOT EXISTS `oc_squareup_customer` (
          `customer_id` int(11) NOT NULL,
          `sandbox` tinyint(1) NOT NULL,
          `square_customer_id` varchar(32) NOT NULL,
@@ -110,8 +110,8 @@ class ModelExtensionPaymentSquareup extends Model {
     }
     
     public function dropTables() {
-        $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "squareup_transaction`");
-        $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "squareup_token`");
-        $this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "squareup_customer`");
+        $this->db->query("DROP TABLE IF EXISTS `oc_squareup_transaction`");
+        $this->db->query("DROP TABLE IF EXISTS `oc_squareup_token`");
+        $this->db->query("DROP TABLE IF EXISTS `oc_squareup_customer`");
     }
 }

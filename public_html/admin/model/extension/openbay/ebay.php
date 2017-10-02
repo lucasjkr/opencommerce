@@ -42,7 +42,7 @@ class ModelExtensionOpenBayEbay extends Model{
 		$this->model_setting_setting->editSetting('ebay', $settings);
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_category` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_category` (
             `ebay_category_id` int(11) NOT NULL AUTO_INCREMENT,
             `CategoryID` int(11) NOT NULL,
             `CategoryParentID` int(11) NOT NULL,
@@ -54,7 +54,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_category_history` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_category_history` (
             `ebay_category_history_id` int(11) NOT NULL AUTO_INCREMENT,
             `CategoryID` int(11) NOT NULL,
             `breadcrumb` varchar(255) NOT NULL,
@@ -63,7 +63,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_listing` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_listing` (
             `ebay_listing_id` int(11) NOT NULL AUTO_INCREMENT,
             `ebay_item_id` char(100) NOT NULL,
             `product_id` int(11) NOT NULL,
@@ -74,7 +74,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 		;
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_listing_pending` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_listing_pending` (
             `ebay_listing_pending_id` int(11) NOT NULL AUTO_INCREMENT,
             `ebay_item_id` char(25) NOT NULL,
             `product_id` int(11) NOT NULL,
@@ -85,7 +85,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_shipping` (
             `ebay_shipping_id` int(11) NOT NULL AUTO_INCREMENT,
             `description` varchar(100) NOT NULL,
             `InternationalService` tinyint(4) NOT NULL,
@@ -100,7 +100,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping_location` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_shipping_location` (
             `ebay_shipping_id` int(11) NOT NULL AUTO_INCREMENT,
             `description` varchar(100) NOT NULL,
             `detail_version` varchar(100) NOT NULL,
@@ -110,7 +110,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_payment_method` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_payment_method` (
             `ebay_payment_method_id` int(11) NOT NULL AUTO_INCREMENT,
             `ebay_name` char(50) NOT NULL,
             `local_name` char(50) NOT NULL,
@@ -118,7 +118,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci AUTO_INCREMENT=5;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_transaction` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_transaction` (
             `ebay_transaction_id` int(11) NOT NULL AUTO_INCREMENT,
             `order_id` int(11) NOT NULL,
             `product_id` int(11) NOT NULL,
@@ -138,7 +138,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_order` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_order` (
             `ebay_order_id` int(11) NOT NULL AUTO_INCREMENT,
             `parent_ebay_order_id` int(11) NOT NULL,
             `order_id` int(11) NOT NULL,
@@ -152,7 +152,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_profile` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_profile` (
             `ebay_profile_id` int(11) NOT NULL AUTO_INCREMENT,
             `name` varchar(100) NOT NULL,
             `description` text NOT NULL,
@@ -163,7 +163,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_setting_option` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_setting_option` (
             `ebay_setting_option_id` INT(11) NOT NULL AUTO_INCREMENT,
             `key` VARCHAR(100) NOT NULL,
             `last_updated` DATETIME NOT NULL,
@@ -172,7 +172,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_image_import` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_image_import` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `image_original` text NOT NULL,
             `image_new` text NOT NULL,
@@ -183,7 +183,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_shipping_location_exclude` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_shipping_location_exclude` (
             `ebay_shipping_exclude_id` int(11) NOT NULL AUTO_INCREMENT,
             `description` varchar(100) NOT NULL,
             `location` varchar(100) NOT NULL,
@@ -192,7 +192,7 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_stock_reserve` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_stock_reserve` (
             `id` int(11) NOT NULL AUTO_INCREMENT,
             `product_id` int(11) NOT NULL,
             `variant_id` varchar(100) NOT NULL,
@@ -203,13 +203,13 @@ class ModelExtensionOpenBayEbay extends Model{
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_order_lock` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_order_lock` (
             `smp_id` int(11) NOT NULL,
             PRIMARY KEY (`smp_id`)
             ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-            CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "ebay_template` (
+            CREATE TABLE IF NOT EXISTS `oc_ebay_template` (
             `template_id` INT(11) NOT NULL AUTO_INCREMENT,
             `name` VARCHAR(100) NOT NULL,
             `html` MEDIUMTEXT NOT NULL,
@@ -218,16 +218,16 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_category`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_category_history`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_listing`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_listing_pending`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_shipping`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_shipping_location`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_payment_method`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_transaction`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_order`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ebay_profile`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_category`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_category_history`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_listing`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_listing_pending`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_shipping`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_shipping_location`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_payment_method`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_transaction`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ebay_profile`;");
 
 		$this->load->model('setting/event');
 		$this->model_setting_event->deleteEventByCode('openbay_ebay_add_order');
@@ -241,9 +241,9 @@ class ModelExtensionOpenBayEbay extends Model{
 
 	public function totalLinked() {
 		$sql = "SELECT COUNT(DISTINCT p.product_id) AS total
-				FROM `" . DB_PREFIX . "ebay_listing` `el`
-				LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`el`.`product_id` = `p`.`product_id`)
-				LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)
+				FROM `oc_ebay_listing` `el`
+				LEFT JOIN `oc_product` `p` ON (`el`.`product_id` = `p`.`product_id`)
+				LEFT JOIN `oc_product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)
 				WHERE `el`.`status` = '1'
 				AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
 
@@ -273,10 +273,10 @@ class ModelExtensionOpenBayEbay extends Model{
 			`p`.`quantity`,
 			`pd`.`name`,
 			`esr`.`reserve`
-		FROM `" . DB_PREFIX . "ebay_listing` `el`
-		LEFT JOIN `" . DB_PREFIX . "product` `p` ON (`el`.`product_id` = `p`.`product_id`)
-		LEFT JOIN `" . DB_PREFIX . "product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)
-		LEFT JOIN `" . DB_PREFIX . "ebay_stock_reserve` `esr` ON (`esr`.`product_id` = `p`.`product_id`)
+		FROM `oc_ebay_listing` `el`
+		LEFT JOIN `oc_product` `p` ON (`el`.`product_id` = `p`.`product_id`)
+		LEFT JOIN `oc_product_description` `pd` ON (`p`.`product_id` = `pd`.`product_id`)
+		LEFT JOIN `oc_ebay_stock_reserve` `esr` ON (`esr`.`product_id` = `p`.`product_id`)
 		WHERE `el`.`status` = '1'
 		AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'";
 
@@ -402,21 +402,21 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getSellerStoreCategories() {
-		$qry = $this->db->query("SHOW TABLES LIKE '" . DB_PREFIX . "ebay_store_category'");
+		$qry = $this->db->query("SHOW TABLES LIKE 'oc_ebay_store_category'");
 
 		if ($qry->num_rows) {
-			$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '0' ORDER BY `CategoryName` ASC");
+			$qry = $this->db->query("SELECT * FROM `oc_ebay_store_category` WHERE `parent_id` = '0' ORDER BY `CategoryName` ASC");
 
 			if ($qry->num_rows) {
 				$cats = array();
 
 				foreach ($qry->rows as $row) {
 					$lev1 = $row['CategoryName'];
-					$qry2 = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '" . $row['ebay_store_category_id'] . "' ORDER BY `CategoryName` ASC");
+					$qry2 = $this->db->query("SELECT * FROM `oc_ebay_store_category` WHERE `parent_id` = '" . $row['ebay_store_category_id'] . "' ORDER BY `CategoryName` ASC");
 
 					if ($qry2->num_rows) {
 						foreach ($qry2->rows as $row2) {
-							$qry3 = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_store_category` WHERE `parent_id` = '" . $row2['ebay_store_category_id'] . "' ORDER BY `CategoryName` ASC");
+							$qry3 = $this->db->query("SELECT * FROM `oc_ebay_store_category` WHERE `parent_id` = '" . $row2['ebay_store_category_id'] . "' ORDER BY `CategoryName` ASC");
 
 							if ($qry3->num_rows) {
 								foreach ($qry3->rows as $row3) {
@@ -446,9 +446,9 @@ class ModelExtensionOpenBayEbay extends Model{
 		$json = array();
 
 		if (empty($parent)) {
-			$cat_qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_category` WHERE `CategoryID` = `CategoryParentID`");
+			$cat_qry = $this->db->query("SELECT * FROM `oc_ebay_category` WHERE `CategoryID` = `CategoryParentID`");
 		} else {
-			$cat_qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_category` WHERE `CategoryParentID` = '" . $parent . "'");
+			$cat_qry = $this->db->query("SELECT * FROM `oc_ebay_category` WHERE `CategoryParentID` = '" . $parent . "'");
 		}
 
 		if ($cat_qry->num_rows) {
@@ -481,7 +481,7 @@ class ModelExtensionOpenBayEbay extends Model{
 
 	public function getShippingService($international, $type) {
 		$json = array();
-		$result = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_shipping` WHERE `InternationalService` = '" . (int)$international . "' AND `ValidForSellingFlow` = '1' AND `ServiceType` LIKE '%" . $this->db->escape($type) . "%'");
+		$result = $this->db->query("SELECT * FROM `oc_ebay_shipping` WHERE `InternationalService` = '" . (int)$international . "' AND `ValidForSellingFlow` = '1' AND `ServiceType` LIKE '%" . $this->db->escape($type) . "%'");
 
 		if ($result->num_rows) {
 			$json['service'] = array();
@@ -494,7 +494,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getShippingLocations() {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_shipping_location` WHERE `shipping_location` != 'None' AND `shipping_location` != 'Worldwide'");
+		$qry = $this->db->query("SELECT * FROM `oc_ebay_shipping_location` WHERE `shipping_location` != 'None' AND `shipping_location` != 'Worldwide'");
 
 		if ($qry->num_rows) {
 			$json = array();
@@ -530,7 +530,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getPaymentTypes() {
-		$cat_payment    = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_payment_method`");
+		$cat_payment    = $this->db->query("SELECT * FROM `oc_ebay_payment_method`");
 		$payments       = array();
 
 		foreach ($cat_payment->rows as $row) {
@@ -541,7 +541,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getPopularCategories() {
-		$res    = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_category_history` ORDER BY `used` DESC LIMIT 5");
+		$res    = $this->db->query("SELECT * FROM `oc_ebay_category_history` ORDER BY `used` DESC LIMIT 5");
 		$cats   = array();
 
 		foreach ($res->rows as $row) {
@@ -552,7 +552,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	private function getCategoryStructure($id) {
-		$res = $this->db->query("SELECT * FROM `" . DB_PREFIX . "ebay_category` WHERE `CategoryID` = '" . $this->db->escape($id) . "' LIMIT 1");
+		$res = $this->db->query("SELECT * FROM `oc_ebay_category` WHERE `CategoryID` = '" . $this->db->escape($id) . "' LIMIT 1");
 		return $res->row;
 	}
 
@@ -630,19 +630,19 @@ class ModelExtensionOpenBayEbay extends Model{
 		}
 
 		if ($err == false) {
-			$res = $this->db->query("SELECT `used` FROM `" . DB_PREFIX . "ebay_category_history` WHERE `CategoryID` = '" . $original_id . "' LIMIT 1");
+			$res = $this->db->query("SELECT `used` FROM `oc_ebay_category_history` WHERE `CategoryID` = '" . $original_id . "' LIMIT 1");
 
 			if ($res->num_rows) {
 				$new = $res->row['used'] + 1;
-				$this->db->query("UPDATE `" . DB_PREFIX . "ebay_category_history` SET `used` = '" . $new . "' WHERE `CategoryID` = '" . $original_id . "' LIMIT 1");
+				$this->db->query("UPDATE `oc_ebay_category_history` SET `used` = '" . $new . "' WHERE `CategoryID` = '" . $original_id . "' LIMIT 1");
 			} else {
-				$this->db->query("INSERT INTO `" . DB_PREFIX . "ebay_category_history` SET `CategoryID` = '" . $original_id . "', `breadcrumb` = '" .   $this->db->escape(implode(' > ', array_reverse($breadcrumb))) . "', `used` = '1'");
+				$this->db->query("INSERT INTO `oc_ebay_category_history` SET `CategoryID` = '" . $original_id . "', `breadcrumb` = '" .   $this->db->escape(implode(' > ', array_reverse($breadcrumb))) . "', `used` = '1'");
 			}
 		}
 	}
 
 	public function getProductStock($id) {
-		$res = $this->db->query("SELECT * FROM `" . DB_PREFIX . "product` WHERE `product_id` = '" . $this->db->escape($id) . "' LIMIT 1");
+		$res = $this->db->query("SELECT * FROM `oc_product` WHERE `product_id` = '" . $this->db->escape($id) . "' LIMIT 1");
 
 		if (isset($res->row['has_option']) && $res->row['has_option'] == 1) {
 			if ($this->openbay->addonLoad('openstock')) {
@@ -677,7 +677,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getLiveListingArray() {
-		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `" . DB_PREFIX . "ebay_listing` WHERE `status` = 1");
+		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = 1");
 
 		$data = array();
 		if ($qry->num_rows) {
@@ -805,12 +805,12 @@ class ModelExtensionOpenBayEbay extends Model{
 	public function getProductAttributes($product_id) {
 		$product_attribute_group_data = array();
 
-		$product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN " . DB_PREFIX . "attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$product_id . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
+		$product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN oc_attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$product_id . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
 
 		foreach ($product_attribute_group_query->rows as $product_attribute_group) {
 			$product_attribute_data = array();
 
-			$product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM " . DB_PREFIX . "product_attribute pa LEFT JOIN " . DB_PREFIX . "attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN " . DB_PREFIX . "attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
+			$product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
 
 			foreach ($product_attribute_query->rows as $product_attribute) {
 				$product_attribute_data[] = array(

@@ -7,7 +7,7 @@ class ModelExtensionOpenBayFba extends Model {
 		$this->model_setting_event->addEvent('openbay_fba_add_orderhistory', 'catalog/model/checkout/order/addOrderHistory/after', 'extension/openbay/fba/eventAddOrderHistory');
 
         $this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "fba_order` (
+				CREATE TABLE IF NOT EXISTS `oc_fba_order` (
 					`order_id` INT(11) NOT NULL,
 					`fba_order_fulfillment_id` INT(11) NOT NULL,
 					`fba_order_fulfillment_ref` CHAR(50) NOT NULL,
@@ -17,7 +17,7 @@ class ModelExtensionOpenBayFba extends Model {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
         $this->db->query("
-				CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "fba_order_fulfillment` (
+				CREATE TABLE IF NOT EXISTS `oc_fba_order_fulfillment` (
 					`fba_order_fulfillment_id` INT(11) NOT NULL AUTO_INCREMENT,
 					`order_id` INT(11) NOT NULL,
 				    `created` DATETIME NOT NULL,
@@ -44,7 +44,7 @@ class ModelExtensionOpenBayFba extends Model {
     }
 
     public function uninstall() {
-        $this->db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE `code` = 'openbay_fba'");
+        $this->db->query("DELETE FROM `oc_setting` WHERE `code` = 'openbay_fba'");
 
         $this->load->model('setting/event');
         $this->model_setting_event->deleteEventByCode('openbay_fba_add_order');
@@ -58,7 +58,7 @@ class ModelExtensionOpenBayFba extends Model {
     }
 
     public function countFbaOrders() {
-        $query = $this->db->query("SELECT COUNT(*) AS `total` FROM `" . DB_PREFIX . "fba_order`");
+        $query = $this->db->query("SELECT COUNT(*) AS `total` FROM `oc_fba_order`");
 
         return (int)$query->row['total'];
     }

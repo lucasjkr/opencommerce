@@ -4,7 +4,7 @@ class ModelExtensionPaymentWorldpay extends Model {
 
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "worldpay_order` (
+			CREATE TABLE IF NOT EXISTS `oc_worldpay_order` (
 			  `worldpay_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `order_code` VARCHAR(50),
@@ -17,7 +17,7 @@ class ModelExtensionPaymentWorldpay extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "worldpay_order_transaction` (
+			CREATE TABLE IF NOT EXISTS `oc_worldpay_order_transaction` (
 			  `worldpay_order_transaction_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `worldpay_order_id` INT(11) NOT NULL,
 			  `date_added` DATETIME NOT NULL,
@@ -27,7 +27,7 @@ class ModelExtensionPaymentWorldpay extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "worldpay_order_recurring` (
+			CREATE TABLE IF NOT EXISTS `oc_worldpay_order_recurring` (
 			  `worldpay_order_recurring_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` INT(11) NOT NULL,
 			  `order_recurring_id` INT(11) NOT NULL,
@@ -44,7 +44,7 @@ class ModelExtensionPaymentWorldpay extends Model {
 			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
 
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "worldpay_card` (
+			CREATE TABLE IF NOT EXISTS `oc_worldpay_card` (
 			  `card_id` INT(11) NOT NULL AUTO_INCREMENT,
 			  `customer_id` INT(11) NOT NULL,
 			  `order_id` INT(11) NOT NULL,
@@ -57,10 +57,10 @@ class ModelExtensionPaymentWorldpay extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "worldpay_order`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "worldpay_order_transaction`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "worldpay_order_recurring`;");
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "worldpay_card`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_worldpay_order`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_worldpay_order_transaction`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_worldpay_order_recurring`;");
+		$this->db->query("DROP TABLE IF EXISTS `oc_worldpay_card`;");
 	}
 
 	public function refund($order_id, $amount) {
@@ -80,12 +80,12 @@ class ModelExtensionPaymentWorldpay extends Model {
 	}
 
 	public function updateRefundStatus($worldpay_order_id, $status) {
-		$this->db->query("UPDATE `" . DB_PREFIX . "worldpay_order` SET `refund_status` = '" . (int)$status . "' WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "'");
+		$this->db->query("UPDATE `oc_worldpay_order` SET `refund_status` = '" . (int)$status . "' WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "'");
 	}
 
 	public function getOrder($order_id) {
 
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "worldpay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_worldpay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -98,7 +98,7 @@ class ModelExtensionPaymentWorldpay extends Model {
 	}
 
 	private function getTransactions($worldpay_order_id, $currency_code) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "'");
 
 		$transactions = array();
 		if ($query->num_rows) {
@@ -113,17 +113,17 @@ class ModelExtensionPaymentWorldpay extends Model {
 	}
 
 	public function addTransaction($worldpay_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "worldpay_order_transaction` SET `worldpay_order_id` = '" . (int)$worldpay_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (double)$total . "'");
+		$this->db->query("INSERT INTO `oc_worldpay_order_transaction` SET `worldpay_order_id` = '" . (int)$worldpay_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (double)$total . "'");
 	}
 
 	public function getTotalReleased($worldpay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "' AND (`type` = 'payment' OR `type` = 'refund')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "' AND (`type` = 'payment' OR `type` = 'refund')");
 
 		return (double)$query->row['total'];
 	}
 
 	public function getTotalRefunded($worldpay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `" . DB_PREFIX . "worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "' AND 'refund'");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "' AND 'refund'");
 
 		return (double)$query->row['total'];
 	}

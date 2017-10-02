@@ -1105,7 +1105,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		 */
 		set_time_limit(0);
 
-		$product_array = $this->db->query("SELECT `product_id` FROM `" . DB_PREFIX . "product`")->rows;
+		$product_array = $this->db->query("SELECT `product_id` FROM `oc_product`")->rows;
 
 		$bulk_array = array();
 

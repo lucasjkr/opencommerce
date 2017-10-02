@@ -1,27 +1,27 @@
 <?php
 class ModelMarketingMarketing extends Model {
 	public function addMarketing($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "marketing SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', code = '" . $this->db->escape((string)$data['code']) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_marketing SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', code = '" . $this->db->escape((string)$data['code']) . "', date_added = NOW()");
 
 		return $this->db->getLastId();
 	}
 
 	public function editMarketing($marketing_id, $data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "marketing SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', code = '" . $this->db->escape((string)$data['code']) . "' WHERE marketing_id = '" . (int)$marketing_id . "'");
+		$this->db->query("UPDATE oc_marketing SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', code = '" . $this->db->escape((string)$data['code']) . "' WHERE marketing_id = '" . (int)$marketing_id . "'");
 	}
 
 	public function deleteMarketing($marketing_id) {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "marketing WHERE marketing_id = '" . (int)$marketing_id . "'");
+		$this->db->query("DELETE FROM oc_marketing WHERE marketing_id = '" . (int)$marketing_id . "'");
 	}
 
 	public function getMarketing($marketing_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "marketing WHERE marketing_id = '" . (int)$marketing_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_marketing WHERE marketing_id = '" . (int)$marketing_id . "'");
 
 		return $query->row;
 	}
 
 	public function getMarketingByCode($code) {
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "marketing WHERE code = '" . $this->db->escape($code) . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_marketing WHERE code = '" . $this->db->escape($code) . "'");
 
 		return $query->row;
 	}
@@ -35,7 +35,7 @@ class ModelMarketingMarketing extends Model {
 			$implode[] = "o.order_status_id = '" . (int)$order_status_id . "'";
 		}
 
-		$sql = "SELECT *, (SELECT COUNT(*) FROM `" . DB_PREFIX . "order` o WHERE (" . implode(" OR ", $implode) . ") AND o.marketing_id = m.marketing_id) AS orders FROM " . DB_PREFIX . "marketing m";
+		$sql = "SELECT *, (SELECT COUNT(*) FROM `oc_order` o WHERE (" . implode(" OR ", $implode) . ") AND o.marketing_id = m.marketing_id) AS orders FROM oc_marketing m";
 
 		$implode = array();
 
@@ -91,7 +91,7 @@ class ModelMarketingMarketing extends Model {
 	}
 
 	public function getTotalMarketings($data = array()) {
-		$sql = "SELECT COUNT(*) AS total FROM " . DB_PREFIX . "marketing";
+		$sql = "SELECT COUNT(*) AS total FROM oc_marketing";
 
 		$implode = array();
 
@@ -125,13 +125,13 @@ class ModelMarketingMarketing extends Model {
 			$limit = 10;
 		}
 
-		$query = $this->db->query("SELECT ip, store_id, country, date_added FROM " . DB_PREFIX . "marketing_report WHERE marketing_id = '" . (int)$marketing_id . "' ORDER BY date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
+		$query = $this->db->query("SELECT ip, store_id, country, date_added FROM oc_marketing_report WHERE marketing_id = '" . (int)$marketing_id . "' ORDER BY date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
 
 		return $query->rows;
 	}
 
 	public function getTotalReports($marketing_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "marketing_report WHERE marketing_id = '" . (int)$marketing_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_marketing_report WHERE marketing_id = '" . (int)$marketing_id . "'");
 
 		return $query->row['total'];
 	}

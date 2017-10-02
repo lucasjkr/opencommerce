@@ -2,7 +2,7 @@
 class ModelExtensionFraudFraudLabsPro extends Model {
 	public function install() {
 		$this->db->query("
-			CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "fraudlabspro` (
+			CREATE TABLE IF NOT EXISTS `oc_fraudlabspro` (
 				`order_id` VARCHAR(11) NOT NULL,
 				`is_country_match` CHAR(2) NOT NULL,
 				`is_high_risk_country` CHAR(2) NOT NULL,
@@ -54,28 +54,28 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 		");
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "order_status` (`language_id`, `name`) VALUES (1, 'Fraud');");
+		$this->db->query("INSERT INTO `oc_order_status` (`language_id`, `name`) VALUES (1, 'Fraud');");
 		$status_fraud_id = $this->db->getLastId();
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "order_status` (`language_id`, `name`) VALUES (1, 'Fraud Review');");
+		$this->db->query("INSERT INTO `oc_order_status` (`language_id`, `name`) VALUES (1, 'Fraud Review');");
 		
 		$status_fraud_review_id = $this->db->getLastId();
 
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_review_status_id', '" . (int)$status_fraud_review_id . "', '0');");
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_approve_status_id', '2', '0');");
-		$this->db->query("INSERT INTO `" . DB_PREFIX . "setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_reject_status_id', '8', '0');");
+		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_review_status_id', '" . (int)$status_fraud_review_id . "', '0');");
+		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_approve_status_id', '2', '0');");
+		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_reject_status_id', '8', '0');");
 
 		$this->cache->delete('order_status.' . (int)$this->config->get('config_language_id'));
 	}
 
 	public function uninstall() {
-		//$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "fraudlabspro`");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order_status` WHERE `name` = 'Fraud'");
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "order_status` WHERE `name` = 'Fraud Review'");
+		//$this->db->query("DROP TABLE IF EXISTS `oc_fraudlabspro`");
+		$this->db->query("DELETE FROM `oc_order_status` WHERE `name` = 'Fraud'");
+		$this->db->query("DELETE FROM `oc_order_status` WHERE `name` = 'Fraud Review'");
 	}
 
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "fraudlabspro` WHERE order_id = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_fraudlabspro` WHERE order_id = '" . (int)$order_id . "'");
 
 		return $query->row;
 	}

@@ -1,40 +1,40 @@
 <?php
 class ModelCatalogDownload extends Model {
 	public function addDownload($data) {
-		$this->db->query("INSERT INTO " . DB_PREFIX . "download SET filename = '" . $this->db->escape((string)$data['filename']) . "', mask = '" . $this->db->escape((string)$data['mask']) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_download SET filename = '" . $this->db->escape((string)$data['filename']) . "', mask = '" . $this->db->escape((string)$data['mask']) . "'");
 
 		$download_id = $this->db->getLastId();
 
 		foreach ($data['download_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
+			$this->db->query("INSERT INTO oc_download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
 		}
 
 		return $download_id;
 	}
 
 	public function editDownload($download_id, $data) {
-		$this->db->query("UPDATE " . DB_PREFIX . "download SET filename = '" . $this->db->escape((string)$data['filename']) . "', mask = '" . $this->db->escape((string)$data['mask']) . "' WHERE download_id = '" . (int)$download_id . "'");
+		$this->db->query("UPDATE oc_download SET filename = '" . $this->db->escape((string)$data['filename']) . "', mask = '" . $this->db->escape((string)$data['mask']) . "' WHERE download_id = '" . (int)$download_id . "'");
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
+		$this->db->query("DELETE FROM oc_download_description WHERE download_id = '" . (int)$download_id . "'");
 
 		foreach ($data['download_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
+			$this->db->query("INSERT INTO oc_download_description SET download_id = '" . (int)$download_id . "', language_id = '" . (int)$language_id . "', name = '" . $this->db->escape($value['name']) . "'");
 		}
 	}
 
 	public function deleteDownload($download_id) {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "download WHERE download_id = '" . (int)$download_id . "'");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
+		$this->db->query("DELETE FROM oc_download WHERE download_id = '" . (int)$download_id . "'");
+		$this->db->query("DELETE FROM oc_download_description WHERE download_id = '" . (int)$download_id . "'");
 	}
 
 	public function getDownload($download_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM " . DB_PREFIX . "download d LEFT JOIN " . DB_PREFIX . "download_description dd ON (d.download_id = dd.download_id) WHERE d.download_id = '" . (int)$download_id . "' AND dd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_download d LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE d.download_id = '" . (int)$download_id . "' AND dd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 		return $query->row;
 	}
 
 	public function getDownloads($data = array()) {
-		$sql = "SELECT * FROM " . DB_PREFIX . "download d LEFT JOIN " . DB_PREFIX . "download_description dd ON (d.download_id = dd.download_id) WHERE dd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+		$sql = "SELECT * FROM oc_download d LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE dd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND dd.name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
@@ -77,7 +77,7 @@ class ModelCatalogDownload extends Model {
 	public function getDownloadDescriptions($download_id) {
 		$download_description_data = array();
 
-		$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "download_description WHERE download_id = '" . (int)$download_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_download_description WHERE download_id = '" . (int)$download_id . "'");
 
 		foreach ($query->rows as $result) {
 			$download_description_data[$result['language_id']] = array('name' => $result['name']);
@@ -87,7 +87,7 @@ class ModelCatalogDownload extends Model {
 	}
 
 	public function getTotalDownloads() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "download");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_download");
 
 		return $query->row['total'];
 	}
@@ -101,13 +101,13 @@ class ModelCatalogDownload extends Model {
 			$limit = 10;
 		}
 
-		$query = $this->db->query("SELECT ip, store_id, country, date_added FROM " . DB_PREFIX . "download_report WHERE download_id = '" . (int)$download_id . "' ORDER BY date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
+		$query = $this->db->query("SELECT ip, store_id, country, date_added FROM oc_download_report WHERE download_id = '" . (int)$download_id . "' ORDER BY date_added ASC LIMIT " . (int)$start . "," . (int)$limit);
 
 		return $query->rows;
 	}
 
 	public function getTotalReports($download_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM " . DB_PREFIX . "download_report WHERE download_id = '" . (int)$download_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_download_report WHERE download_id = '" . (int)$download_id . "'");
 
 		return $query->row['total'];
 	}

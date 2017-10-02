@@ -535,7 +535,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 	}
 
 	public function resetPending() {
-		$this->db->query("UPDATE `" . DB_PREFIX . "amazonus_product` SET `status` = 'saved' WHERE `status` = 'uploaded'");
+		$this->db->query("UPDATE `oc_amazonus_product` SET `status` = 'saved' WHERE `status` = 'uploaded'");
 	}
 
 	private function validateForm() {

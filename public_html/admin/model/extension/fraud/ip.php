@@ -2,7 +2,7 @@
 class ModelExtensionFraudIp extends Model {
 	public function install() {
 		$this->db->query("
-		CREATE TABLE IF NOT EXISTS `" . DB_PREFIX . "fraud_ip` (
+		CREATE TABLE IF NOT EXISTS `oc_fraud_ip` (
 		  `ip` varchar(40) NOT NULL,
 		  `date_added` datetime NOT NULL,
 		  PRIMARY KEY (`ip`)
@@ -11,15 +11,15 @@ class ModelExtensionFraudIp extends Model {
 	}
 
 	public function uninstall() {
-		$this->db->query("DROP TABLE IF EXISTS `" . DB_PREFIX . "ip`");
+		$this->db->query("DROP TABLE IF EXISTS `oc_ip`");
 	}
 
     public function addIp($ip) {
-        $this->db->query("INSERT INTO `" . DB_PREFIX . "fraud_ip` SET `ip` = '" . $this->db->escape($ip) . "', date_added = NOW()");
+        $this->db->query("INSERT INTO `oc_fraud_ip` SET `ip` = '" . $this->db->escape($ip) . "', date_added = NOW()");
     }
 
     public function removeIp($ip) {
-        $this->db->query("DELETE FROM `" . DB_PREFIX . "fraud_ip` WHERE `ip` = '" . $this->db->escape($ip) . "'");
+        $this->db->query("DELETE FROM `oc_fraud_ip` WHERE `ip` = '" . $this->db->escape($ip) . "'");
     }
 
 	public function getIps($start = 0, $limit = 10) {
@@ -31,19 +31,19 @@ class ModelExtensionFraudIp extends Model {
 			$limit = 10;
 		}
 
-        $query = $this->db->query("SELECT * FROM `" . DB_PREFIX . "fraud_ip` ORDER BY `ip` ASC LIMIT " . (int)$start . "," . (int)$limit);
+        $query = $this->db->query("SELECT * FROM `oc_fraud_ip` ORDER BY `ip` ASC LIMIT " . (int)$start . "," . (int)$limit);
 
 		return $query->rows;
 	}
 
 	public function getTotalIps() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "fraud_ip`");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_fraud_ip`");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalIpsByIp($ip) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "fraud_ip` WHERE ip = '" . $this->db->escape($ip) . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_fraud_ip` WHERE ip = '" . $this->db->escape($ip) . "'");
 
 		return $query->row['total'];
 	}
