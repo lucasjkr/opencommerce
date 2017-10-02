@@ -1,7 +1,7 @@
 <?php
 class ModelSaleReturn extends Model {
 	public function addReturn($data) {
-		$this->db->query("INSERT INTO `oc_return` SET order_id = '" . (int)$data['order_id'] . "', product_id = '" . (int)$data['product_id'] . "', customer_id = '" . (int)$data['customer_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', product = '" . $this->db->escape((string)$data['product']) . "', model = '" . $this->db->escape((string)$data['model']) . "', quantity = '" . (int)$data['quantity'] . "', opened = '" . (int)$data['opened'] . "', return_reason_id = '" . (int)$data['return_reason_id'] . "', return_action_id = '" . (int)$data['return_action_id'] . "', return_status_id = '" . (int)$data['return_status_id'] . "', comment = '" . $this->db->escape((string)$data['comment']) . "', date_ordered = '" . $this->db->escape((string)$data['date_ordered']) . "', date_added = NOW(), date_modified = NOW()");
+		$this->db->query("INSERT INTO `oc_return` SET order_id = '" . (int)$data['order_id'] . "', product_id = '" . (int)$data['product_id'] . "', customer_id = '" . (int)$data['customer_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', product = '" . $this->db->escape((string)$data['product']) . "', model = '" . $this->db->escape((string)$data['model']) . "', quantity = '" . (int)$data['quantity'] . "', opened = '" . (int)$data['opened'] . "', return_reason_id = '" . (int)$data['return_reason_id'] . "', return_action_id = '" . (int)$data['return_action_id'] . "', return_status_id = '" . (int)$data['return_status_id'] . "', comment = '" . $this->db->escape((string)$data['comment']) . "', date_ordered = '" . $this->db->escape((string)$data['date_ordered']) . "'");
 	
 		return $this->db->getLastId();
 	}
@@ -168,7 +168,7 @@ class ModelSaleReturn extends Model {
 	
 	public function addReturnHistory($return_id, $return_status_id, $comment, $notify) {
 		$this->db->query("UPDATE `oc_return` SET `return_status_id` = '" . (int)$return_status_id . "', date_modified = NOW() WHERE return_id = '" . (int)$return_id . "'");
-		$this->db->query("INSERT INTO `oc_return_history` SET `return_id` = '" . (int)$return_id . "', return_status_id = '" . (int)$return_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape(strip_tags($comment)) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO `oc_return_history` SET `return_id` = '" . (int)$return_id . "', return_status_id = '" . (int)$return_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape(strip_tags($comment)) . "'");
 	}
 
 	public function getReturnHistories($return_id, $start = 0, $limit = 10) {

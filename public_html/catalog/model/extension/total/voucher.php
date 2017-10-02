@@ -1,7 +1,7 @@
 <?php
 class ModelExtensionTotalVoucher extends Model {
 	public function addVoucher($order_id, $data) {
-		$this->db->query("INSERT INTO oc_voucher SET order_id = '" . (int)$order_id . "', code = '" . $this->db->escape((string)$data['code']) . "', from_name = '" . $this->db->escape((string)$data['from_name']) . "', from_email = '" . $this->db->escape((string)$data['from_email']) . "', to_name = '" . $this->db->escape((string)$data['to_name']) . "', to_email = '" . $this->db->escape((string)$data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape((string)$data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '1', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_voucher SET order_id = '" . (int)$order_id . "', code = '" . $this->db->escape((string)$data['code']) . "', from_name = '" . $this->db->escape((string)$data['from_name']) . "', from_email = '" . $this->db->escape((string)$data['from_email']) . "', to_name = '" . $this->db->escape((string)$data['to_name']) . "', to_email = '" . $this->db->escape((string)$data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape((string)$data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '1'");
 
 		return $this->db->getLastId();
 	}
@@ -111,7 +111,7 @@ class ModelExtensionTotalVoucher extends Model {
 			$voucher_info = $this->getVoucher($code);
 
 			if ($voucher_info) {
-				$this->db->query("INSERT INTO `oc_voucher_history` SET voucher_id = '" . (int)$voucher_info['voucher_id'] . "', order_id = '" . (int)$order_info['order_id'] . "', amount = '" . (float)$order_total['value'] . "', date_added = NOW()");
+				$this->db->query("INSERT INTO `oc_voucher_history` SET voucher_id = '" . (int)$voucher_info['voucher_id'] . "', order_id = '" . (int)$order_info['order_id'] . "', amount = '" . (float)$order_total['value'] . "'");
 			} else {
 				return $this->config->get('config_fraud_status_id');
 			}

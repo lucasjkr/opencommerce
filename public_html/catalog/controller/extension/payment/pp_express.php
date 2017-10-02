@@ -1733,7 +1733,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$this->model_extension_payment_pp_express->log($recurring, 'IPN data');
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `amount` = '" . (float)$this->request->post['amount'] . "', `type` = '1'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `amount` = '" . (float)$this->request->post['amount'] . "', `type` = '1'");
 
 						//as there was a payment the recurring is active, ensure it is set to active (may be been suspended before)
 						if ($recurring['status'] != 1) {
@@ -1747,7 +1747,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '6'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '6'");
 						$this->db->query("UPDATE `oc_order_recurring` SET `status` = 3 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "' LIMIT 1");
 					}
 				}
@@ -1757,7 +1757,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '7'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '7'");
 						$this->db->query("UPDATE `oc_order_recurring` SET `status` = 3 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "' LIMIT 1");
 					}
 				}
@@ -1767,7 +1767,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '4'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '4'");
 					}
 				}
 
@@ -1776,7 +1776,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '8'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '8'");
 					}
 				}
 
@@ -1785,7 +1785,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `amount` = '" . (float)$this->request->post['amount'] . "', `type` = '2'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `amount` = '" . (float)$this->request->post['amount'] . "', `type` = '2'");
 
 						//as there was a payment the recurring is active, ensure it is set to active (may be been suspended before)
 						if ($recurring['status'] != 1) {
@@ -1799,7 +1799,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '0'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '0'");
 
 						if ($recurring['status'] != 1) {
 							$this->db->query("UPDATE `oc_order_recurring` SET `status` = 2 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "'");
@@ -1812,7 +1812,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false && $recurring['status'] != 3) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '5'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '5'");
 						$this->db->query("UPDATE `oc_order_recurring` SET `status` = 4 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "' LIMIT 1");
 					}
 				}
@@ -1822,7 +1822,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '3'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '3'");
 					}
 				}
 
@@ -1831,7 +1831,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `date_added` = NOW(), `type` = '9'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '9'");
 						$this->db->query("UPDATE `oc_order_recurring` SET `status` = 5 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "' LIMIT 1");
 					}
 				}

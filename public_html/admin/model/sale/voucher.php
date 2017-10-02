@@ -1,7 +1,7 @@
 <?php
 class ModelSaleVoucher extends Model {
 	public function addVoucher($data) {
-		$this->db->query("INSERT INTO oc_voucher SET code = '" . $this->db->escape((string)$data['code']) . "', from_name = '" . $this->db->escape((string)$data['from_name']) . "', from_email = '" . $this->db->escape((string)$data['from_email']) . "', to_name = '" . $this->db->escape((string)$data['to_name']) . "', to_email = '" . $this->db->escape((string)$data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape((string)$data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_voucher SET code = '" . $this->db->escape((string)$data['code']) . "', from_name = '" . $this->db->escape((string)$data['from_name']) . "', from_email = '" . $this->db->escape((string)$data['from_email']) . "', to_name = '" . $this->db->escape((string)$data['to_name']) . "', to_email = '" . $this->db->escape((string)$data['to_email']) . "', voucher_theme_id = '" . (int)$data['voucher_theme_id'] . "', message = '" . $this->db->escape((string)$data['message']) . "', amount = '" . (float)$data['amount'] . "', status = '" . (int)$data['status'] . "'");
 
 		return $this->db->getLastId();
 	}

@@ -217,7 +217,7 @@ class ModelExtensionTotalCoupon extends Model {
 			}
 
 			if ($status) {
-				$this->db->query("INSERT INTO `oc_coupon_history` SET coupon_id = '" . (int)$coupon_query->row['coupon_id'] . "', order_id = '" . (int)$order_info['order_id'] . "', customer_id = '" . (int)$order_info['customer_id'] . "', amount = '" . (float)$order_total['value'] . "', date_added = NOW()");
+				$this->db->query("INSERT INTO `oc_coupon_history` SET coupon_id = '" . (int)$coupon_query->row['coupon_id'] . "', order_id = '" . (int)$order_info['order_id'] . "', customer_id = '" . (int)$order_info['customer_id'] . "', amount = '" . (float)$order_total['value'] . "'");
 			} else {
 				return $this->config->get('config_fraud_status_id');
 			}

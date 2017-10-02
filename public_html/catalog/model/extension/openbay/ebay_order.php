@@ -769,7 +769,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		if ($order_info) {
 			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
 
-			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
+			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "'");
 
 			if ($notify) {
 				if (version_compare(VERSION, '2.2', '>') == true) {
@@ -834,7 +834,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 		if ($order_info && !$order_info['order_status_id']) {
 			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
-			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "', date_added = NOW()");
+			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "'");
 
 			if (isset($order_info['email']) && !empty($order_info['email']) && $notify == 1){
 				$order_product_query = $this->db->query("SELECT * FROM `oc_order_product` WHERE `order_id` = '" . (int)$order_id . "'");

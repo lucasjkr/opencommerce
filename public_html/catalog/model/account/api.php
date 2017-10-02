@@ -7,7 +7,7 @@ class ModelAccountApi extends Model {
 	}
 
 	public function addApiSession($api_id, $session_id, $ip) {
-		$this->db->query("INSERT INTO `oc_api_session` SET api_id = '" . (int)$api_id . "', session_id = '" . $this->db->escape($session_id) . "', ip = '" . $this->db->escape($ip) . "', date_added = NOW(), date_modified = NOW()");
+		$this->db->query("INSERT INTO `oc_api_session` SET api_id = '" . (int)$api_id . "', session_id = '" . $this->db->escape($session_id) . "', ip = '" . $this->db->escape($ip) . "'");
 
 		return $this->db->getLastId();
 	}

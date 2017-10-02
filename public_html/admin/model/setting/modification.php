@@ -1,7 +1,7 @@
 <?php
 class ModelSettingModification extends Model {
 	public function addModification($data) {
-		$this->db->query("INSERT INTO `oc_modification` SET `extension_install_id` = '" . (int)$data['extension_install_id'] . "', `name` = '" . $this->db->escape((string)$data['name']) . "', `code` = '" . $this->db->escape((string)$data['code']) . "', `author` = '" . $this->db->escape((string)$data['author']) . "', `version` = '" . $this->db->escape((string)$data['version']) . "', `link` = '" . $this->db->escape((string)$data['link']) . "', `xml` = '" . $this->db->escape((string)$data['xml']) . "', `status` = '" . (int)$data['status'] . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_modification` SET `extension_install_id` = '" . (int)$data['extension_install_id'] . "', `name` = '" . $this->db->escape((string)$data['name']) . "', `code` = '" . $this->db->escape((string)$data['code']) . "', `author` = '" . $this->db->escape((string)$data['author']) . "', `version` = '" . $this->db->escape((string)$data['version']) . "', `link` = '" . $this->db->escape((string)$data['link']) . "', `xml` = '" . $this->db->escape((string)$data['xml']) . "', `status` = '" . (int)$data['status'] . "'");
 	}
 
 	public function deleteModification($modification_id) {

@@ -39,7 +39,7 @@ class ModelAccountRecurring extends Model {
 	}
 	
 	public function addOrderRecurringTransaction($order_recurring_id, $type) {
-		$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$order_recurring_id . "', `date_added` = NOW(), `type` = '" . (int)$type . "'");
+		$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$order_recurring_id . "', `type` = '" . (int)$type . "'");
 	}	
 	
 	public function editOrderRecurringStatus($order_recurring_id, $status) {

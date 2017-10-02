@@ -273,7 +273,7 @@ class ModelCustomerCustomer extends Model {
 	}
 
 	public function addHistory($customer_id, $comment) {
-		$this->db->query("INSERT INTO oc_customer_history SET customer_id = '" . (int)$customer_id . "', comment = '" . $this->db->escape(strip_tags($comment)) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_customer_history SET customer_id = '" . (int)$customer_id . "', comment = '" . $this->db->escape(strip_tags($comment)) . "'");
 	}
 
 	public function getHistories($customer_id, $start = 0, $limit = 10) {
