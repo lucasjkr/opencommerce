@@ -19,7 +19,7 @@ class ModelLocalisationGeoZone extends Model {
 	}
 
 	public function editGeoZone($geo_zone_id, $data) {
-		$this->db->query("UPDATE oc_geo_zone SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', date_modified = NOW() WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$this->db->query("UPDATE oc_geo_zone SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "' WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 
 		$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
 

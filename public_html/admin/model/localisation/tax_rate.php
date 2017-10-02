@@ -15,7 +15,7 @@ class ModelLocalisationTaxRate extends Model {
 	}
 
 	public function editTaxRate($tax_rate_id, $data) {
-		$this->db->query("UPDATE oc_tax_rate SET name = '" . $this->db->escape((string)$data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "', date_modified = NOW() WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
+		$this->db->query("UPDATE oc_tax_rate SET name = '" . $this->db->escape((string)$data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "' WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 
 		$this->db->query("DELETE FROM oc_tax_rate_to_customer_group WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
 

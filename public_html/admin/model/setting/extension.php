@@ -26,7 +26,7 @@ class ModelSettingExtension extends Model {
 	}	
 
 	public function addExtensionInstall($filename, $extension_id = 0, $extension_download_id = 0) {
-		$this->db->query("INSERT INTO `oc_extension_install` SET `filename` = '" . $this->db->escape($filename) . "', `extension_id` = '" . (int)$extension_id . "', `extension_download_id` = '" . (int)$extension_download_id . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_extension_install` SET `filename` = '" . $this->db->escape($filename) . "', `extension_id` = '" . (int)$extension_id . "', `extension_download_id` = '" . (int)$extension_download_id . "'");
 	
 		return $this->db->getLastId();
 	}
@@ -62,7 +62,7 @@ class ModelSettingExtension extends Model {
 	}
 		
 	public function addExtensionPath($extension_install_id, $path) {
-		$this->db->query("INSERT INTO `oc_extension_path` SET `extension_install_id` = '" . (int)$extension_install_id . "', `path` = '" . $this->db->escape($path) . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_extension_path` SET `extension_install_id` = '" . (int)$extension_install_id . "', `path` = '" . $this->db->escape($path) . "'");
 	}
 		
 	public function deleteExtensionPath($extension_path_id) {

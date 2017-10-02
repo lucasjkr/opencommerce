@@ -10,7 +10,7 @@ class ModelExtensionCreditCardSquareup extends Model {
     }
 
     public function addCard($customer_id, $sandbox, $data) {
-        $this->db->query("INSERT INTO `oc_squareup_token` SET customer_id='" . (int)$customer_id . "', sandbox='" . (int)$sandbox . "', token='" . $this->db->escape((string)$data['id']) . "', brand='" . $this->db->escape((string)$data['card_brand']) . "', ends_in='" . (int)$data['last_4'] . "', date_added=NOW()");
+        $this->db->query("INSERT INTO `oc_squareup_token` SET customer_id='" . (int)$customer_id . "', sandbox='" . (int)$sandbox . "', token='" . $this->db->escape((string)$data['id']) . "', brand='" . $this->db->escape((string)$data['card_brand']) . "', ends_in='" . (int)$data['last_4'] . "'");
     }
 
     public function getCard($squareup_token_id) {

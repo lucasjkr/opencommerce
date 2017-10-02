@@ -1,7 +1,7 @@
 <?php
 class ModelLocalisationCurrency extends Model {
 	public function addCurrency($data) {
-		$this->db->query("INSERT INTO oc_currency SET title = '" . $this->db->escape((string)$data['title']) . "', code = '" . $this->db->escape((string)$data['code']) . "', symbol_left = '" . $this->db->escape((string)$data['symbol_left']) . "', symbol_right = '" . $this->db->escape((string)$data['symbol_right']) . "', decimal_place = '" . $this->db->escape((string)$data['decimal_place']) . "', value = '" . $this->db->escape((string)$data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW()");
+		$this->db->query("INSERT INTO oc_currency SET title = '" . $this->db->escape((string)$data['title']) . "', code = '" . $this->db->escape((string)$data['code']) . "', symbol_left = '" . $this->db->escape((string)$data['symbol_left']) . "', symbol_right = '" . $this->db->escape((string)$data['symbol_right']) . "', decimal_place = '" . $this->db->escape((string)$data['decimal_place']) . "', value = '" . $this->db->escape((string)$data['value']) . "', status = '" . (int)$data['status'] . "'");
 
 		$currency_id = $this->db->getLastId();
 
@@ -15,7 +15,7 @@ class ModelLocalisationCurrency extends Model {
 	}
 
 	public function editCurrency($currency_id, $data) {
-		$this->db->query("UPDATE oc_currency SET title = '" . $this->db->escape((string)$data['title']) . "', code = '" . $this->db->escape((string)$data['code']) . "', symbol_left = '" . $this->db->escape((string)$data['symbol_left']) . "', symbol_right = '" . $this->db->escape((string)$data['symbol_right']) . "', decimal_place = '" . $this->db->escape((string)$data['decimal_place']) . "', value = '" . $this->db->escape((string)$data['value']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW() WHERE currency_id = '" . (int)$currency_id . "'");
+		$this->db->query("UPDATE oc_currency SET title = '" . $this->db->escape((string)$data['title']) . "', code = '" . $this->db->escape((string)$data['code']) . "', symbol_left = '" . $this->db->escape((string)$data['symbol_left']) . "', symbol_right = '" . $this->db->escape((string)$data['symbol_right']) . "', decimal_place = '" . $this->db->escape((string)$data['decimal_place']) . "', value = '" . $this->db->escape((string)$data['value']) . "', status = '" . (int)$data['status'] . "' WHERE currency_id = '" . (int)$currency_id . "'");
 
 		$this->cache->delete('currency');
 	}
