@@ -21,6 +21,26 @@ final class mPDO {
 		$this->statement = $this->connection->prepare($sql);
 	}
 
+	private function run($sql, $params) {
+
+    }
+
+	public function select($sql, $params) {
+
+    }
+
+    public function insert($sql, $params) {
+
+    }
+
+    public function update($sql, $params) {
+
+    }
+
+    public function delete($sql, $params) {
+
+    }
+
 	public function bindParam($parameter, $variable, $data_type = \PDO::PARAM_STR, $length = 0) {
 		if ($length) {
 			$this->statement->bindParam($parameter, $variable, $data_type, $length);
