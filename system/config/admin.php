@@ -1,7 +1,8 @@
 <?php
 // Site
-$_['site_url']          = HTTP_SERVER;
-$_['site_ssl']          = HTTPS_SERVER;
+$_['site_url']          = HTTP_ADMIN;
+// TODO: we shouldn't need this at all:
+$_['site_ssl']          = HTTP_ADMIN;
 
 // Database
 $_['db_autostart']      = true;
