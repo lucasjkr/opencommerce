@@ -35,6 +35,14 @@ Run the command line installer:
 Log into your stores admin to continue setting it up:
 
      https://your-site.com/admin/
+     
+## Progress Report
+Concrete tasks completed.
+
+- Converted database to use InnoDB tables exclusively
+- Added timestamps columns (added, modified) to all tables
+- Moved `system/` directory outside of the public accessible path
+- Removed web-installer, updated CLI installer
 
 ### Long Term Goal
 
