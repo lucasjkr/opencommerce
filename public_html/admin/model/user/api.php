@@ -17,7 +17,7 @@ class ModelUserApi extends Model {
 	}
 
 	public function editApi($api_id, $data) {
-		$this->db->query("UPDATE `oc_api` SET username = '" . $this->db->escape((string)$data['username']) . "', `key` = '" . $this->db->escape((string)$data['key']) . "', status = '" . (int)$data['status'] . "', date_modified = NOW() WHERE api_id = '" . (int)$api_id . "'");
+		$this->db->query("UPDATE `oc_api` SET username = '" . $this->db->escape((string)$data['username']) . "', `key` = '" . $this->db->escape((string)$data['key']) . "', status = '" . (int)$data['status'] . "' WHERE api_id = '" . (int)$api_id . "'");
 
 		$this->db->query("DELETE FROM oc_api_ip WHERE api_id = '" . (int)$api_id . "'");
 

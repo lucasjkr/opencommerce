@@ -17,7 +17,7 @@ class ModelLocalisationTaxClass extends Model {
 	}
 
 	public function editTaxClass($tax_class_id, $data) {
-		$this->db->query("UPDATE oc_tax_class SET title = '" . $this->db->escape((string)$data['title']) . "', description = '" . $this->db->escape((string)$data['description']) . "', date_modified = NOW() WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$this->db->query("UPDATE oc_tax_class SET title = '" . $this->db->escape((string)$data['title']) . "', description = '" . $this->db->escape((string)$data['description']) . "' WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 
 		$this->db->query("DELETE FROM oc_tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
 

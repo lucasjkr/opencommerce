@@ -31,7 +31,7 @@ class ModelExtensionPaymentG2APay extends Model {
 	}
 
 	public function addG2aOrder($order_info) {
-		$this->db->query("INSERT INTO `oc_g2apay_order` SET `order_id` = '" . (int)$order_info['order_id'] . "', `date_added` = now(), `modified` = now(), `currency_code` = '" . $this->db->escape($order_info['currency_code']) . "', `total` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_g2apay_order` SET `order_id` = '" . (int)$order_info['order_id'] . "', `modified` = now(), `currency_code` = '" . $this->db->escape($order_info['currency_code']) . "', `total` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
 	}
 
 	public function updateOrder($g2apay_order_id, $g2apay_transaction_id, $type, $order_info) {
