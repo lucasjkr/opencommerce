@@ -173,8 +173,7 @@ class ControllerExtensionOpenbayAmazonus extends Controller {
 					newsletter = '" . (int)$customer_data['newsletter'] . "',
 					customer_group_id = '" . (int)$customer_data['customer_group_id'] . "',
 					password = '',
-					status = '" . (int)$customer_data['status'] . "',
-					date_added = NOW()");
+					status = '" . (int)$customer_data['status'] . "'");
 
 			$customer_id = $this->db->getLastId();
 		}

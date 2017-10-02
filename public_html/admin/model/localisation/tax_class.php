@@ -1,7 +1,7 @@
 <?php
 class ModelLocalisationTaxClass extends Model {
 	public function addTaxClass($data) {
-		$this->db->query("INSERT INTO oc_tax_class SET title = '" . $this->db->escape((string)$data['title']) . "', description = '" . $this->db->escape((string)$data['description']) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_tax_class SET title = '" . $this->db->escape((string)$data['title']) . "', description = '" . $this->db->escape((string)$data['description']) . "'");
 
 		$tax_class_id = $this->db->getLastId();
 

@@ -1,7 +1,7 @@
 <?php
 class ModelLocalisationGeoZone extends Model {
 	public function addGeoZone($data) {
-		$this->db->query("INSERT INTO oc_geo_zone SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_geo_zone SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "'");
 
 		$geo_zone_id = $this->db->getLastId();
 
@@ -9,7 +9,7 @@ class ModelLocalisationGeoZone extends Model {
 			foreach ($data['zone_to_geo_zone'] as $value) {
 				$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "' AND country_id = '" . (int)$value['country_id'] . "' AND zone_id = '" . (int)$value['zone_id'] . "'");
 
-				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = '" . (int)$value['country_id'] . "', zone_id = '" . (int)$value['zone_id'] . "', geo_zone_id = '" . (int)$geo_zone_id . "', date_added = NOW()");
+				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = '" . (int)$value['country_id'] . "', zone_id = '" . (int)$value['zone_id'] . "', geo_zone_id = '" . (int)$geo_zone_id . "'");
 			}
 		}
 
@@ -27,7 +27,7 @@ class ModelLocalisationGeoZone extends Model {
 			foreach ($data['zone_to_geo_zone'] as $value) {
 				$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "' AND country_id = '" . (int)$value['country_id'] . "' AND zone_id = '" . (int)$value['zone_id'] . "'");
 
-				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = '" . (int)$value['country_id'] . "', zone_id = '" . (int)$value['zone_id'] . "', geo_zone_id = '" . (int)$geo_zone_id . "', date_added = NOW()");
+				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = '" . (int)$value['country_id'] . "', zone_id = '" . (int)$value['zone_id'] . "', geo_zone_id = '" . (int)$geo_zone_id . "'");
 			}
 		}
 

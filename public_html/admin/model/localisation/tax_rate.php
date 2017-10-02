@@ -1,7 +1,7 @@
 <?php
 class ModelLocalisationTaxRate extends Model {
 	public function addTaxRate($data) {
-		$this->db->query("INSERT INTO oc_tax_rate SET name = '" . $this->db->escape((string)$data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "', date_added = NOW(), date_modified = NOW()");
+		$this->db->query("INSERT INTO oc_tax_rate SET name = '" . $this->db->escape((string)$data['name']) . "', rate = '" . (float)$data['rate'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', geo_zone_id = '" . (int)$data['geo_zone_id'] . "'");
 
 		$tax_rate_id = $this->db->getLastId();
 

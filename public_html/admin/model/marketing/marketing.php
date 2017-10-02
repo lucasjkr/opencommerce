@@ -1,7 +1,7 @@
 <?php
 class ModelMarketingMarketing extends Model {
 	public function addMarketing($data) {
-		$this->db->query("INSERT INTO oc_marketing SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', code = '" . $this->db->escape((string)$data['code']) . "', date_added = NOW()");
+		$this->db->query("INSERT INTO oc_marketing SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "', code = '" . $this->db->escape((string)$data['code']) . "'");
 
 		return $this->db->getLastId();
 	}
