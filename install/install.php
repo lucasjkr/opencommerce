@@ -18,7 +18,6 @@
 //                               --username admin \
 //                               --password admin \
 //                               --email youremail@example.com \
-//                               --http_server http://localhost/opencart/
 //
 
 // TODO: Mandatory check that mod_rewrite is enabled for Apache;
@@ -30,6 +29,7 @@ ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 // DIR
+define('DIR_ROOT', (dirname(__FILE__) . '/../'));
 define('DIR_APPLICATION', str_replace('\\', '/', realpath(dirname(__FILE__))) . '/');
 define('DIR_SYSTEM', str_replace('\\', '/', realpath(dirname(__FILE__) . '/../')) . '/system/');
 define('DIR_STORAGE', DIR_SYSTEM . 'storage/');
@@ -85,10 +85,9 @@ function usage() {
 		'--db_port', '3306',
 		'--username', 'admin',
 		'--password', 'admin',
-		'--email', 'youremail@example.com',
-		'--http_server', 'http://localhost/opencart/'
+		'--email', 'youremail@example.com'
 	));
-	echo 'php cli_install.php install ' . $options . "\n\n";
+	echo 'php install.php install ' . $options . "\n\n";
 }
 
 
@@ -126,16 +125,12 @@ function valid($options) {
 		'username',
 		'password',
 		'email',
-		'http_server',
 	);
 	$missing = array();
 	foreach ($required as $r) {
 		if (!array_key_exists($r, $options)) {
 			$missing[] = $r;
 		}
-	}
-	if (!preg_match('#/$#', $options['http_server'])) {
-		$options['http_server'] = $options['http_server'] . '/';
 	}
 	$valid = count($missing) === 0;
 	return array($valid, $missing);
@@ -254,17 +249,17 @@ function setup_db($data) {
 function write_config_files($options) {
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
-	$output .= "define('HTTP_SERVER', '" . $options['http_server'] . "');\n";
+	$output .= "define('HTTP_SERVER',       '/');\n";
 
 	$output .= "// DIR\n";
     $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
 	$output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/catalog/');\n";
 	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
-	$output .= "define('DIR_SYSTEM',        '" . DIR_OPENCART . "system/');\n";
-	$output .= "define('DIR_STORAGE',       '" . DIR_SYSTEM   . "storage/');\n";
+	$output .= "define('DIR_SYSTEM',        DIR_ROOT . 'system/');\n";
+	$output .= "define('DIR_STORAGE',       DIR_SYSTEM . 'storage/');\n";
 	$output .= "define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');\n";
 	$output .= "define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/theme/');\n";
-	$output .= "define('DIR_CONFIG',        DIR_SYSTEM . 'config/');\n";
+	$output .= "define('DIR_CONFIG',        DIR_SYSTEM  . 'config/');\n";
 	$output .= "define('DIR_CACHE',         DIR_STORAGE . 'cache/');\n";
 	$output .= "define('DIR_DOWNLOAD',      DIR_STORAGE . 'download/');\n";
 	$output .= "define('DIR_LOGS',          DIR_STORAGE . 'logs/');\n";
@@ -289,15 +284,15 @@ function write_config_files($options) {
 
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
-	$output .= "define('HTTP_ADMIN',       '" . $options['http_server'] . "admin/');\n";
-	$output .= "define('HTTP_CATALOG',     '" . $options['http_server'] . "');\n\n";
+	$output .= "define('HTTP_ADMIN',       '/admin/');\n";
+	$output .= "define('HTTP_CATALOG',     '/');\n\n";
 
 	$output .= "// DIR\n";
     $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
     $output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/admin/');\n";
 	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
-	$output .= "define('DIR_SYSTEM',        '" . DIR_OPENCART . "system/');\n";
-	$output .= "define('DIR_STORAGE',       DIR_SYSTEM . 'storage/');\n";
+	$output .= "define('DIR_SYSTEM',        DIR_ROOT . 'system/');\n";
+	$output .= "define('DIR_STORAGE',       DIR_SYSTEM   . 'storage/');\n";
 	$output .= "define('DIR_CATALOG',       '" . DIR_OPENCART . "catalog/');\n";
 	$output .= "define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');\n";
 	$output .= "define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/template/');\n";
@@ -352,7 +347,6 @@ switch ($subcommand) {
 case "install":
 	try {
 		$options = get_options($argv);
-		define('HTTP_OPENCART', $options['http_server']);
 		$valid = valid($options);
 		if (!$valid[0]) {
 			echo "FAILED! Following inputs were missing or invalid: ";
@@ -361,8 +355,6 @@ case "install":
 		}
 		install($options);
 		echo "SUCCESS! OpenCommerce successfully installed on your server\n";
-		echo "Store link: " . $options['http_server'] . "\n";
-		echo "Admin link: " . $options['http_server'] . "admin/\n\n";
 	} catch (ErrorException $e) {
 		echo 'FAILED!: ' . $e->getMessage() . "\n";
 		exit(1);
