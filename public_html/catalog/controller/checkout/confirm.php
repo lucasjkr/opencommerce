@@ -107,11 +107,9 @@ class ControllerCheckoutConfirm extends Controller {
 			if ($order_data['store_id']) {
 				$order_data['store_url'] = $this->config->get('config_url');
 			} else {
-				if ($this->request->server['HTTPS']) {
-					$order_data['store_url'] = HTTPS_SERVER;
-				} else {
-					$order_data['store_url'] = HTTP_SERVER;
-				}
+            // TODO: This used to be a switch between HTTP_SERVER and HTTPS_SERVER
+                // We can probably also get rid of the check for $config_url
+                $order_data['store_url'] = HTTP_ROOT;
 			}
 			
 			$this->load->model('account/customer');

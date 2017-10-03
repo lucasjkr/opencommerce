@@ -93,11 +93,9 @@ class ControllerExtensionPaymentPaypoint extends Controller {
 
 			$data['title'] = sprintf($this->language->get('heading_title'), $this->config->get('config_name'));
 
-			if (!$this->request->server['HTTPS']) {
-				$data['base'] = HTTP_SERVER;
-			} else {
-				$data['base'] = HTTPS_SERVER;
-			}
+            // TODO: LJK - there was a switch based on request method (HTTP_SERVER vs HTTPS_SERVER)
+            // That was gotten rid of. We MIGHT not even need $data['base'] anymore, but will leave that for now.
+            $data['base']  = HTTP_ROOT;
 
 			$data['language'] = $this->language->get('code');
 			$data['direction'] = $this->language->get('direction');

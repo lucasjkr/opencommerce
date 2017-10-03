@@ -2,11 +2,8 @@
 class ControllerStartupStartup extends Controller {
 	public function index() {
 		// Store
-		if ($this->request->server['HTTPS']) {
-			$query = $this->db->query("SELECT * FROM oc_store WHERE REPLACE(`ssl`, 'www.', '') = '" . $this->db->escape('https://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/') . "'");
-		} else {
-			$query = $this->db->query("SELECT * FROM oc_store WHERE REPLACE(`url`, 'www.', '') = '" . $this->db->escape('http://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/') . "'");
-		}
+        // LJK TODO: There was more logic here, need to check what this is doing (why is it hardcoding http://???
+        $query = $this->db->query("SELECT * FROM oc_store WHERE REPLACE(`url`, 'www.', '') = '" . $this->db->escape('http://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/') . "'");
 
 		if (isset($this->request->get['store_id'])) {
 			$this->config->set('config_store_id', (int)$this->request->get['store_id']);
@@ -16,10 +13,11 @@ class ControllerStartupStartup extends Controller {
 			$this->config->set('config_store_id', 0);
 		}
 
-		if (!$query->num_rows) {
-			$this->config->set('config_url', HTTP_SERVER);
-			$this->config->set('config_ssl', HTTPS_SERVER);
-		}
+		// LJK TODO: Investigating if this is needed
+//		if (!$query->num_rows) {
+//			$this->config->set('config_url', HTTP_SERVER);
+//			$this->config->set('config_ssl', HTTPS_SERVER);
+//		}
 
 		// Settings
 		$query = $this->db->query("SELECT * FROM `oc_setting` WHERE store_id = '0' OR store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY store_id ASC");

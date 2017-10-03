@@ -3,7 +3,11 @@ class ControllerCommonCurrency extends Controller {
 	public function index() {
 		$this->load->language('common/currency');
 
-		$data['action'] = $this->url->link('common/currency/currency', '', $this->request->server['HTTPS']);
+// LJK original line
+// See notes in catalog/controller/common/language.php, same apply
+//		$data['action'] = $this->url->link('common/currency/currency', '', $this->request->server['HTTPS']);
+
+        $data['action'] = $this->url->link('common/currency/currency', '', HTTP_ROOT );
 
 		$data['code'] = $this->session->data['currency'];
 
