@@ -179,14 +179,14 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 	}
 	
 	public function testGetOrderProducts() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$products = $this->model_account_order->getOrderProducts($orderId);
 		$this->assertCount(1, $products);
 	}
 	
 	public function testGetOrderProduct() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$products = $this->model_account_order->getOrderProducts($orderId);
 		$this->assertCount(1, $products);
@@ -196,7 +196,7 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 	}
 	
 	public function testGetOrderOptions() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$products = $this->model_account_order->getOrderProducts($orderId);
 		$this->assertCount(1, $products);
@@ -209,21 +209,21 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 	}
 	
 	public function testGetOrderVouchers() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$vouchers = $this->model_account_order->getOrderVouchers($orderId);
 		$this->assertCount(1, $vouchers);
 	}
 	
 	public function testGetOrderTotals() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$totals = $this->model_account_order->getOrderTotals($orderId);
 		$this->assertCount(2, $totals);
 	}
 	
 	public function testGetOrderHistories() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 	
 		for ($i = 0; $i < 5; $i++) {
 			$this->db->query("INSERT INTO `oc_order_history` SET order_id = $orderId, order_status_id = 1, notify = 1, comment = '', date_added = '1970-01-01 00:00:00'");
@@ -241,7 +241,7 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 	}
 	
 	public function testGetTotalOrderProductsByOrderId() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$total = $this->model_account_order->getTotalOrderProductsByOrderId($orderId);
 		
@@ -249,7 +249,7 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 	}
 	
 	public function testGetTotalOrderVouchersByOrderId() {
-		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$total = $this->model_account_order->getTotalOrderVouchersByOrderId($orderId);
 		

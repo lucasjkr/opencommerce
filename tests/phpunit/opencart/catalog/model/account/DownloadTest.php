@@ -22,10 +22,10 @@ class CatalogModelAccountDownloadTest extends OpenCartTest {
 			$this->addDummyOrder();
 		}
 
-		$this->db->query("INSERT INTO ". DB_PREFIX . "download SET filename = '', mask = '', date_added = '1970-01-01 00:00:00'");
+		$this->db->query("INSERT INTO `oc_download` SET filename = '', mask = '', date_added = '1970-01-01 00:00:00'");
 		$downloadId = $this->db->getLastId();
-		$this->db->query("INSERT INTO oc_download_description SET download_id = $downloadId, language_id = 1, `name` = ''");
-		$this->db->query("INSERT INTO oc_product_to_download SET product_id = 1, download_id = $downloadId");
+		$this->db->query("INSERT INTO `oc_download_description` SET download_id = $downloadId, language_id = 1, `name` = ''");
+		$this->db->query("INSERT INTO `oc_product_to_download` SET product_id = 1, download_id = $downloadId");
 	}
 
 	/**
@@ -170,7 +170,7 @@ class CatalogModelAccountDownloadTest extends OpenCartTest {
 	}
 
 	public function testGetDownload() {
-		$downloadId = $this->db->query("SELECT download_id FROM `". DB_PREFIX . "download` ORDER BY download_id ASC LIMIT 1")->row['download_id'];
+		$downloadId = $this->db->query("SELECT download_id FROM `oc_download` ORDER BY download_id ASC LIMIT 1")->row['download_id'];
 
 		$download = $this->model_account_download->getDownload($downloadId);
 
