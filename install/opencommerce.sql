@@ -699,48 +699,6 @@ CREATE TABLE `oc_customer_activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Table structure for table `oc_affiliate`
---
-
-DROP TABLE IF EXISTS `oc_customer_affiliate`;
-CREATE TABLE `oc_customer_affiliate` (
-  `customer_id` int(11) NOT NULL,
-  `company` varchar(40) NOT NULL,
-  `website` varchar(255) NOT NULL,
-  `tracking` varchar(64) NOT NULL,
-  `commission` decimal(4,2) NOT NULL DEFAULT '0.00',
-  `tax` varchar(64) NOT NULL,
-  `payment` varchar(6) NOT NULL,
-  `cheque` varchar(100) NOT NULL,
-  `paypal` varchar(64) NOT NULL,
-  `bank_name` varchar(64) NOT NULL,
-  `bank_branch_number` varchar(64) NOT NULL,
-  `bank_swift_code` varchar(64) NOT NULL,
-  `bank_account_name` varchar(64) NOT NULL,
-  `bank_account_number` varchar(64) NOT NULL,
-  `custom_field` text NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Table structure for table `oc_customer_affiliate_report`
---
-
-DROP TABLE IF EXISTS `oc_customer_affiliate_report`;
-CREATE TABLE `oc_customer_affiliate_report` (
-  `customer_affiliate_report_id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
-  `store_id` int(11) NOT NULL,
-  `ip` varchar(40) NOT NULL,
-  `country` varchar(2) NOT NULL,
-  `date_added` timestamp NOT NULL,
-  PRIMARY KEY (`customer_affiliate_report_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
 -- Table structure for table `oc_customer_approval`
 --
 
@@ -1442,7 +1400,6 @@ INSERT INTO `oc_layout` (`layout_id`, `name`) VALUES
 (7, 'Checkout'),
 (8, 'Contact'),
 (9, 'Sitemap'),
-(10, 'Affiliate'),
 (11, 'Information'),
 (12, 'Compare'),
 (13, 'Search');
@@ -1500,7 +1457,6 @@ CREATE TABLE `oc_layout_route` (
 
 INSERT INTO `oc_layout_route` (`layout_route_id`, `layout_id`, `store_id`, `route`) VALUES
 (38, 6, 0, 'account/%'),
-(17, 10, 0, 'affiliate/%'),
 (44, 3, 0, 'product/category'),
 (42, 1, 0, 'common/home'),
 (20, 2, 0, 'product/product'),
@@ -1871,8 +1827,6 @@ CREATE TABLE `oc_order` (
   `comment` text NOT NULL,
   `total` decimal(15,4) NOT NULL DEFAULT '0.0000',
   `order_status_id` int(11) NOT NULL DEFAULT '0',
-  `affiliate_id` int(11) NOT NULL,
-  `commission` decimal(15,4) NOT NULL,
   `marketing_id` int(11) NOT NULL,
   `tracking` varchar(64) NOT NULL,
   `language_id` int(11) NOT NULL,
@@ -2669,10 +2623,6 @@ INSERT INTO `oc_setting` (`store_id`, `code`, `key`, `value`, `serialized`) VALU
 (0, 'config', 'config_stock_display', '0', 0),
 (0, 'config', 'config_stock_warning', '0', 0),
 (0, 'config', 'config_stock_checkout', '0', 0),
-(0, 'config', 'config_affiliate_approval', '0', 0),
-(0, 'config', 'config_affiliate_auto', '0', 0),
-(0, 'config', 'config_affiliate_commission', '5', 0),
-(0, 'config', 'config_affiliate_id', '4', 0),
 (0, 'config', 'config_return_id', '0', 0),
 (0, 'config', 'config_return_status_id', '2', 0),
 (0, 'config', 'config_logo', 'catalog/logo.png', 0),
