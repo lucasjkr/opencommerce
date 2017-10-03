@@ -1113,7 +1113,7 @@ final class Ebay {
 	}
 
 	public function getOrder($order_id) {
-		if ($this->openbay->testDbTable(DB_PREFIX . "ebay_order") == true) {
+		if ($this->openbay->testDbTable("oc_ebay_order") == true) {
 			$qry = $this->db->query("SELECT * FROM `oc_ebay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 			if ($qry->num_rows > 0) {
@@ -1127,7 +1127,7 @@ final class Ebay {
 	}
 
 	public function getOrderBySmpId($smp_id) {
-		if ($this->openbay->testDbTable(DB_PREFIX . "ebay_order") == true) {
+		if ($this->openbay->testDbTable("oc_ebay_order") == true) {
 			$qry = $this->db->query("SELECT * FROM `oc_ebay_order` WHERE `smp_id` = '" . (int)$smp_id . "' LIMIT 1");
 
 			if ($qry->num_rows > 0) {
