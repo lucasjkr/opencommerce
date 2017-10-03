@@ -10,8 +10,8 @@ class CatalogModelAccountAddressTest extends OpenCartTest {
 		$this->customerLogout();
 		$this->emptyTables();
 		
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer SET customer_id = 1, email = 'customer@localhost', `status` = 1, customer_group_id = 1, date_added = '1970-01-01 00:00:00', ip = '127.0.0.1'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET ip = '127.0.0.1', customer_id = 1");
+		$this->db->query("INSERT INTO oc_customer SET customer_id = 1, email = 'customer@localhost', `status` = 1, customer_group_id = 1, date_added = '1970-01-01 00:00:00', ip = '127.0.0.1'");
+		$this->db->query("INSERT INTO oc_customer_ip SET ip = '127.0.0.1', customer_id = 1");
 		
 		$this->customerLogin('customer@localhost', '', true);
 	}
@@ -25,10 +25,10 @@ class CatalogModelAccountAddressTest extends OpenCartTest {
 	}
 	
 	private function emptyTables() {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ban_ip");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ip");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "address");
+		$this->db->query("DELETE FROM oc_customer");
+		$this->db->query("DELETE FROM oc_customer_ban_ip");
+		$this->db->query("DELETE FROM oc_customer_ip");
+		$this->db->query("DELETE FROM oc_address");
 	}
 	
 	public function testAddAddress() {
@@ -48,19 +48,19 @@ class CatalogModelAccountAddressTest extends OpenCartTest {
 		
 		$addressId = $this->model_account_address->addAddress($address);
 		
-		$result = $this->db->query("SELECT * FROM " . DB_PREFIX . "address")->row;
+		$result = $this->db->query("SELECT * FROM oc_address")->row;
 		
 		foreach ($address as $key => $value) {
 			$this->assertEquals($value, $address[$key]);
 		}
 		
-		$customer = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = 1")->row;
+		$customer = $this->db->query("SELECT * FROM oc_customer WHERE customer_id = 1")->row;
 		$this->assertEquals($addressId, $customer['address_id']);
 		
 		$address['default'] = false;
 		
 		$this->model_account_address->addAddress($address);
-		$customer = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = 1")->row;
+		$customer = $this->db->query("SELECT * FROM oc_customer WHERE customer_id = 1")->row;
 		$this->assertEquals($addressId, $customer['address_id'], 'Changed default address unnecessarily');
 	}
 	
@@ -97,7 +97,7 @@ class CatalogModelAccountAddressTest extends OpenCartTest {
 		
 		$this->model_account_address->editAddress($addressId, $address);
 		
-		$result = $this->db->query("SELECT * FROM " . DB_PREFIX . "address")->row;
+		$result = $this->db->query("SELECT * FROM oc_address")->row;
 		
 		foreach ($address as $key => $value) {
 			$this->assertEquals($value, $address[$key]);
@@ -106,7 +106,7 @@ class CatalogModelAccountAddressTest extends OpenCartTest {
 		$addressId = $this->model_account_address->addAddress($address);
 		$address['default'] = false;
 		$this->model_account_address->editAddress($addressId, $address);
-		$customer = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer WHERE customer_id = 1")->row;
+		$customer = $this->db->query("SELECT * FROM oc_customer WHERE customer_id = 1")->row;
 		$this->assertEquals($addressId, $customer['address_id'], 'Changed default address unnecessarily');
 	}
 	
@@ -127,12 +127,12 @@ class CatalogModelAccountAddressTest extends OpenCartTest {
 		
 		$addressId = $this->model_account_address->addAddress($address);
 		
-		$result = $this->db->query("SELECT * FROM " . DB_PREFIX . "address")->row;
+		$result = $this->db->query("SELECT * FROM oc_address")->row;
 		$this->assertNotEmpty($result);
 		
 		$this->model_account_address->deleteAddress($addressId);
 		
-		$result = $this->db->query("SELECT * FROM " . DB_PREFIX . "address")->row;
+		$result = $this->db->query("SELECT * FROM oc_address")->row;
 		$this->assertEmpty($result);
 	}
 	

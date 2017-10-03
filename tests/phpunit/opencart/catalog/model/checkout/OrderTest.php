@@ -20,16 +20,16 @@ class CatalogModelCheckoutOrderTest extends OpenCartTest {
 	}
 	
 	private function emptyTables() {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_custom_field");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_fraud");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_history");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_option");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_product");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_recurring");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_recurring_transaction");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_total");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_voucher");
+		$this->db->query("DELETE FROM oc_order");
+		$this->db->query("DELETE FROM oc_order_custom_field");
+		$this->db->query("DELETE FROM oc_order_fraud");
+		$this->db->query("DELETE FROM oc_order_history");
+		$this->db->query("DELETE FROM oc_order_option");
+		$this->db->query("DELETE FROM oc_order_product");
+		$this->db->query("DELETE FROM oc_order_recurring");
+		$this->db->query("DELETE FROM oc_order_recurring_transaction");
+		$this->db->query("DELETE FROM oc_order_total");
+		$this->db->query("DELETE FROM oc_order_voucher");
 		
 	}
 	
@@ -151,19 +151,19 @@ class CatalogModelCheckoutOrderTest extends OpenCartTest {
 		
 		$this->assertNotNull($orderId);
 		
-		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order`")->row['total'];
+		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order`")->row['total'];
 		$this->assertEquals(1, $numRows);
 		
-		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order_product`")->row['total'];
+		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order_product`")->row['total'];
 		$this->assertEquals(1, $numRows);
 		
-		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order_option`")->row['total'];
+		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order_option`")->row['total'];
 		$this->assertEquals(1, $numRows);
 		
-		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order_voucher`")->row['total'];
+		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order_voucher`")->row['total'];
 		$this->assertEquals(1, $numRows);
 		
-		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `" . DB_PREFIX . "order_total`")->row['total'];
+		$numRows = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order_total`")->row['total'];
 		$this->assertEquals(2, $numRows);
 	}
 	
@@ -176,7 +176,7 @@ class CatalogModelCheckoutOrderTest extends OpenCartTest {
 		
 		$this->model_checkout_order->addOrder($orderData);
 		
-		$orderId = $this->db->query("SELECT order_id FROM `" . DB_PREFIX . "order` LIMIT 1")->row['order_id'];
+		$orderId = $this->db->query("SELECT order_id FROM `oc_order` LIMIT 1")->row['order_id'];
 		
 		$order = $this->model_checkout_order->getOrder($orderId);
 		

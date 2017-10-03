@@ -137,7 +137,7 @@ final class Amazonus {
 		$logger = new \Log('amazonus_stocks.log');
 		$logger->write('productUpdateListen(), product ID: ' . $product_id);
 
-		$product = $this->db->query("SELECT DISTINCT * FROM `" . DB_PREFIX . "product` WHERE `product_id` = '" . (int)$product_id . "' LIMIT 1")->row;
+		$product = $this->db->query("SELECT DISTINCT * FROM `oc_product` WHERE `product_id` = '" . (int)$product_id . "' LIMIT 1")->row;
 
 		if ($this->openbay->addonLoad('openstock') && (isset($product['has_option']) && $product['has_option'] == 1)) {
 			$this->load->model('extension/module/openstock');
@@ -153,7 +153,7 @@ final class Amazonus {
 			}
 
 			foreach ($variants as $variant) {
-				$amazon_sku_rows = $this->db->query("SELECT `amazonus_sku` FROM `" . DB_PREFIX . "amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "' AND `var` = '" . $this->db->escape($variant['sku']) . "'")->rows;
+				$amazon_sku_rows = $this->db->query("SELECT `amazonus_sku` FROM `oc_amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "' AND `var` = '" . $this->db->escape($variant['sku']) . "'")->rows;
 
 				foreach($amazon_sku_rows as $amazon_sku_row) {
 					$quantity_data[$amazon_sku_row['amazonus_sku']] = $variant['stock'];
@@ -336,11 +336,11 @@ final class Amazonus {
 		$quantity_data = array();
 
 		foreach($product_id_array as $product_id) {
-			$linked_skus = $this->db->query("SELECT `amazonus_sku` FROM `" . DB_PREFIX . "amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "'")->rows;
+			$linked_skus = $this->db->query("SELECT `amazonus_sku` FROM `oc_amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "'")->rows;
 
 			if (!empty($linked_skus)) {
 				foreach($linked_skus as $sku) {
-					$product = $this->db->query("SELECT quantity, status FROM `" . DB_PREFIX . "product` WHERE `product_id` = '" . (int)$product_id . "'")->row;
+					$product = $this->db->query("SELECT quantity, status FROM `oc_product` WHERE `product_id` = '" . (int)$product_id . "'")->row;
 
 					if(!empty($product)) {
 						if($end_inactive && $product['status'] == '0') {
@@ -367,7 +367,7 @@ final class Amazonus {
 	}
 
 	public function getOrderdProducts($order_id) {
-		return $this->db->query("SELECT `op`.`product_id`, `p`.`quantity` as `quantity_left` FROM `" . DB_PREFIX . "order_product` as `op` LEFT JOIN `" . DB_PREFIX . "product` as `p` ON `p`.`product_id` = `op`.`product_id` WHERE `op`.`order_id` = '" . (int)$order_id . "'")->rows;
+		return $this->db->query("SELECT `op`.`product_id`, `p`.`quantity` as `quantity_left` FROM `oc_order_product` as `op` LEFT JOIN `oc_product` as `p` ON `p`.`product_id` = `op`.`product_id` WHERE `op`.`order_id` = '" . (int)$order_id . "'")->rows;
 	}
 
 	public function validate() {
@@ -382,7 +382,7 @@ final class Amazonus {
 	}
 
 	public function deleteProduct($product_id){
-		$this->db->query("DELETE FROM `" . DB_PREFIX . "amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "'");
+		$this->db->query("DELETE FROM `oc_amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "'");
 	}
 
 	public function orderDelete($order_id){
@@ -392,7 +392,7 @@ final class Amazonus {
 	}
 
 	public function getOrder($order_id) {
-		$qry = $this->db->query("SELECT * FROM `" . DB_PREFIX . "amazonus_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_amazonus_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
 
 		if ($qry->num_rows > 0) {
 			return $qry->row;

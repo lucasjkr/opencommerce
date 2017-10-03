@@ -120,7 +120,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 		$imploded_ids = implode(',', $imploded_ids);
 
 		$this->db->query("
-			DELETE FROM " . DB_PREFIX .  "amazonus_product_search
+			DELETE FROM `oc_amazonus_product_search`
 			WHERE product_id IN ($imploded_ids)
 		");
 	}

@@ -161,7 +161,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 		$imploded_ids = implode(',', $imploded_ids);
 
 		$this->db->query("
-			DELETE FROM " . DB_PREFIX .  "amazon_product_search
+			DELETE FROM `oc_amazon_product_search`
 			WHERE marketplace = '" . $this->db->escape($marketplace) . "' AND product_id IN ($imploded_ids)
 		");
 	}

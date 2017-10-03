@@ -4,11 +4,11 @@ class CurrencyTest extends OpenCartTest {
 	 * @before
 	 */
 	public function setupTest() {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "currency");
+		$this->db->query("DELETE FROM oc_currency");
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "currency SET currency_id = '1', title = 'Pound Sterling', code = 'GBP', symbol_left = '£', symbol_right = '', decimal_place = '2', value = '0.61979997', status = '1', date_modified = '2011-07-16 10:30:52'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "currency SET currency_id = '2', title = 'US Dollar', code = 'USD', symbol_left = '$', symbol_right = '', decimal_place = '2', value = '1.00000000', status = '1', date_modified = '2011-07-16 16:55:46'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "currency SET currency_id = '3', title = 'Euro', code = 'EUR', symbol_left = '', symbol_right = '€', decimal_place = '2', value = '0.70660001', status = '1', date_modified = '2011-07-16 10:30:52'");
+		$this->db->query("INSERT INTO oc_currency SET currency_id = '1', title = 'Pound Sterling', code = 'GBP', symbol_left = '£', symbol_right = '', decimal_place = '2', value = '0.61979997', status = '1', date_modified = '2011-07-16 10:30:52'");
+		$this->db->query("INSERT INTO oc_currency SET currency_id = '2', title = 'US Dollar', code = 'USD', symbol_left = '$', symbol_right = '', decimal_place = '2', value = '1.00000000', status = '1', date_modified = '2011-07-16 16:55:46'");
+		$this->db->query("INSERT INTO oc_currency SET currency_id = '3', title = 'Euro', code = 'EUR', symbol_left = '', symbol_right = '€', decimal_place = '2', value = '0.70660001', status = '1', date_modified = '2011-07-16 10:30:52'");
 	}
 
 	/*

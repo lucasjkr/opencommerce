@@ -50,7 +50,7 @@ class ModelExtensionPaymentPPPayflowIFrame extends Model {
 
 	public function updateOrderStatus($order_id, $status) {
 		$this->db->query("
-			UPDATE " . DB_PREFIX .  "paypal_payflow_iframe_order
+			UPDATE `oc_paypal_payflow_iframe_order`
 			SET `complete` = " . (int)$status . "
 			WHERE order_id = '" . (int)$order_id . "'
 		");

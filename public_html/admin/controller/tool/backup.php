@@ -22,8 +22,8 @@ class ControllerToolBackup extends Controller {
 		$this->load->model('tool/backup');
 
 		$ignore = array(
-			DB_PREFIX . 'user',
-			DB_PREFIX . 'user_group'
+			'oc_user',
+			'oc_user_group'
 		);
 
 		$data['tables'] = array();

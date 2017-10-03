@@ -15,9 +15,9 @@ class CatalogPayPalExpressTest extends OpenCartSeleniumTest {
 	public function setUpPage() {
 		if (!$this->moduleInstalled) {
 			$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
-			$db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "paypal_order");
-			$db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "paypal_order_transaction");
-			$db->query("DELETE l, lr FROM " . DB_PREFIX . "layout l, " . DB_PREFIX . "layout_route lr WHERE l.layout_id = lr.layout_id AND l.`name` = 'Cart'");
+			$db->query("DROP TABLE IF EXISTS oc_paypal_order");
+			$db->query("DROP TABLE IF EXISTS oc_paypal_order_transaction");
+			$db->query("DELETE l, lr FROM oc_layout l, oc_layout_route lr WHERE l.layout_id = lr.layout_id AND l.`name` = 'Cart'");
 
 			$this->url("admin/");
 

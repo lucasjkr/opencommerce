@@ -24,9 +24,9 @@ class CatalogModelCatalogInformationTest extends OpenCartTest {
 		$information = $this->model_catalog_information->getInformationLayoutId(0);
 		$this->assertEmpty($information);
 		
-		$this->db->query("INSERT INTO " . DB_PREFIX . "information_to_layout SET information_id = 3, layout_id = 1");
+		$this->db->query("INSERT INTO oc_information_to_layout SET information_id = 3, layout_id = 1");
 		$layoutId = $this->model_catalog_information->getInformationLayoutId(3);
-		$this->db->query("DELETE FROM " . DB_PREFIX . "information_to_layout");
+		$this->db->query("DELETE FROM oc_information_to_layout");
 		$this->assertEquals(1, $layoutId);
 	}
 	

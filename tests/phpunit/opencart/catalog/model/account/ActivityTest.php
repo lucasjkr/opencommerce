@@ -8,14 +8,14 @@ class CatalogModelAccountActivityTest extends OpenCartTest {
 	public function setupTest() {		
 		$this->loadModelByRoute('account/activity');
 		
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_activity");
+		$this->db->query("DELETE FROM oc_customer_activity");
 	}
 	
 	/**
 	 * @after
 	 */
 	public function completeTest() {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_activity");
+		$this->db->query("DELETE FROM oc_customer_activity");
 	}
 	
 	public function testAddActivity() {
@@ -28,7 +28,7 @@ class CatalogModelAccountActivityTest extends OpenCartTest {
 		
 		$this->model_account_activity->addActivity($key, $data);
 		
-		$result = $this->db->query("SELECT * FROM " . DB_PREFIX . "customer_activity")->row;
+		$result = $this->db->query("SELECT * FROM oc_customer_activity")->row;
 		
 		$this->assertEquals($key, $result['key']);
 		$this->assertEquals($data, unserialize($result['data']));
