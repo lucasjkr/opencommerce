@@ -13,11 +13,7 @@
       </ul>
     </div>
   </div>
-  <div class="container-fluid">{% if error_install %}
-      <div class="alert alert-danger alert-dismissible">
-        <button type="button" class="close pull-right" data-dismiss="alert">&times;</button>
-        <i class="fa fa-exclamation-circle"></i> {{ error_install }}</div>
-    {% endif %}
+  <div class="container-fluid">
     {% for row in rows %}
       <div class="row">{% for dashboard_1 in row %}
           {% set class = 'col-lg-%s %s'|format(dashboard_1.width, 'col-md-3 col-sm-6') %}
