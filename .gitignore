@@ -58,3 +58,4 @@ system/storage/cache/*
 # Config files
 config/config.php
 public_html/admin/config.php
+config/credentials.php
