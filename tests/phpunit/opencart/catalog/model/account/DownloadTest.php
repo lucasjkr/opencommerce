@@ -13,8 +13,8 @@ class CatalogModelAccountDownloadTest extends OpenCartTest {
 		$this->customerLogout();
 		$this->emptyTables();
 
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer SET customer_id = 1, email = 'customer@localhost', `status` = 1, customer_group_id = 1, date_added = '1970-01-01 00:00:00', ip = '127.0.0.1'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET ip = '127.0.0.1', customer_id = 1");
+		$this->db->query("INSERT INTO oc_customer SET customer_id = 1, email = 'customer@localhost', `status` = 1, customer_group_id = 1, date_added = '1970-01-01 00:00:00', ip = '127.0.0.1'");
+		$this->db->query("INSERT INTO oc_customer_ip SET ip = '127.0.0.1', customer_id = 1");
 
 		$this->customerLogin('customer@localhost', '', true);
 
@@ -24,8 +24,8 @@ class CatalogModelAccountDownloadTest extends OpenCartTest {
 
 		$this->db->query("INSERT INTO ". DB_PREFIX . "download SET filename = '', mask = '', date_added = '1970-01-01 00:00:00'");
 		$downloadId = $this->db->getLastId();
-		$this->db->query("INSERT INTO " . DB_PREFIX . "download_description SET download_id = $downloadId, language_id = 1, `name` = ''");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "product_to_download SET product_id = 1, download_id = $downloadId");
+		$this->db->query("INSERT INTO oc_download_description SET download_id = $downloadId, language_id = 1, `name` = ''");
+		$this->db->query("INSERT INTO oc_product_to_download SET product_id = 1, download_id = $downloadId");
 	}
 
 	/**
@@ -37,24 +37,24 @@ class CatalogModelAccountDownloadTest extends OpenCartTest {
 	}
 
 	private function emptyTables() {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ban_ip");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ip");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "address");
+		$this->db->query("DELETE FROM oc_customer");
+		$this->db->query("DELETE FROM oc_customer_ban_ip");
+		$this->db->query("DELETE FROM oc_customer_ip");
+		$this->db->query("DELETE FROM oc_address");
 
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_custom_field");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_fraud");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_history");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_option");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_product");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_recurring");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_recurring_transaction");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_total");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_voucher");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "download");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "download_description");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "product_to_download");
+		$this->db->query("DELETE FROM oc_order");
+		$this->db->query("DELETE FROM oc_order_custom_field");
+		$this->db->query("DELETE FROM oc_order_fraud");
+		$this->db->query("DELETE FROM oc_order_history");
+		$this->db->query("DELETE FROM oc_order_option");
+		$this->db->query("DELETE FROM oc_order_product");
+		$this->db->query("DELETE FROM oc_order_recurring");
+		$this->db->query("DELETE FROM oc_order_recurring_transaction");
+		$this->db->query("DELETE FROM oc_order_total");
+		$this->db->query("DELETE FROM oc_order_voucher");
+		$this->db->query("DELETE FROM oc_download");
+		$this->db->query("DELETE FROM oc_download_description");
+		$this->db->query("DELETE FROM oc_product_to_download");
 	}
 
 	private function addDummyOrder() {
@@ -166,7 +166,7 @@ class CatalogModelAccountDownloadTest extends OpenCartTest {
 		);
 
 		$order_id = $this->model_checkout_order->addOrder($order);
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = " . (int)$this->config->get('config_complete_status_id') . " WHERE order_id = " . (int)$order_id);
+		$this->db->query("UPDATE `oc_order` SET order_status_id = " . (int)$this->config->get('config_complete_status_id') . " WHERE order_id = " . (int)$order_id);
 	}
 
 	public function testGetDownload() {

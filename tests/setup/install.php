@@ -23,7 +23,7 @@ $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_P
  * Store settings configuration
  */
 foreach ($settings as $store_id => $store_settings) {
-	$query = $db->query("SELECT * FROM `" . DB_PREFIX . "setting` WHERE store_id = '" . (int)$store_id . "'");
+	$query = $db->query("SELECT * FROM `oc_setting` WHERE store_id = '" . (int)$store_id . "'");
 
 	$old_store_config = array();
 
@@ -84,10 +84,10 @@ foreach ($module_settings as $module_settings_type => $module_settings_data) {
 		deleteSetting($store_id, $remove_extension);
 	}
 
-	$db->query("DELETE FROM " . DB_PREFIX . "extension WHERE `type` = '" . $db->escape($module_settings_type) . "' AND `code` = '" . $db->escape($remove_extension) . "'");
+	$db->query("DELETE FROM oc_extension WHERE `type` = '" . $db->escape($module_settings_type) . "' AND `code` = '" . $db->escape($remove_extension) . "'");
 
 	foreach ($module_settings_data as $module_key => $module_data) {
-		$db->query("INSERT INTO " . DB_PREFIX . "extension SET `type` = '" . $db->escape($module_settings_type) . "', `code` = '" . $db->escape($module_key) . "'");
+		$db->query("INSERT INTO oc_extension SET `type` = '" . $db->escape($module_settings_type) . "', `code` = '" . $db->escape($module_key) . "'");
 
 		$loader->model('user/user_group');
 
@@ -102,20 +102,20 @@ echo "Setting update completed\r\n";
 function deleteSetting($store_id, $code) {
 	global $db;
 
-	$db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $db->escape($code) . "'");
+	$db->query("DELETE FROM `oc_setting` WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $db->escape($code) . "'");
 }
 
 function editSetting($code, $data, $store_id = 0) {
 	global $db;
 
-	$db->query("DELETE FROM `" . DB_PREFIX . "setting` WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $db->escape($code) . "'");
+	$db->query("DELETE FROM `oc_setting` WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $db->escape($code) . "'");
 
 	foreach ($data as $key => $value) {
 		if (substr($key, 0, strlen($code)) == $code) {
 			if (!is_array($value)) {
-				$db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '" . (int)$store_id . "', `code` = '" . $db->escape($code) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape($value) . "'");
+				$db->query("INSERT INTO oc_setting SET store_id = '" . (int)$store_id . "', `code` = '" . $db->escape($code) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape($value) . "'");
 			} else {
-				$db->query("INSERT INTO " . DB_PREFIX . "setting SET store_id = '" . (int)$store_id . "', `code` = '" . $db->escape($code) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape(json_encode($value)) . "', serialized = '1'");
+				$db->query("INSERT INTO oc_setting SET store_id = '" . (int)$store_id . "', `code` = '" . $db->escape($code) . "', `key` = '" . $db->escape($key) . "', `value` = '" . $db->escape(json_encode($value)) . "', serialized = '1'");
 			}
 		}
 	}
@@ -126,7 +126,7 @@ function getInstalledExtension($type) {
 
 	$extension_data = array();
 
-	$query = $db->query("SELECT * FROM " . DB_PREFIX . "extension WHERE `type` = '" . $db->escape($type) . "' ORDER BY code");
+	$query = $db->query("SELECT * FROM oc_extension WHERE `type` = '" . $db->escape($type) . "' ORDER BY code");
 
 	foreach ($query->rows as $result) {
 		$extension_data[] = $result['code'];

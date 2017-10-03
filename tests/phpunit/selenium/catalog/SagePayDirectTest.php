@@ -15,10 +15,10 @@ class CatalogSagePayExpressTest extends OpenCartSeleniumTest {
 	public function setUpPage() {
 		if (!$this->moduleInstalled) {
 			$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
-			$db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "sagepay_direct_order");
-			$db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "sagepay_direct_order_transaction");
-			$db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "sagepay_direct_order_recurring");
-			$db->query("DROP TABLE IF EXISTS " . DB_PREFIX . "sagepay_direct_card");
+			$db->query("DROP TABLE IF EXISTS oc_sagepay_direct_order");
+			$db->query("DROP TABLE IF EXISTS oc_sagepay_direct_order_transaction");
+			$db->query("DROP TABLE IF EXISTS oc_sagepay_direct_order_recurring");
+			$db->query("DROP TABLE IF EXISTS oc_sagepay_direct_card");
 
 			$this->url("admin/");
 

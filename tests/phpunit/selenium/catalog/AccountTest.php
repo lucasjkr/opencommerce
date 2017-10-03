@@ -16,8 +16,8 @@ class CatalogAccountTest extends OpenCartSeleniumTest {
 	 */
 	protected function completeTest() {
 		$db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_PORT);
-		$db->query("DELETE FROM " . DB_PREFIX . "customer");
-		$db->query("DELETE FROM " . DB_PREFIX . "address");
+		$db->query("DELETE FROM oc_customer");
+		$db->query("DELETE FROM oc_address");
 	}
 
 	public function testNewsletterSubscription() {

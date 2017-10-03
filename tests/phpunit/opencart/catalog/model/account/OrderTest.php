@@ -13,8 +13,8 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 		$this->customerLogout();
 		$this->emptyTables();
 		
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer SET customer_id = 1, email = 'customer@localhost', `status` = 1, customer_group_id = 1, date_added = '1970-01-01 00:00:00', ip = '127.0.0.1'");
-		$this->db->query("INSERT INTO " . DB_PREFIX . "customer_ip SET ip = '127.0.0.1', customer_id = 1");
+		$this->db->query("INSERT INTO oc_customer SET customer_id = 1, email = 'customer@localhost', `status` = 1, customer_group_id = 1, date_added = '1970-01-01 00:00:00', ip = '127.0.0.1'");
+		$this->db->query("INSERT INTO oc_customer_ip SET ip = '127.0.0.1', customer_id = 1");
 		
 		$this->customerLogin('customer@localhost', '', true);
 		
@@ -30,21 +30,21 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 	}
 	
 	private function emptyTables() {
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ban_ip");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "customer_ip");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "address");
+		$this->db->query("DELETE FROM oc_customer");
+		$this->db->query("DELETE FROM oc_customer_ban_ip");
+		$this->db->query("DELETE FROM oc_customer_ip");
+		$this->db->query("DELETE FROM oc_address");
 		
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_custom_field");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_fraud");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_history");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_option");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_product");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_recurring");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_recurring_transaction");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_total");
-		$this->db->query("DELETE FROM " . DB_PREFIX . "order_voucher");
+		$this->db->query("DELETE FROM oc_order");
+		$this->db->query("DELETE FROM oc_order_custom_field");
+		$this->db->query("DELETE FROM oc_order_fraud");
+		$this->db->query("DELETE FROM oc_order_history");
+		$this->db->query("DELETE FROM oc_order_option");
+		$this->db->query("DELETE FROM oc_order_product");
+		$this->db->query("DELETE FROM oc_order_recurring");
+		$this->db->query("DELETE FROM oc_order_recurring_transaction");
+		$this->db->query("DELETE FROM oc_order_total");
+		$this->db->query("DELETE FROM oc_order_voucher");
 	}
 	
 	private function addDummyOrder() {
@@ -156,11 +156,11 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 		);
 		
 		$orderId = $this->model_checkout_order->addOrder($order);
-		$this->db->query("UPDATE `" . DB_PREFIX . "order` SET order_status_id = 1 WHERE order_id = $orderId");
+		$this->db->query("UPDATE `oc_order` SET order_status_id = 1 WHERE order_id = $orderId");
 	}
 	
 	public function testGetOrder() {
-		$result = $this->db->query("SELECT * FROM `" . DB_PREFIX . "order`")->row;
+		$result = $this->db->query("SELECT * FROM `oc_order`")->row;
 		
 		$order = $this->model_account_order->getOrder($result['order_id']);
 		$this->assertNotEmpty($order);
@@ -226,7 +226,7 @@ class CatalogModelAccountOrderTest extends OpenCartTest {
 		$orderId = $this->db->query("SELECT order_id FROM `". DB_PREFIX . "order` LIMIT 1")->row['order_id'];
 	
 		for ($i = 0; $i < 5; $i++) {
-			$this->db->query("INSERT INTO `" . DB_PREFIX . "order_history` SET order_id = $orderId, order_status_id = 1, notify = 1, comment = '', date_added = '1970-01-01 00:00:00'");
+			$this->db->query("INSERT INTO `oc_order_history` SET order_id = $orderId, order_status_id = 1, notify = 1, comment = '', date_added = '1970-01-01 00:00:00'");
 		}
 		
 		$histories = $this->model_account_order->getOrderHistories($orderId);

@@ -312,7 +312,7 @@ class ModelExtensionOpenBayOpenbay extends Model {
 	}
 
 	public function faqDbTableCheck() {
-		if (!$this->openbay->testDbTable(DB_PREFIX . "openbay_faq")) {
+		if (!$this->openbay->testDbTable("oc_openbay_faq")) {
 			$this->db->query("CREATE TABLE IF NOT EXISTS `oc_openbay_faq` (`id` int(11) NOT NULL AUTO_INCREMENT,`route` text NOT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
 		}
 	}

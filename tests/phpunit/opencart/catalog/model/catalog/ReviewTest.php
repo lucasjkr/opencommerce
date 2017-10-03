@@ -7,7 +7,7 @@ class CatalogModelCatalogReviewTest extends OpenCartTest {
 	 */
 	public function setupTest() {
 		$this->loadModelByRoute('catalog/review');
-		$this->db->query("DELETE FROM " . DB_PREFIX . "review");
+		$this->db->query("DELETE FROM oc_review");
 	}
 	
 	/**
@@ -15,7 +15,7 @@ class CatalogModelCatalogReviewTest extends OpenCartTest {
 	 */
 	public function completeTest() {
 		$this->loadModelByRoute('catalog/review');
-		$this->db->query("DELETE FROM " . DB_PREFIX . "review");
+		$this->db->query("DELETE FROM oc_review");
 	}
 	
 	public function testAddReviews() {		
@@ -30,7 +30,7 @@ class CatalogModelCatalogReviewTest extends OpenCartTest {
 			$this->model_catalog_review->addReview($productId, $data);
 		}
 		
-		$reviewCount = (int)$this->db->query("SELECT COUNT(*) AS review_num FROM " . DB_PREFIX . "review")->row['review_num'];
+		$reviewCount = (int)$this->db->query("SELECT COUNT(*) AS review_num FROM oc_review")->row['review_num'];
 		$this->assertEquals(5, $reviewCount);
 	}
 	
@@ -46,7 +46,7 @@ class CatalogModelCatalogReviewTest extends OpenCartTest {
 			$this->model_catalog_review->addReview($productId, $data);
 		}
 		
-		$this->db->query("UPDATE " . DB_PREFIX . "review SET `status` = 1");
+		$this->db->query("UPDATE oc_review SET `status` = 1");
 		
 		$reviews = $this->model_catalog_review->getReviewsByProductId($productId);
 		
@@ -65,7 +65,7 @@ class CatalogModelCatalogReviewTest extends OpenCartTest {
 			$this->model_catalog_review->addReview($productId, $data);
 		}
 		
-		$this->db->query("UPDATE " . DB_PREFIX . "review SET `status` = 1");
+		$this->db->query("UPDATE oc_review SET `status` = 1");
 		
 		$reviewCount = $this->model_catalog_review->getTotalReviewsByProductId($productId);
 		

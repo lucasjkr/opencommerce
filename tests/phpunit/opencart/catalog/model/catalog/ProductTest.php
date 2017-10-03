@@ -40,11 +40,11 @@ class CatalogModelCatalogProductTest extends OpenCartTest {
 	public function testAvailableDate() {
 		$product = $this->model_catalog_product->getProduct(28);
 		
-		$this->db->query("UPDATE " . DB_PREFIX . "product SET date_available = '9999-12-30' WHERE product_id = 28");
+		$this->db->query("UPDATE oc_product SET date_available = '9999-12-30' WHERE product_id = 28");
 		
 		$result = $this->model_catalog_product->getProduct(28);
 		
-		$this->db->query("UPDATE " . DB_PREFIX . "product SET date_available = '" . $product['date_available'] . "' WHERE product_id = 28");
+		$this->db->query("UPDATE oc_product SET date_available = '" . $product['date_available'] . "' WHERE product_id = 28");
 		
 		$this->assertFalse($result);
 	}
