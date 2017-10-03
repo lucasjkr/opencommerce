@@ -250,6 +250,9 @@ function setup_db($data) {
 
 function write_config_files($options) {
     $output  = "<?php\n";
+    $output .= "\n";
+    $output .= "define('STORE_URL',         '" . $options['url'] . "');";
+    $output .= "\n";
     $output .= "// Stored Credentials\n";
     $output .= "\n";
     $output .= "define('DB_HOSTNAME',       '" . $options['db_hostname'] . "');\n";
@@ -267,7 +270,6 @@ function write_config_files($options) {
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
     $output .= "define('HTTP_ROOT',         '/');\n";
-    $output .= "define('STORE_URL',         '" . $options['url'] . "/');\n";
     $output .= "define('HTTP_SERVER',       '/');\n";
 
 	$output .= "// DIR\n";
@@ -292,7 +294,6 @@ function write_config_files($options) {
 
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
-    $output .= "define('STORE_URL',         '" . $options['url'] . "/');\n";
     $output .= "define('HTTP_ADMIN',       '/admin/');\n";
     $output .= "define('HTTP_CATALOG',     '/');\n\n";
 
