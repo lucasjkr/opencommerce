@@ -3,7 +3,12 @@ class ControllerCommonLanguage extends Controller {
 	public function index() {
 		$this->load->language('common/language');
 
-		$data['action'] = $this->url->link('common/language/language', '', $this->request->server['HTTPS']);
+        // LJK, this was usig $this->request->server['HTTPS']
+        // old code:
+        // 		$data['action'] = $this->url->link('common/language/language', '', $this->request->server['HTTPS']);
+        // not even convinced this is needed - we shouldn't be rewriting URL's anymore. But need to set that config option to true
+        // and then rewrite everything to automatically pull SEO URL
+        $data['action'] = $this->url->link('common/language/language', '', HTTP_ROOT );
 
 		$data['code'] = $this->session->data['language'];
 

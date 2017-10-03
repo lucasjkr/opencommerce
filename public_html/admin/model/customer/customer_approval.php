@@ -90,5 +90,5 @@ class ModelCustomerCustomerApproval extends Model {
 	public function denyCustomer($customer_id) {
 		$this->db->query("DELETE FROM `oc_customer_approval` WHERE customer_id = '" . (int)$customer_id . "' AND `type` = 'customer'");
 	}
-    
+
 }

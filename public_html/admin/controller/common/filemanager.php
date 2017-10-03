@@ -3,12 +3,8 @@ class ControllerCommonFileManager extends Controller {
 	public function index() {
 		$this->load->language('common/filemanager');
 
-		// Find which protocol to use to pass the full image link back
-		if ($this->request->server['HTTPS']) {
-			$server = HTTPS_CATALOG;
-		} else {
-			$server = HTTP_CATALOG;
-		}
+        // LJK This was a switch between HTTP_CATALOG and HTTPS_CATALOG
+        $server = HTTP_ROOT;
 
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = rtrim(str_replace(array('*', '/', '\\'), '', $this->request->get['filter_name']), '/');
