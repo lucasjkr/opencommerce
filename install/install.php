@@ -85,6 +85,7 @@ function usage() {
 		'--db_port', '3306',
 		'--username', 'admin',
 		'--password', 'admin',
+        '--url', 'www.yoursite.com',
 		'--email', 'youremail@example.com'
 	));
 	echo 'php install.php install ' . $options . "\n\n";
@@ -125,6 +126,7 @@ function valid($options) {
 		'username',
 		'password',
 		'email',
+        'url',
 	);
 	$missing = array();
 	foreach ($required as $r) {
@@ -249,7 +251,9 @@ function setup_db($data) {
 function write_config_files($options) {
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
-	$output .= "define('HTTP_SERVER',       '/');\n";
+    $output .= "define('HTTP_ROOT',         '/');\n";
+    $output .= "define('STORE_URL',         '" . $options['url'] . "/');\n";
+    $output .= "define('HTTP_SERVER',       '/');\n";
 
 	$output .= "// DIR\n";
     $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
@@ -284,8 +288,9 @@ function write_config_files($options) {
 
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
-	$output .= "define('HTTP_ADMIN',       '/admin/');\n";
-	$output .= "define('HTTP_CATALOG',     '/');\n\n";
+    $output .= "define('STORE_URL',         '" . $options['url'] . "/');\n";
+    $output .= "define('HTTP_ADMIN',       '/admin/');\n";
+    $output .= "define('HTTP_CATALOG',     '/');\n\n";
 
 	$output .= "// DIR\n";
     $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
