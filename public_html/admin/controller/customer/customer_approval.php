@@ -207,11 +207,10 @@ class ControllerCustomerCustomerApproval extends Controller {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
 			$this->load->model('customer/customer_approval');
-			
+
+            //TODO: This might not need to be an 'if', need to track down where get['type'] is being set
 			if ($this->request->get['type'] == 'customer') {
 				$this->model_customer_customer_approval->approveCustomer($this->request->get['customer_id']);
-			} elseif ($this->request->get['type'] == 'affiliate') {
-				$this->model_customer_customer_approval->approveAffiliate($this->request->get['customer_id']);
 			}
 			
 			$json['success'] = $this->language->get('text_success');
@@ -230,11 +229,10 @@ class ControllerCustomerCustomerApproval extends Controller {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
 			$this->load->model('customer/customer_approval');
-			
+
+            //TODO: This might not need to be an 'if', need to track down where get['type'] is being set
 			if ($this->request->get['type'] == 'customer') {
 				$this->model_customer_customer_approval->denyCustomer($this->request->get['customer_id']);
-			} elseif ($this->request->get['type'] == 'affiliate') {
-				$this->model_customer_customer_approval->denyAffiliate($this->request->get['customer_id']);
 			}
 					
 			$json['success'] = $this->language->get('text_success');
