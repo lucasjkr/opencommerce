@@ -249,6 +249,21 @@ function setup_db($data) {
 
 
 function write_config_files($options) {
+    $output  = "<?php\n";
+    $output .= "// Stored Credentials\n";
+    $output .= "\n";
+    $output .= "define('DB_HOSTNAME',       '" . $options['db_hostname'] . "');\n";
+    $output .= "define('DB_USERNAME',       '" . $options['db_username'] . "');\n";
+    $output .= "define('DB_PASSWORD',       '" . $options['db_password'] . "');\n";
+    $output .= "define('DB_DATABASE',       '" . $options['db_database'] . "');\n";
+    $output .= "define('DB_DRIVER',         'mpdo');\n";
+    $output .= "define('DB_PREFIX',         'oc_');\n";
+    $output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n";
+
+    $file = fopen(DIR_OPENCART . 'config/credentials.php', 'w');
+    fwrite($file, $output);
+    fclose($file);
+
 	$output  = "<?php\n";
 	$output .= "// HTTP\n";
     $output .= "define('HTTP_ROOT',         '/');\n";
@@ -271,19 +286,8 @@ function write_config_files($options) {
 	$output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
 	$output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n\n";
 
-	$output .= "// DB\n";
-	$output .= "define('DB_HOSTNAME',       '" . $options['db_hostname'] . "');\n";
-	$output .= "define('DB_USERNAME',       '" . $options['db_username'] . "');\n";
-	$output .= "define('DB_PASSWORD',       '" . $options['db_password'] . "');\n";
-	$output .= "define('DB_DATABASE',       '" . $options['db_database'] . "');\n";
-    $output .= "define('DB_DRIVER',         'mpdo');\n";
-    $output .= "define('DB_PREFIX',         'oc_');\n";
-    $output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n";
-
 	$file = fopen(DIR_OPENCART . 'config/config.php', 'w');
-
 	fwrite($file, $output);
-
 	fclose($file);
 
 	$output  = "<?php\n";
@@ -308,15 +312,6 @@ function write_config_files($options) {
 	$output .= "define('DIR_MODIFICATION',  DIR_STORAGE . 'modification/');\n";
 	$output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
 	$output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n\n";
-
-	$output .= "// DB\n";
-	$output .= "define('DB_HOSTNAME',       '" . $options['db_hostname'] . "');\n";
-	$output .= "define('DB_USERNAME',       '" . $options['db_username'] . "');\n";
-	$output .= "define('DB_PASSWORD',       '" . $options['db_password'] . "');\n";
-	$output .= "define('DB_DATABASE',       '" . $options['db_database'] . "');\n";
-    $output .= "define('DB_DRIVER',         'mpdo');\n";
-    $output .= "define('DB_PREFIX',         'oc_');\n";
-	$output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n\n";
 
 	$output .= "// OpenCart API \n";
 	$output .= "define('OPENCART_SERVER',  'https://www.opencart.com/');\n";
