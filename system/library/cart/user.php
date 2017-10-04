@@ -19,8 +19,6 @@ class User {
 				$this->username = $user_query->row['username'];
 				$this->user_group_id = $user_query->row['user_group_id'];
 
-				$this->db->query("UPDATE oc_user SET ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE user_id = '" . (int)$this->session->data['user_id'] . "'");
-
 				$user_group_query = $this->db->query("SELECT permission FROM oc_user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
 
 				$permissions = json_decode($user_group_query->row['permission'], true);

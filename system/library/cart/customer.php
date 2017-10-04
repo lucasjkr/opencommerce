@@ -11,8 +11,8 @@ class Customer {
 	private $address_id;
 
 	public function __construct($registry) {
-		$this->config = $registry->get('config');
-		$this->db = $registry->get('db');
+		$this->config  = $registry->get('config');
+		$this->db      = $registry->get('db');
 		$this->request = $registry->get('request');
 		$this->session = $registry->get('session');
 
@@ -50,8 +50,6 @@ class Customer {
                 $this->telephone = $customer_query->row['telephone'];
                 $this->newsletter = $customer_query->row['newsletter'];
                 $this->address_id = $customer_query->row['address_id'];
-
-                // Customers login table - this is IP they used, to add as insert later on $this->request->server['REMOTE_ADDR'];
 
                 // Check password strength, rehash if necessary
                 if (password_needs_rehash($customer_query->row['password'], PASSWORD_DEFAULT)) {
