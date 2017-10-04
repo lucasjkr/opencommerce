@@ -121,14 +121,9 @@ class Customer {
 	}
 
 	public function getBalance() {
-		$query = $this->db->query("SELECT SUM(amount) AS total FROM oc_customer_transaction WHERE customer_id = '" . (int)$this->customer_id . "'");
+		$query = $this->db->query("SELECT SUM(amount) AS total FROM `oc_customer_transaction` WHERE `customer_id` = '" . (int)$this->customer_id . "'");
 
 		return $query->row['total'];
 	}
 
-	public function getRewardPoints() {
-		$query = $this->db->query("SELECT SUM(points) AS total FROM oc_customer_reward WHERE customer_id = '" . (int)$this->customer_id . "'");
-
-		return $query->row['total'];
-	}
 }

@@ -52,19 +52,13 @@ class Cart {
 
 					if ($option_query->num_rows) {
 						if ($option_query->row['type'] == 'select' || $option_query->row['type'] == 'radio') {
-							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix FROM oc_product_option_value pov LEFT JOIN oc_option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$value . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix FROM oc_product_option_value pov LEFT JOIN oc_option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$value . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 							if ($option_value_query->num_rows) {
 								if ($option_value_query->row['price_prefix'] == '+') {
 									$option_price += $option_value_query->row['price'];
 								} elseif ($option_value_query->row['price_prefix'] == '-') {
 									$option_price -= $option_value_query->row['price'];
-								}
-
-								if ($option_value_query->row['points_prefix'] == '+') {
-									$option_points += $option_value_query->row['points'];
-								} elseif ($option_value_query->row['points_prefix'] == '-') {
-									$option_points -= $option_value_query->row['points'];
 								}
 
 								if ($option_value_query->row['weight_prefix'] == '+') {
@@ -89,27 +83,19 @@ class Cart {
 									'subtract'                => $option_value_query->row['subtract'],
 									'price'                   => $option_value_query->row['price'],
 									'price_prefix'            => $option_value_query->row['price_prefix'],
-									'points'                  => $option_value_query->row['points'],
-									'points_prefix'           => $option_value_query->row['points_prefix'],
 									'weight'                  => $option_value_query->row['weight'],
 									'weight_prefix'           => $option_value_query->row['weight_prefix']
 								);
 							}
 						} elseif ($option_query->row['type'] == 'checkbox' && is_array($value)) {
 							foreach ($value as $product_option_value_id) {
-								$option_value_query = $this->db->query("SELECT pov.option_value_id, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.points, pov.points_prefix, pov.weight, pov.weight_prefix, ovd.name FROM oc_product_option_value pov LEFT JOIN oc_option_value_description ovd ON (pov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$product_option_value_id . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+								$option_value_query = $this->db->query("SELECT pov.option_value_id, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix, ovd.name FROM oc_product_option_value pov LEFT JOIN oc_option_value_description ovd ON (pov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$product_option_value_id . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
 
 								if ($option_value_query->num_rows) {
 									if ($option_value_query->row['price_prefix'] == '+') {
 										$option_price += $option_value_query->row['price'];
 									} elseif ($option_value_query->row['price_prefix'] == '-') {
 										$option_price -= $option_value_query->row['price'];
-									}
-
-									if ($option_value_query->row['points_prefix'] == '+') {
-										$option_points += $option_value_query->row['points'];
-									} elseif ($option_value_query->row['points_prefix'] == '-') {
-										$option_points -= $option_value_query->row['points'];
 									}
 
 									if ($option_value_query->row['weight_prefix'] == '+') {
@@ -134,8 +120,6 @@ class Cart {
 										'subtract'                => $option_value_query->row['subtract'],
 										'price'                   => $option_value_query->row['price'],
 										'price_prefix'            => $option_value_query->row['price_prefix'],
-										'points'                  => $option_value_query->row['points'],
-										'points_prefix'           => $option_value_query->row['points_prefix'],
 										'weight'                  => $option_value_query->row['weight'],
 										'weight_prefix'           => $option_value_query->row['weight_prefix']
 									);
@@ -154,8 +138,6 @@ class Cart {
 								'subtract'                => '',
 								'price'                   => '',
 								'price_prefix'            => '',
-								'points'                  => '',
-								'points_prefix'           => '',
 								'weight'                  => '',
 								'weight_prefix'           => ''
 							);
@@ -187,14 +169,8 @@ class Cart {
 					$price = $product_special_query->row['price'];
 				}
 
-				// Reward Points
-				$product_reward_query = $this->db->query("SELECT points FROM oc_product_reward WHERE product_id = '" . (int)$cart['product_id'] . "' AND customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "'");
-
-				if ($product_reward_query->num_rows) {
-					$reward = $product_reward_query->row['points'];
-				} else {
-					$reward = 0;
-				}
+                // LJK TODO: This is hanging out, to do with points/rewards. Should be fine to delete just not deleting it yet.
+                $reward = 0;
 
 				// Downloads
 				$download_data = array();
@@ -251,7 +227,6 @@ class Cart {
 					'price'           => ($price + $option_price),
 					'total'           => ($price + $option_price) * $cart['quantity'],
 					'reward'          => $reward * $cart['quantity'],
-					'points'          => ($product_query->row['points'] ? ($product_query->row['points'] + $option_points) * $cart['quantity'] : 0),
 					'tax_class_id'    => $product_query->row['tax_class_id'],
 					'weight'          => ($product_query->row['weight'] + $option_weight) * $cart['quantity'],
 					'weight_class_id' => $product_query->row['weight_class_id'],
