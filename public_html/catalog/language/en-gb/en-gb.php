@@ -52,7 +52,6 @@ $_['button_guest']          = 'Guest Checkout';
 $_['button_view']           = 'View';
 $_['button_voucher']        = 'Apply Gift Certificate';
 $_['button_upload']         = 'Upload File';
-$_['button_reward']         = 'Apply Points';
 $_['button_quote']          = 'Get Quotes';
 $_['button_list']           = 'List';
 $_['button_grid']           = 'Grid';

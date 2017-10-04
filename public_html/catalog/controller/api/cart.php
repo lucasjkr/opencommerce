@@ -89,7 +89,6 @@ class ControllerApiCart extends Controller {
 			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);
 			unset($this->session->data['payment_methods']);
-			unset($this->session->data['reward']);
 		}
 
 		$this->response->addHeader('Content-Type: application/json');
@@ -116,7 +115,6 @@ class ControllerApiCart extends Controller {
 				unset($this->session->data['shipping_methods']);
 				unset($this->session->data['payment_method']);
 				unset($this->session->data['payment_methods']);
-				unset($this->session->data['reward']);
 			}
 		}
 
@@ -178,7 +176,6 @@ class ControllerApiCart extends Controller {
 					'shipping'   => $product['shipping'],
 					'price'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']),
 					'total'      => $this->currency->format($this->tax->calculate($product['price'], $product['tax_class_id'], $this->config->get('config_tax')) * $product['quantity'], $this->session->data['currency']),
-					'reward'     => $product['reward']
 				);
 			}
 

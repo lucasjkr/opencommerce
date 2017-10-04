@@ -139,7 +139,6 @@ class ControllerCheckoutCart extends Controller {
 					'recurring' => $recurring,
 					'quantity'  => $product['quantity'],
 					'stock'     => $product['stock'] ? true : !(!$this->config->get('config_stock_checkout') || $this->config->get('config_stock_warning')),
-					'reward'    => ($product['reward'] ? sprintf($this->language->get('text_points'), $product['reward']) : ''),
 					'price'     => $price,
 					'total'     => $total,
 					'href'      => $this->url->link('product/product', 'product_id=' . $product['product_id'])
@@ -397,7 +396,6 @@ class ControllerCheckoutCart extends Controller {
 			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);
 			unset($this->session->data['payment_methods']);
-			unset($this->session->data['reward']);
 
 			$this->response->redirect($this->url->link('checkout/cart'));
 		}
@@ -423,7 +421,6 @@ class ControllerCheckoutCart extends Controller {
 			unset($this->session->data['shipping_methods']);
 			unset($this->session->data['payment_method']);
 			unset($this->session->data['payment_methods']);
-			unset($this->session->data['reward']);
 
 			// Totals
 			$this->load->model('setting/extension');
