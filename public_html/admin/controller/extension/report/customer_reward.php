@@ -108,22 +108,6 @@ class ControllerExtensionReportCustomerReward extends Controller {
 			'limit'				=> $this->config->get('config_limit_admin')
 		);
 
-		$customer_total = $this->model_extension_report_customer->getTotalRewardPoints($filter_data);
-
-		$results = $this->model_extension_report_customer->getRewardPoints($filter_data);
-
-		foreach ($results as $result) {
-			$data['customers'][] = array(
-				'customer'       => $result['customer'],
-				'email'          => $result['email'],
-				'customer_group' => $result['customer_group'],
-				'status'         => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
-				'points'         => $result['points'],
-				'orders'         => $result['orders'],
-				'total'          => $this->currency->format($result['total'], $this->config->get('config_currency')),
-				'edit'           => $this->url->link('customer/customer/edit', 'user_token=' . $this->session->data['user_token'] . '&customer_id=' . $result['customer_id'], true)
-			);
-		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 

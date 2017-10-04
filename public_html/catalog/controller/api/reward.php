@@ -1,6 +1,7 @@
 <?php
 class ControllerApiReward extends Controller {
 	public function index() {
+	    // TODO: LJK this API call can be removed altogether
 		$this->load->language('api/reward');
 
 		// Delete past reward in case there is an error
