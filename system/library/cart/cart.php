@@ -42,7 +42,6 @@ class Cart {
 
 			if ($product_query->num_rows && ($cart['quantity'] > 0)) {
 				$option_price = 0;
-				$option_points = 0;
 				$option_weight = 0;
 
 				$option_data = array();
@@ -169,9 +168,6 @@ class Cart {
 					$price = $product_special_query->row['price'];
 				}
 
-                // LJK TODO: This is hanging out, to do with points/rewards. Should be fine to delete just not deleting it yet.
-                $reward = 0;
-
 				// Downloads
 				$download_data = array();
 
@@ -226,7 +222,6 @@ class Cart {
 					'stock'           => $stock,
 					'price'           => ($price + $option_price),
 					'total'           => ($price + $option_price) * $cart['quantity'],
-					'reward'          => $reward * $cart['quantity'],
 					'tax_class_id'    => $product_query->row['tax_class_id'],
 					'weight'          => ($product_query->row['weight'] + $option_weight) * $cart['quantity'],
 					'weight_class_id' => $product_query->row['weight_class_id'],
