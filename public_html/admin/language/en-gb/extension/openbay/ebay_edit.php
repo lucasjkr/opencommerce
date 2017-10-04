@@ -44,7 +44,7 @@ $_['column_add']				   = 'Add';
 $_['column_combination']		   = 'Combination';
 
 // Help
-$_['help_stock_store']			   = 'This is the level of stock on in OpenCart';
+$_['help_stock_store']			   = 'This is the level of stock on in your store';
 $_['help_stock_listed']			   = 'This is the current level of stock on eBay';
 $_['help_stock_reserve']		   = 'This is the maximum level of stock on eBay (0 = no reserve limit)';
 

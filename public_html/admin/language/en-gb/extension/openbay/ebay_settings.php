@@ -38,7 +38,7 @@ $_['text_api_status']               = 'API connection status';
 $_['text_api_ok']                   = 'Connection OK, token expires';
 $_['text_api_failed']               = 'Validation failed';
 $_['text_api_other']        		= 'Other actions';
-$_['text_create_date_0']            = 'When added to OpenCart';
+$_['text_create_date_0']            = 'When added to your store';
 $_['text_create_date_1']            = 'When created on eBay';
 $_['text_obp_detail_update']        = 'Update your store URL &amp; contact email';
 $_['text_success']					= 'Your settings have been saved';
@@ -88,7 +88,7 @@ $_['tab_setup']					  = 'Settings';
 $_['tab_defaults']				  = 'Listing defaults';
 
 // Help
-$_['help_disable_soldout']		  = 'When the item sells out it then disables the product in OpenCart';
+$_['help_disable_soldout']		  = 'When the item sells out it then disables the product in your store';
 $_['help_relist_items'] 		  = 'If an item link existed before it will relist previous item if back in stock';
 $_['help_end_items']    		  = 'If items sell out, should the listing be ended on eBay?';
 $_['help_currency']     		  = 'Based on currencies from your store';
