@@ -16,8 +16,6 @@ $_['text_history']          = 'History';
 $_['text_history_add']      = 'Add History';
 $_['text_transaction']      = 'Transactions';
 $_['text_transaction_add']  = 'Add Transaction';
-$_['text_reward']           = 'Reward Points';
-$_['text_reward_add']       = 'Add Reward Points';
 $_['text_ip']               = 'IP';
 $_['text_option']           = 'Options';
 $_['text_login']            = 'Login into Store';
@@ -32,7 +30,6 @@ $_['column_date_added']     = 'Date Added';
 $_['column_comment']        = 'Comment';
 $_['column_description']    = 'Description';
 $_['column_amount']         = 'Amount';
-$_['column_points']         = 'Points';
 $_['column_ip']             = 'IP';
 $_['column_account']        = 'Accounts';
 $_['column_store']          = 'Store';
@@ -61,14 +58,12 @@ $_['entry_default']         = 'Default Address';
 $_['entry_comment']         = 'Comment';
 $_['entry_description']     = 'Description';
 $_['entry_amount']          = 'Amount';
-$_['entry_points']          = 'Points';
 $_['entry_name']            = 'Customer Name';
 $_['entry_ip']              = 'IP';
 $_['entry_date_added']      = 'Date Added';
 
 // Help
 $_['help_safe']             = 'Set to true to avoid this customer from being caught by the anti-fraud system';
-$_['help_points']           = 'Use minus to remove points';
 
 // Error
 $_['error_warning']         = 'Warning: Please check the form carefully for errors!';

@@ -79,10 +79,6 @@ $_['button_deny']                   = 'Deny';
 $_['button_reset']                  = 'Reset';
 $_['button_generate']               = 'Generate';
 $_['button_voucher_add']            = 'Add Voucher';
-$_['button_reward_add']             = 'Add Reward Points';
-$_['button_reward_remove']          = 'Remove Reward Points';
-$_['button_commission_add']         = 'Add Commission';
-$_['button_commission_remove']      = 'Remove Commission';
 $_['button_credit_add']             = 'Add Credit';
 $_['button_credit_remove']          = 'Remove Credit';
 $_['button_ip_add']                 = 'Add IP';
@@ -103,7 +99,6 @@ $_['button_restore']                = 'Restore';
 $_['button_backup']                 = 'Backup';
 
 // Tab
-$_['tab_affiliate']                 = 'Affiliate';
 $_['tab_address']                   = 'Address';
 $_['tab_additional']                = 'Additional';
 $_['tab_admin']                     = 'Admin';
@@ -131,7 +126,6 @@ $_['tab_local']                     = 'Local';
 $_['tab_mail']                      = 'Mail';
 $_['tab_module']                    = 'Module';
 $_['tab_product']                   = 'Products';
-$_['tab_reward']                    = 'Reward Points';
 $_['tab_transaction']               = 'Transactions';
 $_['tab_voucher']                   = 'Vouchers';
 $_['tab_sale']                      = 'Sales';
