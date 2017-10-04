@@ -3,7 +3,7 @@
 $_['heading_title']                        = 'Recurring Orders';
 
 // Text
-$_['text_success']                         = 'Success: You have modified recurring profiles!';
+$_['text_success']                         = 'Success: You have modified recurring orders!';
 $_['text_list']                            = 'Recurring Order List';
 $_['text_filter']                          = 'Filter';
 $_['text_recurring_detail']                = 'Recurring Details';

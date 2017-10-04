@@ -79,9 +79,8 @@ $_['entry_filter']           = 'Filters';
 $_['entry_download']         = 'Downloads';
 $_['entry_related']          = 'Related Products';
 $_['entry_tag']              = 'Product Tags';
-$_['entry_reward']           = 'Reward Points';
 $_['entry_layout']           = 'Layout Override';
-$_['entry_recurring']        = 'Recurring Profile';
+$_['entry_recurring']        = 'Recurring Payments';
 
 // Help
 $_['help_sku']               = 'Stock Keeping Unit';
