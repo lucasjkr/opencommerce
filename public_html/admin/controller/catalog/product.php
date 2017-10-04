@@ -507,6 +507,14 @@ class ControllerCatalogProduct extends Controller {
 			$data['error_name'] = array();
 		}
 
+        if (isset($this->request->post['product_seo_url'])) {
+            $data['product_seo_url'] = $this->request->post['product_seo_url'];
+        } elseif (isset($this->request->get['product_id'])) {
+            $data['product_seo_url'] = $this->model_catalog_product->getProductSeoUrls($this->request->get['product_id']);
+        } else {
+            $data['product_seo_url'] = array();
+        }
+
 		if (isset($this->error['meta_title'])) {
 			$data['error_meta_title'] = $this->error['meta_title'];
 		} else {
@@ -965,8 +973,6 @@ class ControllerCatalogProduct extends Controller {
 						'subtract'                => $product_option_value['subtract'],
 						'price'                   => $product_option_value['price'],
 						'price_prefix'            => $product_option_value['price_prefix'],
-						'points'                  => $product_option_value['points'],
-						'points_prefix'           => $product_option_value['points_prefix'],
 						'weight'                  => $product_option_value['weight'],
 						'weight_prefix'           => $product_option_value['weight_prefix']
 					);
@@ -1132,28 +1138,12 @@ class ControllerCatalogProduct extends Controller {
 			}
 		}
 
-		if (isset($this->request->post['points'])) {
-			$data['points'] = $this->request->post['points'];
-		} elseif (!empty($product_info)) {
-			$data['points'] = $product_info['points'];
-		} else {
-			$data['points'] = '';
-		}
-
 		if (isset($this->request->post['product_reward'])) {
 			$data['product_reward'] = $this->request->post['product_reward'];
 		} elseif (isset($this->request->get['product_id'])) {
 			$data['product_reward'] = $this->model_catalog_product->getProductRewards($this->request->get['product_id']);
 		} else {
 			$data['product_reward'] = array();
-		}
-
-		if (isset($this->request->post['product_seo_url'])) {
-			$data['product_seo_url'] = $this->request->post['product_seo_url'];
-		} elseif (isset($this->request->get['product_id'])) {
-			$data['product_seo_url'] = $this->model_catalog_product->getProductSeoUrls($this->request->get['product_id']);
-		} else {
-			$data['product_seo_url'] = array();
 		}
 
 		if (isset($this->request->post['product_layout'])) {
