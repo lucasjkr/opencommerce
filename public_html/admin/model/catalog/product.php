@@ -294,7 +294,6 @@ class ModelCatalogProduct extends Model {
 			$data['product_image'] = $this->getProductImages($product_id);
 			$data['product_option'] = $this->getProductOptions($product_id);
 			$data['product_related'] = $this->getProductRelated($product_id);
-			$data['product_reward'] = $this->getProductRewards($product_id);
 			$data['product_special'] = $this->getProductSpecials($product_id);
 			$data['product_category'] = $this->getProductCategories($product_id);
 			$data['product_download'] = $this->getProductDownloads($product_id);
@@ -317,7 +316,6 @@ class ModelCatalogProduct extends Model {
 		$this->db->query("DELETE FROM oc_product_option_value WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM oc_product_related WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM oc_product_related WHERE related_id = '" . (int)$product_id . "'");
-		$this->db->query("DELETE FROM oc_product_reward WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM oc_product_special WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM oc_product_to_category WHERE product_id = '" . (int)$product_id . "'");
 		$this->db->query("DELETE FROM oc_product_to_download WHERE product_id = '" . (int)$product_id . "'");

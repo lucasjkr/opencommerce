@@ -49,10 +49,7 @@ class ModelCustomerCustomer extends Model {
 	public function deleteCustomer($customer_id) {
 		$this->db->query("DELETE FROM oc_customer WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM oc_customer_activity WHERE customer_id = '" . (int)$customer_id . "'");
-		$this->db->query("DELETE FROM oc_customer_affiliate WHERE customer_id = '" . (int)$customer_id . "'");
-		$this->db->query("DELETE FROM oc_customer_affiliate_report WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM oc_customer_approval WHERE customer_id = '" . (int)$customer_id . "'");
-		$this->db->query("DELETE FROM oc_customer_reward WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM oc_customer_transaction WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM oc_customer_ip WHERE customer_id = '" . (int)$customer_id . "'");
 		$this->db->query("DELETE FROM oc_address WHERE customer_id = '" . (int)$customer_id . "'");
@@ -333,46 +330,6 @@ class ModelCustomerCustomer extends Model {
 
 	public function getTotalTransactionsByOrderId($order_id) {
 		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_customer_transaction WHERE order_id = '" . (int)$order_id . "'");
-
-		return $query->row['total'];
-	}
-
-	public function addReward($customer_id, $description = '', $points = '', $order_id = 0) {
-		$this->db->query("INSERT INTO oc_customer_reward SET customer_id = '" . (int)$customer_id . "', order_id = '" . (int)$order_id . "', points = '" . (int)$points . "', description = '" . $this->db->escape($description) . "'");
-	}
-
-	public function deleteReward($order_id) {
-		$this->db->query("DELETE FROM oc_customer_reward WHERE order_id = '" . (int)$order_id . "' AND points > 0");
-	}
-
-	public function getRewards($customer_id, $start = 0, $limit = 10) {
-		if ($start < 0) {
-			$start = 0;
-		}
-
-		if ($limit < 1) {
-			$limit = 10;
-		}
-
-		$query = $this->db->query("SELECT * FROM oc_customer_reward WHERE customer_id = '" . (int)$customer_id . "' ORDER BY date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
-
-		return $query->rows;
-	}
-
-	public function getTotalRewards($customer_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_customer_reward WHERE customer_id = '" . (int)$customer_id . "'");
-
-		return $query->row['total'];
-	}
-
-	public function getRewardTotal($customer_id) {
-		$query = $this->db->query("SELECT SUM(points) AS total FROM oc_customer_reward WHERE customer_id = '" . (int)$customer_id . "'");
-
-		return $query->row['total'];
-	}
-
-	public function getTotalCustomerRewardsByOrderId($order_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_customer_reward WHERE order_id = '" . (int)$order_id . "' AND points > 0");
 
 		return $query->row['total'];
 	}

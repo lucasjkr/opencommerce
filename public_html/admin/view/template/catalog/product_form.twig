@@ -34,7 +34,6 @@
             <li><a href="#tab-discount" data-toggle="tab">{{ tab_discount }}</a></li>
             <li><a href="#tab-special" data-toggle="tab">{{ tab_special }}</a></li>
             <li><a href="#tab-image" data-toggle="tab">{{ tab_image }}</a></li>
-            <li><a href="#tab-reward" data-toggle="tab">{{ tab_reward }}</a></li>
             <li><a href="#tab-seo" data-toggle="tab">{{ tab_seo }}</a></li>
             <li><a href="#tab-design" data-toggle="tab">{{ tab_design }}</a></li>
           </ul>
@@ -1036,35 +1035,6 @@
                     <td class="text-left"><button type="button" onclick="addImage();" data-toggle="tooltip" title="{{ button_image_add }}" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></td>
                   </tr>
                   </tfoot>
-                </table>
-              </div>
-            </div>
-            <div class="tab-pane" id="tab-reward">
-              <div class="form-group">
-                <label class="col-sm-2 control-label" for="input-points"><span data-toggle="tooltip" title="{{ help_points }}">{{ entry_points }}</span></label>
-                <div class="col-sm-10">
-                  <input type="text" name="points" value="{{ points }}" placeholder="{{ entry_points }}" id="input-points" class="form-control"/>
-                </div>
-              </div>
-              <div class="table-responsive">
-                <table class="table table-bordered table-hover">
-                  <thead>
-                  <tr>
-                    <td class="text-left">{{ entry_customer_group }}</td>
-                    <td class="text-right">{{ entry_reward }}</td>
-                  </tr>
-                  </thead>
-                  <tbody>
-
-                  {% for customer_group in customer_groups %}
-                    <tr>
-                      <!-- LJK: product reward stuff is here -->
-                      <td class="text-left">{{ customer_group.name }}</td>
-                      <td class="text-right"><input type="text" name="product_reward[{{ customer_group.customer_group_id }}][points]" value="{{ product_reward[customer_group.customer_group_id] ? product_reward[customer_group.customer_group_id].points }}" class="form-control"/></td>
-                    </tr>
-                  {% endfor %}
-                  </tbody>
-
                 </table>
               </div>
             </div>
