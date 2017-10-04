@@ -1,18 +1,23 @@
 <?php
-// Configuration
-if (is_file('../config/config.php')) {
-	require_once('../config/config.php');
+// Config
+if(is_file('../config/config.php')){
+    require_once('../config/config.php');
+} else {
+    exit("/config/config.php not found, please re-run installer");
 }
 
-// Credentials
-if (is_file(DIR_ROOT . 'config/credentials.php')) {
-    require_once(DIR_ROOT . 'config/credentials.php');
+// Paths
+if (is_file(DIR_ROOT . 'config/paths.php')) {
+    require_once(DIR_ROOT . 'config/paths.php');
+} else {
+    exit("/config/paths.php not found, please re-run installer");
 }
 
-// Install
-if (!defined('DIR_APPLICATION')) {
-    exit("You need to execute the command line installer first!");
-}
+// TEMPORARY - these will eventually be moved to paths.php
+define('DIR_APPLICATION',   '/vb_shared/_forks/opencommerce/public_html/catalog/');
+define('DIR_IMAGE',         '/vb_shared/_forks/opencommerce/public_html/image/');
+define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');
+define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/theme/');
 
 // Startup
 require_once(DIR_SYSTEM . 'startup.php');

@@ -1,18 +1,23 @@
 <?php
-// Configuration
-if (is_file('config.php')) {
-	require_once('config.php');
+// Config
+if(is_file('../../config/config.php')){
+    require_once('../../config/config.php');
+} else {
+    exit("/config/config.php not found, please re-run installer");
 }
 
-// Credentials
-if (is_file(DIR_ROOT . 'config/credentials.php')) {
-    require_once(DIR_ROOT . 'config/credentials.php');
+// Paths
+if (is_file(DIR_ROOT . 'config/paths.php')) {
+    require_once(DIR_ROOT . 'config/paths.php');
+} else {
+    exit("/config/credentials.php not found, please re-run installer");
 }
 
-// Install
-if (!defined('DIR_APPLICATION')) {
-    exit("You need to execute the command line installer first!");
-}
+define('DIR_APPLICATION',   '/vb_shared/_forks/opencommerce/public_html/admin/');
+define('DIR_IMAGE',         '/vb_shared/_forks/opencommerce/public_html/image/');
+define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');
+// this is unique to Admin (catalog uses view/theme)
+define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/template/');
 
 // Startup
 require_once(DIR_SYSTEM . 'startup.php');
