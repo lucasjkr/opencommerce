@@ -98,12 +98,6 @@ class ModelAccountCustomer extends Model {
 		return $query->row['total'];
 	}
 
-	public function getRewardTotal($customer_id) {
-		$query = $this->db->query("SELECT SUM(points) AS total FROM oc_customer_reward WHERE customer_id = '" . (int)$customer_id . "'");
-
-		return $query->row['total'];
-	}
-
 	public function getIps($customer_id) {
 		$query = $this->db->query("SELECT * FROM `oc_customer_ip` WHERE customer_id = '" . (int)$customer_id . "'");
 
