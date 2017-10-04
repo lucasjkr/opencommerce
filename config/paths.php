@@ -17,3 +17,5 @@ define('HTTP_SERVER',       '/');
 // these are used by admin
 define('HTTP_ADMIN',       '/admin/');
 define('HTTP_CATALOG',     '/');
+define('HTTPS_ADMIN',       '/admin/');
+define('HTTPS_CATALOG',     '/');
