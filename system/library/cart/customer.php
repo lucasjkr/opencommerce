@@ -39,6 +39,7 @@ class Customer {
   public function login($email, $password, $override = false) {
 		$customer_query = $this->db->query("SELECT * FROM oc_customer WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "' AND status = '1'");
 
+//        TODO: LJK - need to remove all this extra handling for salts, etc.
 		if ($customer_query->num_rows) {
 			if (!$override) {
 				if (password_verify($password, $customer_query->row['password'])) {
@@ -63,7 +64,7 @@ class Customer {
 			$this->newsletter = $customer_query->row['newsletter'];
 			$this->address_id = $customer_query->row['address_id'];
 
-			$this->db->query("UPDATE oc_customer SET " . ((isset($new_password_hashed)) ? "salt = '', password = '" . $this->db->escape($new_password_hashed) . "', " : "") . "language_id = '" . (int)$this->config->get('config_language_id') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+			$this->db->query("UPDATE oc_customer SET " . ((isset($new_password_hashed)) ? ", password = '" . $this->db->escape($new_password_hashed) . "', " : "") . "language_id = '" . (int)$this->config->get('config_language_id') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
 
 			return true;
 		} else {
@@ -72,7 +73,7 @@ class Customer {
 	}
 
 	public function logout() {
-		unset($this->session->data['customer_id']);
+        unset($this->session->data['customer_id']);
 
 		$this->customer_id = '';
 		$this->firstname = '';
