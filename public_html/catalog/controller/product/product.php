@@ -238,7 +238,6 @@ class ControllerProductProduct extends Controller {
 			$data['manufacturer'] = $product_info['manufacturer'];
 			$data['manufacturers'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product_info['manufacturer_id']);
 			$data['model'] = $product_info['model'];
-			$data['reward'] = $product_info['reward'];
 			$data['points'] = $product_info['points'];
 			$data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
 

@@ -15,7 +15,6 @@ $_['text_credit_card']    = 'Manage Stored Credit Cards';
 $_['text_wishlist']       = 'Modify your wish list';
 $_['text_order']          = 'View your order history';
 $_['text_download']       = 'Downloads';
-$_['text_reward']         = 'Your Reward Points';
 $_['text_return']         = 'View your return requests';
 $_['text_transaction']    = 'Your Transactions';
 $_['text_newsletter']     = 'Subscribe / unsubscribe to newsletter';

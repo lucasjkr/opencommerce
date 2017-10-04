@@ -12,7 +12,6 @@ $_['text_empty']        = 'There is no product that matches the search criteria.
 $_['text_quantity']     = 'Qty:';
 $_['text_manufacturer'] = 'Brand:';
 $_['text_model']        = 'Product Code:';
-$_['text_points']       = 'Reward Points:';
 $_['text_price']        = 'Price:';
 $_['text_tax']          = 'Ex Tax:';
 $_['text_reviews']      = 'Based on %s reviews.';
