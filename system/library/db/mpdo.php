@@ -21,8 +21,14 @@ final class mPDO {
 		$this->statement = $this->connection->prepare($sql);
 	}
 
-	private function run($sql, $params) {
-
+	private function run($sql, $params = NULL) {
+        if (!$params)
+        {
+            return $this->query($sql);
+        }
+        $stmt = $this->prepare($sql);
+        $stmt->execute($params);
+        return $stmt;
     }
 
 	public function select($sql, $params) {
