@@ -35,7 +35,7 @@ class ControllerAccountTracking extends Controller {
 	
 			$data['text_description'] = sprintf($this->language->get('text_description'), $this->config->get('config_name'));
 	
-			$data['code'] = $affiliate_info['tracking'];
+			$data['code'] = "LJK - fix; this was \$affiliate['tracking']";
 	
 			$data['continue'] = $this->url->link('account/account', '', true);
 	

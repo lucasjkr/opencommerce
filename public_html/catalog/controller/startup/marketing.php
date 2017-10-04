@@ -13,13 +13,6 @@ class ControllerStartupMarketing extends Controller {
 				$this->model_marketing_marketing->addMarketingReport($marketing_info['marketing_id'], $this->request->server['REMOTE_ADDR']);
 			}
 
-			$this->load->model('account/affiliate');
-
-			$affiliate_info = $this->model_account_affiliate->getAffiliateByTracking($this->request->get['tracking']);
-
-			if ($affiliate_info) {
-				$this->model_account_affiliate->addAffiliateReport($affiliate_info['customer_id'], $this->request->server['REMOTE_ADDR']);
-			}
 		}
 	}
 }
