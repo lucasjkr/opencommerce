@@ -45,6 +45,8 @@ class ControllerMailReward extends Controller {
 			$data['text_received'] = sprintf($this->language->get('text_received'), $points);
 			$data['text_total'] = sprintf($this->language->get('text_total'), $this->model_customer_customer->getRewardTotal($customer_id));
 
+            // TODO: LJK this should be replaced with PHPMailer
+            // TODO: LJK email credentials should be stored in config.php, NOT database.
 			$mail = new Mail($this->config->get('config_mail_engine'));
 			$mail->protocol = $this->config->get('config_mail_protocol');
 			$mail->parameter = $this->config->get('config_mail_parameter');

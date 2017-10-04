@@ -66,7 +66,8 @@ class ControllerAccountAccount extends Controller {
 		$data['transaction'] = $this->url->link('account/transaction', '', true);
 		$data['newsletter'] = $this->url->link('account/newsletter', '', true);
 		$data['recurring'] = $this->url->link('account/recurring', '', true);
-		
+
+        // TODO: LJK - a bunch of affiliate related stuff, can we remove?
 		$this->load->model('account/affiliate');
 		
 		$affiliate_info = $this->model_account_affiliate->getAffiliate($this->customer->getId());

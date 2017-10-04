@@ -1058,6 +1058,7 @@
 
                   {% for customer_group in customer_groups %}
                     <tr>
+                      <!-- LJK: product reward stuff is here -->
                       <td class="text-left">{{ customer_group.name }}</td>
                       <td class="text-right"><input type="text" name="product_reward[{{ customer_group.customer_group_id }}][points]" value="{{ product_reward[customer_group.customer_group_id] ? product_reward[customer_group.customer_group_id].points }}" class="form-control"/></td>
                     </tr>
