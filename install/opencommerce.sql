@@ -2972,6 +2972,25 @@ INSERT INTO `oc_user_group` (`user_group_id`, `name`, `permission`) VALUES
 (10, 'Demonstration', '');
 
 --
+-- Table structure for table `oc_user_login_history`
+--
+
+CREATE TABLE `oc_user_login_history` (
+  `user_login_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `username` varchar(96) DEFAULT NULL,
+  `ip_address` varchar(5) DEFAULT NULL,
+  `result` varchar(40) DEFAULT NULL,
+  `date_added` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_login_id`),
+  KEY `user_id` (`user_id`),
+  KEY `username` (`username`),
+  KEY `ip_address` (`ip_address`),
+  KEY `result` (`result`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+
+--
 -- Table structure for table `oc_voucher`
 --
 
