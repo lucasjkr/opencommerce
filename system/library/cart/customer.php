@@ -36,41 +36,34 @@ class Customer {
 		}
 	}
 
-  public function login($email, $password, $override = false) {
-		$customer_query = $this->db->query("SELECT * FROM oc_customer WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "' AND status = '1'");
+    public function login($email, $password, $override = false) {
+        $customer_query = $this->db->query("SELECT * FROM oc_customer WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "' AND status = '1'");
+        if ($customer_query->num_rows) {
+            if (password_verify($password, $customer_query->row['password'])) {
+                $this->session->data['customer_id'] = $customer_query->row['custome r_id'];
 
-//        TODO: LJK - need to remove all this extra handling for salts, etc.
-		if ($customer_query->num_rows) {
-			if (!$override) {
-				if (password_verify($password, $customer_query->row['password'])) {
-					if (password_needs_rehash($customer_query->row['password'], PASSWORD_DEFAULT)) {
-						$new_password_hashed = password_hash($password, PASSWORD_DEFAULT);
-					}
-				} elseif ($customer_query->row['password'] == sha1($customer_query->row['salt'] . sha1($customer_query->row['salt'] . sha1($password))) || $customer_query->row['password'] == md5($password)) {
-					$new_password_hashed = password_hash($password, PASSWORD_DEFAULT);
-				} else {
-					return false;
-				}
-			}
-			
-			$this->session->data['customer_id'] = $customer_query->row['customer_id'];
+                $this->customer_id = $customer_query->row['customer_id'];
+                $this->firstname = $customer_query->row['firstname'];
+                $this->lastname = $customer_query->row['lastname'];
+                $this->customer_group_id = $customer_query->row['customer_group_id'];
+                $this->email = $customer_query->row['email'];
+                $this->telephone = $customer_query->row['telephone'];
+                $this->newsletter = $customer_query->row['newsletter'];
+                $this->address_id = $customer_query->row['address_id'];
 
-			$this->customer_id = $customer_query->row['customer_id'];
-			$this->firstname = $customer_query->row['firstname'];
-			$this->lastname = $customer_query->row['lastname'];
-			$this->customer_group_id = $customer_query->row['customer_group_id'];
-			$this->email = $customer_query->row['email'];
-			$this->telephone = $customer_query->row['telephone'];
-			$this->newsletter = $customer_query->row['newsletter'];
-			$this->address_id = $customer_query->row['address_id'];
+                // Customers login table - this is IP they used, to add as insert later on $this->request->server['REMOTE_ADDR'];
 
-			$this->db->query("UPDATE oc_customer SET " . ((isset($new_password_hashed)) ? ", password = '" . $this->db->escape($new_password_hashed) . "', " : "") . "language_id = '" . (int)$this->config->get('config_language_id') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+                // Check password strength, rehash if necessary
+                if (password_needs_rehash($customer_query->row['password'], PASSWORD_DEFAULT)) {
+                    $this->db->query("UPDATE oc_customer SET password = '" . password_hash($password, PASSWORD_DEFAULT). "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+                }
 
-			return true;
-		} else {
-			return false;
-		}
-	}
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
 
 	public function logout() {
         unset($this->session->data['customer_id']);
