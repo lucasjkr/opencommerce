@@ -1,21 +1,21 @@
 <?php
 class ModelUserUser extends Model {
 	public function addUser($data) {
-		$this->db->query("INSERT INTO `oc_user` SET username = '" . $this->db->escape((string)$data['username']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', salt = '', password = '" . $this->db->escape(password_hash($data['password'], PASSWORD_DEFAULT)) . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "'");
+		$this->db->query("INSERT INTO `oc_user` SET username = '" . $this->db->escape((string)$data['username']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "'");
 	
 		return $this->db->getLastId();
 	}
 
 	public function editUser($user_id, $data) {
-		$this->db->query("UPDATE `oc_user` SET username = '" . $this->db->escape((string)$data['username']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "' WHERE user_id = '" . (int)$user_id . "'");
+		$this->db->query("UPDATE `oc_user` SET `username` = '" . $this->db->escape((string)$data['username']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "' WHERE user_id = '" . (int)$user_id . "'");
 
 		if ($data['password']) {
-			$this->db->query("UPDATE `oc_user` SET salt = '', password = '" . $this->db->escape(password_hash($data['password'], PASSWORD_DEFAULT)) . "' WHERE user_id = '" . (int)$user_id . "'");
+			$this->db->query("UPDATE `oc_user` SET `password` = '" . $this->db->escape(password_hash($data['password'], PASSWORD_DEFAULT)) . "' WHERE user_id = '" . (int)$user_id . "'");
 		}
 	}
 
 	public function editPassword($user_id, $password) {
-		$this->db->query("UPDATE `oc_user` SET salt = '', password = '" . $this->db->escape(password_hash($password, PASSWORD_DEFAULT)) . "', code = '' WHERE user_id = '" . (int)$user_id . "'");
+		$this->db->query("UPDATE `oc_user` SET `password` = '" . $this->db->escape(password_hash($password, PASSWORD_DEFAULT)) . "', code = '' WHERE user_id = '" . (int)$user_id . "'");
 	}
 
 	public function editCode($email, $code) {
@@ -23,7 +23,7 @@ class ModelUserUser extends Model {
 	}
 
 	public function deleteUser($user_id) {
-		$this->db->query("DELETE FROM `oc_user` WHERE user_id = '" . (int)$user_id . "'");
+		$this->db->query("DELETE FROM `oc_user` WHERE `user_id` = '" . (int)$user_id . "'");
 	}
 
 	public function getUser($user_id) {
@@ -33,7 +33,7 @@ class ModelUserUser extends Model {
 	}
 
 	public function getUserByUsername($username) {
-		$query = $this->db->query("SELECT * FROM `oc_user` WHERE username = '" . $this->db->escape($username) . "'");
+		$query = $this->db->query("SELECT * FROM `oc_user` WHERE `username` = '" . $this->db->escape($username) . "'");
 
 		return $query->row;
 	}
