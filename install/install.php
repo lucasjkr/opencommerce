@@ -196,62 +196,64 @@ function check_requirements() {
 }
 
 
-function setup_db($data) {
-	$db = new DB($data['db_driver'], htmlspecialchars_decode($data['db_hostname']), htmlspecialchars_decode($data['db_username']), htmlspecialchars_decode($data['db_password']), htmlspecialchars_decode($data['db_database']), $data['db_port']);
+function setup_db($data)
+{
+    $db = new DB($data['db_driver'], htmlspecialchars_decode($data['db_hostname']), htmlspecialchars_decode($data['db_username']), htmlspecialchars_decode($data['db_password']), htmlspecialchars_decode($data['db_database']), $data['db_port']);
 
-	$file = DIR_APPLICATION . 'opencommerce.sql';
+    $file = DIR_APPLICATION . 'opencommerce.sql';
 
-	if (!file_exists($file)) {
-		exit('Could not load sql file: ' . $file);
-	}
+    if (!file_exists($file)) {
+        exit('Could not load sql file: ' . $file);
+    }
 
-	$lines = file($file);
+    $lines = file($file);
 
-	if ($lines) {
-		$sql = '';
+    if ($lines) {
+        $sql = '';
 
-		foreach ($lines as $line) {
-			if ($line && (substr($line, 0, 2) != '--') && (substr($line, 0, 1) != '#')) {
-				$sql .= $line;
+        foreach ($lines as $line) {
+            if ($line && (substr($line, 0, 2) != '--') && (substr($line, 0, 1) != '#')) {
+                $sql .= $line;
 
-				if (preg_match('/;\s*$/', $line)) {
-					$sql = str_replace("DROP TABLE IF EXISTS `oc_", "DROP TABLE IF EXISTS `" . $data['db_prefix'], $sql);
-					$sql = str_replace("CREATE TABLE `oc_", "CREATE TABLE `" . $data['db_prefix'], $sql);
-					$sql = str_replace("INSERT INTO `oc_", "INSERT INTO `" . $data['db_prefix'], $sql);
+                if (preg_match('/;\s*$/', $line)) {
+                    $sql = str_replace("DROP TABLE IF EXISTS `oc_", "DROP TABLE IF EXISTS `" . $data['db_prefix'], $sql);
+                    $sql = str_replace("CREATE TABLE `oc_", "CREATE TABLE `" . $data['db_prefix'], $sql);
+                    $sql = str_replace("INSERT INTO `oc_", "INSERT INTO `" . $data['db_prefix'], $sql);
 
-					$db->query($sql);
+                    $db->query($sql);
 
-					$sql = '';
-				}
-			}
-		}
+                    $sql = '';
+                }
+            }
+        }
 
-		$db->query("DELETE FROM `oc_user` WHERE user_id = '1'");
+        $db->query("DELETE FROM `oc_user` WHERE user_id = '1'");
 
-		$db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', username = '" . $db->escape($data['username']) . "', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1'");
+        $db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', username = '" . $db->escape($data['username']) . "', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1'");
 
-		$db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_email'");
-		$db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = '" . $db->escape($data['email']) . "'");
+        $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_email'");
+        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = '" . $db->escape($data['email']) . "'");
 
-		$db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_encryption'");
-		$db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_encryption', value = '" . $db->escape(token(1024)) . "'");
+        $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_encryption'");
+        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_encryption', value = '" . $db->escape(token(1024)) . "'");
 
-		$db->query("UPDATE `oc_product` SET `viewed` = '0'");
+        $db->query("UPDATE `oc_product` SET `viewed` = '0'");
 
-		$db->query("INSERT INTO `oc_api` SET username = 'Default', `key` = '" . $db->escape(token(256)) . "', status = 1");
+        $db->query("INSERT INTO `oc_api` SET username = 'Default', `key` = '" . $db->escape(token(256)) . "', status = 1");
 
-		$api_id = $db->getLastId();
+        $api_id = $db->getLastId();
 
-		$db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_api_id'");
-		$db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_api_id', value = '" . (int)$api_id . "'");
-	}
+        $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_api_id'");
+        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_api_id', value = '" . (int)$api_id . "'");
+    }
 }
 
-
 function write_config_files($options) {
+    // Config file (database, email, etc)
     $output  = "<?php\n";
     $output .= "\n";
-    $output .= "define('STORE_URL',         '" . $options['url'] . "');";
+    $output .= "define('STORE_URL',         '" . $options['url'] . "');\n";
+    $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
     $output .= "\n";
     $output .= "// Stored Credentials\n";
     $output .= "\n";
@@ -263,65 +265,35 @@ function write_config_files($options) {
     $output .= "define('DB_PREFIX',         'oc_');\n";
     $output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n";
 
-    $file = fopen(DIR_OPENCART . 'config/credentials.php', 'w');
+    $file = fopen(DIR_OPENCART . 'config/config.php', 'w');
     fwrite($file, $output);
     fclose($file);
 
-	$output  = "<?php\n";
-	$output .= "// HTTP\n";
-    $output .= "define('HTTP_ROOT',         '/');\n";
-    $output .= "define('HTTP_SERVER',       '/');\n";
+    // Paths file (universal)
+//    $output  = "<?php\n";;
+//    $output .= "// Any modifications to this file are at your own risk!\n";
+//    $output .= "define('DIR_SYSTEM',        DIR_ROOT    . 'system/');\n";
+//    $output .= "define('DIR_STORAGE',       DIR_SYSTEM  . 'storage/');\n";
+//    $output .= "define('DIR_CONFIG',        DIR_SYSTEM  . 'config/');\n";
+//    $output .= "define('DIR_CACHE',         DIR_STORAGE . 'cache/');\n";
+//    $output .= "define('DIR_DOWNLOAD',      DIR_STORAGE . 'download/');\n";
+//    $output .= "define('DIR_LOGS',          DIR_STORAGE . 'logs/');\n";
+//    $output .= "define('DIR_MODIFICATION',  DIR_STORAGE . 'modification/');\n";
+//    $output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
+//    $output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n";
+//    $output .= "\n";
+//    $output .= "// these are used by catalog\n";
+//    $output .= "define('HTTP_ROOT',         '/');\n";
+//    $output .= "define('HTTP_SERVER',       '/');\n";
+//    $output .= "\n";
+//    $output .= "// these are used by admin\n";
+//    $output .= "define('HTTP_ADMIN',       '/admin/');\n";
+//    $output .= "define('HTTP_CATALOG',     '/');\n";
+//
+//    $file = fopen(DIR_OPENCART . 'config/paths.php', 'w');
+//    fwrite($file, $output);
+//    fclose($file);
 
-	$output .= "// DIR\n";
-    $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
-	$output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/catalog/');\n";
-	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
-	$output .= "define('DIR_SYSTEM',        DIR_ROOT . 'system/');\n";
-	$output .= "define('DIR_STORAGE',       DIR_SYSTEM . 'storage/');\n";
-	$output .= "define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');\n";
-	$output .= "define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/theme/');\n";
-	$output .= "define('DIR_CONFIG',        DIR_SYSTEM  . 'config/');\n";
-	$output .= "define('DIR_CACHE',         DIR_STORAGE . 'cache/');\n";
-	$output .= "define('DIR_DOWNLOAD',      DIR_STORAGE . 'download/');\n";
-	$output .= "define('DIR_LOGS',          DIR_STORAGE . 'logs/');\n";
-	$output .= "define('DIR_MODIFICATION',  DIR_STORAGE . 'modification/');\n";
-	$output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
-	$output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n\n";
-
-	$file = fopen(DIR_OPENCART . 'config/config.php', 'w');
-	fwrite($file, $output);
-	fclose($file);
-
-	$output  = "<?php\n";
-	$output .= "// HTTP\n";
-    $output .= "define('HTTP_ADMIN',       '/admin/');\n";
-    $output .= "define('HTTP_CATALOG',     '/');\n\n";
-
-	$output .= "// DIR\n";
-    $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
-    $output .= "define('DIR_APPLICATION',   '" . DIR_OPENCART . "public_html/admin/');\n";
-	$output .= "define('DIR_IMAGE',         '" . DIR_OPENCART . "public_html/image/');\n";
-	$output .= "define('DIR_SYSTEM',        DIR_ROOT . 'system/');\n";
-	$output .= "define('DIR_STORAGE',       DIR_SYSTEM   . 'storage/');\n";
-	$output .= "define('DIR_CATALOG',       '" . DIR_OPENCART . "catalog/');\n";
-	$output .= "define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');\n";
-	$output .= "define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/template/');\n";
-	$output .= "define('DIR_CONFIG',        DIR_SYSTEM . 'config/');\n";
-	$output .= "define('DIR_CACHE',         DIR_STORAGE . 'cache/');\n";
-	$output .= "define('DIR_DOWNLOAD',      DIR_STORAGE . 'download/');\n";
-	$output .= "define('DIR_LOGS',          DIR_STORAGE . 'logs/');\n";
-	$output .= "define('DIR_MODIFICATION',  DIR_STORAGE . 'modification/');\n";
-	$output .= "define('DIR_SESSION',       DIR_STORAGE . 'session/');\n";
-	$output .= "define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');\n\n";
-
-	$output .= "// OpenCart API \n";
-	$output .= "define('OPENCART_SERVER',  'https://www.opencart.com/');\n";
-
-	$file = fopen(DIR_PUBLIC . 'admin/config.php', 'w');
-
-	fwrite($file, $output);
-
-	fclose($file);
 }
 
 
