@@ -197,10 +197,9 @@ class ControllerExtensionPaymentDivido extends Controller {
 
 		$deposit_amount = round(($deposit / 100) * $total, 2, PHP_ROUND_HALF_UP);
 
-		$shop_url = $this->config->get('config_url');
-		if (isset($this->request->server['HTTPS']) && (($this->request->server['HTTPS'] == 'on') || ($this->request->server['HTTPS'] == '1'))) {
-			$shop_url = $this->config->get('config_ssl');
-		}
+        // TODO: LJK questions:
+        // 1 - do we need full URL, or just Http root? And is response only on https?
+		$shop_url = STORE_URL;
 
 		$callback_url = $this->url->link('extension/payment/divido/update', '', true);
 		$return_url = $this->url->link('checkout/success', '', true);
