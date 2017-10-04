@@ -14,10 +14,10 @@ class ControllerStartupStartup extends Controller {
 		}
 
 		// LJK TODO: Investigating if this is needed
-//		if (!$query->num_rows) {
-//			$this->config->set('config_url', HTTP_SERVER);
+		if (!$query->num_rows) {
+			$this->config->set('config_url', HTTP_ROOT);
 //			$this->config->set('config_ssl', HTTPS_SERVER);
-//		}
+		}
 
 		// Settings
 		$query = $this->db->query("SELECT * FROM `oc_setting` WHERE store_id = '0' OR store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY store_id ASC");
