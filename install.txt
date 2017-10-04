@@ -24,4 +24,4 @@ php install.php install \
     --username admin_username \
     --password admin_password \
     --email admin@email.com \
-
+    --url www.site.com
