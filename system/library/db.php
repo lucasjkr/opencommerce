@@ -41,8 +41,39 @@ class DB {
 	 * 
 	 * @return	array
      */
-	public function query($sql) {
-		return $this->adaptor->query($sql);
+	public function query($sql, $params = null) {
+        if(defined('DEBUG_SQL') && DEBUG_SQL == 1){
+            // get starttime in microseconds
+            $start    = microtime(true);
+
+            // execute query
+            $result   = $this->adaptor->query($sql, $params);
+
+            // get time
+            $time     = number_format((microtime(true) - $start) * 1000, 4, '.', ',');
+
+            // create output
+            $output   = date("Y-m-d h:i:s"). " \t";
+            $output  .= $time . " msec \t";
+            $output  .= preg_replace('!\s+!', ' ', $sql) . "\n";
+
+
+            // create log file if it doesn't already exit
+            if (!file_exists(DIR_LOGS . 'database.log')) {
+                touch(DIR_LOGS . 'database.log');
+            }
+
+            // write data to file
+            $file = fopen(DIR_LOGS . 'database.log', 'a');
+            fwrite($file, $output);
+            fclose($file);
+
+            // return query result
+            return $result;
+        }
+
+        return $this->adaptor->query($sql, $params);
+
 	}
 
 	/**
