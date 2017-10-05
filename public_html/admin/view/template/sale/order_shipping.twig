@@ -71,7 +71,9 @@
         {% for product in order.product %}
         <tr>
           <td>{{ product.location }}</td>
-          <td>{% if product.sku %}
+          <td>
+            <!-- LJK: Part numbers go in here  -->
+            {% if product.sku %}
             {{ text_sku }} {{ product.sku }}<br />
             {% endif %}
             {% if product.upc %}

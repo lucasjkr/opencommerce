@@ -35,12 +35,6 @@ $_['entry_meta_description'] = 'Meta Tag Description';
 $_['entry_store']            = 'Stores';
 $_['entry_keyword']          = 'Keyword';
 $_['entry_model']            = 'Model';
-$_['entry_sku']              = 'SKU';
-$_['entry_upc']              = 'UPC';
-$_['entry_ean']              = 'EAN';
-$_['entry_jan']              = 'JAN';
-$_['entry_isbn']             = 'ISBN';
-$_['entry_mpn']              = 'MPN';
 $_['entry_location']         = 'Location';
 $_['entry_shipping']         = 'Requires Shipping';
 $_['entry_manufacturer']     = 'Manufacturer';
@@ -81,12 +75,6 @@ $_['entry_layout']           = 'Layout Override';
 $_['entry_recurring']        = 'Recurring Payments';
 
 // Help
-$_['help_sku']               = 'Stock Keeping Unit';
-$_['help_upc']               = 'Universal Product Code';
-$_['help_ean']               = 'European Article Number';
-$_['help_jan']               = 'Japanese Article Number';
-$_['help_isbn']              = 'International Standard Book Number';
-$_['help_mpn']               = 'Manufacturer Part Number';
 $_['help_manufacturer']      = '(Autocomplete)';
 $_['help_minimum']           = 'Force a minimum ordered amount';
 $_['help_stock_status']      = 'Status shown when a product is out of stock';

@@ -1662,12 +1662,6 @@ class ControllerSaleOrder extends Controller {
 							'option'   => $option_data,
 							'quantity' => $product['quantity'],
 							'location' => $product_info['location'],
-							'sku'      => $product_info['sku'],
-							'upc'      => $product_info['upc'],
-							'ean'      => $product_info['ean'],
-							'jan'      => $product_info['jan'],
-							'isbn'     => $product_info['isbn'],
-							'mpn'      => $product_info['mpn'],
 							'weight'   => $this->weight->format(($product_info['weight'] + (float)$option_weight) * $product['quantity'], $product_info['weight_class_id'], $this->language->get('decimal_point'), $this->language->get('thousand_point'))
 						);
 					}
