@@ -38,9 +38,9 @@ class ControllerMailCustomer extends Controller {
 				
 			$data['login'] = $store_url . 'index.php?route=account/login';	
 			$data['store'] = $store_name;
-	
+
+            // LJK: TODO use PHP Mailer to set all this stuff
 			$mail = new Mail($this->config->get('config_mail_engine'));
-			$mail->parameter = $this->config->get('config_mail_parameter');
 			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
 			$mail->smtp_username = $this->config->get('config_mail_smtp_username');
 			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
@@ -96,7 +96,6 @@ class ControllerMailCustomer extends Controller {
 			$data['store'] = $store_name;
 
 			$mail = new Mail($this->config->get('config_mail_engine'));
-			$mail->parameter = $this->config->get('config_mail_parameter');
 			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
 			$mail->smtp_username = $this->config->get('config_mail_smtp_username');
 			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
