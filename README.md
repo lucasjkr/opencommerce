@@ -48,7 +48,7 @@ Concrete tasks completed.
 
 ## In process
 - Merge User and Customer tables - only table to check for logins, lists, etc
-
+- Convert queries to parameterized queries, which will clean up a LOT of messiness `($this->db->escape((int)$value)`
 
 ### Long Term Goal
 
