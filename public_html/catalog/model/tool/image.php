@@ -40,7 +40,7 @@ class ModelToolImage extends Model {
 		
 		$image_new = str_replace(' ', '%20', $image_new);  // fix bug when attach image on email (gmail.com). it is automatic changing space " " to +
 
-        return DIR_ROOT . 'image/' . $image_new;
+        return  HTTP_IMAGE . $image_new;
 
 	}
 }
