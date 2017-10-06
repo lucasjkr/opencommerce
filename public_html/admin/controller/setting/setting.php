@@ -716,50 +716,10 @@ class ControllerSettingSetting extends Controller {
 			$data['icon'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 
-		if (isset($this->request->post['config_mail_engine'])) {
-			$data['config_mail_engine'] = $this->request->post['config_mail_engine'];
-		} else {
-			$data['config_mail_engine'] = $this->config->get('config_mail_engine');
-		}
-
 		if (isset($this->request->post['config_mail_parameter'])) {
 			$data['config_mail_parameter'] = $this->request->post['config_mail_parameter'];
 		} else {
 			$data['config_mail_parameter'] = $this->config->get('config_mail_parameter');
-		}
-
-		if (isset($this->request->post['config_mail_smtp_hostname'])) {
-			$data['config_mail_smtp_hostname'] = $this->request->post['config_mail_smtp_hostname'];
-		} else {
-			$data['config_mail_smtp_hostname'] = $this->config->get('config_mail_smtp_hostname');
-		}
-
-		if (isset($this->request->post['config_mail_smtp_username'])) {
-			$data['config_mail_smtp_username'] = $this->request->post['config_mail_smtp_username'];
-		} else {
-			$data['config_mail_smtp_username'] = $this->config->get('config_mail_smtp_username');
-		}
-
-		if (isset($this->request->post['config_mail_smtp_password'])) {
-			$data['config_mail_smtp_password'] = $this->request->post['config_mail_smtp_password'];
-		} else {
-			$data['config_mail_smtp_password'] = $this->config->get('config_mail_smtp_password');
-		}
-
-		if (isset($this->request->post['config_mail_smtp_port'])) {
-			$data['config_mail_smtp_port'] = $this->request->post['config_mail_smtp_port'];
-		} elseif ($this->config->has('config_mail_smtp_port')) {
-			$data['config_mail_smtp_port'] = $this->config->get('config_mail_smtp_port');
-		} else {
-			$data['config_mail_smtp_port'] = 25;
-		}
-
-		if (isset($this->request->post['config_mail_smtp_timeout'])) {
-			$data['config_mail_smtp_timeout'] = $this->request->post['config_mail_smtp_timeout'];
-		} elseif ($this->config->has('config_mail_smtp_timeout')) {
-			$data['config_mail_smtp_timeout'] = $this->config->get('config_mail_smtp_timeout');
-		} else {
-			$data['config_mail_smtp_timeout'] = 5;
 		}
 
 		if (isset($this->request->post['config_mail_alert'])) {
