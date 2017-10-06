@@ -262,9 +262,17 @@ function write_config_files($options) {
     $output .= "define('DB_PASSWORD',       '" . $options['db_password'] . "');\n";
     $output .= "define('DB_DATABASE',       '" . $options['db_database'] . "');\n";
     $output .= "define('DB_DRIVER',         'mpdo');\n";
-    $output .= "define('DB_PREFIX',         'oc_');\n";
     $output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n";
-
+    $output .= "\n";
+    $output .= "// email server credentials";
+    $output .= "define('SMTP_SERVER',   null);\n";
+    $output .= "define('SMTP_USERNAME', null);\n";
+    $output .= "define('SMTP_PASSWORD', null);\n";
+    $output .= "define('SMTP_TIMEOUT',  5);\n";
+    $output .= "define('SMTP_PORT',     25); \n";
+    $output .= "define('SMTP_NAME',     null); // The Name that appears in outgoing messages\n";
+    $output .= "define('SMTP_REPLYTO',  null); // The Reply-To email address\n";
+    $output .= "\n";
     $file = fopen(DIR_OPENCART . 'config/config.php', 'w');
     fwrite($file, $output);
     fclose($file);
