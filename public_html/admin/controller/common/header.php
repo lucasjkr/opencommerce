@@ -43,7 +43,8 @@ class ControllerCommonHeader extends Controller {
 			if ($user_info) {
 				$data['firstname'] = $user_info['firstname'];
 				$data['lastname'] = $user_info['lastname'];
-				$data['username']  = $user_info['username'];
+                // LJK TODO: Template needs to be fixed so we just ask for email instead of username
+				$data['username']  = $user_info['email'];
 				$data['user_group'] = $user_info['user_group'];
 	
 				if (is_file(DIR_IMAGE . $user_info['image'])) {
