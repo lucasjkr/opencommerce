@@ -808,8 +808,6 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				$message .= 'eBay and Amazon order management - http://www.openbaypro.com/';
 
 				$mail = new Mail($this->config->get('config_mail_engine'));
-				$mail->protocol = $this->config->get('config_mail_protocol');
-				$mail->parameter = $this->config->get('config_mail_parameter');
 				$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
 				$mail->smtp_username = $this->config->get('config_mail_smtp_username');
 				$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
@@ -1080,7 +1078,6 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 				if ($notify == 1) {
 					$mail = new Mail($this->config->get('config_mail_engine'));
-					$mail->parameter = $this->config->get('config_mail_parameter');
 					$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
 					$mail->smtp_username = $this->config->get('config_mail_smtp_username');
 					$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');

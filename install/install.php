@@ -264,7 +264,7 @@ function write_config_files($options) {
     $output .= "define('DB_DRIVER',         'mpdo');\n";
     $output .= "define('DB_PORT',           '" . $options['db_port'] ."');\n";
     $output .= "\n";
-    $output .= "// email server credentials";
+    $output .= "// email server credentials\n";
     $output .= "define('SMTP_SERVER',   null);\n";
     $output .= "define('SMTP_USERNAME', null);\n";
     $output .= "define('SMTP_PASSWORD', null);\n";

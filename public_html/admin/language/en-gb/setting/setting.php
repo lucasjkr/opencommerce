@@ -90,7 +90,6 @@ $_['entry_captcha']                  = 'Captcha';
 $_['entry_captcha_page']             = 'Captcha Page';
 $_['entry_logo']                     = 'Store Logo';
 $_['entry_icon']                     = 'Icon';
-$_['entry_mail_parameter']           = 'Mail Parameters';
 $_['entry_mail_alert']               = 'Alert Mail';
 $_['entry_mail_alert_email']         = 'Additional Alert Mail';
 $_['entry_shared']                   = 'Use Shared Sessions';
