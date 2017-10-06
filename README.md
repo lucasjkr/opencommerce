@@ -41,8 +41,14 @@ Concrete tasks completed.
 
 - Converted database to use InnoDB tables exclusively
 - Added timestamps columns (added, modified) to all tables
+- Fixed issue where columns with DATE type had invalid default values
 - Moved `system/` directory outside of the public accessible path
 - Removed web-installer, updated CLI installer
+- Administrative users are identified by email address, not user name
+
+## In process
+- Merge User and Customer tables - only table to check for logins, lists, etc
+
 
 ### Long Term Goal
 
