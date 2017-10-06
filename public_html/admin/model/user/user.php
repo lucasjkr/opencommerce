@@ -1,13 +1,13 @@
 <?php
 class ModelUserUser extends Model {
 	public function addUser($data) {
-		$this->db->query("INSERT INTO `oc_user` SET username = '" . $this->db->escape((string)$data['username']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "'");
+		$this->db->query("INSERT INTO `oc_user` SET `user_group_id` = '" . (int)$data['user_group_id'] . "', `password` = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "'");
 	
 		return $this->db->getLastId();
 	}
 
 	public function editUser($user_id, $data) {
-		$this->db->query("UPDATE `oc_user` SET `username` = '" . $this->db->escape((string)$data['username']) . "', user_group_id = '" . (int)$data['user_group_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "' WHERE user_id = '" . (int)$user_id . "'");
+		$this->db->query("UPDATE `oc_user` SET user_group_id = '" . (int)$data['user_group_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "' WHERE user_id = '" . (int)$user_id . "'");
 
 		if ($data['password']) {
 			$this->db->query("UPDATE `oc_user` SET `password` = '" . $this->db->escape(password_hash($data['password'], PASSWORD_DEFAULT)) . "' WHERE user_id = '" . (int)$user_id . "'");
@@ -54,7 +54,7 @@ class ModelUserUser extends Model {
 		$sql = "SELECT * FROM `oc_user`";
 
 		$sort_data = array(
-			'username',
+			'email',
 			'status',
 			'date_added'
 		);
@@ -62,7 +62,7 @@ class ModelUserUser extends Model {
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
 		} else {
-			$sql .= " ORDER BY username";
+			$sql .= " ORDER BY email";
 		}
 
 		if (isset($data['order']) && ($data['order'] == 'DESC')) {

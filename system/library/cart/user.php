@@ -4,8 +4,12 @@ class User {
 	private $user_id;
 	private $user_group_id;
 	private $username;
+    private $email;
 	private $permission = array();
-
+// TODO: LJK much refactoring throughout to cease looking for $user->['username'] and instead getting $user->['email']
+// the rewrites within SHOULD be sufficient for the short term, but longer term and for consistency, we should be
+// referring to field properly.
+// TODO: The above can hold off until AFTER the user and customer tables are combined.
 	public function __construct($registry) {
 		$this->db = $registry->get('db');
 		$this->request = $registry->get('request');
@@ -16,7 +20,7 @@ class User {
 
 			if ($user_query->num_rows) {
 				$this->user_id = $user_query->row['user_id'];
-				$this->username = $user_query->row['username'];
+				$this->username = $user_query->row['email'];
 				$this->user_group_id = $user_query->row['user_group_id'];
 
 				$user_group_query = $this->db->query("SELECT permission FROM oc_user_group WHERE user_group_id = '" . (int)$user_query->row['user_group_id'] . "'");
@@ -35,12 +39,12 @@ class User {
 	}
 
 	public function login($username, $password) {
-		$user_query = $this->db->query("SELECT * FROM oc_user WHERE username = '" . $this->db->escape($username) . "' AND status = '1'");
+		$user_query = $this->db->query("SELECT * FROM oc_user WHERE email = '" . $this->db->escape($username) . "' AND status = '1'");
         if ($user_query->num_rows) {
             if (password_verify($password, $user_query->row['password'])) {
                 $this->session->data['user_id'] = $user_query->row['user_id'];
                 $this->user_id = $user_query->row['user_id'];
-                $this->username = $user_query->row['username'];
+                $this->username = $user_query->row['email'];
                 $this->user_group_id = $user_query->row['user_group_id'];
 
                 // Check password hash strength, re-hash if necessary
@@ -68,7 +72,7 @@ class User {
 		unset($this->session->data['user_id']);
 
 		$this->user_id = '';
-		$this->username = '';
+		$this->email = '';
 	}
 
 	public function hasPermission($key, $value) {
@@ -88,7 +92,7 @@ class User {
 	}
 
 	public function getUserName() {
-		return $this->username;
+		return $this->email;
 	}
 
 	public function getGroupId() {

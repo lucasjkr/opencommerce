@@ -92,14 +92,6 @@ class ControllerCommonProfile extends Controller {
 			$user_info = $this->model_user_user->getUser($this->user->getId());
 		}
 
-		if (isset($this->request->post['username'])) {
-			$data['username'] = $this->request->post['username'];
-		} elseif (!empty($user_info)) {
-			$data['username'] = $user_info['username'];
-		} else {
-			$data['username'] = '';
-		}
-
 		if (isset($this->request->post['password'])) {
 			$data['password'] = $this->request->post['password'];
 		} else {
@@ -166,10 +158,6 @@ class ControllerCommonProfile extends Controller {
 	protected function validateForm() {
 		if (!$this->user->hasPermission('modify', 'common/profile')) {
 			$this->error['warning'] = $this->language->get('error_permission');
-		}
-
-		if ((utf8_strlen($this->request->post['username']) < 3) || (utf8_strlen($this->request->post['username']) > 20)) {
-			$this->error['username'] = $this->language->get('error_username');
 		}
 
 		$user_info = $this->model_user_user->getUserByUsername($this->request->post['username']);

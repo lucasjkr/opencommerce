@@ -229,7 +229,7 @@ function setup_db($data)
 
         $db->query("DELETE FROM `oc_user` WHERE user_id = '1'");
 
-        $db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', username = '" . $db->escape($data['username']) . "', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1'");
+        $db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1'");
 
         $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_email'");
         $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = '" . $db->escape($data['email']) . "'");
