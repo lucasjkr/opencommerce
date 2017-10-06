@@ -12,6 +12,7 @@ define('DIR_UPLOAD',        DIR_STORAGE . 'upload/');
 
 // these are used by catalog
 define('HTTP_ROOT',         '/');
+define('HTTP_IMAGE',        'image/');
 define('HTTP_SERVER',       '/');
 
 // these are used by admin
