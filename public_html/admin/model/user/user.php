@@ -14,8 +14,11 @@ class ModelUserUser extends Model {
 
 		if ($data['password']) {
 		    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-			$this->db->query("UPDATE `oc_user` SET `password` = ? WHERE user_id = ?",
-                [$data['password'], $data['user_id']]
+			$this->db->query("UPDATE `oc_user` SET `password` = :password WHERE user_id = :user_id",
+               [
+                   ':password' => $data['password'],
+                   ':user_id' => $user_id,
+               ]
             );
 		}
 	}
