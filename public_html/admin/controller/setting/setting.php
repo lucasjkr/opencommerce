@@ -815,24 +815,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_compression'] = $this->config->get('config_compression');
 		}
 
-		if (isset($this->request->post['config_error_display'])) {
-			$data['config_error_display'] = $this->request->post['config_error_display'];
-		} else {
-			$data['config_error_display'] = $this->config->get('config_error_display');
-		}
-
-		if (isset($this->request->post['config_error_log'])) {
-			$data['config_error_log'] = $this->request->post['config_error_log'];
-		} else {
-			$data['config_error_log'] = $this->config->get('config_error_log');
-		}
-
-		if (isset($this->request->post['config_error_filename'])) {
-			$data['config_error_filename'] = $this->request->post['config_error_filename'];
-		} else {
-			$data['config_error_filename'] = $this->config->get('config_error_filename');
-		}
-
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
@@ -927,18 +909,6 @@ class ControllerSettingSetting extends Controller {
 
 				break;
 			}
-		}
-
-		if (!$this->request->post['config_error_filename']) {
-			$this->error['log'] = $this->language->get('error_log_required');
-		} elseif (preg_match('/\.\.[\/\\\]?/', $this->request->post['config_error_filename'])) {
-			$this->error['log'] = $this->language->get('error_log_invalid');
-		} elseif (substr($this->request->post['config_error_filename'], strrpos($this->request->post['config_error_filename'], '.')) != '.log') {
-			$this->error['log'] = $this->language->get('error_log_extension');
-		}
-		
-		if ((utf8_strlen($this->request->post['config_encryption']) < 32) || (utf8_strlen($this->request->post['config_encryption']) > 1024)) {
-			$this->error['encryption'] = $this->language->get('error_encryption');
 		}
 
 		if ($this->error && !isset($this->error['warning'])) {
