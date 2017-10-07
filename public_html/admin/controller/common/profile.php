@@ -160,7 +160,7 @@ class ControllerCommonProfile extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$user_info = $this->model_user_user->getUserByUsername($this->request->post['username']);
+		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
 
 		if ($user_info && ($this->user->getId() != $user_info['user_id'])) {
 			$this->error['warning'] = $this->language->get('error_username_exists');

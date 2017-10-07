@@ -1,51 +1,69 @@
 <?php
 class ModelUserUser extends Model {
 	public function addUser($data) {
-		$this->db->query("INSERT INTO `oc_user` SET `user_group_id` = '" . (int)$data['user_group_id'] . "', `password` = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "'");
+        $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+		$this->db->query("INSERT INTO `oc_user` SET `user_group_id` = ?, `password` = ?, firstname = ?, lastname = ?, email = ?, image = ?, status = ?",
+            [$data['user_group_id'], $data['password'], $data['firstname'], $data['lastname'], $data['email'], $data['image'], $data['status']]);
 	
 		return $this->db->getLastId();
 	}
 
 	public function editUser($user_id, $data) {
-		$this->db->query("UPDATE `oc_user` SET user_group_id = '" . (int)$data['user_group_id'] . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', image = '" . $this->db->escape((string)$data['image']) . "', status = '" . (int)$data['status'] . "' WHERE user_id = '" . (int)$user_id . "'");
+		$this->db->query("UPDATE `oc_user` SET user_group_id = ?, firstname = ?, lastname = ?, email = ?, image = ?, status = ? WHERE user_id = ?",
+            [ $data['user_group_id'], $data['firstname'], $data['lastname'], $data['email'], $data['image'], $data['status'], $user_id ]);
 
 		if ($data['password']) {
-			$this->db->query("UPDATE `oc_user` SET `password` = '" . $this->db->escape(password_hash($data['password'], PASSWORD_DEFAULT)) . "' WHERE user_id = '" . (int)$user_id . "'");
+		    $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
+			$this->db->query("UPDATE `oc_user` SET `password` = ? WHERE user_id = ?",
+                [$data['password'], $data['user_id']]
+            );
 		}
 	}
 
 	public function editPassword($user_id, $password) {
-		$this->db->query("UPDATE `oc_user` SET `password` = '" . $this->db->escape(password_hash($password, PASSWORD_DEFAULT)) . "', code = '' WHERE user_id = '" . (int)$user_id . "'");
+		$this->db->query("UPDATE `oc_user` SET `password` = ? WHERE user_id = ?",
+            [password_hash($password, PASSWORD_DEFAULT), $user_id ]);
 	}
 
 	public function editCode($email, $code) {
-		$this->db->query("UPDATE `oc_user` SET code = '" . $this->db->escape($code) . "' WHERE LCASE(email) = '" . $this->db->escape(utf8_strtolower($email)) . "'");
+		$this->db->query("UPDATE `oc_user` SET `code` = ? WHERE LCASE(email) = ?",
+            [$code, $email]
+        );
 	}
 
 	public function deleteUser($user_id) {
-		$this->db->query("DELETE FROM `oc_user` WHERE `user_id` = '" . (int)$user_id . "'");
+		$this->db->query("DELETE FROM `oc_user` WHERE `user_id` = ?",
+            [$user_id]
+        );
 	}
 
 	public function getUser($user_id) {
-		$query = $this->db->query("SELECT *, (SELECT ug.name FROM `oc_user_group` ug WHERE ug.user_group_id = u.user_group_id) AS user_group FROM `oc_user` u WHERE u.user_id = '" . (int)$user_id . "'");
+		$query = $this->db->query("SELECT *, (SELECT ug.name FROM `oc_user_group` ug WHERE ug.user_group_id = u.user_group_id) AS user_group FROM `oc_user` u WHERE u.user_id = ?",
+            [ $user_id ]
+        );
 
 		return $query->row;
 	}
 
-	public function getUserByUsername($username) {
-		$query = $this->db->query("SELECT * FROM `oc_user` WHERE `username` = '" . $this->db->escape($username) . "'");
+	public function getUserByUsername($email) {
+		$query = $this->db->query("SELECT * FROM `oc_user` WHERE `email` = ?",
+            [ $email ]);
 
 		return $query->row;
 	}
 
 	public function getUserByEmail($email) {
-		$query = $this->db->query("SELECT DISTINCT * FROM `oc_user` WHERE LCASE(email) = '" . $this->db->escape(utf8_strtolower($email)) . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM `oc_user` WHERE LCASE(email) = ?",
+            [utf8_strtolower($email)]
+        );
 
 		return $query->row;
 	}
 
 	public function getUserByCode($code) {
-		$query = $this->db->query("SELECT * FROM `oc_user` WHERE code = '" . $this->db->escape($code) . "' AND code != ''");
+		$query = $this->db->query("SELECT * FROM `oc_user` WHERE code = ? AND code != ''",
+            [$code]
+        );
 
 		return $query->row;
 	}
@@ -95,13 +113,17 @@ class ModelUserUser extends Model {
 	}
 
 	public function getTotalUsersByGroupId($user_group_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_user` WHERE user_group_id = '" . (int)$user_group_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_user` WHERE user_group_id = ?",
+            [$user_group_id ]
+        );
 
 		return $query->row['total'];
 	}
 
 	public function getTotalUsersByEmail($email) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_user` WHERE LCASE(email) = '" . $this->db->escape(utf8_strtolower($email)) . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_user` WHERE LCASE(email) = ?",
+            [ utf8_strtolower($email) ]
+        );
 
 		return $query->row['total'];
 	}
