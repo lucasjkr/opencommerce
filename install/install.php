@@ -267,6 +267,9 @@ function write_config_files($options) {
     $output .= "define('SMTP_REPLYTO',  null); // The Reply-To email address\n";
     $output .= "\n";
     $output .= "define('DEBUG_SQL', 1);";
+    $output .= "define('PHP_ERROR_DISPLAY', 1)\n;";
+    $output .= "define('PHP_ERROR_LOG',     1)\n;";
+    $output .= "define('PHP_ERROR_HALT',     1)\n;";
     $file = fopen(DIR_OPENCART . 'config/config.php', 'w');
     fwrite($file, $output);
     fclose($file);
