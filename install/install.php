@@ -177,11 +177,13 @@ function check_requirements() {
 // TODO: Check for Apache mod_rewrite
 
 	if (!extension_loaded('gd')) {
-		$error = 'Warning: GD extension needs to be loaded for OpenCart to work!';
+		$error = "Warning: GD extension needs to be loaded for OpenCart to work!\n";
+        $error .= "Needed for things like image resize, caching, etc";
 	}
 
 	if (!extension_loaded('curl')) {
-		$error = 'Warning: CURL extension needs to be loaded for OpenCart to work!';
+		$error = "Warning: CURL extension needs to be loaded for OpenCart to work!\n";
+        $error .= "Needed for currency lookups (CURL requests to Yahoo API)";
 	}
 
 	if (!function_exists('openssl_encrypt')) {
