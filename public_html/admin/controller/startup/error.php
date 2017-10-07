@@ -29,15 +29,19 @@ class ControllerStartupError extends Controller {
 				$error = 'Unknown';
 				break;
 		}
-	
-		if ($this->config->get('config_error_display')) {
+
+        if (defined('PHP_ERROR_DISPLAY') && PHP_ERROR_DISPLAY == 1) {
 			echo '<b>' . $error . '</b>: ' . $message . ' in <b>' . $file . '</b> on line <b>' . $line . '</b>';
 		}
-	
-		if ($this->config->get('config_error_log')) {
+
+		if (defined('PHP_ERROR_LOG') && PHP_ERROR_LOG == 1) {
 			$this->log->write('PHP ' . $error . ':  ' . $message . ' in ' . $file . ' on line ' . $line);
 		}
-	
+
+        if (defined('PHP_ERROR_HALT') && PHP_ERROR_HALT == 1) {
+            exit();
+        }
+
 		return true;
 	} 
 } 
