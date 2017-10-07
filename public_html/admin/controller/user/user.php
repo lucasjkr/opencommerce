@@ -114,7 +114,7 @@ class ControllerUserUser extends Controller {
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
-			$sort = 'username';
+			$sort = 'email';
 		}
 
 		if (isset($this->request->get['order'])) {
@@ -174,7 +174,7 @@ class ControllerUserUser extends Controller {
 		foreach ($results as $result) {
 			$data['users'][] = array(
 				'user_id'    => $result['user_id'],
-				'username'   => $result['username'],
+				'email'      => $result['email'],
 				'status'     => ($result['status'] ? $this->language->get('text_enabled') : $this->language->get('text_disabled')),
 				'date_added' => date($this->language->get('date_format_short'), strtotime($result['date_added'])),
 				'edit'       => $this->url->link('user/user/edit', 'user_token=' . $this->session->data['user_token'] . '&user_id=' . $result['user_id'] . $url, true)
@@ -213,7 +213,7 @@ class ControllerUserUser extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['sort_username'] = $this->url->link('user/user', 'user_token=' . $this->session->data['user_token'] . '&sort=username' . $url, true);
+		$data['sort_email'] = $this->url->link('user/user', 'user_token=' . $this->session->data['user_token'] . '&sort=email' . $url, true);
 		$data['sort_status'] = $this->url->link('user/user', 'user_token=' . $this->session->data['user_token'] . '&sort=status' . $url, true);
 		$data['sort_date_added'] = $this->url->link('user/user', 'user_token=' . $this->session->data['user_token'] . '&sort=date_added' . $url, true);
 
@@ -256,10 +256,10 @@ class ControllerUserUser extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		if (isset($this->error['username'])) {
-			$data['error_username'] = $this->error['username'];
+		if (isset($this->error['email'])) {
+			$data['error_email'] = $this->error['email'];
 		} else {
-			$data['error_username'] = '';
+			$data['error_email'] = '';
 		}
 
 		if (isset($this->error['password'])) {
@@ -330,12 +330,12 @@ class ControllerUserUser extends Controller {
 			$user_info = $this->model_user_user->getUser($this->request->get['user_id']);
 		}
 
-		if (isset($this->request->post['username'])) {
-			$data['username'] = $this->request->post['username'];
+		if (isset($this->request->post['email'])) {
+			$data['email'] = $this->request->post['email'];
 		} elseif (!empty($user_info)) {
-			$data['username'] = $user_info['username'];
+			$data['email'] = $user_info['email'];
 		} else {
-			$data['username'] = '';
+			$data['email'] = '';
 		}
 
 		if (isset($this->request->post['user_group_id'])) {
@@ -426,19 +426,19 @@ class ControllerUserUser extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		if ((utf8_strlen($this->request->post['username']) < 3) || (utf8_strlen($this->request->post['username']) > 20)) {
-			$this->error['username'] = $this->language->get('error_username');
+		if ((utf8_strlen($this->request->post['email']) < 3) || (utf8_strlen($this->request->post['email']) > 20)) {
+			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		$user_info = $this->model_user_user->getUserByUsername($this->request->post['username']);
+		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
 
 		if (!isset($this->request->get['user_id'])) {
 			if ($user_info) {
-				$this->error['warning'] = $this->language->get('error_exists_username');
+				$this->error['warning'] = $this->language->get('error_exists_email');
 			}
 		} else {
 			if ($user_info && ($this->request->get['user_id'] != $user_info['user_id'])) {
-				$this->error['warning'] = $this->language->get('error_exists_username');
+				$this->error['warning'] = $this->language->get('error_exists_email');
 			}
 		}
 
