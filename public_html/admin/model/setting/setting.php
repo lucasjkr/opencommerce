@@ -3,7 +3,11 @@ class ModelSettingSetting extends Model {
 	public function getSetting($code, $store_id = 0) {
 		$setting_data = array();
 
-		$query = $this->db->query("SELECT * FROM oc_setting WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $this->db->escape($code) . "'");
+		$query = $this->db->query("SELECT * FROM oc_setting WHERE store_id = :store_id AND `code` = :code",
+            [
+                ':store_id' => $store_id,
+                ':code' => $code,
+            ]);
 
 		foreach ($query->rows as $result) {
 			if (!$result['serialized']) {
@@ -17,25 +21,50 @@ class ModelSettingSetting extends Model {
 	}
 
 	public function editSetting($code, $data, $store_id = 0) {
-		$this->db->query("DELETE FROM `oc_setting` WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $this->db->escape($code) . "'");
+		$this->db->query("DELETE FROM `oc_setting` WHERE store_id = :store_id AND `code` = :code",
+            [
+                ':store_id' => $store_id,
+                ':code' => $code
+
+            ]);
 
 		foreach ($data as $key => $value) {
 			if (substr($key, 0, strlen($code)) == $code) {
 				if (!is_array($value)) {
-					$this->db->query("INSERT INTO oc_setting SET store_id = '" . (int)$store_id . "', `code` = '" . $this->db->escape($code) . "', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape($value) . "'");
+					$this->db->query("INSERT INTO `oc_setting` SET `store_id` = :store_id, `code` = :code, `key` = :key, `value` = :value",
+                        [
+                            ':store_id' => $store_id,
+                            ':code' => $code,
+                            ':key' => $key,
+                            ':value' => $value,
+                        ]);
 				} else {
-					$this->db->query("INSERT INTO oc_setting SET store_id = '" . (int)$store_id . "', `code` = '" . $this->db->escape($code) . "', `key` = '" . $this->db->escape($key) . "', `value` = '" . $this->db->escape(json_encode($value, true)) . "', serialized = '1'");
+					$this->db->query("INSERT INTO oc_setting SET store_id = :store_id, `code` = :code, `key` = :key, `value` = :values, serialized = '1'",
+                        [
+                            ':store_id' => $store_id,
+                            ':code' => $code,
+                            ':key' => $key,
+                            ':values' => json_encode($value, true),
+                        ]);
 				}
 			}
 		}
 	}
 
 	public function deleteSetting($code, $store_id = 0) {
-		$this->db->query("DELETE FROM oc_setting WHERE store_id = '" . (int)$store_id . "' AND `code` = '" . $this->db->escape($code) . "'");
+		$this->db->query("DELETE FROM oc_setting WHERE store_id = :store_id AND `code` = :code".
+        [
+            ':store_id' => $store_id,
+            ':code' => $code,
+        ]);
 	}
 	
 	public function getSettingValue($key, $store_id = 0) {
-		$query = $this->db->query("SELECT value FROM oc_setting WHERE store_id = '" . (int)$store_id . "' AND `key` = '" . $this->db->escape($key) . "'");
+		$query = $this->db->query("SELECT value FROM oc_setting WHERE store_id = :store_id AND `key` = $key",
+            [
+                ':store_id' => $store_id,
+                ':key' => $key,
+            ]);
 
 		if ($query->num_rows) {
 			return $query->row['value'];
@@ -45,10 +74,19 @@ class ModelSettingSetting extends Model {
 	}
 	
 	public function editSettingValue($code = '', $key = '', $value = '', $store_id = 0) {
-		if (!is_array($value)) {
-			$this->db->query("UPDATE oc_setting SET `value` = '" . $this->db->escape($value) . "', serialized = '0'  WHERE `code` = '" . $this->db->escape($code) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id = '" . (int)$store_id . "'");
-		} else {
-			$this->db->query("UPDATE oc_setting SET `value` = '" . $this->db->escape(json_encode($value)) . "', serialized = '1' WHERE `code` = '" . $this->db->escape($code) . "' AND `key` = '" . $this->db->escape($key) . "' AND store_id = '" . (int)$store_id . "'");
+		if(!is_array($value)){
+		    $serialized = 0;
+        } else {
+            $value = json_encode($value);
+            $serialized = 1;
+        }
+        $this->db->query("UPDATE oc_setting SET `value` = :value , serialized = :serialized  WHERE `code` = :code AND `key` = :key AND store_id = :store_id",
+            [
+                ':value' => $value,
+                ':serialized' => $serialized,
+                ':code' => $code,
+                ':key' => $key,
+                ':store_id' => $store_id,
+            ]);
 		}
-	}
 }
