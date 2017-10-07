@@ -246,6 +246,7 @@ function write_config_files($options) {
     $output .= "\n";
     $output .= "define('STORE_URL',         '" . $options['url'] . "');\n";
     $output .= "define('DIR_ROOT',          '" . DIR_OPENCART . "');\n";
+    $output .= "define('DIR_CATALOG',       DIR_ROOT . 'public_html/catalog');\n";
     $output .= "\n";
     $output .= "// Stored Credentials\n";
     $output .= "\n";
