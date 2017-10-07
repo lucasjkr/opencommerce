@@ -38,8 +38,9 @@ class User {
 		}
 	}
 
-	public function login($username, $password) {
-		$user_query = $this->db->query("SELECT * FROM oc_user WHERE email = '" . $this->db->escape($username) . "' AND status = '1'");
+	public function login($email, $password) {
+		$user_query = $this->db->query("SELECT * FROM oc_user WHERE email = ? AND status = '1'",
+            [ $email ]);
         if ($user_query->num_rows) {
             if (password_verify($password, $user_query->row['password'])) {
                 $this->session->data['user_id'] = $user_query->row['user_id'];
@@ -94,6 +95,10 @@ class User {
 	public function getUserName() {
 		return $this->email;
 	}
+
+    public function getEmail() {
+        return $this->email;
+    }
 
 	public function getGroupId() {
 		return $this->user_group_id;

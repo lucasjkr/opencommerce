@@ -41,12 +41,12 @@ class ControllerCommonLogin extends Controller {
 			$data['success'] = '';
 		}
 
-		$data['action'] = $this->url->link('common/login', '', true);
+		$data['action'] = $this->url->link('common/login', '');
 
-		if (isset($this->request->post['username'])) {
-			$data['username'] = $this->request->post['username'];
+		if (isset($this->request->post['email'])) {
+			$data['email'] = $this->request->post['email'];
 		} else {
-			$data['username'] = '';
+			$data['email'] = '';
 		}
 
 		if (isset($this->request->post['password'])) {
@@ -67,13 +67,13 @@ class ControllerCommonLogin extends Controller {
 				$url .= http_build_query($this->request->get);
 			}
 
-			$data['redirect'] = $this->url->link($route, $url, true);
+			$data['redirect'] = $this->url->link($route, $url);
 		} else {
 			$data['redirect'] = '';
 		}
 
 		if ($this->config->get('config_password')) {
-			$data['forgotten'] = $this->url->link('common/forgotten', '', true);
+			$data['forgotten'] = $this->url->link('common/forgotten', '');
 		} else {
 			$data['forgotten'] = '';
 		}
@@ -85,7 +85,7 @@ class ControllerCommonLogin extends Controller {
 	}
 
 	protected function validate() {
-		if (!isset($this->request->post['username']) || !isset($this->request->post['password']) || !$this->user->login($this->request->post['username'], html_entity_decode($this->request->post['password'], ENT_QUOTES, 'UTF-8'))) {
+		if (!isset($this->request->post['email']) || !isset($this->request->post['password']) || !$this->user->login($this->request->post['email'], $this->request->post['password'])){
 			$this->error['warning'] = $this->language->get('error_login');
 		}
 

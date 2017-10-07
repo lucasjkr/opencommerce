@@ -232,19 +232,11 @@ function setup_db($data)
         $db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1'");
 
         $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_email'");
-        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = '" . $db->escape($data['email']) . "'");
-
-        $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_encryption'");
-        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_encryption', value = '" . $db->escape(token(1024)) . "'");
+        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = ?",
+            [ $data['email'] ]);
 
         $db->query("UPDATE `oc_product` SET `viewed` = '0'");
 
-        $db->query("INSERT INTO `oc_api` SET username = 'Default', `key` = '" . $db->escape(token(256)) . "', status = 1");
-
-        $api_id = $db->getLastId();
-
-        $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_api_id'");
-        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_api_id', value = '" . (int)$api_id . "'");
     }
 }
 
@@ -273,6 +265,7 @@ function write_config_files($options) {
     $output .= "define('SMTP_NAME',     null); // The Name that appears in outgoing messages\n";
     $output .= "define('SMTP_REPLYTO',  null); // The Reply-To email address\n";
     $output .= "\n";
+    $output .= "define('DEBUG_SQL', 1);";
     $file = fopen(DIR_OPENCART . 'config/config.php', 'w');
     fwrite($file, $output);
     fclose($file);
