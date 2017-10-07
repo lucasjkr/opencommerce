@@ -738,11 +738,6 @@ class ControllerSettingSetting extends Controller {
 		);
 
 		$data['mail_alerts'][] = array(
-			'text'  => $this->language->get('text_mail_affiliate'),
-			'value' => 'affiliate'
-		);
-
-		$data['mail_alerts'][] = array(
 			'text'  => $this->language->get('text_mail_order'),
 			'value' => 'order'
 		);
@@ -960,7 +955,7 @@ class ControllerSettingSetting extends Controller {
 		} else {
 			$theme = basename($this->request->get['theme']);
 		}
-		
+
 		if (is_file(DIR_CATALOG . 'view/theme/' . $theme . '/image/' . $theme . '.png')) {
 			$this->response->setOutput(HTTP_ROOT . 'catalog/view/theme/' . $theme . '/image/' . $theme . '.png');
 		} else {
