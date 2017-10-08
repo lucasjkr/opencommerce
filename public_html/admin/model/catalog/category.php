@@ -290,7 +290,7 @@ class ModelCatalogCategory extends Model {
 				}
 			}
 		}
-        
+
 		$this->db->query("DELETE FROM oc_category_to_layout WHERE category_id = :category_id",
             [
                 ':category_id' => $category_id
