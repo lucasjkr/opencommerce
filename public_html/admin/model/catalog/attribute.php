@@ -72,7 +72,7 @@ class ModelCatalogAttribute extends Model {
 
         if (!empty($data['filter_name'])) {
 			$sql .= " AND ad.name LIKE :filter_name";
-            $args[':filter_name'] = $data['filter_name'] . '%';
+            $args[':filter_name'] = '%' . $data['filter_name'] . '%';
 		} else {
 		    $data['filter_name'] = '';
         }
