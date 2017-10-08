@@ -97,6 +97,24 @@ require_once(modification(DIR_SYSTEM . 'engine/proxy.php'));
 require_once(DIR_SYSTEM . 'helper/general.php');
 require_once(DIR_SYSTEM . 'helper/utf8.php');
 
+// Models
+/*******************************************************************/
+/* load models                                                     */
+/* lets blindly load all models for now                            */
+/* When we get to production, we can do the above and explicityl   */
+/* require only the models we're expecing to be present            */
+/*******************************************************************/
+
+if ($handle = opendir(DIR_ROOT . "model/")) {
+    while (false !== ($entry = readdir($handle))) {
+        if ($entry != "." && $entry != ".." && substr($entry, -3) == "php") {
+            require_once(DIR_ROOT . 'model/' . $entry);
+        }
+    }
+    closedir($handle);
+}
+unset($handle);
+
 function start($application_config) {
 	require_once(DIR_SYSTEM . 'framework.php');	
 }
