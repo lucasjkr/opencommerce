@@ -2583,6 +2583,29 @@ CREATE TABLE `oc_order_voucher` (
 
 
 
+DROP TABLE IF EXISTS `oc_part_number_types`;
+CREATE TABLE `oc_part_number_types` (
+  `part_number_type_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(6) DEFAULT NULL,
+  `name` varchar(90) DEFAULT NULL,
+  `date_added` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`part_number_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+LOCK TABLES `oc_part_number_types` WRITE;
+/*!40000 ALTER TABLE `oc_part_number_types` DISABLE KEYS */;
+
+INSERT INTO `oc_part_number_types` (`part_number_type_id`, `code`, `name`, `date_added`, `date_modified`)
+VALUES
+	(1,'SKU','Stock Keeping Unit','2017-10-09 10:35:15','2017-10-09 10:35:15'),
+	(2,'UPC','Universal Product Code','2017-10-09 10:35:23','2017-10-09 10:35:23'),
+	(3,'EAN','European Article Number','2017-10-09 10:35:34','2017-10-09 10:35:34'),
+	(4,'JAN','Japanese Article Number','2017-10-09 10:35:43','2017-10-09 10:35:43'),
+	(5,'ISBN','International Standard Book Number','2017-10-09 10:35:55','2017-10-09 10:35:55'),
+	(6,'MPN','Manufacturer Part Number','2017-10-09 10:36:09','2017-10-09 10:36:09');
+
+
 DROP TABLE IF EXISTS `oc_product`;
 CREATE TABLE `oc_product` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -3105,6 +3128,23 @@ CREATE TABLE `oc_product_to_layout` (
   `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`,`store_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+# Dump of table oc_product_to_part_number
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `oc_product_to_part_number`;
+CREATE TABLE `oc_product_to_part_number` (
+  `product_id` int(11) NOT NULL,
+  `part_number_type_id` int(11) DEFAULT NULL,
+  `part_number` varchar(50) DEFAULT NULL,
+  `date_added` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`product_id`),
+  KEY `part_number_type_id` (`part_number_type_id`),
+  KEY `part_number` (`part_number`),
+  KEY `product_id` (`product_id`,`part_number_type_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 
 
 
