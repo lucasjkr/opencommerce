@@ -1,17 +1,29 @@
 <?php
 class ModelCatalogManufacturer extends Model {
 	public function addManufacturer($data) {
-		$this->db->query("INSERT INTO oc_manufacturer SET name = '" . $this->db->escape((string)$data['name']) . "', sort_order = '" . (int)$data['sort_order'] . "'");
+		$this->db->query("INSERT INTO oc_manufacturer SET name = :name, sort_order = :sort_order",
+            [
+                ':name' => $data['name'],
+                ':sort_order' => $data['sort_order']
+            ]);
 
 		$manufacturer_id = $this->db->getLastId();
 
 		if (isset($data['image'])) {
-			$this->db->query("UPDATE oc_manufacturer SET image = '" . $this->db->escape((string)$data['image']) . "' WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+			$this->db->query("UPDATE oc_manufacturer SET image = :image WHERE manufacturer_id = :manufacturer_id",
+                [
+                    ':image' => $data['image'],
+                    ':manufacturer_id' => $manufacturer_id
+                ]);
 		}
 
 		if (isset($data['manufacturer_store'])) {
 			foreach ($data['manufacturer_store'] as $store_id) {
-				$this->db->query("INSERT INTO oc_manufacturer_to_store SET manufacturer_id = '" . (int)$manufacturer_id . "', store_id = '" . (int)$store_id . "'");
+				$this->db->query("INSERT INTO oc_manufacturer_to_store SET manufacturer_id = :manufacturer_id, store_id = :store_id",
+                    [
+                        ':manufacturer_id' => $manufacturer_id,
+                        ':store_id' => $store_id
+                    ]);
 			}
 		}
 				
@@ -20,7 +32,13 @@ class ModelCatalogManufacturer extends Model {
 			foreach ($data['manufacturer_seo_url'] as $store_id => $language) {
 				foreach ($language as $language_id => $keyword) {
 					if (!empty($keyword)) {
-						$this->db->query("INSERT INTO oc_seo_url SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'manufacturer_id=" . (int)$manufacturer_id . "', keyword = '" . $this->db->escape($keyword) . "'");
+						$this->db->query("INSERT INTO oc_seo_url SET store_id = :store_id, language_id = :language_id, query = :query, keyword = :keyword",
+                            [
+                                ':store_id' => $store_id,
+                                ':language_id' => $language_id,
+                                ':query' =>  'manufacturer_id=' . (int)$manufacturer_id,
+                                ':keyword' => $keyword
+                            ]);
 					}
 				}
 			}
@@ -32,27 +50,52 @@ class ModelCatalogManufacturer extends Model {
 	}
 
 	public function editManufacturer($manufacturer_id, $data) {
-		$this->db->query("UPDATE oc_manufacturer SET name = '" . $this->db->escape((string)$data['name']) . "', sort_order = '" . (int)$data['sort_order'] . "' WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+		$this->db->query("UPDATE oc_manufacturer SET name = :name, sort_order = :sort_order WHERE manufacturer_id = :manufacturer_id",
+            [
+                ':name' => $data['name'],
+                ':sort_order' => $data['sort_order'],
+                ':manufacturer_id' => $manufacturer_id
+            ]);
 
 		if (isset($data['image'])) {
-			$this->db->query("UPDATE oc_manufacturer SET image = '" . $this->db->escape((string)$data['image']) . "' WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+			$this->db->query("UPDATE oc_manufacturer SET image = :image WHERE manufacturer_id = :manufacturer_id",
+                [
+                    ':manufacturer_id' => $manufacturer_id,
+                    ':image' => $data['image'],
+                ]);
 		}
 
-		$this->db->query("DELETE FROM oc_manufacturer_to_store WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+		$this->db->query("DELETE FROM oc_manufacturer_to_store WHERE manufacturer_id = :manufacturer_id",
+            [
+                ':manufacturer_id' => $manufacturer_id,
+            ]);
 
 		if (isset($data['manufacturer_store'])) {
 			foreach ($data['manufacturer_store'] as $store_id) {
-				$this->db->query("INSERT INTO oc_manufacturer_to_store SET manufacturer_id = '" . (int)$manufacturer_id . "', store_id = '" . (int)$store_id . "'");
+				$this->db->query("INSERT INTO oc_manufacturer_to_store SET manufacturer_id = :manufacturer_id, store_id = :store_id",
+                    [
+                        ':manufacturer_id' => $manufacturer_id,
+                        ':store_id' => $store_id
+                    ]);
 			}
 		}
 
-		$this->db->query("DELETE FROM `oc_seo_url` WHERE query = 'manufacturer_id=" . (int)$manufacturer_id . "'");
+		$this->db->query("DELETE FROM `oc_seo_url` WHERE query = :query",
+            [
+                ':query' =>  'manufacturer_id=' . $manufacturer_id
+            ]);
 
 		if (isset($data['manufacturer_seo_url'])) {
 			foreach ($data['manufacturer_seo_url'] as $store_id => $language) {
 				foreach ($language as $language_id => $keyword) {
 					if (!empty($keyword)) {
-						$this->db->query("INSERT INTO `oc_seo_url` SET store_id = '" . (int)$store_id . "', language_id = '" . (int)$language_id . "', query = 'manufacturer_id=" . (int)$manufacturer_id . "', keyword = '" . $this->db->escape($keyword) . "'");
+						$this->db->query("INSERT INTO `oc_seo_url` SET store_id = :store_id, language_id = :language_id, query = :query, keyword = :keyword",
+                            [
+                                ':store_id' => $store_id,
+                                ':query' =>  'manufacturer_id=' . $manufacturer_id,
+                                ':language_id' => $language_id,
+                                ':keyword' => $keyword
+                            ]);
 					}
 				}
 			}
@@ -62,15 +105,28 @@ class ModelCatalogManufacturer extends Model {
 	}
 
 	public function deleteManufacturer($manufacturer_id) {
-		$this->db->query("DELETE FROM `oc_manufacturer` WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
-		$this->db->query("DELETE FROM `oc_manufacturer_to_store` WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
-		$this->db->query("DELETE FROM `oc_seo_url` WHERE query = 'manufacturer_id=" . (int)$manufacturer_id . "'");
+		$this->db->query("DELETE FROM `oc_manufacturer` WHERE manufacturer_id = :manufacturer_id",
+            [
+                ':manufacturer_id' => $manufacturer_id,
+            ]);
+		$this->db->query("DELETE FROM `oc_manufacturer_to_store` WHERE manufacturer_id = :manufacturer_id",
+            [
+                ':manufacturer_id' => $manufacturer_id,
+            ]);
+		$this->db->query("DELETE FROM `oc_seo_url` WHERE query = :query",
+            [
+                ':query' => 'manufacturer_id=' . $manufacturer_id,
+
+            ]);
 
 		$this->cache->delete('manufacturer');
 	}
 
 	public function getManufacturer($manufacturer_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_manufacturer WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_manufacturer WHERE manufacturer_id = :manufacturer_id",
+            [
+                ':manufacturer_id' => $manufacturer_id,
+            ]);
 
 		return $query->row;
 	}
@@ -79,7 +135,8 @@ class ModelCatalogManufacturer extends Model {
 		$sql = "SELECT * FROM oc_manufacturer";
 
 		if (!empty($data['filter_name'])) {
-			$sql .= " WHERE name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
+			$sql .= " WHERE name LIKE :name";
+            $args[':name'] = $data['filter_name']) . '%'
 		}
 
 		$sort_data = array(
@@ -111,7 +168,7 @@ class ModelCatalogManufacturer extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -119,7 +176,10 @@ class ModelCatalogManufacturer extends Model {
 	public function getManufacturerStores($manufacturer_id) {
 		$manufacturer_store_data = array();
 
-		$query = $this->db->query("SELECT * FROM oc_manufacturer_to_store WHERE manufacturer_id = '" . (int)$manufacturer_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_manufacturer_to_store WHERE manufacturer_id = :manufacturer_id",
+            [
+                ':manufacturer_id' => $manufacturer_id,
+            ]);
 
 		foreach ($query->rows as $result) {
 			$manufacturer_store_data[] = $result['store_id'];
@@ -131,7 +191,10 @@ class ModelCatalogManufacturer extends Model {
 	public function getManufacturerSeoUrls($manufacturer_id) {
 		$manufacturer_seo_url_data = array();
 		
-		$query = $this->db->query("SELECT * FROM oc_seo_url WHERE query = 'manufacturer_id=" . (int)$manufacturer_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_seo_url WHERE query = :query",
+            [
+                ':query' => 'manufacturer_id=' . $manufacturer_id
+            ]);
 
 		foreach ($query->rows as $result) {
 			$manufacturer_seo_url_data[$result['store_id']][$result['language_id']] = $result['keyword'];
