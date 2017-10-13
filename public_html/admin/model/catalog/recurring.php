@@ -19,12 +19,12 @@ class ModelCatalogRecurring extends Model {
 		$recurring_id = $this->db->getLastId();
 
 		foreach ($data['recurring_description'] as $language_id => $recurring_description) {
-			$this->db->query("INSERT INTO `oc_recurring_description` SET `recurring_id` = :recurring_id, `language_id` = :language_id, `name` = :name"),
+			$this->db->query("INSERT INTO `oc_recurring_description` SET `recurring_id` = :recurring_id, `language_id` = :language_id, `name` = :name",
             [
                 ':recurring_id' => $recurring_id,
                 ':language_id' => $language_id ,
                 ':name' => $recurring_description['name']
-            ];
+            ]);
 		}
 
 		return $recurring_id;
@@ -55,12 +55,12 @@ class ModelCatalogRecurring extends Model {
             );
 
         foreach ($data['recurring_description'] as $language_id => $recurring_description) {
-            $this->db->query("INSERT INTO `oc_recurring_description` SET `recurring_id` = :recurring_id, `language_id` = :language_id, `name` = :name"),
+            $this->db->query("INSERT INTO `oc_recurring_description` SET `recurring_id` = :recurring_id, `language_id` = :language_id, `name` = :name",
             [
                 ':recurring_id' => $recurring_id,
                 ':language_id' => $language_id ,
                 ':name' => $recurring_description['name']
-            ];
+            ]);
 		}
 	}
 
@@ -126,7 +126,7 @@ class ModelCatalogRecurring extends Model {
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND rd.name LIKE :name";
-            $args[':name'] =  $data['filter_name']) . '%'
+            $args[':name'] =  $data['filter_name'] . '%';
 		}
 
 		$sort_data = array(
