@@ -197,7 +197,7 @@ tax_class_id = :tax_class_id, sort_order = :sort_order",
 			foreach ($data['product_category'] as $category_id) {
 				$this->db->query("INSERT INTO `oc_product_to_category` SET product_id = :product_id, category_id = :category_id",
                     [
-                        ':product_id' => $product_id
+                        ':product_id' => $product_id,
                         ':category_id' => $category_id
                     ]);
 			}
@@ -1050,7 +1050,7 @@ tax_class_id = :tax_class_id, sort_order = :sort_order",
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND pd.name LIKE :filter_name";
-            $args[':language_id'] = $data['filter_name'] . '%');
+            $args[':language_id'] = $data['filter_name'] . '%';
         }
 
 		if (!empty($data['filter_model'])) {

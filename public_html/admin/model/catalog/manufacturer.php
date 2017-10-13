@@ -136,7 +136,7 @@ class ModelCatalogManufacturer extends Model {
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " WHERE name LIKE :name";
-            $args[':name'] = $data['filter_name']) . '%'
+            $args[':name'] = $data['filter_name'] . '%';
 		}
 
 		$sort_data = array(

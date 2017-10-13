@@ -68,7 +68,7 @@ class ModelCatalogDownload extends Model {
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND dd.name LIKE :filter_name";
-            $args[':filter_name'] = $data['filter_name']) . '%';
+            $args[':filter_name'] = $data['filter_name'] . '%';
 		}
 
 		$sort_data = array(
@@ -144,7 +144,7 @@ class ModelCatalogDownload extends Model {
 	}
 
 	public function getTotalReports($download_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_download_report WHERE download_id = :download_id"
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_download_report WHERE download_id = :download_id",
             [
                 ':download_id' => $download_id,
             ]);
