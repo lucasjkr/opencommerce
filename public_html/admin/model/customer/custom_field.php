@@ -3,12 +3,12 @@ class ModelCustomerCustomField extends Model {
 	public function addCustomField($data) {
 		$this->db->query("INSERT INTO `oc_custom_field` SET type = :type, value = :value, validation = :validation, location = :location, status = :status, sort_order = :sort_order",
         [
-            ':type' = $data['type'],
-            ':value' = $data['value'],
-            ':validation' = $data['validation'],
-            ':location' = $data['location'],
-            ':status' = $data['status'],
-            ':sort_order'= $data['sort_order']
+            ':type' => $data['type'],
+            ':value' => $data['value'],
+            ':validation' => $data['validation'],
+            ':location' => $data['location'],
+            ':status' => $data['status'],
+            ':sort_order' => $data['sort_order']
         ]);
 
 		$custom_field_id = $this->db->getLastId();
@@ -63,12 +63,12 @@ class ModelCustomerCustomField extends Model {
 	public function editCustomField($custom_field_id, $data) {
 		$this->db->query("UPDATE `oc_custom_field` SET type = :type, value = :value, validation = :validation, location = :location, status = :status, sort_order = :sort_order WHERE custom_field_id = :custom_field_id",
             [
-                ':type' = $data['type'],
-                ':value' = $data['value'],
-                ':validation' = $data['validation'],
-                ':location' = $data['location'],
-                ':status' = $data['status'],
-                ':sort_order'= $data['sort_order'],
+                ':type' => $data['type'],
+                ':value' => $data['value'],
+                ':validation' => $data['validation'],
+                ':location' => $data['location'],
+                ':status' => $data['status'],
+                ':sort_order' => $data['sort_order'],
                 ':custom_field_id' => $custom_field_id
             ]);
 

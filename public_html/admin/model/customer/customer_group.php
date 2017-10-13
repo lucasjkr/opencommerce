@@ -124,10 +124,10 @@ class ModelCustomerCustomerGroup extends Model {
 	public function getCustomerGroupDescriptions($customer_group_id) {
 		$customer_group_data = array();
 
-		$query = $this->db->query("SELECT * FROM oc_customer_group_description WHERE customer_group_id = :customer_group_id"),
+		$query = $this->db->query("SELECT * FROM oc_customer_group_description WHERE customer_group_id = :customer_group_id",
         [
             ':customer_group_id' => $customer_group_id
-        ];
+        ]);
 
 		foreach ($query->rows as $result) {
 			$customer_group_data[$result['language_id']] = array(
