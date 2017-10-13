@@ -1,24 +1,66 @@
 <?php
 class ModelCatalogRecurring extends Model {
 	public function addRecurring($data) {
-		$this->db->query("INSERT INTO `oc_recurring` SET `sort_order` = " . (int)$data['sort_order'] . ", `status` = " . (int)$data['status'] . ", `price` = " . (float)$data['price'] . ", `frequency` = '" . $this->db->escape((string)$data['frequency']) . "', `duration` = " . (int)$data['duration'] . ", `cycle` = " . (int)$data['cycle'] . ", `trial_status` = " . (int)$data['trial_status'] . ", `trial_price` = " . (float)$data['trial_price'] . ", `trial_frequency` = '" . $this->db->escape((string)$data['trial_frequency']) . "', `trial_duration` = " . (int)$data['trial_duration'] . ", `trial_cycle` = '" . (int)$data['trial_cycle'] . "'");
+		$this->db->query("INSERT INTO `oc_recurring` SET `sort_order` = :sort_order, `status` = :status, `price` = :price, `frequency` = :frequency, `duration` = :duration, `cycle` = :cycle, `trial_status` = :trial_status, `trial_price` = :trial_price, `trial_frequency` = :trial_frequency, `trial_duration` = :trial_duration, `trial_cycle` = :trial_cycle",
+            [
+                ':sort_order' => $data['sort_order'],
+                ':status' => $data['status'],
+                ':price' => $data['price'],
+                ':frequency' => $data['frequency'],
+                ':duration' => $data['duration'],
+                ':cycle' => $data['cycle'],
+                ':trial_status' => $data['trial_status'] ,
+                ':trial_price' => $data['trial_price'],
+                ':trial_frequency' => $data['trial_frequency'],
+                ':trial_duration' => $data['trial_duration'],
+                ':trial_cycle' => $data['trial_cycle']
+            ]);
 
 		$recurring_id = $this->db->getLastId();
 
 		foreach ($data['recurring_description'] as $language_id => $recurring_description) {
-			$this->db->query("INSERT INTO `oc_recurring_description` (`recurring_id`, `language_id`, `name`) VALUES (" . (int)$recurring_id . ", " . (int)$language_id . ", '" . $this->db->escape($recurring_description['name']) . "')");
+			$this->db->query("INSERT INTO `oc_recurring_description` SET `recurring_id` = :recurring_id, `language_id` = :language_id, `name` = :name"),
+            [
+                ':recurring_id' => $recurring_id,
+                ':language_id' => $language_id ,
+                ':name' => $recurring_description['name']
+            ];
 		}
 
 		return $recurring_id;
 	}
 
 	public function editRecurring($recurring_id, $data) {
-		$this->db->query("DELETE FROM `oc_recurring_description` WHERE recurring_id = '" . (int)$recurring_id . "'");
+		$this->db->query("DELETE FROM `oc_recurring_description` WHERE recurring_id = :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
 
-		$this->db->query("UPDATE `oc_recurring` SET `price` = '" . (float)$data['price'] . "', `frequency` = '" . $this->db->escape((string)$data['frequency']) . "', `duration` = '" . (int)$data['duration'] . "', `cycle` = '" . (int)$data['cycle'] . "', `sort_order` = '" . (int)$data['sort_order'] . "', `status` = '" . (int)$data['status'] . "', `trial_price` = '" . (float)$data['trial_price'] . "', `trial_frequency` = '" . $this->db->escape((string)$data['trial_frequency']) . "', `trial_duration` = '" . (int)$data['trial_duration'] . "', `trial_cycle` = '" . (int)$data['trial_cycle'] . "', `trial_status` = '" . (int)$data['trial_status'] . "' WHERE recurring_id = '" . (int)$recurring_id . "'");
+		$this->db->query("UPDATE `oc_recurring` SET `price` = :price, `frequency` = :frequency, `duration` = :duration, `cycle` = :cycle, `sort_order` = :sort_order, `status` = :status, `trial_price` = :trial_price, `trial_frequency` = :trial_frequency, `trial_duration` = :trial_duration, `trial_cycle` = trial_cycle, `trial_status` = :trial_status WHERE recurring_id = :recurring_id",
+            [
+                ':price' => $data['price'],
+                ':frequency' => $data['frequency'],
+                ':duration' => $data['duration'],
+                ':cycle' => $data['cycle'],
+                ':sort_order' => $data['sort_order'],
+                ':status' => $data['status'],
+                ':trial_price' => $data['trial_price'],
+                ':trial_frequency' => $data['trial_frequency'],
+                ':trial_duration' => $data['trial_duration'],
+                ':trial_cycle' => $data['trial_cycle'],
+                ':trial_status' => $data['trial_status'] ,
+                ':recurring_id' => $recurring_id,
+            ]
 
-		foreach ($data['recurring_description'] as $language_id => $recurring_description) {
-			$this->db->query("INSERT INTO `oc_recurring_description` (`recurring_id`, `language_id`, `name`) VALUES (" . (int)$recurring_id . ", " . (int)$language_id . ", '" . $this->db->escape($recurring_description['name']) . "')");
+            );
+
+        foreach ($data['recurring_description'] as $language_id => $recurring_description) {
+            $this->db->query("INSERT INTO `oc_recurring_description` SET `recurring_id` = :recurring_id, `language_id` = :language_id, `name` = :name"),
+            [
+                ':recurring_id' => $recurring_id,
+                ':language_id' => $language_id ,
+                ':name' => $recurring_description['name']
+            ];
 		}
 	}
 
@@ -35,14 +77,29 @@ class ModelCatalogRecurring extends Model {
 	}
 
 	public function deleteRecurring($recurring_id) {
-		$this->db->query("DELETE FROM `oc_recurring` WHERE recurring_id = " . (int)$recurring_id . "");
-		$this->db->query("DELETE FROM `oc_recurring_description` WHERE recurring_id = " . (int)$recurring_id . "");
-		$this->db->query("DELETE FROM `oc_product_recurring` WHERE recurring_id = " . (int)$recurring_id . "");
-		$this->db->query("UPDATE `oc_order_recurring` SET `recurring_id` = 0 WHERE `recurring_id` = " . (int)$recurring_id . "");
+		$this->db->query("DELETE FROM `oc_recurring` WHERE recurring_id = :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
+		$this->db->query("DELETE FROM `oc_recurring_description` WHERE recurring_id = :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
+		$this->db->query("DELETE FROM `oc_product_recurring` WHERE recurring_id = :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
+		$this->db->query("UPDATE `oc_order_recurring` SET `recurring_id` = 0 WHERE `recurring_id` = :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
 	}
 
 	public function getRecurring($recurring_id) {
-		$query = $this->db->query("SELECT * FROM `oc_recurring` WHERE recurring_id = '" . (int)$recurring_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_recurring` WHERE recurring_id = `recurring_id` = :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
 
 		return $query->row;
 	}
@@ -50,7 +107,10 @@ class ModelCatalogRecurring extends Model {
 	public function getRecurringDescription($recurring_id) {
 		$recurring_description_data = array();
 
-		$query = $this->db->query("SELECT * FROM `oc_recurring_description` WHERE `recurring_id` = '" . (int)$recurring_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_recurring_description` WHERE `recurring_id` =  :recurring_id",
+            [
+                ':recurring_id' => $recurring_id
+            ]);
 
 		foreach ($query->rows as $result) {
 			$recurring_description_data[$result['language_id']] = array('name' => $result['name']);
@@ -60,10 +120,13 @@ class ModelCatalogRecurring extends Model {
 	}
 
 	public function getRecurrings($data = array()) {
-		$sql = "SELECT * FROM `oc_recurring` r LEFT JOIN oc_recurring_description rd ON (r.recurring_id = rd.recurring_id) WHERE rd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
+		$sql = "SELECT * FROM `oc_recurring` r LEFT JOIN oc_recurring_description rd ON (r.recurring_id = rd.recurring_id) WHERE rd.language_id = :language_id";
+
+        $args[':language_id'] = $this->config->get('config_language_id');
 
 		if (!empty($data['filter_name'])) {
-			$sql .= " AND rd.name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
+			$sql .= " AND rd.name LIKE :name";
+            $args[':name'] =  $data['filter_name']) . '%'
 		}
 
 		$sort_data = array(
@@ -95,7 +158,7 @@ class ModelCatalogRecurring extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
