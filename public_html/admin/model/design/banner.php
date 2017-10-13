@@ -1,14 +1,26 @@
 <?php
 class ModelDesignBanner extends Model {
 	public function addBanner($data) {
-		$this->db->query("INSERT INTO oc_banner SET name = '" . $this->db->escape((string)$data['name']) . "', status = '" . (int)$data['status'] . "'");
+		$this->db->query("INSERT INTO oc_banner SET name = :name, status = :status",
+            [
+                ':name' => $data['name'],
+                ':status' => $data['status'],
+            ]);
 
 		$banner_id = $this->db->getLastId();
 
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $language_id => $value) {
 				foreach ($value as $banner_image) {
-					$this->db->query("INSERT INTO oc_banner_image SET banner_id = '" . (int)$banner_id . "', language_id = '" . (int)$language_id . "', title = '" .  $this->db->escape($banner_image['title']) . "', link = '" .  $this->db->escape($banner_image['link']) . "', image = '" .  $this->db->escape($banner_image['image']) . "', sort_order = '" .  (int)$banner_image['sort_order'] . "'");
+					$this->db->query("INSERT INTO oc_banner_image SET banner_id = :banner_id, language_id = :language_id, title = :title, link = :link, image = :image, sort_order = :sort_order",
+                        [
+                            ':banner_id' => $banner_id,
+                            ':language_id' => $language_id,
+                            ':title' => $banner_image['title'],
+                            ':link' => $banner_image['link'],
+                            ':image' => $banner_image['image'],
+                            ':sort_order' => $banner_image['sort_order']
+                        ]);
 				}
 			}
 		}
@@ -17,26 +29,51 @@ class ModelDesignBanner extends Model {
 	}
 
 	public function editBanner($banner_id, $data) {
-		$this->db->query("UPDATE oc_banner SET name = '" . $this->db->escape((string)$data['name']) . "', status = '" . (int)$data['status'] . "' WHERE banner_id = '" . (int)$banner_id . "'");
+		$this->db->query("UPDATE oc_banner SET name = :name, status = :status WHERE banner_id = :banner_id",
+            [
+                ':name' => $data['name'],
+                ':status' => $data['status'],
+                ':banner_id' => $banner_id
+            ]);
 
-		$this->db->query("DELETE FROM oc_banner_image WHERE banner_id = '" . (int)$banner_id . "'");
+		$this->db->query("DELETE FROM oc_banner_image WHERE banner_id = :banner_id",
+            [
+                ':banner_id' => $banner_id
+            ]);
 
 		if (isset($data['banner_image'])) {
 			foreach ($data['banner_image'] as $language_id => $value) {
 				foreach ($value as $banner_image) {
-					$this->db->query("INSERT INTO oc_banner_image SET banner_id = '" . (int)$banner_id . "', language_id = '" . (int)$language_id . "', title = '" .  $this->db->escape($banner_image['title']) . "', link = '" .  $this->db->escape($banner_image['link']) . "', image = '" .  $this->db->escape($banner_image['image']) . "', sort_order = '" . (int)$banner_image['sort_order'] . "'");
+					$this->db->query("INSERT INTO oc_banner_image SET banner_id = :banner_id, language_id = :language_id, title = :title, link = :link, image = :image, sort_order = :sort_order".
+                    [
+                        ':banner_id' => $banner_id,
+                        ':language_id' => $language_id,
+                        ':title' => $banner_image['title'],
+                        ':link' => $banner_image['link'],
+                        ':image' => $banner_image['image'],
+                        ':sort_order' => $banner_image['sort_order']
+                    ]);
 				}
 			}
 		}
 	}
 
 	public function deleteBanner($banner_id) {
-		$this->db->query("DELETE FROM oc_banner WHERE banner_id = '" . (int)$banner_id . "'");
-		$this->db->query("DELETE FROM oc_banner_image WHERE banner_id = '" . (int)$banner_id . "'");
+		$this->db->query("DELETE FROM oc_banner WHERE banner_id = :banner_id",
+            [
+                ':banner_id' => $banner_id
+            ]);
+		$this->db->query("DELETE FROM oc_banner_image WHERE banner_id = :banner_id",
+            [
+                ':banner_id' => $banner_id
+            ]);
 	}
 
 	public function getBanner($banner_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_banner WHERE banner_id = '" . (int)$banner_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_banner WHERE banner_id = :banner_id",
+            [
+                ':banner_id' => $banner_id
+            ]);
 
 		return $query->row;
 	}
@@ -81,7 +118,10 @@ class ModelDesignBanner extends Model {
 	public function getBannerImages($banner_id) {
 		$banner_image_data = array();
 
-		$banner_image_query = $this->db->query("SELECT * FROM oc_banner_image WHERE banner_id = '" . (int)$banner_id . "' ORDER BY sort_order ASC");
+		$banner_image_query = $this->db->query("SELECT * FROM oc_banner_image WHERE banner_id = :banner_id ORDER BY sort_order ASC",
+            [
+                ':banner_id' => $banner_id
+            ]);
 
 		foreach ($banner_image_query->rows as $banner_image) {
 			$banner_image_data[$banner_image['language_id']][] = array(
