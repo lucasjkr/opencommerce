@@ -320,6 +320,7 @@ class ModelCustomerCustomer extends Model {
 	}
 
 	public function getTotalCustomers($data = array()) {
+	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM oc_customer";
 
 		$implode = array();
@@ -331,7 +332,7 @@ class ModelCustomerCustomer extends Model {
 
 		if (!empty($data['filter_email'])) {
 			$implode[] = "email LIKE :email";
-		    $args[':email'] = $data['filter_email'] . '%'
+		    $args[':email'] = $data['filter_email'] . '%';
 		}
 
 		if (isset($data['filter_newsletter']) && !is_null($data['filter_newsletter'])) {
