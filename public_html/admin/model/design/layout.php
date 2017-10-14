@@ -1,19 +1,33 @@
 <?php
 class ModelDesignLayout extends Model {
 	public function addLayout($data) {
-		$this->db->query("INSERT INTO oc_layout SET name = '" . $this->db->escape((string)$data['name']) . "'");
+		$this->db->query("INSERT INTO oc_layout SET name = :name",
+            [
+                ':name' => $data['name']
+            ]);
 
 		$layout_id = $this->db->getLastId();
 
 		if (isset($data['layout_route'])) {
 			foreach ($data['layout_route'] as $layout_route) {
-				$this->db->query("INSERT INTO oc_layout_route SET layout_id = '" . (int)$layout_id . "', store_id = '" . (int)$layout_route['store_id'] . "', route = '" . $this->db->escape($layout_route['route']) . "'");
+				$this->db->query("INSERT INTO oc_layout_route SET layout_id = :layout_id, store_id = :store_id, route = :route",
+                    [
+                        ':layout_id' => (int)$layout_id,
+                        ':store_id' => $layout_route['store_id'] ,
+                        ':route' => $layout_route['route'],
+                    ]);
 			}
 		}
 
 		if (isset($data['layout_module'])) {
 			foreach ($data['layout_module'] as $layout_module) {
-				$this->db->query("INSERT INTO oc_layout_module SET layout_id = '" . (int)$layout_id . "', code = '" . $this->db->escape($layout_module['code']) . "', position = '" . $this->db->escape($layout_module['position']) . "', sort_order = '" . (int)$layout_module['sort_order'] . "'");
+				$this->db->query("INSERT INTO oc_layout_module SET layout_id = :layout_id, code = :code, position = :position, sort_order = :sort_order",
+                    [
+                        ':layout_id' => $layout_id,
+                        ':code' => $layout_module['code'],
+                        ':position' => $layout_module['position'],
+                        ':sort_order' => $layout_module['sort_order']
+                    ]);
 			}
 		}
 
@@ -21,17 +35,32 @@ class ModelDesignLayout extends Model {
 	}
 
 	public function editLayout($layout_id, $data) {
-		$this->db->query("UPDATE oc_layout SET name = '" . $this->db->escape((string)$data['name']) . "' WHERE layout_id = '" . (int)$layout_id . "'");
+		$this->db->query("UPDATE oc_layout SET name = :name WHERE layout_id = :layout_id",
+            [
+                ':name' => $data['name'],
+                ':layout_id' => $layout_id ,
+            ]);
 
-		$this->db->query("DELETE FROM oc_layout_route WHERE layout_id = '" . (int)$layout_id . "'");
+		$this->db->query("DELETE FROM oc_layout_route WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
 
 		if (isset($data['layout_route'])) {
 			foreach ($data['layout_route'] as $layout_route) {
-				$this->db->query("INSERT INTO oc_layout_route SET layout_id = '" . (int)$layout_id . "', store_id = '" . (int)$layout_route['store_id'] . "', route = '" . $this->db->escape($layout_route['route']) . "'");
+				$this->db->query("INSERT INTO oc_layout_route SET layout_id = :layout_id, store_id = :store_id, route = :route",
+                    [
+                        ':layout_id' => $layout_id,
+                        ':store_id' => $layout_route['store_id'],
+                        ':route' => $layout_route['route']
+                    ]);
 			}
 		}
 
-		$this->db->query("DELETE FROM oc_layout_module WHERE layout_id = '" . (int)$layout_id . "'");
+		$this->db->query("DELETE FROM oc_layout_module WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
 
 		if (isset($data['layout_module'])) {
 			foreach ($data['layout_module'] as $layout_module) {
@@ -41,16 +70,37 @@ class ModelDesignLayout extends Model {
 	}
 
 	public function deleteLayout($layout_id) {
-		$this->db->query("DELETE FROM oc_layout WHERE layout_id = '" . (int)$layout_id . "'");
-		$this->db->query("DELETE FROM oc_layout_route WHERE layout_id = '" . (int)$layout_id . "'");
-		$this->db->query("DELETE FROM oc_layout_module WHERE layout_id = '" . (int)$layout_id . "'");
-		$this->db->query("DELETE FROM oc_category_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
-		$this->db->query("DELETE FROM oc_product_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
-		$this->db->query("DELETE FROM oc_information_to_layout WHERE layout_id = '" . (int)$layout_id . "'");
+		$this->db->query("DELETE FROM oc_layout WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
+		$this->db->query("DELETE FROM oc_layout_route WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
+		$this->db->query("DELETE FROM oc_layout_module WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
+		$this->db->query("DELETE FROM oc_category_to_layout WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
+		$this->db->query("DELETE FROM oc_product_to_layout WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
+		$this->db->query("DELETE FROM oc_information_to_layout WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
 	}
 
 	public function getLayout($layout_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_layout WHERE layout_id = '" . (int)$layout_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_layout WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
 
 		return $query->row;
 	}
@@ -90,13 +140,18 @@ class ModelDesignLayout extends Model {
 	}
 
 	public function getLayoutRoutes($layout_id) {
-		$query = $this->db->query("SELECT * FROM oc_layout_route WHERE layout_id = '" . (int)$layout_id . "'");
-
+		$query = $this->db->query("SELECT * FROM oc_layout_route WHERE layout_id = :layout_id",
+            [
+                ':layout_id' => $layout_id
+            ]);
 		return $query->rows;
 	}
 
 	public function getLayoutModules($layout_id) {
-		$query = $this->db->query("SELECT * FROM oc_layout_module WHERE layout_id = '" . (int)$layout_id . "' ORDER BY position ASC, sort_order ASC");
+		$query = $this->db->query("SELECT * FROM oc_layout_module WHERE layout_id = :layout_id ORDER BY position ASC, sort_order ASC",
+            [
+                ':layout_id' = $layout_id
+            ]);
 
 		return $query->rows;
 	}
