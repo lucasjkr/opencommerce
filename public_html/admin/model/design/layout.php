@@ -64,7 +64,13 @@ class ModelDesignLayout extends Model {
 
 		if (isset($data['layout_module'])) {
 			foreach ($data['layout_module'] as $layout_module) {
-				$this->db->query("INSERT INTO oc_layout_module SET layout_id = '" . (int)$layout_id . "', code = '" . $this->db->escape($layout_module['code']) . "', position = '" . $this->db->escape($layout_module['position']) . "', sort_order = '" . (int)$layout_module['sort_order'] . "'");
+				$this->db->query("INSERT INTO oc_layout_module SET layout_id = :layout_id, code = :code, position = :position, sort_order = :sort_order",
+                    [
+                        ':layout_id' => $layout_id,
+                        ':code' => $layout_module['code'],
+                        ':position' => $layout_module['position'],
+                        ':sort_order' => $layout_module['sort_order']
+                    ]);
 			}
 		}
 	}
@@ -150,7 +156,7 @@ class ModelDesignLayout extends Model {
 	public function getLayoutModules($layout_id) {
 		$query = $this->db->query("SELECT * FROM oc_layout_module WHERE layout_id = :layout_id ORDER BY position ASC, sort_order ASC",
             [
-                ':layout_id' = $layout_id
+                ':layout_id' => $layout_id
             ]);
 
 		return $query->rows;
