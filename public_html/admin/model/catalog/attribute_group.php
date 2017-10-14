@@ -100,7 +100,7 @@ class ModelCatalogAttributeGroup extends Model {
 	}
 
 	public function getAttributeGroupDescriptions($attribute_group_id) {
-		$attribute_group_data = array();
+		$attribute_group_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_attribute_group_description WHERE attribute_group_id = :attribute_group_id",
             [

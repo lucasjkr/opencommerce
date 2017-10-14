@@ -174,7 +174,7 @@ class ModelCatalogManufacturer extends Model {
 	}
 
 	public function getManufacturerStores($manufacturer_id) {
-		$manufacturer_store_data = array();
+		$manufacturer_store_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_manufacturer_to_store WHERE manufacturer_id = :manufacturer_id",
             [
@@ -189,7 +189,7 @@ class ModelCatalogManufacturer extends Model {
 	}
 	
 	public function getManufacturerSeoUrls($manufacturer_id) {
-		$manufacturer_seo_url_data = array();
+		$manufacturer_seo_url_data = [];
 		
 		$query = $this->db->query("SELECT * FROM oc_seo_url WHERE query = :query",
             [

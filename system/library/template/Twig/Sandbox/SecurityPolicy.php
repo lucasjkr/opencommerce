@@ -43,7 +43,7 @@ class Twig_Sandbox_SecurityPolicy implements Twig_Sandbox_SecurityPolicyInterfac
 
     public function setAllowedMethods(array $methods)
     {
-        $this->allowedMethods = array();
+        $this->allowedMethods = [];
         foreach ($methods as $class => $m) {
             $this->allowedMethods[$class] = array_map('strtolower', is_array($m) ? $m : array($m));
         }

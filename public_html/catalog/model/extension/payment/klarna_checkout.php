@@ -184,7 +184,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 	}
 
 	public function getTotals() {
-		$totals = array();
+		$totals = [];
 		$taxes = $this->cart->getTaxes();
 		$total = 0;
 
@@ -197,7 +197,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 
 		$this->load->model('setting/extension');
 
-		$sort_order = array();
+		$sort_order = [];
 
 		$results = $this->model_setting_extension->getExtensions('total');
 
@@ -216,7 +216,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 			}
 		}
 
-		$sort_order = array();
+		$sort_order = [];
 
 		foreach ($totals as $key => $value) {
 			$sort_order[$key] = $value['sort_order'];

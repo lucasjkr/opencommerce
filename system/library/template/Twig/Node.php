@@ -43,7 +43,7 @@ class Twig_Node implements Twig_NodeInterface
 
     public function __toString()
     {
-        $attributes = array();
+        $attributes = [];
         foreach ($this->attributes as $name => $value) {
             $attributes[] = sprintf('%s: %s', $name, str_replace("\n", '', var_export($value, true)));
         }
@@ -53,7 +53,7 @@ class Twig_Node implements Twig_NodeInterface
         if (count($this->nodes)) {
             foreach ($this->nodes as $name => $node) {
                 $len = strlen($name) + 4;
-                $noderepr = array();
+                $noderepr = [];
                 foreach (explode("\n", (string) $node) as $line) {
                     $noderepr[] = str_repeat(' ', $len).$line;
                 }

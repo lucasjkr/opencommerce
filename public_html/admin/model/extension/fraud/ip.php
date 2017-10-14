@@ -2,11 +2,12 @@
 class ModelExtensionFraudIp extends Model {
 	public function install() {
 		$this->db->query("
-		CREATE TABLE IF NOT EXISTS `oc_fraud_ip` (
-		  `ip` varchar(40) NOT NULL,
-		  `date_added` datetime NOT NULL,
-		  PRIMARY KEY (`ip`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+            CREATE TABLE IF NOT EXISTS `oc_fraud_ip` (
+              `ip` varchar(40) NOT NULL,
+              `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+              PRIMARY KEY (`ip`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
 	}
 
@@ -15,11 +16,17 @@ class ModelExtensionFraudIp extends Model {
 	}
 
     public function addIp($ip) {
-        $this->db->query("INSERT INTO `oc_fraud_ip` SET `ip` = '" . $this->db->escape($ip) . "'");
+        $this->db->query("INSERT INTO `oc_fraud_ip` SET `ip` = :ip",
+            [
+                ':ip' => $ip
+            ]);
     }
 
     public function removeIp($ip) {
-        $this->db->query("DELETE FROM `oc_fraud_ip` WHERE `ip` = '" . $this->db->escape($ip) . "'");
+        $this->db->query("DELETE FROM `oc_fraud_ip` WHERE `ip` = :ip",
+            [
+                ':ip' => $ip
+            ]);
     }
 
 	public function getIps($start = 0, $limit = 10) {
@@ -43,7 +50,10 @@ class ModelExtensionFraudIp extends Model {
 	}
 
 	public function getTotalIpsByIp($ip) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_fraud_ip` WHERE ip = '" . $this->db->escape($ip) . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_fraud_ip` WHERE ip = :ip",
+            [
+                ':ip' => $ip
+            ]);
 
 		return $query->row['total'];
 	}

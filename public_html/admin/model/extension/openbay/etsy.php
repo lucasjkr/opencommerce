@@ -5,7 +5,7 @@ class ModelExtensionOpenBayEtsy extends Model{
 
 		$this->model_setting_event->addEvent('openbay_etsy_add_order', 'catalog/model/checkout/order/addOrderHistory/after', 'extension/openbay/etsy/eventAddOrderHistory');
 
-		$settings = array();
+		$settings = [];
 		$settings["etsy_token"] = '';
 		$settings["etsy_secret"] = '';
 		$settings["etsy_encryption_key"] = '';

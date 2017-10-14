@@ -5,7 +5,7 @@ class User {
 	private $user_group_id;
 	private $username;
     private $email;
-	private $permission = array();
+	private $permission = [];
 // TODO: LJK much refactoring throughout to cease looking for $user->['username'] and instead getting $user->['email']
 // the rewrites within SHOULD be sufficient for the short term, but longer term and for consistency, we should be
 // referring to field properly.

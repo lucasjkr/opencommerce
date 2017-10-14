@@ -105,7 +105,7 @@ class ModelCatalogRecurring extends Model {
 	}
 
 	public function getRecurringDescription($recurring_id) {
-		$recurring_description_data = array();
+		$recurring_description_data = [];
 
 		$query = $this->db->query("SELECT * FROM `oc_recurring_description` WHERE `recurring_id` =  :recurring_id",
             [

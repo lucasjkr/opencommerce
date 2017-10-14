@@ -22,10 +22,10 @@ class ControllerExtensionPaymentPPStandard extends Controller {
 			$data['business'] = $this->config->get('payment_pp_standard_email');
 			$data['item_name'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
-			$data['products'] = array();
+			$data['products'] = [];
 
 			foreach ($this->cart->getProducts() as $product) {
-				$option_data = array();
+				$option_data = [];
 
 				foreach ($product['option'] as $option) {
 					if ($option['type'] != 'file') {

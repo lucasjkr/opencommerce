@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionPaymentPayMate extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/payment/paymate');
@@ -35,7 +35,7 @@ class ControllerExtensionPaymentPayMate extends Controller {
 			$data['error_password'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),

@@ -1,20 +1,40 @@
 <?php
 class ModelDesignTranslation extends Model {
 	public function addTranslation($data) {
-		$this->db->query("INSERT INTO `oc_translation` SET `store_id` = '" . (int)$data['store_id'] . "', `language_id` = '" . (int)$data['language_id'] . "', `route` = '" . $this->db->escape((string)$data['route']) . "', `key` = '" . $this->db->escape((string)$data['key']) . "', `value` = '" . $this->db->escape((string)$data['value']) . "'");
+		$this->db->query("INSERT INTO `oc_translation` SET `store_id` = :store_id, `language_id` = :language_id, `route` = :route, `key` = :key, `value` = :value",
+            [
+                ':store_id' => $data['store_id'],
+                ':language_id' => $data['language_id'] ,
+                ':route' => $data['route'],
+                ':key' => $data['key'],
+                ':value' => $data['value']
+            ]);
 	}
 		
 	public function editTranslation($translation_id, $data) {
-		$this->db->query("UPDATE `oc_translation` SET `store_id` = '" . (int)$data['store_id'] . "', `language_id` = '" . (int)$data['language_id'] . "', `route` = '" . $this->db->escape((string)$data['route']) . "', `key` = '" . $this->db->escape((string)$data['key']) . "', `value` = '" . $this->db->escape((string)$data['value']) . "' WHERE `translation_id` = '" . (int)$translation_id . "'");
+		$this->db->query("UPDATE `oc_translation` SET `store_id` = :store_id, `language_id` = :language_id, `route` = :route, `key` :key, `value` :value WHERE `translation_id` = :translation_id",
+            [
+                ':store_id' => $data['store_id'],
+                ':language_id' => $data['language_id'] ,
+                ':route' => $data['route'],
+                ':key' => $data['key'],
+                ':value' => $data['value'],
+                ':translation_id' => $translation_id
+            ]);
 	}
 
 	public function deleteTranslation($translation_id) {
-		$this->db->query("DELETE FROM `oc_translation` WHERE `translation_id` = '" . (int)$translation_id . "'");
+		$this->db->query("DELETE FROM `oc_translation` WHERE `translation_id` = :translation_id",
+            [
+                ':translation_id' => $translation_id
+            ]);
 	}
 
 	public function getTranslation($translation_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM `oc_translation` WHERE `translation_id` = '" . (int)$translation_id . "'");
-
+		$query = $this->db->query("SELECT DISTINCT * FROM `oc_translation` WHERE `translation_id` = :translation_id",
+            [
+                ':translation_id' => $translation_id
+            ]);
 		return $query->row;
 	}
 	

@@ -19,7 +19,7 @@ class Twig_SimpleFunction
     protected $name;
     protected $callable;
     protected $options;
-    protected $arguments = array();
+    protected $arguments = [];
 
     public function __construct($name, $callable, array $options = array())
     {

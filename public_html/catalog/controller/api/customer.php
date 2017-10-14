@@ -6,7 +6,7 @@ class ControllerApiCustomer extends Controller {
 		// Delete past customer in case there is an error
 		unset($this->session->data['customer']);
 
-		$json = array();
+		$json = [];
 
 		if (!isset($this->session->data['api_id'])) {
 			$json['error']['warning'] = $this->language->get('error_permission');

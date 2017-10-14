@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionPaymentAuthorizenetAim extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/payment/authorizenet_aim');
@@ -35,7 +35,7 @@ class ControllerExtensionPaymentAuthorizenetAim extends Controller {
 			$data['error_key'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),

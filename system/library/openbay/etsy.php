@@ -79,7 +79,7 @@ final class Etsy {
 			$curl = curl_init();
 			curl_setopt_array($curl, $defaults);
 
-			$response = array();
+			$response = [];
 
 			if (! $result = curl_exec($curl)) {
 				$this->log('call() - Curl Failed ' . curl_error($curl) . ' ' . curl_errno($curl));
@@ -188,7 +188,7 @@ final class Etsy {
 		if ($qry->num_rows) {
 			$this->log("getLinks() - " . $qry->num_rows . " found");
 
-			$links = array();
+			$links = [];
 
 			foreach ($qry->rows as $row) {
 				$links[] = $row;

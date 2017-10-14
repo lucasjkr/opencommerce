@@ -13,8 +13,8 @@ if (is_file(DIR_ROOT . 'config/paths.php')) {
     exit("/config/credentials.php not found, please re-run installer");
 }
 
-define('DIR_APPLICATION',   '/vb_shared/_forks/opencommerce/public_html/admin/');
-define('DIR_IMAGE',         '/vb_shared/_forks/opencommerce/public_html/image/');
+define('DIR_APPLICATION',   DIR_ROOT . 'public_html/admin/');
+define('DIR_IMAGE',         DIR_ROOT . 'public_html/image/');
 define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');
 // this is unique to Admin (catalog uses view/theme)
 define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/template/');

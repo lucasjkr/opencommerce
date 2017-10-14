@@ -32,7 +32,7 @@ final class mPDO {
 	public function execute() {
 		try {
 			if ($this->statement && $this->statement->execute()) {
-				$data = array();
+				$data = [];
 
 				while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
 					$data[] = $row;
@@ -55,7 +55,7 @@ final class mPDO {
 
 		try {
 			if ($this->statement && $this->statement->execute($params)) {
-				$data = array();
+				$data = [];
 
 				while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
 					$data[] = $row;
@@ -74,8 +74,8 @@ final class mPDO {
 			return $result;
 		} else {
 			$result = new \stdClass();
-			$result->row = array();
-			$result->rows = array();
+			$result->row = [];
+			$result->rows = [];
 			$result->num_rows = 0;
 			return $result;
 		}

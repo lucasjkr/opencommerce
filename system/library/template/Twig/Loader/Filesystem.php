@@ -19,9 +19,9 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
     /** Identifier of the main namespace. */
     const MAIN_NAMESPACE = '__main__';
 
-    protected $paths = array();
-    protected $cache = array();
-    protected $errorCache = array();
+    protected $paths = [];
+    protected $cache = [];
+    protected $errorCache = [];
 
     /**
      * Constructor.
@@ -71,7 +71,7 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
             $paths = array($paths);
         }
 
-        $this->paths[$namespace] = array();
+        $this->paths[$namespace] = [];
         foreach ($paths as $path) {
             $this->addPath($path, $namespace);
         }
@@ -88,7 +88,7 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
     public function addPath($path, $namespace = self::MAIN_NAMESPACE)
     {
         // invalidate the cache
-        $this->cache = $this->errorCache = array();
+        $this->cache = $this->errorCache = [];
 
         if (!is_dir($path)) {
             throw new Twig_Error_Loader(sprintf('The "%s" directory does not exist.', $path));
@@ -108,7 +108,7 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
     public function prependPath($path, $namespace = self::MAIN_NAMESPACE)
     {
         // invalidate the cache
-        $this->cache = $this->errorCache = array();
+        $this->cache = $this->errorCache = [];
 
         if (!is_dir($path)) {
             throw new Twig_Error_Loader(sprintf('The "%s" directory does not exist.', $path));

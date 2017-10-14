@@ -23,7 +23,7 @@
 abstract class Twig_Filter implements Twig_FilterInterface, Twig_FilterCallableInterface
 {
     protected $options;
-    protected $arguments = array();
+    protected $arguments = [];
 
     public function __construct(array $options = array())
     {

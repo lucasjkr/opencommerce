@@ -31,7 +31,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('text_dashboard'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -93,7 +93,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -429,7 +429,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 		$response = $this->model_extension_openbay_ebay->getEbayCategorySpecifics($this->request->get['category_id']);
 
-		$recommendation_data = array();
+		$recommendation_data = [];
 
 		if (isset($response['data']['Recommendations']['NameRecommendation'])) {
 			if (isset($response['data']['Recommendations']['NameRecommendation']['Name'])) {
@@ -553,7 +553,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -612,7 +612,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -701,7 +701,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 		$product = $this->model_catalog_product->getProduct($this->request->get['product_id']);
 
-		$json = array();
+		$json = [];
 
 		if ($product['subtract'] == 1) {
 			$this->openbay->ebay->productUpdateListen($this->request->get['product_id']);
@@ -743,7 +743,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -782,7 +782,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -833,7 +833,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -872,7 +872,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -919,7 +919,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -1003,7 +1003,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 		$this->load->model('extension/openbay/ebay');
 
-		$filter = array();
+		$filter = [];
 
 		if (isset($this->request->post['filter_variant']) && !empty($this->request->post['filter_variant'])) {
 			$filter['variants'] = (int)$this->request->post['filter_variant'];
@@ -1093,7 +1093,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$data['user_token'] = $this->session->data['user_token'];
 				$data['product_id'] = (int)$this->request->get['product_id'];
 
-				$data['breadcrumbs'] = array();
+				$data['breadcrumbs'] = [];
 
 				$data['breadcrumbs'][] = array(
 					'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -1137,7 +1137,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 			$listings   = $this->openbay->ebay->getEbayListing($item_id);
 			$stock      = $this->openbay->ebay->getProductStockLevel($this->request->get['product_id']);
 			$reserve    = $this->openbay->ebay->getReserve($this->request->get['product_id'], $item_id);
-			$options    = array();
+			$options    = [];
 
 			$product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
 
@@ -1147,11 +1147,11 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$product_info['options'] = $this->model_setting_module_openstock->getVariants($this->request->get['product_id']);
 				$product_info['option_groups'] = $this->model_extension_openbay_ebay_product->getProductOptions($this->request->get['product_id']);
 
-				$t = array();
-				$t_rel = array();
+				$t = [];
+				$t_rel = [];
 
 				foreach($product_info['option_groups'] as $group) {
-					$t_tmp = array();
+					$t_tmp = [];
 
 					foreach($group['product_option_value'] as $group_node) {
 						$t_tmp[$group_node['option_value_id']] = $group_node['name'];
@@ -1192,7 +1192,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				}
 
 				//unset variants that dont appear on eBay
-				$options_inactive = array();
+				$options_inactive = [];
 				foreach($options as $k => $option) {
 					if (empty($option['ebay'])) {
 						$options_inactive[] = $options[$k];
@@ -1275,7 +1275,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$data['cancel']   = $this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'], true);
 				$data['user_token']    = $this->session->data['user_token'];
 
-				$data['breadcrumbs'] = array();
+				$data['breadcrumbs'] = [];
 				$data['breadcrumbs'][] = array(
 					'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 					'text'      => $this->language->get('text_home'),
@@ -1296,7 +1296,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 				$product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
 
-				$setting = array();
+				$setting = [];
 
 				$setting['dispatch_times'] = $this->openbay->ebay->getSetting('dispatch_time_max');
 
@@ -1339,11 +1339,11 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 					$product_info['option_groups'] = $this->model_extension_openbay_ebay_product->getProductOptions($this->request->get['product_id']);
 
-					$option_group_array = array();
-					$option_group_relation_array = array();
+					$option_group_array = [];
+					$option_group_relation_array = [];
 
 					foreach($product_info['option_groups'] as $option_group) {
-						$child_option = array();
+						$child_option = [];
 
 						foreach($option_group['product_option_value'] as $group_node) {
 							$child_option[$group_node['option_value_id']] = $group_node['name'];
@@ -1396,7 +1396,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 				//images
 				$product_images = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
-				$product_info['product_images'] = array();
+				$product_info['product_images'] = [];
 
 				if (!empty($product_info['image'])) {
 					$img_info = getimagesize(DIR_IMAGE . $product_info['image']);
@@ -1494,7 +1494,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$this->load->model('extension/openbay/ebay');
 				$this->load->model('extension/openbay/ebay_profile');
 
-				$data['breadcrumbs'] = array();
+				$data['breadcrumbs'] = [];
 				$data['breadcrumbs'][] = array(
 					'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 					'text'      => $this->language->get('text_home'),
@@ -1513,14 +1513,14 @@ class ControllerExtensionOpenbayEbay extends Controller {
 					'text'      => $this->language->get('heading_title'),
 				);
 
-				$data['error_warning'] = array();
+				$data['error_warning'] = [];
 
 				$data['cancel'] = $this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'], true);
 				$data['image_directory'] = DIR_IMAGE;
 
 				$active_list = $this->model_extension_openbay_ebay->getLiveListingArray();
 
-				$products = array();
+				$products = [];
 
 				if ($this->openbay->addonLoad('openstock')) {
 					$openstock = 1;
@@ -1569,7 +1569,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 							}
 
 							//load the settings from eBay
-							$setting = array();
+							$setting = [];
 
 							$setting['product_details'] = $this->openbay->ebay->getSetting('product_details');
 
@@ -1707,8 +1707,8 @@ class ControllerExtensionOpenbayEbay extends Controller {
 					unset($data['data']);
 
 					if (!empty($data['img_tpl'])) {
-						$tmp_gallery_array = array();
-						$tmp_thumbnail_array = array();
+						$tmp_gallery_array = [];
+						$tmp_thumbnail_array = [];
 						$this->load->model('tool/image');
 
 						foreach ($data['img_tpl'] as $k => $v) {
@@ -1724,7 +1724,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 					$data['product_info'] = $query->row;
 
-					$data['product_info']['product_filters'] = array();
+					$data['product_info']['product_filters'] = [];
 
 					$filters = $this->model_catalog_product->getProductFilters($this->request->post['product_id']);
 
@@ -1770,7 +1770,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			if ($this->checkConfig() == true) {
 				$post = $this->request->post;
-				$data = array();
+				$data = [];
 
 				//load all of the listing defaults and assign to correct variable names
 				$profile_shipping = $this->model_extension_openbay_ebay_profile->get($post['shipping_profile']);
@@ -1790,7 +1790,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 				$data['product_info'] = $query->row;
 
-				$data['product_info']['product_filters'] = array();
+				$data['product_info']['product_filters'] = [];
 
 				$filters = $this->model_catalog_product->getProductFilters($this->request->post['product_id']);
 
@@ -1913,7 +1913,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				//product attributes - this is just a direct pass through used with the template tag
 				$data['attributes'] = base64_encode(json_encode($this->model_extension_openbay_ebay->getProductAttributes($post['product_id'])));
 
-				$data['payments'] = array();
+				$data['payments'] = [];
 				foreach($payments as $payment) {
 					if ($payments_accepted[$payment['ebay_name']] == 1) {
 						$data['payments'][$payment['ebay_name']] = 1;
@@ -1921,11 +1921,11 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				}
 
 				$data['main_image'] = 0;
-				$data['img'] = array();
+				$data['img'] = [];
 
 				$product_images = $this->model_catalog_product->getProductImages($post['product_id']);
 
-				$product_info['product_images'] = array();
+				$product_info['product_images'] = [];
 
 				if (!empty($product_info['image'])) {
 					$data['img'][] = $product_info['image'];
@@ -1940,8 +1940,8 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				}
 
 				if (isset($profile_template['data']['ebay_img_template']) && $profile_template['data']['ebay_img_template'] == 1) {
-					$tmp_gallery_array = array();
-					$tmp_thumbnail_array = array();
+					$tmp_gallery_array = [];
+					$tmp_thumbnail_array = [];
 
 					//if the user has not set the exclude default image, add it to the array for theme images.
 					$key_offset = 0;
@@ -2024,8 +2024,8 @@ class ControllerExtensionOpenbayEbay extends Controller {
 			unset($data['data']);
 
 			if (!empty($data['img_tpl'])) {
-				$tmp_gallery_array = array();
-				$tmp_thumbnail_array = array();
+				$tmp_gallery_array = [];
+				$tmp_thumbnail_array = [];
 				$this->load->model('tool/image');
 
 				foreach ($data['img_tpl'] as $k => $v) {
@@ -2041,7 +2041,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 			$data['product_info'] = $query->row;
 
-			$data['product_info']['product_filters'] = array();
+			$data['product_info']['product_filters'] = [];
 
 			$filters = $this->model_catalog_product->getProductFilters($this->request->post['product_id']);
 
@@ -2082,7 +2082,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			if ($this->checkConfig() == true) {
 				$post = $this->request->post;
-				$data = array();
+				$data = [];
 
 				//load all of the listing defaults and assign to correct variable names
 				$profile_shipping = $this->model_extension_openbay_ebay_profile->get($post['shipping_profile']);
@@ -2101,7 +2101,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 				$data['product_info'] = $query->row;
 
-				$data['product_info']['product_filters'] = array();
+				$data['product_info']['product_filters'] = [];
 
 				$filters = $this->model_catalog_product->getProductFilters($this->request->post['product_id']);
 
@@ -2223,7 +2223,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				//product attributes - this is just a direct pass through used with the template tag
 				$data['attributes'] = base64_encode(json_encode($this->model_extension_openbay_ebay->getProductAttributes($post['product_id'])));
 
-				$data['payments'] = array();
+				$data['payments'] = [];
 				foreach($payments as $payment) {
 					if ($payments_accepted[$payment['ebay_name']] == 1) {
 						$data['payments'][$payment['ebay_name']] = 1;
@@ -2231,11 +2231,11 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				}
 
 				$data['main_image'] = 0;
-				$data['img'] = array();
+				$data['img'] = [];
 
 				$product_images = $this->model_catalog_product->getProductImages($post['product_id']);
 
-				$product_info['product_images'] = array();
+				$product_info['product_images'] = [];
 
 				if (!empty($product_info['image'])) {
 					$data['img'][] = $product_info['image'];
@@ -2250,8 +2250,8 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				}
 
 				if (isset($profile_template['data']['ebay_img_template']) && $profile_template['data']['ebay_img_template'] == 1) {
-					$tmp_gallery_array = array();
-					$tmp_thumbnail_array = array();
+					$tmp_gallery_array = [];
+					$tmp_thumbnail_array = [];
 
 					//if the user has not set the exclude default image, add it to the array for theme images.
 					$key_offset = 0;
@@ -2351,7 +2351,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 	public function getPartsCompatibilityValues() {
 		$this->load->model('extension/openbay/ebay_product');
 
-		$property_filter = array();
+		$property_filter = [];
 
 		if (isset($this->request->post['filters']) && !empty($this->request->post['filters'])) {
 			$post_filters = $this->request->post['filters'];
@@ -2386,7 +2386,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				'msg' => $this->language->get('error_no_item_id'),
 			);
 		} else {
-			$filters = array();
+			$filters = [];
 
 			$filters['item_id'] = $this->request->get['item_id'];
 

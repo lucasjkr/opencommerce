@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionPaymentCardConnect extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->model('setting/setting');
@@ -63,7 +63,7 @@ class ControllerExtensionPaymentCardConnect extends Controller {
 			$data['error_site'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -297,7 +297,7 @@ class ControllerExtensionPaymentCardConnect extends Controller {
 	public function inquire() {
 		$this->load->language('extension/payment/cardconnect');
 
-		$json = array();
+		$json = [];
 
 		if ($this->config->get('payment_cardconnect_status')) {
 			if (isset($this->request->post['order_id']) && isset($this->request->post['retref'])) {
@@ -336,7 +336,7 @@ class ControllerExtensionPaymentCardConnect extends Controller {
 	public function capture() {
 		$this->load->language('extension/payment/cardconnect');
 
-		$json = array();
+		$json = [];
 
 		if ($this->config->get('payment_cardconnect_status')) {
 			if (isset($this->request->post['order_id']) && isset($this->request->post['amount'])) {
@@ -386,7 +386,7 @@ class ControllerExtensionPaymentCardConnect extends Controller {
 	public function refund() {
 		$this->load->language('extension/payment/cardconnect');
 
-		$json = array();
+		$json = [];
 
 		if ($this->config->get('payment_cardconnect_status')) {
 			if (isset($this->request->post['order_id']) && isset($this->request->post['amount'])) {
@@ -436,7 +436,7 @@ class ControllerExtensionPaymentCardConnect extends Controller {
 	public function void() {
 		$this->load->language('extension/payment/cardconnect');
 
-		$json = array();
+		$json = [];
 
 		if ($this->config->get('payment_cardconnect_status')) {
 			if (isset($this->request->post['order_id']) && isset($this->request->post['retref'])) {

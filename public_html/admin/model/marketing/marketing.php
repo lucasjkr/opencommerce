@@ -27,7 +27,7 @@ class ModelMarketingMarketing extends Model {
 	}
 
 	public function getMarketings($data = array()) {
-		$implode = array();
+		$implode = [];
 
 		$order_statuses = $this->config->get('config_complete_status');
 
@@ -37,7 +37,7 @@ class ModelMarketingMarketing extends Model {
 
 		$sql = "SELECT *, (SELECT COUNT(*) FROM `oc_order` o WHERE (" . implode(" OR ", $implode) . ") AND o.marketing_id = m.marketing_id) AS orders FROM oc_marketing m";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_name'])) {
 			$implode[] = "m.name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
@@ -93,7 +93,7 @@ class ModelMarketingMarketing extends Model {
 	public function getTotalMarketings($data = array()) {
 		$sql = "SELECT COUNT(*) AS total FROM oc_marketing";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_name'])) {
 			$implode[] = "name LIKE '" . $this->db->escape((string)$data['filter_name']) . "'";

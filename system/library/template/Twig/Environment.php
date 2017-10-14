@@ -41,8 +41,8 @@ class Twig_Environment
     protected $unaryOperators;
     protected $binaryOperators;
     protected $templateClassPrefix = '__TwigTemplate_';
-    protected $functionCallbacks = array();
-    protected $filterCallbacks = array();
+    protected $functionCallbacks = [];
+    protected $filterCallbacks = [];
     protected $staging;
 
     private $originalCache;
@@ -521,7 +521,7 @@ class Twig_Environment
     {
         @trigger_error(sprintf('The %s method is deprecated since version 1.18.3 and will be removed in Twig 2.0.', __METHOD__), E_USER_DEPRECATED);
 
-        $this->loadedTemplates = array();
+        $this->loadedTemplates = [];
     }
 
     /**
@@ -882,7 +882,7 @@ class Twig_Environment
      */
     public function getTags()
     {
-        $tags = array();
+        $tags = [];
         foreach ($this->getTokenParsers()->getParsers() as $parser) {
             if ($parser instanceof Twig_TokenParserInterface) {
                 $tags[$parser->getTag()] = $parser;
@@ -1294,7 +1294,7 @@ class Twig_Environment
      */
     protected function initGlobals()
     {
-        $globals = array();
+        $globals = [];
         foreach ($this->extensions as $name => $extension) {
             if (!$extension instanceof Twig_Extension_GlobalsInterface) {
                 $m = new ReflectionMethod($extension, 'getGlobals');
@@ -1328,12 +1328,12 @@ class Twig_Environment
 
         $this->extensionInitialized = true;
         $this->parsers = new Twig_TokenParserBroker(array(), array(), false);
-        $this->filters = array();
-        $this->functions = array();
-        $this->tests = array();
-        $this->visitors = array();
-        $this->unaryOperators = array();
-        $this->binaryOperators = array();
+        $this->filters = [];
+        $this->functions = [];
+        $this->tests = [];
+        $this->visitors = [];
+        $this->unaryOperators = [];
+        $this->binaryOperators = [];
 
         foreach ($this->extensions as $extension) {
             $this->initExtension($extension);

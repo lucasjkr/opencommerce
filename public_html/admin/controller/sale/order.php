@@ -1,6 +1,6 @@
 <?php
 class ControllerSaleOrder extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('sale/order');
@@ -187,7 +187,7 @@ class ControllerSaleOrder extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -204,7 +204,7 @@ class ControllerSaleOrder extends Controller {
 		$data['add'] = $this->url->link('sale/order/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url, true));
 
-		$data['orders'] = array();
+		$data['orders'] = [];
 
 		$filter_data = array(
 			'filter_order_id'        => $filter_order_id,
@@ -257,7 +257,7 @@ class ControllerSaleOrder extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -446,7 +446,7 @@ class ControllerSaleOrder extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -511,7 +511,7 @@ class ControllerSaleOrder extends Controller {
 			$data['shipping_code'] = $order_info['shipping_code'];
 
 			// Products
-			$data['order_products'] = array();
+			$data['order_products'] = [];
 
 			$products = $this->model_sale_order->getOrderProducts($this->request->get['order_id']);
 
@@ -535,7 +535,7 @@ class ControllerSaleOrder extends Controller {
 			$data['voucher'] = '';
 			$data['reward'] = '';
 
-			$data['order_totals'] = array();
+			$data['order_totals'] = [];
 
 			$order_totals = $this->model_sale_order->getOrderTotals($this->request->get['order_id']);
 
@@ -566,9 +566,9 @@ class ControllerSaleOrder extends Controller {
 			$data['lastname'] = '';
 			$data['email'] = '';
 			$data['telephone'] = '';
-			$data['customer_custom_field'] = array();
+			$data['customer_custom_field'] = [];
 
-			$data['addresses'] = array();
+			$data['addresses'] = [];
 
 			$data['payment_firstname'] = '';
 			$data['payment_lastname'] = '';
@@ -579,7 +579,7 @@ class ControllerSaleOrder extends Controller {
 			$data['payment_postcode'] = '';
 			$data['payment_country_id'] = '';
 			$data['payment_zone_id'] = '';
-			$data['payment_custom_field'] = array();
+			$data['payment_custom_field'] = [];
 			$data['payment_method'] = '';
 			$data['payment_code'] = '';
 
@@ -592,13 +592,13 @@ class ControllerSaleOrder extends Controller {
 			$data['shipping_postcode'] = '';
 			$data['shipping_country_id'] = '';
 			$data['shipping_zone_id'] = '';
-			$data['shipping_custom_field'] = array();
+			$data['shipping_custom_field'] = [];
 			$data['shipping_method'] = '';
 			$data['shipping_code'] = '';
 
-			$data['order_products'] = array();
-			$data['order_vouchers'] = array();
-			$data['order_totals'] = array();
+			$data['order_products'] = [];
+			$data['order_vouchers'] = [];
+			$data['order_totals'] = [];
 
 			$data['order_status_id'] = $this->config->get('config_order_status_id');
 			$data['comment'] = '';
@@ -614,7 +614,7 @@ class ControllerSaleOrder extends Controller {
 		// Stores
 		$this->load->model('setting/store');
 
-		$data['stores'] = array();
+		$data['stores'] = [];
 
 		$data['stores'][] = array(
 			'store_id' => 0,
@@ -638,7 +638,7 @@ class ControllerSaleOrder extends Controller {
 		// Custom Fields
 		$this->load->model('customer/custom_field');
 
-		$data['custom_fields'] = array();
+		$data['custom_fields'] = [];
 
 		$filter_data = array(
 			'sort'  => 'cf.sort_order',
@@ -769,7 +769,7 @@ class ControllerSaleOrder extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$data['breadcrumbs'] = array();
+			$data['breadcrumbs'] = [];
 
 			$data['breadcrumbs'][] = array(
 				'text' => $this->language->get('text_home'),
@@ -905,12 +905,12 @@ class ControllerSaleOrder extends Controller {
 			// Uploaded files
 			$this->load->model('tool/upload');
 
-			$data['products'] = array();
+			$data['products'] = [];
 
 			$products = $this->model_sale_order->getOrderProducts($this->request->get['order_id']);
 
 			foreach ($products as $product) {
-				$option_data = array();
+				$option_data = [];
 
 				$options = $this->model_sale_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
 
@@ -948,7 +948,7 @@ class ControllerSaleOrder extends Controller {
 				);
 			}
 
-			$data['vouchers'] = array();
+			$data['vouchers'] = [];
 
 			$vouchers = $this->model_sale_order->getOrderVouchers($this->request->get['order_id']);
 
@@ -960,7 +960,7 @@ class ControllerSaleOrder extends Controller {
 				);
 			}
 
-			$data['totals'] = array();
+			$data['totals'] = [];
 
 			$totals = $this->model_sale_order->getOrderTotals($this->request->get['order_id']);
 
@@ -1000,7 +1000,7 @@ class ControllerSaleOrder extends Controller {
 			// Custom Fields
 			$this->load->model('customer/custom_field');
 
-			$data['account_custom_fields'] = array();
+			$data['account_custom_fields'] = [];
 
 			$filter_data = array(
 				'sort'  => 'cf.sort_order',
@@ -1056,7 +1056,7 @@ class ControllerSaleOrder extends Controller {
 			}
 
 			// Custom fields
-			$data['payment_custom_fields'] = array();
+			$data['payment_custom_fields'] = [];
 
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['location'] == 'address' && isset($order_info['payment_custom_field'][$custom_field['custom_field_id']])) {
@@ -1109,7 +1109,7 @@ class ControllerSaleOrder extends Controller {
 			}
 
 			// Shipping
-			$data['shipping_custom_fields'] = array();
+			$data['shipping_custom_fields'] = [];
 
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['location'] == 'address' && isset($order_info['shipping_custom_field'][$custom_field['custom_field_id']])) {
@@ -1167,7 +1167,7 @@ class ControllerSaleOrder extends Controller {
 			$data['accept_language'] = $order_info['accept_language'];
 
 			// Additional Tabs
-			$data['tabs'] = array();
+			$data['tabs'] = [];
 
 			if ($this->user->hasPermission('access', 'extension/payment/' . $order_info['payment_code'])) {
 				if (is_file(DIR_CATALOG . 'controller/extension/payment/' . $order_info['payment_code'] . '.php')) {
@@ -1252,7 +1252,7 @@ class ControllerSaleOrder extends Controller {
 	public function createInvoiceNo() {
 		$this->load->language('sale/order');
 
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['order_id'])) {
 			$order_id = $this->request->get['order_id'];
@@ -1293,7 +1293,7 @@ class ControllerSaleOrder extends Controller {
 			$page = 1;
 		}
 
-		$data['histories'] = array();
+		$data['histories'] = [];
 
 		$this->load->model('sale/order');
 
@@ -1337,9 +1337,9 @@ class ControllerSaleOrder extends Controller {
 
 		$this->load->model('setting/setting');
 
-		$data['orders'] = array();
+		$data['orders'] = [];
 
-		$orders = array();
+		$orders = [];
 
 		if (isset($this->request->post['selected'])) {
 			$orders = $this->request->post['selected'];
@@ -1441,12 +1441,12 @@ class ControllerSaleOrder extends Controller {
 
 				$this->load->model('tool/upload');
 
-				$product_data = array();
+				$product_data = [];
 
 				$products = $this->model_sale_order->getOrderProducts($order_id);
 
 				foreach ($products as $product) {
-					$option_data = array();
+					$option_data = [];
 
 					$options = $this->model_sale_order->getOrderOptions($order_id, $product['order_product_id']);
 
@@ -1479,7 +1479,7 @@ class ControllerSaleOrder extends Controller {
 					);
 				}
 
-				$voucher_data = array();
+				$voucher_data = [];
 
 				$vouchers = $this->model_sale_order->getOrderVouchers($order_id);
 
@@ -1490,7 +1490,7 @@ class ControllerSaleOrder extends Controller {
 					);
 				}
 
-				$total_data = array();
+				$total_data = [];
 
 				$totals = $this->model_sale_order->getOrderTotals($order_id);
 
@@ -1544,9 +1544,9 @@ class ControllerSaleOrder extends Controller {
 
 		$this->load->model('setting/setting');
 
-		$data['orders'] = array();
+		$data['orders'] = [];
 
-		$orders = array();
+		$orders = [];
 
 		if (isset($this->request->post['selected'])) {
 			$orders = $this->request->post['selected'];
@@ -1613,7 +1613,7 @@ class ControllerSaleOrder extends Controller {
 
 				$this->load->model('tool/upload');
 
-				$product_data = array();
+				$product_data = [];
 
 				$products = $this->model_sale_order->getOrderProducts($order_id);
 
@@ -1623,7 +1623,7 @@ class ControllerSaleOrder extends Controller {
 					$product_info = $this->model_catalog_product->getProduct($product['product_id']);
 
 					if ($product_info) {
-						$option_data = array();
+						$option_data = [];
 
 						$options = $this->model_sale_order->getOrderOptions($order_id, $product['order_product_id']);
 

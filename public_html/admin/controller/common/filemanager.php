@@ -25,10 +25,10 @@ class ControllerCommonFileManager extends Controller {
 			$page = 1;
 		}
 
-		$directories = array();
-		$files = array();
+		$directories = [];
+		$files = [];
 
-		$data['images'] = array();
+		$data['images'] = [];
 
 		$this->load->model('tool/image');
 
@@ -37,14 +37,14 @@ class ControllerCommonFileManager extends Controller {
 			$directories = glob($directory . '/' . $filter_name . '*', GLOB_ONLYDIR);
 
 			if (!$directories) {
-				$directories = array();
+				$directories = [];
 			}
 
 			// Get files
 			$files = glob($directory . '/' . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
 
 			if (!$files) {
-				$files = array();
+				$files = [];
 			}
 		}
 
@@ -187,7 +187,7 @@ class ControllerCommonFileManager extends Controller {
 	public function upload() {
 		$this->load->language('common/filemanager');
 
-		$json = array();
+		$json = [];
 
 		// Check user has permission
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
@@ -208,7 +208,7 @@ class ControllerCommonFileManager extends Controller {
 
 		if (!$json) {
 			// Check if multiple files are uploaded or just one
-			$files = array();
+			$files = [];
 
 			if (!empty($this->request->files['file']['name']) && is_array($this->request->files['file']['name'])) {
 				foreach (array_keys($this->request->files['file']['name']) as $key) {
@@ -282,7 +282,7 @@ class ControllerCommonFileManager extends Controller {
 	public function folder() {
 		$this->load->language('common/filemanager');
 
-		$json = array();
+		$json = [];
 
 		// Check user has permission
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
@@ -332,7 +332,7 @@ class ControllerCommonFileManager extends Controller {
 	public function delete() {
 		$this->load->language('common/filemanager');
 
-		$json = array();
+		$json = [];
 
 		// Check user has permission
 		if (!$this->user->hasPermission('modify', 'common/filemanager')) {
@@ -342,7 +342,7 @@ class ControllerCommonFileManager extends Controller {
 		if (isset($this->request->post['path'])) {
 			$paths = $this->request->post['path'];
 		} else {
-			$paths = array();
+			$paths = [];
 		}
 
 		// Loop through each path to run validations
@@ -366,7 +366,7 @@ class ControllerCommonFileManager extends Controller {
 
 				// If path is a directory beging deleting each file and sub folder
 				} elseif (is_dir($path)) {
-					$files = array();
+					$files = [];
 
 					// Make path into an array
 					$path = array($path);

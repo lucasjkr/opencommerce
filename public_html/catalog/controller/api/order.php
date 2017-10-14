@@ -3,7 +3,7 @@ class ControllerApiOrder extends Controller {
 	public function add() {
 		$this->load->language('api/order');
 
-		$json = array();
+		$json = [];
 
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');
@@ -96,7 +96,7 @@ class ControllerApiOrder extends Controller {
 			if (!$json) {
 				$json['success'] = $this->language->get('text_success');
 				
-				$order_data = array();
+				$order_data = [];
 
 				// Store Details
 				$order_data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
@@ -180,16 +180,16 @@ class ControllerApiOrder extends Controller {
 					$order_data['shipping_country'] = '';
 					$order_data['shipping_country_id'] = '';
 					$order_data['shipping_address_format'] = '';
-					$order_data['shipping_custom_field'] = array();
+					$order_data['shipping_custom_field'] = [];
 					$order_data['shipping_method'] = '';
 					$order_data['shipping_code'] = '';
 				}
 
 				// Products
-				$order_data['products'] = array();
+				$order_data['products'] = [];
 
 				foreach ($this->cart->getProducts() as $product) {
-					$option_data = array();
+					$option_data = [];
 
 					foreach ($product['option'] as $option) {
 						$option_data[] = array(
@@ -218,7 +218,7 @@ class ControllerApiOrder extends Controller {
 				}
 
 				// Gift Voucher
-				$order_data['vouchers'] = array();
+				$order_data['vouchers'] = [];
 
 				if (!empty($this->session->data['vouchers'])) {
 					foreach ($this->session->data['vouchers'] as $voucher) {
@@ -239,7 +239,7 @@ class ControllerApiOrder extends Controller {
 				// Order Totals
 				$this->load->model('setting/extension');
 
-				$totals = array();
+				$totals = [];
 				$taxes = $this->cart->getTaxes();
 				$total = 0;
 
@@ -250,7 +250,7 @@ class ControllerApiOrder extends Controller {
 					'total'  => &$total
 				);
 			
-				$sort_order = array();
+				$sort_order = [];
 
 				$results = $this->model_setting_extension->getExtensions('total');
 
@@ -269,7 +269,7 @@ class ControllerApiOrder extends Controller {
 					}
 				}
 
-				$sort_order = array();
+				$sort_order = [];
 
 				foreach ($total_data['totals'] as $key => $value) {
 					$sort_order[$key] = $value['sort_order'];
@@ -362,7 +362,7 @@ class ControllerApiOrder extends Controller {
 	public function edit() {
 		$this->load->language('api/order');
 
-		$json = array();
+		$json = [];
 
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');
@@ -465,7 +465,7 @@ class ControllerApiOrder extends Controller {
 				if (!$json) {
 					$json['success'] = $this->language->get('text_success');
 					
-					$order_data = array();
+					$order_data = [];
 
 					// Store Details
 					$order_data['invoice_prefix'] = $this->config->get('config_invoice_prefix');
@@ -549,16 +549,16 @@ class ControllerApiOrder extends Controller {
 						$order_data['shipping_country'] = '';
 						$order_data['shipping_country_id'] = '';
 						$order_data['shipping_address_format'] = '';
-						$order_data['shipping_custom_field'] = array();
+						$order_data['shipping_custom_field'] = [];
 						$order_data['shipping_method'] = '';
 						$order_data['shipping_code'] = '';
 					}
 
 					// Products
-					$order_data['products'] = array();
+					$order_data['products'] = [];
 
 					foreach ($this->cart->getProducts() as $product) {
-						$option_data = array();
+						$option_data = [];
 
 						foreach ($product['option'] as $option) {
 							$option_data[] = array(
@@ -587,7 +587,7 @@ class ControllerApiOrder extends Controller {
 					}
 
 					// Gift Voucher
-					$order_data['vouchers'] = array();
+					$order_data['vouchers'] = [];
 
 					if (!empty($this->session->data['vouchers'])) {
 						foreach ($this->session->data['vouchers'] as $voucher) {
@@ -608,7 +608,7 @@ class ControllerApiOrder extends Controller {
 					// Order Totals
 					$this->load->model('setting/extension');
 
-					$totals = array();
+					$totals = [];
 					$taxes = $this->cart->getTaxes();
 					$total = 0;
 					
@@ -619,7 +619,7 @@ class ControllerApiOrder extends Controller {
 						'total'  => &$total
 					);
 			
-					$sort_order = array();
+					$sort_order = [];
 
 					$results = $this->model_setting_extension->getExtensions('total');
 
@@ -638,7 +638,7 @@ class ControllerApiOrder extends Controller {
 						}
 					}
 
-					$sort_order = array();
+					$sort_order = [];
 
 					foreach ($total_data['totals'] as $key => $value) {
 						$sort_order[$key] = $value['sort_order'];
@@ -697,7 +697,7 @@ class ControllerApiOrder extends Controller {
 	public function delete() {
 		$this->load->language('api/order');
 
-		$json = array();
+		$json = [];
 
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');
@@ -728,7 +728,7 @@ class ControllerApiOrder extends Controller {
 	public function info() {
 		$this->load->language('api/order');
 
-		$json = array();
+		$json = [];
 
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');
@@ -759,7 +759,7 @@ class ControllerApiOrder extends Controller {
 	public function history() {
 		$this->load->language('api/order');
 
-		$json = array();
+		$json = [];
 
 		if (!isset($this->session->data['api_id'])) {
 			$json['error'] = $this->language->get('error_permission');

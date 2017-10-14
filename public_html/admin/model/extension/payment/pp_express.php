@@ -38,7 +38,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 
 		$this->load->model('setting/setting');
 
-		$defaults = array();
+		$defaults = [];
 
 		// Order Status defaults
 		$defaults['payment_pp_express_canceled_reversal_status_id'] = 9;
@@ -179,7 +179,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 	public function cleanReturn($data) {
 		$data = explode('&', $data);
 
-		$arr = array();
+		$arr = [];
 
 		foreach ($data as $k => $v) {
 			$tmp = explode('=', $v);
@@ -258,7 +258,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 
 		$endpoint1 = $endpoint . '?tracking_id=' . $merchant_id;
 
-		$header = array();
+		$header = [];
 		$header[] = 'Content-Type: application/json';
 		$header[] = 'Authorization: Bearer ' . $access_token;
 		$header[] = 'PAYPAL_SERVICE_VERSION:1.2.0';

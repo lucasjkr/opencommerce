@@ -32,7 +32,7 @@ class ModelExtensionModulePPLogin extends Model {
 			$endpoint = 'https://api.paypal.com/v1/identity/openidconnect/userinfo/?schema=openid';
 		}
 
-		$header   = array();
+		$header   = [];
 		$header[] = 'Content-Type: application/json';
 		$header[] = 'Authorization: Bearer ' . $access_token;
 

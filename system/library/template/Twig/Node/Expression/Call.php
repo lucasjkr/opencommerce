@@ -93,7 +93,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
         $callType = $this->getAttribute('type');
         $callName = $this->getAttribute('name');
 
-        $parameters = array();
+        $parameters = [];
         $named = false;
         foreach ($arguments as $name => $node) {
             if (!is_int($name)) {
@@ -123,10 +123,10 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
 
         // manage named arguments
         $callableParameters = $this->getCallableParameters($callable, $isVariadic);
-        $arguments = array();
-        $names = array();
-        $missingArguments = array();
-        $optionalArguments = array();
+        $arguments = [];
+        $names = [];
+        $missingArguments = [];
+        $optionalArguments = [];
         $pos = 0;
         foreach ($callableParameters as $callableParameter) {
             $names[] = $name = $this->normalizeName($callableParameter->name);
@@ -146,12 +146,12 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
                 $arguments = array_merge($arguments, $optionalArguments);
                 $arguments[] = $parameters[$name];
                 unset($parameters[$name]);
-                $optionalArguments = array();
+                $optionalArguments = [];
             } elseif (array_key_exists($pos, $parameters)) {
                 $arguments = array_merge($arguments, $optionalArguments);
                 $arguments[] = $parameters[$pos];
                 unset($parameters[$pos]);
-                $optionalArguments = array();
+                $optionalArguments = [];
                 ++$pos;
             } elseif ($callableParameter->isDefaultValueAvailable()) {
                 $optionalArguments[] = new Twig_Node_Expression_Constant($callableParameter->getDefaultValue(), -1);

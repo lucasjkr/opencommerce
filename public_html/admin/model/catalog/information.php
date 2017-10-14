@@ -243,7 +243,7 @@ class ModelCatalogInformation extends Model {
 	}
 
 	public function getInformationDescriptions($information_id) {
-		$information_description_data = array();
+		$information_description_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_information_description WHERE information_id = :information_id",
             [
@@ -264,7 +264,7 @@ class ModelCatalogInformation extends Model {
 	}
 
 	public function getInformationStores($information_id) {
-		$information_store_data = array();
+		$information_store_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_information_to_store WHERE information_id = :information_id",
             [
@@ -279,7 +279,7 @@ class ModelCatalogInformation extends Model {
 	}
 
 	public function getInformationSeoUrls($information_id) {
-		$information_seo_url_data = array();
+		$information_seo_url_data = [];
 		
 		$query = $this->db->query("SELECT * FROM oc_seo_url WHERE query = :query",
             [
@@ -294,7 +294,7 @@ class ModelCatalogInformation extends Model {
 	}
 
 	public function getInformationLayouts($information_id) {
-		$information_layout_data = array();
+		$information_layout_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_information_to_layout WHERE information_id = :information_id",
             [

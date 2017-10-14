@@ -24,7 +24,7 @@ class CatalogModelCataloManufacturerTest extends OpenCartTest {
 		
 		$manufacturers = $this->model_catalog_manufacturer->getManufacturers($filters);
 		$manufacturerIds = array(8, 9, 7, 5, 6, 10);
-		$actualManufacturerIds = array();
+		$actualManufacturerIds = [];
 		
 		foreach ($manufacturers as $manufacturer) {
 			$actualManufacturerIds[] = $manufacturer['manufacturer_id'];

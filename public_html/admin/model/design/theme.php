@@ -1,17 +1,37 @@
 <?php
 class ModelDesignTheme extends Model {
 	public function editTheme($store_id, $theme, $route, $code) {
-		$this->db->query("DELETE FROM `oc_theme` WHERE store_id = '" . (int)$store_id . "' AND theme = '" . $this->db->escape($theme) . "' AND route = '" . $this->db->escape($route) . "'");
+		// LJK TODO: What is code for?
+	    $this->db->query("DELETE FROM `oc_theme` WHERE store_id = :store_id AND theme = :theme AND route = :route",
+            [
+                ':store_id' => $store_id,
+                ':theme' => $theme,
+                ':route' => $route,
+            ]);
 		
-		$this->db->query("INSERT INTO `oc_theme` SET store_id = '" . (int)$store_id . "', theme = '" . $this->db->escape($theme) . "', route = '" . $this->db->escape($route) . "', code = '" . $this->db->escape($code) . "'");
+		$this->db->query("INSERT INTO `oc_theme` SET store_id = :store_id, theme = :theme, route = :route, code = :code",
+            [
+                ':store_id' => $store_id,
+                ':theme' => $theme,
+                ':route' => $route,
+                ':code' => $code
+            ]);
 	}
 
 	public function deleteTheme($theme_id) {
-		$this->db->query("DELETE FROM `oc_theme` WHERE theme_id = '" . (int)$theme_id . "'");
+		$this->db->query("DELETE FROM `oc_theme` WHERE theme_id = :theme_id",
+            [
+                ':theme_id' => $theme_id
+            ]);
 	}
 
 	public function getTheme($store_id, $theme, $route) {
-		$query = $this->db->query("SELECT * FROM `oc_theme` WHERE store_id = '" . (int)$store_id . "' AND theme = '" . $this->db->escape($theme) . "' AND route = '" . $this->db->escape($route) . "'");
+		$query = $this->db->query("SELECT * FROM `oc_theme` WHERE store_id = :store AND theme = :theme AND route = :route",
+            [
+                ':store_id' => $store_id,
+                ':theme' => $theme,
+                ':route' => $route,
+            ]);
 
 		return $query->row;
 	}

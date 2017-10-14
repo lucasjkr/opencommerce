@@ -41,7 +41,7 @@ class ModelExtensionPaymentKlarnaInvoice extends Model {
 			}
 		}
 
-		$method = array();
+		$method = [];
 
 		if ($status) {
 			$klarna_fee = $this->config->get('total_klarna_fee');

@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionTotalKlarnaFee extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/total/klarna_fee');
@@ -33,7 +33,7 @@ class ControllerExtensionTotalKlarnaFee extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -54,7 +54,7 @@ class ControllerExtensionTotalKlarnaFee extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=total', true);
 
-		$data['countries'] = array();
+		$data['countries'] = [];
 
 		$data['countries'][] = array(
 			'name' => $this->language->get('text_germany'),

@@ -8,7 +8,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 		if ($order_info) {
 			$this->load->language('extension/payment/klarna_account');
 
-			$data['days'] = array();
+			$data['days'] = [];
 
 			for ($i = 1; $i <= 31; $i++) {
 				$data['days'][] = array(
@@ -17,7 +17,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				);
 			}
 
-			$data['months'] = array();
+			$data['months'] = [];
 
 			for ($i = 1; $i <= 12; $i++) {
 				$data['months'][] = array(
@@ -26,7 +26,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				);
 			}
 
-			$data['years'] = array();
+			$data['years'] = [];
 
 			for ($i = date('Y'); $i >= 1900; $i--) {
 				$data['years'][] = array(
@@ -36,7 +36,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 			}
 
 			// Store Taxes to send to Klarna
-			$totals = array();
+			$totals = [];
 			$taxes = $this->cart->getTaxes();
 			$total = 0;
 
@@ -49,7 +49,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 
 			$this->load->model('setting/extension');
 
-			$sort_order = array();
+			$sort_order = [];
 
 			$results = $this->model_setting_extension->getExtensions('total');
 
@@ -59,13 +59,13 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 
 			array_multisort($sort_order, SORT_ASC, $results);
 
-			$klarna_tax = array();
+			$klarna_tax = [];
 
 			foreach ($results as $result) {
 				if ($this->config->get('total_' . $result['code'] . '_status')) {
 					$this->load->model('extension/total/' . $result['code']);
 
-					$taxes = array();
+					$taxes = [];
 					
 					// We have to put the totals in an array so that they pass by reference.
 					$this->{'model_extension_total_' . $result['code']}->getTotal($total_data);
@@ -137,7 +137,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 			$data['iso_code_2'] = $order_info['payment_iso_code_2'];
 			$data['iso_code_3'] = $order_info['payment_iso_code_3'];
 
-			$payment_option = array();
+			$payment_option = [];
 
 			$total = $this->currency->format($order_info['total'], $country_to_currency[$order_info['payment_iso_code_3']], '', false);
 
@@ -146,7 +146,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 			if (isset($pclasses[$order_info['payment_iso_code_3']])) {
 				$pclasses = $pclasses[$order_info['payment_iso_code_3']];
 			} else {
-				$pclasses = array();
+				$pclasses = [];
 			}
 
 			foreach ($pclasses as $pclass) {
@@ -194,7 +194,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 						$payment += $monthly_fee;
 
 						$balance = $sum;
-						$pay_data = array();
+						$pay_data = [];
 
 						$months = $pclass['months'];
 
@@ -242,7 +242,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				$payment_option[$pclass['id']]['monthly_cost'] = $monthly_cost;
 			}
 
-			$sort_order = array();
+			$sort_order = [];
 
 			foreach ($payment_option as $key => $value) {
 				$sort_order[$key] = $value['pclass_id'];
@@ -250,7 +250,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 
 			array_multisort($sort_order, SORT_ASC, $payment_option);
 
-			$data['payment_options'] = array();
+			$data['payment_options'] = [];
 
 			foreach ($payment_option as $payment_option) {
 				$data['payment_options'][] = array(
@@ -266,7 +266,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 	public function send() {
 		$this->load->language('extension/payment/klarna_account');
 
-		$json = array();
+		$json = [];
 
 		$this->load->model('checkout/order');
 
@@ -398,7 +398,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				if (isset($this->session->data['klarna'][$this->session->data['order_id']])) {
 					$totals = $this->session->data['klarna'][$this->session->data['order_id']];
 				} else {
-					$totals = array();
+					$totals = [];
 				}
 
 				foreach ($totals as $total) {
@@ -484,7 +484,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				$xml .= '  </params>';
 				$xml .= '</methodCall>';
 
-				$header = array();
+				$header = [];
 
 				$header[] = 'Content-Type: text/xml';
 				$header[] = 'Content-Length: ' . strlen($xml);

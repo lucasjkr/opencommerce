@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionPaymentBankTransfer extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/payment/bank_transfer');
@@ -26,10 +26,10 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 		if (isset($this->error['bank'])) {
 			$data['error_bank'] = $this->error['bank'];
 		} else {
-			$data['error_bank'] = array();
+			$data['error_bank'] = [];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -52,7 +52,7 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 
 		$this->load->model('localisation/language');
 
-		$data['payment_bank_transfer'] = array();
+		$data['payment_bank_transfer'] = [];
 
 		$languages = $this->model_localisation_language->getLanguages();
 		
