@@ -4,13 +4,16 @@ class ModelExtensionReportCoupon extends Model {
 		$sql = "SELECT ch.coupon_id, c.name, c.code, COUNT(DISTINCT ch.order_id) AS `orders`, SUM(ch.amount) AS total FROM `oc_coupon_history` ch LEFT JOIN `oc_coupon` c ON (ch.coupon_id = c.coupon_id)";
 
 		$implode = [];
+        $args = [];
 
 		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(ch.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$implode[] = "DATE(ch.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(ch.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$implode[] = "DATE(ch.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
 		if ($implode) {
@@ -31,7 +34,7 @@ class ModelExtensionReportCoupon extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -40,20 +43,23 @@ class ModelExtensionReportCoupon extends Model {
 		$sql = "SELECT COUNT(DISTINCT coupon_id) AS total FROM `oc_coupon_history`";
 
 		$implode = [];
+        $args = [];
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
-		}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(ch.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
+        }
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
-		}
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(ch.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
+        }
 
 		if ($implode) {
 			$sql .= " WHERE " . implode(" AND ", $implode);
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}

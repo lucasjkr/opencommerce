@@ -36,7 +36,10 @@ class ModelExtensionReportCustomer extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= DATE('" . $this->db->escape(date('Y-m-d', $date_start)) . "') GROUP BY DAYNAME(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= DATE(:date_start) GROUP BY DAYNAME(date_added)",
+            [
+                ':date_start' => date('Y-m-d', $date_start),
+            ]);
 
 		foreach ($query->rows as $result) {
 			$customer_data[date('w', strtotime($result['date_added']))] = array(
@@ -60,7 +63,10 @@ class ModelExtensionReportCustomer extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= '" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "' GROUP BY DATE(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= :date_added GROUP BY DATE(date_added)",
+            [
+                ':date_added' => date('Y') . '-' . date('m') . '-1'
+            ]);
 
 		foreach ($query->rows as $result) {
 			$customer_data[date('j', strtotime($result['date_added']))] = array(
@@ -95,28 +101,6 @@ class ModelExtensionReportCustomer extends Model {
 	}
 
 	public function getOrders($data = array()) {
-		$sql = "SELECT c.customer_id, CONCAT(c.firstname, ' ', c.lastname) AS customer, c.email, cgd.name AS customer_group, c.status, o.order_id, SUM(op.quantity) as products, o.total AS total FROM `oc_order` o LEFT JOIN `oc_order_product` op ON (o.order_id = op.order_id) LEFT JOIN `oc_customer` c ON (o.customer_id = c.customer_id) LEFT JOIN `oc_customer_group_description` cgd ON (c.customer_group_id = cgd.customer_group_id) WHERE o.customer_id > 0 AND cgd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
-
-		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
-		}
-
-		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
-		}
-
-		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
-		}
-
-		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
-		} else {
-			$sql .= " AND o.order_status_id > '0'";
-		}
-
-		$sql .= " GROUP BY o.order_id";
-
 		$sql = "SELECT t.customer_id, t.customer, t.email, t.customer_group, t.status, COUNT(DISTINCT t.order_id) AS orders, SUM(t.products) AS products, SUM(t.total) AS total FROM (" . $sql . ") AS t GROUP BY t.customer_id ORDER BY total DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
@@ -138,26 +122,31 @@ class ModelExtensionReportCustomer extends Model {
 
 	public function getTotalOrders($data = array()) {
 		$sql = "SELECT COUNT(DISTINCT o.customer_id) AS total FROM `oc_order` o LEFT JOIN `oc_customer` c ON (o.customer_id = c.customer_id) WHERE o.customer_id > '0'";
+        $args = [];
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
+			$sql .= " AND CONCAT(c.firstname, ' ', c.lastname) LIKE :customer";
+            $args[':customer'] = $data['filter_customer'];
 		}
 
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " AND o.order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
 			$sql .= " AND o.order_status_id > '0'";
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
@@ -166,21 +155,26 @@ class ModelExtensionReportCustomer extends Model {
 		$sql = "SELECT ca.customer_activity_id, ca.customer_id, ca.key, ca.data, ca.ip, ca.date_added FROM oc_customer_activity ca LEFT JOIN oc_customer c ON (ca.customer_id = c.customer_id)";
 
 		$implode = [];
+        $args = [];
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(ca.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
-		}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
+        }
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(ca.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
-		}
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
+        }
 
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
-		}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE :customer";
+            $args[':customer'] = $data['filter_customer'];
+        }
 
 		if (!empty($data['filter_ip'])) {
-			$implode[] = "ca.ip LIKE '" . $this->db->escape((string)$data['filter_ip']) . "'";
+			$implode[] = "ca.ip LIKE :ip";
+            $args[':ip'] = $data['filter_ip'];
 		}
 
 		if ($implode) {
@@ -201,7 +195,7 @@ class ModelExtensionReportCustomer extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -210,28 +204,33 @@ class ModelExtensionReportCustomer extends Model {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_activity` ca LEFT JOIN oc_customer c ON (ca.customer_id = c.customer_id)";
 
 		$implode = [];
+        $args = [];
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(ca.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
-		}
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
+        }
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(ca.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
-		}
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
+        }
 
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
-		}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE :customer";
+            $args[':customer'] = $data['filter_customer'];
+        }
 
-		if (!empty($data['filter_ip'])) {
-			$implode[] = "ca.ip LIKE '" . $this->db->escape((string)$data['filter_ip']) . "'";
-		}
+        if (!empty($data['filter_ip'])) {
+            $implode[] = "ca.ip LIKE :ip";
+            $args[':ip'] = $data['filter_ip'];
+        }
 
 		if ($implode) {
 			$sql .= " WHERE " . implode(" AND ", $implode);
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
@@ -240,25 +239,31 @@ class ModelExtensionReportCustomer extends Model {
 		$sql = "SELECT cs.customer_id, cs.keyword, cs.category_id, cs.products, cs.ip, cs.date_added, CONCAT(c.firstname, ' ', c.lastname) AS customer FROM oc_customer_search cs LEFT JOIN oc_customer c ON (cs.customer_id = c.customer_id)";
 
 		$implode = [];
+        $args = [];
 
 		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(cs.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$implode[] = "DATE(cs.date_added) >= :date_added";
+            $args[':date_added'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(cs.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$implode[] = "DATE(cs.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
 		if (!empty($data['filter_keyword'])) {
-			$implode[] = "cs.keyword LIKE '" . $this->db->escape((string)$data['filter_keyword']) . "%'";
+			$implode[] = "cs.keyword LIKE :keyword";
+            $args[':keyword'] = $data['filter_keyword'] . '%'
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
+			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE :customer";
+            $args[':customer'] = $data['filter_customer'];
 		}
 
 		if (!empty($data['filter_ip'])) {
-			$implode[] = "cs.ip LIKE '" . $this->db->escape((string)$data['filter_ip']) . "'";
+			$implode[] = "cs.ip LIKE :ip";
+            $args[':ip'] = $data['filter_ip'];
 		}
 
 		if ($implode) {
@@ -279,7 +284,7 @@ class ModelExtensionReportCustomer extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -288,26 +293,32 @@ class ModelExtensionReportCustomer extends Model {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_search` cs LEFT JOIN oc_customer c ON (cs.customer_id = c.customer_id)";
 
 		$implode = [];
+        $args = [];
 
-		if (!empty($data['filter_date_start'])) {
-			$implode[] = "DATE(cs.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+        if (!empty($data['filter_date_start'])) {
+            $implode[] = "DATE(cs.date_added) >= :date_added";
+            $args[':date_added'] = $data['filter_date_start'];
+        }
+
+        if (!empty($data['filter_date_end'])) {
+            $implode[] = "DATE(cs.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
+        }
+
+        if (!empty($data['filter_keyword'])) {
+            $implode[] = "cs.keyword LIKE :keyword";
+            $args[':keyword'] = $data['filter_keyword'] . '%'
 		}
 
-		if (!empty($data['filter_date_end'])) {
-			$implode[] = "DATE(cs.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
-		}
+        if (!empty($data['filter_customer'])) {
+            $implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE :customer";
+            $args[':customer'] = $data['filter_customer'];
+        }
 
-		if (!empty($data['filter_keyword'])) {
-			$implode[] = "cs.keyword LIKE '" . $this->db->escape((string)$data['filter_keyword']) . "%'";
-		}
-
-		if (!empty($data['filter_customer'])) {
-			$implode[] = "CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
-		}
-
-		if (!empty($data['filter_ip'])) {
-			$implode[] = "cs.ip LIKE '" . $this->db->escape((string)$data['filter_ip']) . "'";
-		}
+        if (!empty($data['filter_ip'])) {
+            $implode[] = "cs.ip LIKE :ip";
+            $args[':ip'] = $data['filter_ip'];
+        }
 
 		if ($implode) {
 			$sql .= " WHERE " . implode(" AND ", $implode);
