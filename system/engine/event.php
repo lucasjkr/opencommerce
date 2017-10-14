@@ -16,7 +16,7 @@
 */
 class Event {
 	protected $registry;
-	protected $data = array();
+	protected $data = [];
 	
 	/**
 	 * Constructor
@@ -41,7 +41,7 @@ class Event {
 			'priority' => $priority
 		);
 		
-		$sort_order = array();
+		$sort_order = [];
 
 		foreach ($this->data as $key => $value) {
 			$sort_order[$key] = $value['priority'];

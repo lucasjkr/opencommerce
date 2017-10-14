@@ -3,7 +3,7 @@ class ModelSaleRecurring extends Model {
 	public function getRecurrings($data) {
 		$sql = "SELECT `or`.order_recurring_id, `or`.order_id, `or`.reference, `or`.`status`, `or`.`date_added`, CONCAT(`o`.firstname, ' ', `o`.lastname) AS customer FROM `oc_order_recurring` `or` LEFT JOIN `oc_order` `o` ON (`or`.order_id = `o`.order_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_order_recurring_id'])) {
 			$implode[] = "or.order_recurring_id = " . (int)$data['filter_order_recurring_id'];
@@ -78,7 +78,7 @@ class ModelSaleRecurring extends Model {
 	}
 
 	public function getRecurringTransactions($order_recurring_id) {
-		$transactions = array();
+		$transactions = [];
 
 		$query = $this->db->query("SELECT amount, type, date_added FROM oc_order_recurring_transaction WHERE order_recurring_id = " . (int)$order_recurring_id . " ORDER BY date_added DESC");
 
@@ -160,7 +160,7 @@ class ModelSaleRecurring extends Model {
 	public function getTotalRecurrings($data = array()) {
 		$sql = "SELECT COUNT(*) AS `total` FROM `oc_order_recurring` `or` LEFT JOIN `oc_order` o ON (`or`.order_id = `o`.order_id)";
 		
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_order_recurring_id'])) {
 			$implode[] .= "or.order_recurring_id = " . (int)$data['filter_order_recurring_id'];

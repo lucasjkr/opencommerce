@@ -301,7 +301,7 @@ class ModelCustomerCustomer extends Model {
 	}
 
 	public function getAddresses($customer_id) {
-		$address_data = array();
+		$address_data = [];
 
 		$query = $this->db->query("SELECT address_id FROM oc_address WHERE customer_id = :customer_id",
             [
@@ -323,7 +323,7 @@ class ModelCustomerCustomer extends Model {
 	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM oc_customer";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_name'])) {
 			$implode[] = "CONCAT(firstname, ' ', lastname) LIKE :name";

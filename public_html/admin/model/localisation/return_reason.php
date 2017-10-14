@@ -81,7 +81,7 @@ class ModelLocalisationReturnReason extends Model {
 	}
 
 	public function getReturnReasonDescriptions($return_reason_id) {
-		$return_reason_data = array();
+		$return_reason_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_return_reason WHERE return_reason_id = '" . (int)$return_reason_id . "'");
 

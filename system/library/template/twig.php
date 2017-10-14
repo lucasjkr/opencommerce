@@ -2,7 +2,7 @@
 namespace Template;
 final class Twig {
 	private $twig;
-	private $data = array();
+	private $data = [];
 
 	public function set($key, $value) {
 		$this->data[$key] = $value;

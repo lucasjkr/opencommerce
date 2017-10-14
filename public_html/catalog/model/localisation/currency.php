@@ -10,7 +10,7 @@ class ModelLocalisationCurrency extends Model {
 		$currency_data = $this->cache->get('currency');
 
 		if (!$currency_data) {
-			$currency_data = array();
+			$currency_data = [];
 
 			$query = $this->db->query("SELECT * FROM oc_currency ORDER BY title ASC");
 

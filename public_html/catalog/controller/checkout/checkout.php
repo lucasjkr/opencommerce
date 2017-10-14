@@ -37,7 +37,7 @@ class ControllerCheckoutCheckout extends Controller {
 			$this->document->addScript('http://cdn.klarna.com/public/kitt/toc/v1.0/js/klarna.terms.min.js');
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -96,7 +96,7 @@ class ControllerCheckoutCheckout extends Controller {
 	}
 
 	public function country() {
-		$json = array();
+		$json = [];
 
 		$this->load->model('localisation/country');
 
@@ -122,7 +122,7 @@ class ControllerCheckoutCheckout extends Controller {
 	}
 
 	public function customfield() {
-		$json = array();
+		$json = [];
 
 		$this->load->model('account/custom_field');
 

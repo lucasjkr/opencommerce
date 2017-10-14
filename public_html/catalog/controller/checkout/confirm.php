@@ -54,9 +54,9 @@ class ControllerCheckoutConfirm extends Controller {
 		}
 
 		if (!$redirect) {
-			$order_data = array();
+			$order_data = [];
 
-			$totals = array();
+			$totals = [];
 			$taxes = $this->cart->getTaxes();
 			$total = 0;
 
@@ -69,7 +69,7 @@ class ControllerCheckoutConfirm extends Controller {
 
 			$this->load->model('setting/extension');
 
-			$sort_order = array();
+			$sort_order = [];
 
 			$results = $this->model_setting_extension->getExtensions('total');
 
@@ -88,7 +88,7 @@ class ControllerCheckoutConfirm extends Controller {
 				}
 			}
 
-			$sort_order = array();
+			$sort_order = [];
 
 			foreach ($totals as $key => $value) {
 				$sort_order[$key] = $value['sort_order'];
@@ -199,15 +199,15 @@ class ControllerCheckoutConfirm extends Controller {
 				$order_data['shipping_country'] = '';
 				$order_data['shipping_country_id'] = '';
 				$order_data['shipping_address_format'] = '';
-				$order_data['shipping_custom_field'] = array();
+				$order_data['shipping_custom_field'] = [];
 				$order_data['shipping_method'] = '';
 				$order_data['shipping_code'] = '';
 			}
 
-			$order_data['products'] = array();
+			$order_data['products'] = [];
 
 			foreach ($this->cart->getProducts() as $product) {
-				$option_data = array();
+				$option_data = [];
 
 				foreach ($product['option'] as $option) {
 					$option_data[] = array(
@@ -236,7 +236,7 @@ class ControllerCheckoutConfirm extends Controller {
 			}
 
 			// Gift Voucher
-			$order_data['vouchers'] = array();
+			$order_data['vouchers'] = [];
 
 			if (!empty($this->session->data['vouchers'])) {
 				foreach ($this->session->data['vouchers'] as $voucher) {
@@ -324,10 +324,10 @@ class ControllerCheckoutConfirm extends Controller {
 
 			$this->load->model('tool/upload');
 
-			$data['products'] = array();
+			$data['products'] = [];
 
 			foreach ($this->cart->getProducts() as $product) {
-				$option_data = array();
+				$option_data = [];
 
 				foreach ($product['option'] as $option) {
 					if ($option['type'] != 'file') {
@@ -386,7 +386,7 @@ class ControllerCheckoutConfirm extends Controller {
 			}
 
 			// Gift Voucher
-			$data['vouchers'] = array();
+			$data['vouchers'] = [];
 
 			if (!empty($this->session->data['vouchers'])) {
 				foreach ($this->session->data['vouchers'] as $voucher) {
@@ -397,7 +397,7 @@ class ControllerCheckoutConfirm extends Controller {
 				}
 			}
 
-			$data['totals'] = array();
+			$data['totals'] = [];
 
 			foreach ($order_data['totals'] as $total) {
 				$data['totals'][] = array(

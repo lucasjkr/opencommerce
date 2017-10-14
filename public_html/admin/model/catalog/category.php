@@ -169,7 +169,7 @@ class ModelCatalogCategory extends Model {
                         ':level' => $category_path['level']
                     ]);
 
-				$path = array();
+				$path = [];
 
 				// Get the nodes new parents
 				$query = $this->db->query("SELECT * FROM `oc_category_path` WHERE category_id = :category_id ORDER BY level ASC",
@@ -439,7 +439,7 @@ class ModelCatalogCategory extends Model {
 	}
 
 	public function getCategoryDescriptions($category_id) {
-		$category_description_data = array();
+		$category_description_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_category_description WHERE category_id = :category_id",
             [
@@ -469,7 +469,7 @@ class ModelCatalogCategory extends Model {
 	}
 	
 	public function getCategoryFilters($category_id) {
-		$category_filter_data = array();
+		$category_filter_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_category_filter WHERE category_id = :category_id",
             [
@@ -484,7 +484,7 @@ class ModelCatalogCategory extends Model {
 	}
 
 	public function getCategoryStores($category_id) {
-		$category_store_data = array();
+		$category_store_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_category_to_store WHERE category_id = :category_id",
             [
@@ -499,7 +499,7 @@ class ModelCatalogCategory extends Model {
 	}
 	
 	public function getCategorySeoUrls($category_id) {
-		$category_seo_url_data = array();
+		$category_seo_url_data = [];
 		
 		$query = $this->db->query("SELECT * FROM oc_seo_url WHERE query = :query",
             [
@@ -514,7 +514,7 @@ class ModelCatalogCategory extends Model {
 	}
 	
 	public function getCategoryLayouts($category_id) {
-		$category_layout_data = array();
+		$category_layout_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_category_to_layout WHERE category_id = :category_id",
             [

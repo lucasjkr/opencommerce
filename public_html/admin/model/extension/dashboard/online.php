@@ -4,7 +4,7 @@ class ModelExtensionDashboardOnline extends Model {
 	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_online` co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_ip'])) {
 			$implode[] = "co.ip LIKE :ip";

@@ -59,18 +59,18 @@ $_['response_header']      = array('Content-Type: text/html; charset=utf-8');
 $_['response_compression'] = 0;
 
 // Autoload Configs
-$_['config_autoload']      = array();
+$_['config_autoload']      = [];
 
 // Autoload Libraries
-$_['library_autoload']     = array();
+$_['library_autoload']     = [];
 
 // Autoload Libraries
-$_['model_autoload']       = array();
+$_['model_autoload']       = [];
 
 // Actions
 $_['action_default']       = 'common/home';
 $_['action_router']        = 'startup/router';
 $_['action_error']         = 'error/not_found';
-$_['action_pre_action']    = array();
-$_['action_event']         = array();
-$_['action_cron']          = array();
+$_['action_pre_action']    = [];
+$_['action_event']         = [];
+$_['action_cron']          = [];

@@ -7,7 +7,7 @@ class ControllerExtensionModuleLatest extends Controller {
 
 		$this->load->model('tool/image');
 
-		$data['products'] = array();
+		$data['products'] = [];
 
 		$filter_data = array(
 			'sort'  => 'p.date_added',

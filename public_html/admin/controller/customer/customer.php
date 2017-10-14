@@ -1,6 +1,6 @@
 <?php
 class ControllerCustomerCustomer extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('customer/customer');
@@ -331,7 +331,7 @@ class ControllerCustomerCustomer extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -350,7 +350,7 @@ class ControllerCustomerCustomer extends Controller {
 
 		$stores = $this->model_setting_store->getStores();
 		
-		$data['customers'] = array();
+		$data['customers'] = [];
 
 		$filter_data = array(
 			'filter_name'              => $filter_name,
@@ -378,7 +378,7 @@ class ControllerCustomerCustomer extends Controller {
 				$unlock = '';
 			}
 
-			$store_data = array();
+			$store_data = [];
 
 			$store_data[] = array(
 				'name' => $this->config->get('config_name'),
@@ -425,7 +425,7 @@ class ControllerCustomerCustomer extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -616,13 +616,13 @@ class ControllerCustomerCustomer extends Controller {
 		if (isset($this->error['custom_field'])) {
 			$data['error_custom_field'] = $this->error['custom_field'];
 		} else {
-			$data['error_custom_field'] = array();
+			$data['error_custom_field'] = [];
 		}
 
 		if (isset($this->error['address'])) {
 			$data['error_address'] = $this->error['address'];
 		} else {
-			$data['error_address'] = array();
+			$data['error_address'] = [];
 		}
 
 		$url = '';
@@ -663,7 +663,7 @@ class ControllerCustomerCustomer extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -734,7 +734,7 @@ class ControllerCustomerCustomer extends Controller {
 		// Custom Fields
 		$this->load->model('customer/custom_field');
 
-		$data['custom_fields'] = array();
+		$data['custom_fields'] = [];
 
 		$filter_data = array(
 			'sort'  => 'cf.sort_order',
@@ -760,7 +760,7 @@ class ControllerCustomerCustomer extends Controller {
 		} elseif (!empty($customer_info)) {
 			$data['account_custom_field'] = json_decode($customer_info['custom_field'], true);
 		} else {
-			$data['account_custom_field'] = array();
+			$data['account_custom_field'] = [];
 		}
 
 		if (isset($this->request->post['newsletter'])) {
@@ -808,7 +808,7 @@ class ControllerCustomerCustomer extends Controller {
 		} elseif (isset($this->request->get['customer_id'])) {
 			$data['addresses'] = $this->model_customer_customer->getAddresses($this->request->get['customer_id']);
 		} else {
-			$data['addresses'] = array();
+			$data['addresses'] = [];
 		}
 
 		if (isset($this->request->post['address_id'])) {
@@ -988,7 +988,7 @@ class ControllerCustomerCustomer extends Controller {
 
 			$this->document->setTitle($this->language->get('heading_title'));
 
-			$data['breadcrumbs'] = array();
+			$data['breadcrumbs'] = [];
 
 			$data['breadcrumbs'][] = array(
 				'text' => $this->language->get('text_home'),
@@ -1025,7 +1025,7 @@ class ControllerCustomerCustomer extends Controller {
 			$page = 1;
 		}
 
-		$data['histories'] = array();
+		$data['histories'] = [];
 
 		$results = $this->model_customer_customer->getHistories($customer_id, ($page - 1) * 10, 10);
 
@@ -1054,7 +1054,7 @@ class ControllerCustomerCustomer extends Controller {
 	public function addHistory() {
 		$this->load->language('customer/customer');
 
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['customer_id'])) {
 			$customer_id = $this->request->get['customer_id'];
@@ -1093,7 +1093,7 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->load->model('customer/customer');
 
-		$data['transactions'] = array();
+		$data['transactions'] = [];
 
 		$results = $this->model_customer_customer->getTransactions($customer_id, ($page - 1) * 10, 10);
 
@@ -1125,7 +1125,7 @@ class ControllerCustomerCustomer extends Controller {
 	public function addTransaction() {
 		$this->load->language('customer/customer');
 
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['customer_id'])) {
 			$customer_id = $this->request->get['customer_id'];
@@ -1165,7 +1165,7 @@ class ControllerCustomerCustomer extends Controller {
 		$this->load->model('customer/customer');
 		$this->load->model('setting/store');
 
-		$data['ips'] = array();
+		$data['ips'] = [];
 
 		$results = $this->model_customer_customer->getIps($customer_id, ($page - 1) * 10, 10);
 
@@ -1206,7 +1206,7 @@ class ControllerCustomerCustomer extends Controller {
 	}
 
 	public function autocomplete() {
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['filter_name']) || isset($this->request->get['filter_email'])) {
 			if (isset($this->request->get['filter_name'])) {
@@ -1255,7 +1255,7 @@ class ControllerCustomerCustomer extends Controller {
 			}
 		}
 
-		$sort_order = array();
+		$sort_order = [];
 
 		foreach ($json as $key => $value) {
 			$sort_order[$key] = $value['name'];
@@ -1268,7 +1268,7 @@ class ControllerCustomerCustomer extends Controller {
 	}
 
 	public function customfield() {
-		$json = array();
+		$json = [];
 
 		$this->load->model('customer/custom_field');
 
@@ -1293,7 +1293,7 @@ class ControllerCustomerCustomer extends Controller {
 	}
 
 	public function address() {
-		$json = array();
+		$json = [];
 
 		if (!empty($this->request->get['address_id'])) {
 			$this->load->model('customer/customer');

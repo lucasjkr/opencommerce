@@ -21,7 +21,7 @@ class ModelExtensionPaymentLaybuy extends Model {
 
 		$maximum = $this->config->get('payment_laybuy_max_deposit') ? $this->config->get('payment_laybuy_max_deposit') : 50;
 
-		$initial_payments = array();
+		$initial_payments = [];
 
 		for ($i = $minimum; $i <= $maximum; $i += 10) {
 			$initial_payments[] = $i;
@@ -43,7 +43,7 @@ class ModelExtensionPaymentLaybuy extends Model {
 			$max_months = 1;
 		}
 
-		$months = array();
+		$months = [];
 
 		for ($i = 1; $i <= $max_months; $i++) {
 			$months[] = array(
@@ -100,7 +100,7 @@ class ModelExtensionPaymentLaybuy extends Model {
 	public function getTransactions($data = array()) {
 		$sql = "SELECT *, CONCAT(firstname, ' ', lastname) AS `customer` FROM `oc_laybuy_transaction` `lt` WHERE 1 = 1";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_order_id'])) {
 			$implode[] = "`lt`.`order_id` = '" . (int)$data['filter_order_id'] . "'";
@@ -179,7 +179,7 @@ class ModelExtensionPaymentLaybuy extends Model {
 	public function getTotalTransactions($data = array()) {
 		$sql = "SELECT COUNT(*) AS `total` FROM `oc_laybuy_transaction` `lt` WHERE 1 = 1";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_order_id'])) {
 			$implode[] = "`lt`.`order_id` = '" . (int)$data['filter_order_id'] . "'";

@@ -13,7 +13,7 @@
 class Session {
 	protected $adaptor;
 	protected $session_id;
-	public $data = array();
+	public $data = [];
 
 	/**
 	 * Constructor

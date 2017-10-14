@@ -41,7 +41,7 @@ class ControllerExtensionRecurringSquareup extends Controller {
             $order_recurring_id = 0;
         }
 
-        $json = array();
+        $json = [];
         
         $recurring_info = $this->model_account_recurring->getOrderRecurring($order_recurring_id);
 

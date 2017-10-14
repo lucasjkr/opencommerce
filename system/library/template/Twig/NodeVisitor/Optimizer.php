@@ -27,10 +27,10 @@ class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
     const OPTIMIZE_RAW_FILTER = 4;
     const OPTIMIZE_VAR_ACCESS = 8;
 
-    protected $loops = array();
-    protected $loopsTargets = array();
+    protected $loops = [];
+    protected $loopsTargets = [];
     protected $optimizers;
-    protected $prependedNodes = array();
+    protected $prependedNodes = [];
     protected $inABody = false;
 
     /**
@@ -95,7 +95,7 @@ class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
                 $this->inABody = false;
             } elseif ($this->inABody) {
                 if (!$expression && get_class($node) !== 'Twig_Node' && $prependedNodes = array_shift($this->prependedNodes)) {
-                    $nodes = array();
+                    $nodes = [];
                     foreach (array_unique($prependedNodes) as $name) {
                         $nodes[] = new Twig_Node_SetTemp($name, $node->getLine());
                     }

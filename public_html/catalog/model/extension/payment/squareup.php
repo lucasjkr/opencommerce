@@ -46,7 +46,7 @@ class ModelExtensionPaymentSquareup extends Model {
             $status = false;
         }
 
-        $method_data = array();
+        $method_data = [];
 
         if ($status) {
             $method_data = array(
@@ -215,7 +215,7 @@ class ModelExtensionPaymentSquareup extends Model {
     }
 
     public function nextRecurringPayments() {
-        $payments = array();
+        $payments = [];
 
         $this->load->library('squareup');
 

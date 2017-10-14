@@ -247,7 +247,7 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 
 		$this->db->query("INSERT INTO `oc_etsy_order` SET `order_id` = '" . (int)$order_id . "', `receipt_id` = '" . (int)$order->receipt_id . "'");
 
-		$totals = array();
+		$totals = [];
 
 		$totals[0] = array(
 			'code'          => 'sub_total',

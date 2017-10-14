@@ -1,6 +1,6 @@
 <?php
 class ControllerDesignTranslation extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('design/translation');
@@ -143,7 +143,7 @@ class ControllerDesignTranslation extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 		
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -160,7 +160,7 @@ class ControllerDesignTranslation extends Controller {
 		$data['add'] = $this->url->link('design/translation/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('design/translation/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$data['translations'] = array();
+		$data['translations'] = [];
 
 		$filter_data = array(
 			'sort'  => $sort,
@@ -204,7 +204,7 @@ class ControllerDesignTranslation extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -274,7 +274,7 @@ class ControllerDesignTranslation extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -334,7 +334,7 @@ class ControllerDesignTranslation extends Controller {
 
 		if (empty($translation_info)) {
 			// Get a list of files ready to upload
-			$data['paths'] = array();
+			$data['paths'] = [];
 
 			$path = glob(DIR_CATALOG . 'language/'.$code.'/*');
 
@@ -373,7 +373,7 @@ class ControllerDesignTranslation extends Controller {
 			$directory = DIR_CATALOG . 'language/';
 
 			if (is_file($directory . $code . '/' . $translation_info['route'] . '.php') && substr(str_replace('\\', '/', realpath($directory . $code . '/' . $translation_info['route'] . '.php')), 0, strlen($directory)) == str_replace('\\', '/', $directory)) {
-				$_ = array();
+				$_ = [];
 
 				include($directory . $code . '/' . $translation_info['route'] . '.php');
 
@@ -427,7 +427,7 @@ class ControllerDesignTranslation extends Controller {
 	public function path() {
 		$this->load->language('design/translation');
 
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['language_id'])) {
 			$language_id = $this->request->get['language_id'];
@@ -464,7 +464,7 @@ class ControllerDesignTranslation extends Controller {
 	public function translation() {
 		$this->load->language('design/translation');
 
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['store_id'])) {
 			$store_id = $this->request->get['store_id'];
@@ -491,7 +491,7 @@ class ControllerDesignTranslation extends Controller {
 		$directory = DIR_CATALOG . 'language/';
 
 		if ($language_info && is_file($directory . $language_info['code'] . '/' . $route . '.php') && substr(str_replace('\\', '/', realpath($directory . $language_info['code'] . '/' . $route . '.php')), 0, strlen($directory)) == str_replace('\\', '/', $directory)) {
-			$_ = array();
+			$_ = [];
 
 			include($directory . $language_info['code'] . '/' . $route . '.php');
 

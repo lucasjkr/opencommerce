@@ -75,7 +75,7 @@ final class fba {
 	public function call($uri, $data = array(), $request_type = 'GET') {
 		$this->log("Request: " . $request_type . " : " . $this->url . $uri);
 
-		$headers = array();
+		$headers = [];
 		$headers[] = 'X-Auth-Token: ' . $this->api_key;
 		$headers[] = 'X-Account-ID: ' . $this->api_account_id;
         $headers[] = 'X-Endpoint-Version: 2';

@@ -276,7 +276,7 @@ class ModelLocalisationLanguage extends Model {
 			$language_data = $this->cache->get('language');
 
 			if (!$language_data) {
-				$language_data = array();
+				$language_data = [];
 
 				$query = $this->db->query("SELECT * FROM oc_language ORDER BY sort_order, name");
 

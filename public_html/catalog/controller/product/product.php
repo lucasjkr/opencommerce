@@ -1,11 +1,11 @@
 <?php
 class ControllerProductProduct extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('product/product');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -262,7 +262,7 @@ class ControllerProductProduct extends Controller {
 				$data['thumb'] = '';
 			}
 
-			$data['images'] = array();
+			$data['images'] = [];
 
 			$results = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
 
@@ -293,7 +293,7 @@ class ControllerProductProduct extends Controller {
 
 			$discounts = $this->model_catalog_product->getProductDiscounts($this->request->get['product_id']);
 
-			$data['discounts'] = array();
+			$data['discounts'] = [];
 
 			foreach ($discounts as $discount) {
 				$data['discounts'][] = array(
@@ -302,10 +302,10 @@ class ControllerProductProduct extends Controller {
 				);
 			}
 
-			$data['options'] = array();
+			$data['options'] = [];
 
 			foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) {
-				$product_option_value_data = array();
+				$product_option_value_data = [];
 
 				foreach ($option['product_option_value'] as $option_value) {
 					if (!$option_value['subtract'] || ($option_value['quantity'] > 0)) {
@@ -371,7 +371,7 @@ class ControllerProductProduct extends Controller {
 
 			$data['attribute_groups'] = $this->model_catalog_product->getProductAttributes($this->request->get['product_id']);
 
-			$data['products'] = array();
+			$data['products'] = [];
 
 			$results = $this->model_catalog_product->getProductRelated($this->request->get['product_id']);
 
@@ -420,7 +420,7 @@ class ControllerProductProduct extends Controller {
 				);
 			}
 
-			$data['tags'] = array();
+			$data['tags'] = [];
 
 			if ($product_info['tag']) {
 				$tags = explode(',', $product_info['tag']);
@@ -529,7 +529,7 @@ class ControllerProductProduct extends Controller {
 			$page = 1;
 		}
 
-		$data['reviews'] = array();
+		$data['reviews'] = [];
 
 		$review_total = $this->model_catalog_review->getTotalReviewsByProductId($this->request->get['product_id']);
 
@@ -560,7 +560,7 @@ class ControllerProductProduct extends Controller {
 	public function write() {
 		$this->load->language('product/product');
 
-		$json = array();
+		$json = [];
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			if ((utf8_strlen($this->request->post['name']) < 3) || (utf8_strlen($this->request->post['name']) > 25)) {
@@ -623,7 +623,7 @@ class ControllerProductProduct extends Controller {
 		
 		$recurring_info = $this->model_catalog_product->getProfile($product_id, $recurring_id);
 
-		$json = array();
+		$json = [];
 
 		if ($product_info && $recurring_info) {
 			if (!$json) {

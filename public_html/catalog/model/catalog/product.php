@@ -77,7 +77,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!empty($data['filter_filter'])) {
-				$implode = array();
+				$implode = [];
 
 				$filters = explode(',', $data['filter_filter']);
 
@@ -93,7 +93,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= " AND (";
 
 			if (!empty($data['filter_name'])) {
-				$implode = array();
+				$implode = [];
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_name'])));
 
@@ -115,7 +115,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!empty($data['filter_tag'])) {
-				$implode = array();
+				$implode = [];
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_tag'])));
 
@@ -177,7 +177,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$product_data = array();
+		$product_data = [];
 
 		$query = $this->db->query($sql);
 
@@ -227,7 +227,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$product_data = array();
+		$product_data = [];
 
 		$query = $this->db->query($sql);
 
@@ -274,7 +274,7 @@ class ModelCatalogProduct extends Model {
 		$product_data = $this->cache->get('product.bestseller.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . (int)$limit);
 
 		if (!$product_data) {
-			$product_data = array();
+			$product_data = [];
 
 			$query = $this->db->query("SELECT op.product_id, SUM(op.quantity) AS total FROM oc_order_product op LEFT JOIN `oc_order` o ON (op.order_id = o.order_id) LEFT JOIN `oc_product` p ON (op.product_id = p.product_id) LEFT JOIN oc_product_to_store p2s ON (p.product_id = p2s.product_id) WHERE o.order_status_id > '0' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' GROUP BY op.product_id ORDER BY total DESC LIMIT " . (int)$limit);
 
@@ -289,12 +289,12 @@ class ModelCatalogProduct extends Model {
 	}
 
 	public function getProductAttributes($product_id) {
-		$product_attribute_group_data = array();
+		$product_attribute_group_data = [];
 
 		$product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN oc_attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$product_id . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
 
 		foreach ($product_attribute_group_query->rows as $product_attribute_group) {
-			$product_attribute_data = array();
+			$product_attribute_data = [];
 
 			$product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
 
@@ -317,12 +317,12 @@ class ModelCatalogProduct extends Model {
 	}
 
 	public function getProductOptions($product_id) {
-		$product_option_data = array();
+		$product_option_data = [];
 
 		$product_option_query = $this->db->query("SELECT * FROM oc_product_option po LEFT JOIN `oc_option` o ON (po.option_id = o.option_id) LEFT JOIN oc_option_description od ON (o.option_id = od.option_id) WHERE po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY o.sort_order");
 
 		foreach ($product_option_query->rows as $product_option) {
-			$product_option_value_data = array();
+			$product_option_value_data = [];
 
 			$product_option_value_query = $this->db->query("SELECT * FROM oc_product_option_value pov LEFT JOIN oc_option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_id = '" . (int)$product_id . "' AND pov.product_option_id = '" . (int)$product_option['product_option_id'] . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY ov.sort_order");
 
@@ -368,7 +368,7 @@ class ModelCatalogProduct extends Model {
 	}
 
 	public function getProductRelated($product_id) {
-		$product_data = array();
+		$product_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_product_related pr LEFT JOIN oc_product p ON (pr.related_id = p.product_id) LEFT JOIN oc_product_to_store p2s ON (p.product_id = p2s.product_id) WHERE pr.product_id = '" . (int)$product_id . "' AND p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = '" . (int)$this->config->get('config_store_id') . "'");
 
@@ -424,7 +424,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!empty($data['filter_filter'])) {
-				$implode = array();
+				$implode = [];
 
 				$filters = explode(',', $data['filter_filter']);
 
@@ -440,7 +440,7 @@ class ModelCatalogProduct extends Model {
 			$sql .= " AND (";
 
 			if (!empty($data['filter_name'])) {
-				$implode = array();
+				$implode = [];
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_name'])));
 
@@ -462,7 +462,7 @@ class ModelCatalogProduct extends Model {
 			}
 
 			if (!empty($data['filter_tag'])) {
-				$implode = array();
+				$implode = [];
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_tag'])));
 

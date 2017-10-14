@@ -94,7 +94,7 @@ class ModelExtensionOpenBayAmazonusProduct extends Model {
 	public function addListingReport($data) {
 		$sql = "INSERT INTO oc_amazonus_listing_report (sku, quantity, asin, price) VALUES ";
 
-		$sql_values = array();
+		$sql_values = [];
 
 		foreach ($data as $product) {
 			$sql_values[] = " ('" . $this->db->escape($product['sku']) . "', " . (int)$product['quantity'] . ", '" . $this->db->escape($product['asin']) . "', " . (double)$product['price'] . ") ";

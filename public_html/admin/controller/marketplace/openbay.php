@@ -1,6 +1,6 @@
 <?php
 class ControllerMarketplaceOpenbay extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function install() {
 		$this->load->language('marketplace/openbay');
@@ -76,7 +76,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -114,7 +114,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 		}
 
-		$data['extensions'] = array();
+		$data['extensions'] = [];
 
 		$markets = array('ebay', 'etsy', 'amazon', 'amazonus', 'fba');
 
@@ -160,7 +160,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$this->document->setTitle($this->language->get('text_manage'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -388,7 +388,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 		$this->model_extension_openbay_openbay->faqDismiss($this->request->get['qry_route']);
 
-		$json = array();
+		$json = [];
 
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
@@ -594,7 +594,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -611,7 +611,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			'text' => $data['heading_title'],
 		);
 
-		$data['orders'] = array();
+		$data['orders'] = [];
 
 		$filter = array(
 			'filter_order_id'        => $filter_order_id,
@@ -642,7 +642,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			);
 		}
 
-		$data['channels'] = array();
+		$data['channels'] = [];
 
 		$data['channels'][] = array(
 			'module' => 'web',
@@ -840,7 +840,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 			$data['link_complete'] = $this->url->link('marketplace/openbay/orderlistcomplete', 'user_token=' . $this->session->data['user_token'], true);
 
-			$data['market_options'] = array();
+			$data['market_options'] = [];
 
 			if ($this->config->get('ebay_status') == 1) {
 				$data['market_options']['ebay']['carriers'] = $this->openbay->ebay->getCarriers();
@@ -857,13 +857,13 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 			$this->load->model('localisation/order_status');
 			$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
-			$data['status_mapped'] = array();
+			$data['status_mapped'] = [];
 
 			foreach($data['order_statuses'] as $status) {
 				$data['status_mapped'][$status['order_status_id']] = $status['name'];
 			}
 
-			$orders = array();
+			$orders = [];
 
 			foreach($this->request->post['selected'] as $order_id) {
 				$order = $this->model_extension_openbay_order->getOrder($order_id);
@@ -881,7 +881,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$data['orders'] = $orders;
 			}
 
-			$data['breadcrumbs'] = array();
+			$data['breadcrumbs'] = [];
 
 			$data['breadcrumbs'][] = array(
 				'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -975,7 +975,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			if ($this->config->get('openbay_amazon_status') == 1) {
 				$this->load->model('extension/openbay/amazon');
 
-				$orders = array();
+				$orders = [];
 
 				foreach ($this->request->post['order_id'] as $order_id) {
 					if ($this->request->post['channel'][$order_id] == 'Amazon EU') {
@@ -1019,7 +1019,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			if ($this->config->get('openbay_amazonus_status') == 1) {
 				$this->load->model('extension/openbay/amazonus');
 
-				$orders = array();
+				$orders = [];
 
 				foreach ($this->request->post['order_id'] as $order_id) {
 					if ($this->request->post['channel'][$order_id] == 'Amazon US') {
@@ -1286,7 +1286,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text'      => $this->language->get('text_home'),
@@ -1321,7 +1321,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$data['link_ebay_bulk'] = '';
 		}
 
-		$data['products'] = array();
+		$data['products'] = [];
 
 		$filter_market_id = '';
 		$filter_market_name = '';
@@ -1446,7 +1446,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			 * 3 = Pending
 			 */
 
-			$markets = array();
+			$markets = [];
 
 			if ($this->config->get('ebay_status') == '1') {
 				$this->load->model('extension/openbay/ebay');
@@ -1809,7 +1809,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 	public function eventMenu($route, &$data) {
 		// OpenBay Pro Menu
-		$openbay_menu = array();
+		$openbay_menu = [];
 
 		$this->load->language('extension/openbay/openbay_menu');
 
@@ -1833,7 +1833,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			);
 
 			// eBay sub menu
-			$ebay = array();
+			$ebay = [];
 
 			if ($this->user->hasPermission('access', 'extension/openbay/ebay') && $this->config->get('ebay_status') == 1) {
 				$ebay[] = array(
@@ -1870,7 +1870,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 
 			// Amazon EU sub menu
-			$amazon_eu = array();
+			$amazon_eu = [];
 
 			if ($this->user->hasPermission('access', 'extension/openbay/amazon') && $this->config->get('openbay_amazon_status') == 1) {
 				$amazon_eu[] = array(
@@ -1901,7 +1901,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 
 			// Amazon US sub menu
-			$amazon_us = array();
+			$amazon_us = [];
 
 			if ($this->user->hasPermission('access', 'extension/openbay/amazonus') && $this->config->get('openbay_amazonus_status') == 1) {
 				$amazon_us[] = array(
@@ -1932,7 +1932,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 
 			// Etsy sub menu
-			$etsy = array();
+			$etsy = [];
 
 			if ($this->user->hasPermission('access', 'extension/openbay/etsy') && $this->config->get('etsy_status') == 1) {
 				$etsy[] = array(
@@ -1965,7 +1965,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 
 			// FBA sub menu
-			$fba = array();
+			$fba = [];
 
 			if ($this->user->hasPermission('access', 'extension/openbay/fba') && $this->config->get('openbay_fba_status') == 1) {
 				$fba[] = array(

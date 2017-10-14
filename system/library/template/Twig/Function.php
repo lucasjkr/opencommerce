@@ -23,7 +23,7 @@
 abstract class Twig_Function implements Twig_FunctionInterface, Twig_FunctionCallableInterface
 {
     protected $options;
-    protected $arguments = array();
+    protected $arguments = [];
 
     public function __construct(array $options = array())
     {

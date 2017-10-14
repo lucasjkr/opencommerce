@@ -80,7 +80,7 @@ class ModelLocalisationCurrency extends Model {
 			$currency_data = $this->cache->get('currency');
 
 			if (!$currency_data) {
-				$currency_data = array();
+				$currency_data = [];
 
 				$query = $this->db->query("SELECT * FROM oc_currency ORDER BY title ASC");
 
@@ -106,7 +106,7 @@ class ModelLocalisationCurrency extends Model {
 	}
 
 	public function refresh($force = false) {
-		$currency_data = array();
+		$currency_data = [];
 
 		if ($force) {
 			$query = $this->db->query("SELECT * FROM oc_currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "'");

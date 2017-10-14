@@ -156,7 +156,7 @@ class ControllerExtensionOpenbayAmazonusListing extends Controller{
 			$data['price'] = $product_info['price'];
 		}
 
-		$data['listing_errors'] = array();
+		$data['listing_errors'] = [];
 
 		if ($listing_status == 'error_quick') {
 			$data['listing_errors'] = $this->model_extension_openbay_amazonus->getProductErrors($product_info['product_id'], 3);
@@ -183,7 +183,7 @@ class ControllerExtensionOpenbayAmazonusListing extends Controller{
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -284,7 +284,7 @@ class ControllerExtensionOpenbayAmazonusListing extends Controller{
 			$this->response->redirect($this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'] . $url, true));
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),

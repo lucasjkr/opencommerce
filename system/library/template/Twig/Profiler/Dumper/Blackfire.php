@@ -16,7 +16,7 @@ class Twig_Profiler_Dumper_Blackfire
 {
     public function dump(Twig_Profiler_Profile $profile)
     {
-        $data = array();
+        $data = [];
         $this->dumpProfile('main()', $profile, $data);
         $this->dumpChildren('main()', $profile, $data);
 

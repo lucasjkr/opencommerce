@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionOpenbayEbayTemplate extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function listAll() {
 		$data = $this->load->language('extension/openbay/ebay_template');
@@ -30,7 +30,7 @@ class ControllerExtensionOpenbayEbayTemplate extends Controller {
 		$data['templates'] = $this->model_extension_openbay_ebay_template->getAll();
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -145,7 +145,7 @@ class ControllerExtensionOpenbayEbayTemplate extends Controller {
 
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),

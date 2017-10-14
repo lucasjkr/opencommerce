@@ -1,6 +1,6 @@
 <?php
 class ControllerLocalisationLocation extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('localisation/location');
@@ -158,7 +158,7 @@ class ControllerLocalisationLocation extends Controller {
 		$data['add'] = $this->url->link('localisation/location/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('localisation/location/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$data['location'] = array();
+		$data['location'] = [];
 
 		$filter_data = array(
 			'sort'  => $sort,
@@ -197,7 +197,7 @@ class ControllerLocalisationLocation extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -286,7 +286,7 @@ class ControllerLocalisationLocation extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
