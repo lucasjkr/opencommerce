@@ -32,7 +32,7 @@ class ControllerExtensionOpenbayFba extends Controller {
         $this->document->setTitle($this->language->get('text_dashboard'));
         $this->document->addScript('view/javascript/openbay/js/faq.js');
 
-        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'] = [];
         $data['breadcrumbs'][] = array(
             'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
             'text'      => $this->language->get('text_home'),
@@ -84,7 +84,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             $this->response->redirect($this->url->link('extension/openbay/fba', 'user_token=' . $this->session->data['user_token'], true));
         }
 
-        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'] = [];
 
         $data['breadcrumbs'][] = array(
             'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -223,7 +223,7 @@ class ControllerExtensionOpenbayFba extends Controller {
     public function verifyCredentials() {
         $this->load->language('extension/openbay/fba_settings');
 
-        $errors = array();
+        $errors = [];
 
         if (!isset($this->request->post['openbay_fba_api_key']) || empty($this->request->post['openbay_fba_api_key'])) {
             $errors[] = array('message' => $this->language->get('error_api_key'));
@@ -286,7 +286,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             $this->response->redirect($this->url->link('extension/openbay/fba/fulfillmentlist', 'user_token=' . $this->session->data['user_token'] . (!empty($this->request->get['filter_date']) ? '&filter_date=' . $this->request->get['filter_date'] : ''), true));
         }
 
-        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'] = [];
 
         $data['breadcrumbs'][] = array(
             'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -347,7 +347,7 @@ class ControllerExtensionOpenbayFba extends Controller {
         $this->document->setTitle($this->language->get('heading_title'));
         $this->document->addScript('view/javascript/openbay/js/faq.js');
 
-        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'] = [];
 
         $data['breadcrumbs'][] = array(
             'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -377,7 +377,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             $request_url = "";
         }
 
-        $data['fulfillments'] = array();
+        $data['fulfillments'] = [];
 
         $response = $this->openbay->fba->call("v1/fba/fulfillments/".$request_url, array(), 'GET');
 
@@ -422,7 +422,7 @@ class ControllerExtensionOpenbayFba extends Controller {
     public function shipFulfillment() {
         $this->load->language('extension/openbay/fba_fulfillment');
 
-        $errors = array();
+        $errors = [];
 
         if (empty($this->request->get['order_id']) || empty($this->request->get['fba_order_fulfillment_id'])) {
             $this->session->data['error'] = $this->language->get('error_missing_id');
@@ -466,7 +466,7 @@ class ControllerExtensionOpenbayFba extends Controller {
     public function cancelFulfillment() {
         $this->load->language('extension/openbay/fba_fulfillment');
 
-        $errors = array();
+        $errors = [];
 
         if (empty($this->request->get['order_id']) || empty($this->request->get['fba_order_fulfillment_id'])) {
             $this->session->data['error'] = $this->language->get('error_missing_id');
@@ -506,7 +506,7 @@ class ControllerExtensionOpenbayFba extends Controller {
     public function resendFulfillment() {
         $this->load->language('extension/openbay/fba_fulfillment');
 
-        $errors = array();
+        $errors = [];
 
         if (empty($this->request->get['order_id'])) {
             $this->session->data['error'] = $this->language->get('error_missing_id');
@@ -528,7 +528,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
                     $order_products = $this->model_sale_order->getOrderProducts($order_id);
 
-                    $fulfillment_items = array();
+                    $fulfillment_items = [];
 
                     foreach ($order_products as $order_product) {
                         $product = $this->model_catalog_product->getProduct($order_product['product_id']);
@@ -549,7 +549,7 @@ class ControllerExtensionOpenbayFba extends Controller {
                     $total_fulfillment_items = count($fulfillment_items);
 
                     if (!empty($fulfillment_items)) {
-                        $request = array();
+                        $request = [];
 
                         $datetime = new DateTime($order['date_added']);
                         $request['displayable_order_datetime'] = $datetime->format(DateTime::ISO8601);
@@ -619,7 +619,7 @@ class ControllerExtensionOpenbayFba extends Controller {
         $this->document->setTitle($this->language->get('heading_title'));
         $this->document->addScript('view/javascript/openbay/js/faq.js');
 
-        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'] = [];
 
         $data['breadcrumbs'][] = array(
             'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -641,7 +641,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             'text' => $data['heading_title'],
         );
 
-        $filters = array();
+        $filters = [];
 
         $url = '';
 
@@ -672,7 +672,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             $data['filter_status'] = null;
         }
 
-        $data['orders'] = array();
+        $data['orders'] = [];
 
         $orders = $this->openbay->fba->getFBAOrders($filters);
 
@@ -755,7 +755,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
         $data['cancel'] = $this->url->link('extension/openbay/fba/orderlist', 'user_token=' . $this->session->data['user_token'], true);
 
-        $data['breadcrumbs'] = array();
+        $data['breadcrumbs'] = [];
 
         $data['breadcrumbs'][] = array(
             'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -777,13 +777,13 @@ class ControllerExtensionOpenbayFba extends Controller {
             'text' => $data['heading_title'],
         );
 
-        $data['fulfillments'] = array();
+        $data['fulfillments'] = [];
 
         if (is_array($order_fba['fulfillments'])) {
             foreach ($order_fba['fulfillments'] as $fulfillment) {
                 $response_body = json_decode($fulfillment['response_body'], true);
 
-                $fulfillment_errors = array();
+                $fulfillment_errors = [];
 
                 if (isset($response_body['error']) && $response_body['error'] == true) {
                     if (is_array($response_body['error_messages']) && !empty($response_body['error_messages'])) {
@@ -854,12 +854,12 @@ class ControllerExtensionOpenbayFba extends Controller {
             2 => $this->language->get('text_type_cancel'),
         );
 
-        $data['products'] = array();
+        $data['products'] = [];
 
         $products = $this->model_sale_order->getOrderProducts($this->request->get['order_id']);
 
         foreach ($products as $product) {
-            $option_data = array();
+            $option_data = [];
 
             $product_info = $this->model_catalog_product->getProduct($product['product_id']);
 

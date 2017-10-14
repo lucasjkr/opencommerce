@@ -1,7 +1,7 @@
 <?php
 class ModelSettingSetting extends Model {
 	public function getSetting($code, $store_id = 0) {
-		$setting_data = array();
+		$setting_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_setting WHERE store_id = :store_id AND `code` = :code",
             [

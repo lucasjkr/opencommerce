@@ -64,7 +64,7 @@ final class Ebay {
 				$domain = $this->config->get('config_url');
 			}
 
-            $headers = array();
+            $headers = [];
             $headers[] = 'X-Endpoint-Version: 2';
 
 			$data = array('token' => $this->token, 'secret' => $this->secret, 'server' => $this->server, 'domain' => $domain, 'openbay_version' => (int)$this->config->get('feed_openbaypro_version'), 'opencart_version' => VERSION, 'data' => $post, 'content_type' => $content_type, 'language' => $this->config->get('openbay_language'));
@@ -137,7 +137,7 @@ final class Ebay {
 				$domain = $this->config->get('config_url');
 			}
 
-            $headers = array();
+            $headers = [];
             $headers[] = 'X-Endpoint-Version: 2';
 
 			$data = array('token' => $this->token, 'secret' => $this->secret, 'server' => $this->server, 'domain' => $domain, 'openbay_version' => (int)$this->config->get('feed_openbaypro_version'), 'opencart_version' => VERSION, 'data' => $post, 'content_type' => $content_type, 'language' => $this->config->get('openbay_language'));
@@ -267,7 +267,7 @@ final class Ebay {
 
 		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = '1'");
 
-		$data = array();
+		$data = [];
 		if ($qry->num_rows > 0) {
 			foreach ($qry->rows as $row) {
 				$data[$row['product_id']] = $row['ebay_item_id'];
@@ -283,7 +283,7 @@ final class Ebay {
 
 		$qry = $this->db->query("SELECT e.* FROM (SELECT `product_id`, MAX(`ebay_listing_id`) as `ebay_listing_id` FROM `oc_ebay_listing` WHERE `status` = 0 GROUP BY `product_id`) `a` INNER JOIN `oc_ebay_listing` `e` ON (`e`.`ebay_listing_id` = `a`.`ebay_listing_id`)");
 
-		$data = array();
+		$data = [];
 		if ($qry->num_rows > 0) {
 			foreach ($qry->rows as $row) {
 				$data[$row['product_id']] = $row['ebay_item_id'];
@@ -306,7 +306,7 @@ final class Ebay {
 		*/
 		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = '1'");
 
-		$data = array();
+		$data = [];
 		if ($qry->num_rows) {
 			foreach ($qry->rows as $row) {
 				$data[$row['ebay_item_id']] = $row['product_id'];
@@ -559,8 +559,8 @@ final class Ebay {
 		$ebay_listings = $this->getEbayActiveListings();
 		$live_data = $this->getLiveListingArray();
 
-		$linked_items        = array();
-		$linked_ended_items   = array();
+		$linked_items        = [];
+		$linked_ended_items   = [];
 
 		foreach ($product_id_array as $product_id) {
 			if (array_key_exists((int)$product_id, $live_data)) {
@@ -579,7 +579,7 @@ final class Ebay {
 			if ($openstock == true) {
 				$options = $this->model_extension_module_openstock->getVariants($item['productId']);
 			} else {
-				$options = array();
+				$options = [];
 			}
 
 			if (empty($options)) {
@@ -625,7 +625,7 @@ final class Ebay {
 					if ($openstock == true) {
 						$options = $this->model_extension_module_openstock->getVariants($item['productId']);
 					} else {
-						$options = array();
+						$options = [];
 					}
 
 					if (empty($options) && empty($ebay_listings[$item['itemId']]['variants'])) {
@@ -648,7 +648,7 @@ final class Ebay {
 						$this->log('putStockUpdateBulk() - Variants found');
 
 						//create an index of var codes to search against
-						$var_ids = array();
+						$var_ids = [];
 						foreach ($options as $k => $v) {
 							$var_ids[$k] = $v['var'];
 						}
@@ -722,14 +722,14 @@ final class Ebay {
 					$variants = $data['variant'];
 				}
 
-				$variant_data = array();
+				$variant_data = [];
 
 				$groups = $this->openbay->getProductOptions($product_id);
-				$variant_data['groups']  = array();
-				$variant_data['related'] = array();
+				$variant_data['groups']  = [];
+				$variant_data['related'] = [];
 
 				foreach ($groups as $grp) {
-					$t_tmp = array();
+					$t_tmp = [];
 					foreach ($grp['product_option_value'] as $grp_node) {
 						$t_tmp[$grp_node['option_value_id']] = $grp_node['name'];
 
@@ -1102,7 +1102,7 @@ final class Ebay {
 	public function getCarriers() {
 		$qry = $this->db->query("SELECT * FROM oc_ebay_shipping");
 
-		$couriers = array();
+		$couriers = [];
 		foreach ($qry->rows as $row) {
 			$couriers[] = $row;
 		}

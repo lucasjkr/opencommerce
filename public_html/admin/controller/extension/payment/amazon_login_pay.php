@@ -1,7 +1,7 @@
 <?php
 class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 
@@ -73,7 +73,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 			$data['error_curreny'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -361,7 +361,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 
 	public function cancel() {
 		$this->load->language('extension/payment/amazon_login_pay');
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
 			$this->load->model('extension/payment/amazon_login_pay');
@@ -376,7 +376,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 				$this->model_extension_payment_amazon_login_pay->addTransaction($amazon_login_pay_order['amazon_login_pay_order_id'], 'cancel', $cancel_response['status'], 0.00);
 				$this->model_extension_payment_amazon_login_pay->updateCancelStatus($amazon_login_pay_order['amazon_login_pay_order_id'], 1);
 				$json['msg'] = $this->language->get('text_cancel_ok');
-				$json['data'] = array();
+				$json['data'] = [];
 				$json['data']['date_added'] = date("Y-m-d H:i:s");
 				$json['data']['type'] = 'cancel';
 				$json['data']['status'] = $cancel_response['status'];
@@ -396,7 +396,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 
 	public function capture() {
 		$this->load->language('extension/payment/amazon_login_pay');
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
 			$this->load->model('extension/payment/amazon_login_pay');
@@ -421,7 +421,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 					$json['msg'] = $this->language->get('text_capture_ok');
 				}
 
-				$json['data'] = array();
+				$json['data'] = [];
 				$json['data']['date_added'] = date("Y-m-d H:i:s");
 				$json['data']['type'] = 'capture';
 				$json['data']['status'] = $capture_response['status'];
@@ -445,7 +445,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 
 	public function refund() {
 		$this->load->language('extension/payment/amazon_login_pay');
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
 			$this->load->model('extension/payment/amazon_login_pay');
@@ -476,7 +476,7 @@ class ControllerExtensionPaymentAmazonLoginPay extends Controller {
 						$json['msg'][] = $this->language->get('text_refund_ok') . '<br />';
 					}
 
-					$data = array();
+					$data = [];
 					$data['date_added'] = date("Y-m-d H:i:s");
 					$data['type'] = 'refund';
 					$data['status'] = $response['status'];

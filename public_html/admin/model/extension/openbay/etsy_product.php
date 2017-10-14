@@ -52,7 +52,7 @@ class ModelExtensionOpenBayEtsyProduct extends Model{
 
 		$qry = $this->db->query($sql);
 
-		$data = array();
+		$data = [];
 		if ($qry->num_rows) {
 			foreach($qry->rows as $row) {
 				$data[] = array(

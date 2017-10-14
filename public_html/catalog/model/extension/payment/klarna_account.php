@@ -45,7 +45,7 @@ class ModelExtensionPaymentKlarnaAccount extends Model {
 			}
 		}
 
-		$payment_option = array();
+		$payment_option = [];
 
 		if ($status) {
 			$total = $this->currency->format($total, $country_to_currency[$address['iso_code_3']], '', false);
@@ -55,7 +55,7 @@ class ModelExtensionPaymentKlarnaAccount extends Model {
 			if (isset($pclasses[$address['iso_code_3']])) {
 				$pclasses = $pclasses[$address['iso_code_3']];
 			} else {
-				$pclasses = array();
+				$pclasses = [];
 			}
 
 			foreach ($pclasses as $pclass) {
@@ -104,7 +104,7 @@ class ModelExtensionPaymentKlarnaAccount extends Model {
 						$payment += $monthly_fee;
 
 						$balance = $sum;
-						$pay_data = array();
+						$pay_data = [];
 
 						$months = $pclass['months'];
 
@@ -156,7 +156,7 @@ class ModelExtensionPaymentKlarnaAccount extends Model {
 			$status = false;
 		}
 
-		$sort_order = array();
+		$sort_order = [];
 
 		foreach ($payment_option as $key => $value) {
 			$sort_order[$key] = $value['monthly_cost'];
@@ -168,7 +168,7 @@ class ModelExtensionPaymentKlarnaAccount extends Model {
 			$status = false;
 		}
 
-		$method = array();
+		$method = [];
 
 		if ($status) {
 			$method = array(

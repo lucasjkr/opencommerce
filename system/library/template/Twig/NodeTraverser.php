@@ -19,7 +19,7 @@
 class Twig_NodeTraverser
 {
     protected $env;
-    protected $visitors = array();
+    protected $visitors = [];
 
     /**
      * Constructor.
@@ -43,7 +43,7 @@ class Twig_NodeTraverser
     public function addVisitor(Twig_NodeVisitorInterface $visitor)
     {
         if (!isset($this->visitors[$visitor->getPriority()])) {
-            $this->visitors[$visitor->getPriority()] = array();
+            $this->visitors[$visitor->getPriority()] = [];
         }
 
         $this->visitors[$visitor->getPriority()][] = $visitor;

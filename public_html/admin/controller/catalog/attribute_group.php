@@ -1,6 +1,6 @@
 <?php
 class ControllerCatalogAttributeGroup extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('catalog/attribute_group');
@@ -143,7 +143,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -158,7 +158,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 		$data['add'] = $this->url->link('catalog/attribute_group/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('catalog/attribute_group/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$data['attribute_groups'] = array();
+		$data['attribute_groups'] = [];
 
 		$filter_data = array(
 			'sort'  => $sort,
@@ -197,7 +197,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -257,7 +257,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 		if (isset($this->error['name'])) {
 			$data['error_name'] = $this->error['name'];
 		} else {
-			$data['error_name'] = array();
+			$data['error_name'] = [];
 		}
 
 		$url = '';
@@ -274,7 +274,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -307,7 +307,7 @@ class ControllerCatalogAttributeGroup extends Controller {
 		} elseif (isset($this->request->get['attribute_group_id'])) {
 			$data['attribute_group_description'] = $this->model_catalog_attribute_group->getAttributeGroupDescriptions($this->request->get['attribute_group_id']);
 		} else {
-			$data['attribute_group_description'] = array();
+			$data['attribute_group_description'] = [];
 		}
 
 		if (isset($this->request->post['sort_order'])) {

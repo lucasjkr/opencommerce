@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionOpenBayAmazonListing extends Model {
-	private $tabs = array();
+	private $tabs = [];
 
 	public function search($search_string, $marketplace) {
 		$search_params = array(
@@ -10,7 +10,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 
 		$results = json_decode($this->openbay->amazon->call('productv3/search', $search_params), 1);
 
-		$products = array();
+		$products = [];
 
 		if (!empty($results)) {
 			foreach ($results['Products'] as $result) {
@@ -152,7 +152,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 	}
 
 	public function deleteSearchResults($marketplace, $product_ids) {
-		$imploded_ids = array();
+		$imploded_ids = [];
 
 		foreach ($product_ids as $product_id) {
 			$imploded_ids[] = (int)$product_id;
@@ -168,7 +168,7 @@ class ModelExtensionOpenBayAmazonListing extends Model {
 
 	public function doBulkListing($data) {
 		$this->load->model('catalog/product');
-		$request = array();
+		$request = [];
 
 		$marketplace_mapping = array(
 			'uk' => 'A1F83G8C2ARO7P',

@@ -17,13 +17,13 @@
  */
 abstract class Twig_Template implements Twig_TemplateInterface
 {
-    protected static $cache = array();
+    protected static $cache = [];
 
     protected $parent;
-    protected $parents = array();
+    protected $parents = [];
     protected $env;
-    protected $blocks = array();
-    protected $traits = array();
+    protected $blocks = [];
+    protected $traits = [];
 
     /**
      * Constructor.
@@ -550,7 +550,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
             // get_class_methods returns all methods accessible in the scope, but we only want public ones to be accessible in templates
             if ($object instanceof self) {
                 $ref = new ReflectionClass($class);
-                $methods = array();
+                $methods = [];
 
                 foreach ($ref->getMethods(ReflectionMethod::IS_PUBLIC) as $refMethod) {
                     $methodName = strtolower($refMethod->name);

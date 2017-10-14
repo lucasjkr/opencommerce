@@ -41,7 +41,7 @@ class ModelDesignSeoUrl extends Model {
 	    $args = [];
 		$sql = "SELECT *, (SELECT `name` FROM `oc_store` s WHERE s.store_id = su.store_id) AS store, (SELECT `name` FROM `oc_language` l WHERE l.language_id = su.language_id) AS language FROM `oc_seo_url` su";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_query'])) {
 			$implode[] = "`query` LIKE :query";
@@ -107,7 +107,7 @@ class ModelDesignSeoUrl extends Model {
 	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM `oc_seo_url`";
 		
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_query'])) {
 			$implode[] = "query LIKE :query";

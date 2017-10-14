@@ -30,7 +30,7 @@ class ModelExtensionOpenBayFba extends Model {
 				) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
 
         // Default settings
-        $setting = array();
+        $setting = [];
         $setting["openbay_fba_status"] = 0;
         $setting["openbay_fba_send_orders"] = 0;
         $setting["openbay_fba_debug_log"] = 1;

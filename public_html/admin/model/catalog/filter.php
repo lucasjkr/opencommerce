@@ -174,7 +174,7 @@ class ModelCatalogFilter extends Model {
 	}
 
 	public function getFilterGroupDescriptions($filter_group_id) {
-		$filter_group_data = array();
+		$filter_group_data = [];
 
 		$query = $this->db->query("SELECT * FROM `oc_filter_group_description` WHERE `filter_group_id` = :filter_group_id",
             [
@@ -229,7 +229,7 @@ class ModelCatalogFilter extends Model {
 	}
 
 	public function getFilterDescriptions($filter_group_id) {
-		$filter_data = array();
+		$filter_data = [];
 
 		$filter_query = $this->db->query("SELECT * FROM `oc_filter` WHERE `filter_group_id` = :filter_group_id",
             [
@@ -237,7 +237,7 @@ class ModelCatalogFilter extends Model {
             ]);
 
 		foreach ($filter_query->rows as $filter) {
-			$filter_description_data = array();
+			$filter_description_data = [];
 
 			$filter_description_query = $this->db->query("SELECT * FROM `oc_filter_description` WHERE `filter_id` =  :filter_id",
                 [

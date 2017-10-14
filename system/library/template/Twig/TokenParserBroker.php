@@ -20,8 +20,8 @@
 class Twig_TokenParserBroker implements Twig_TokenParserBrokerInterface
 {
     protected $parser;
-    protected $parsers = array();
-    protected $brokers = array();
+    protected $parsers = [];
+    protected $brokers = [];
 
     /**
      * Constructor.

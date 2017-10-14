@@ -9,7 +9,7 @@ class ControllerProductManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -21,7 +21,7 @@ class ControllerProductManufacturer extends Controller {
 			'href' => $this->url->link('product/manufacturer')
 		);
 
-		$data['categories'] = array();
+		$data['categories'] = [];
 
 		$results = $this->model_catalog_manufacturer->getManufacturers();
 
@@ -93,7 +93,7 @@ class ControllerProductManufacturer extends Controller {
 			$limit = (int)$this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit');
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -139,7 +139,7 @@ class ControllerProductManufacturer extends Controller {
 
 			$data['compare'] = $this->url->link('product/compare');
 
-			$data['products'] = array();
+			$data['products'] = [];
 
 			$filter_data = array(
 				'filter_manufacturer_id' => $manufacturer_id,
@@ -204,7 +204,7 @@ class ControllerProductManufacturer extends Controller {
 				$url .= '&limit=' . $this->request->get['limit'];
 			}
 
-			$data['sorts'] = array();
+			$data['sorts'] = [];
 
 			$data['sorts'][] = array(
 				'text'  => $this->language->get('text_default'),
@@ -272,7 +272,7 @@ class ControllerProductManufacturer extends Controller {
 				$url .= '&order=' . $this->request->get['order'];
 			}
 
-			$data['limits'] = array();
+			$data['limits'] = [];
 
 			$limits = array_unique(array($this->config->get('theme_' . $this->config->get('config_theme') . '_product_limit'), 25, 50, 75, 100));
 

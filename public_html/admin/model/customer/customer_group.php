@@ -122,7 +122,7 @@ class ModelCustomerCustomerGroup extends Model {
 	}
 
 	public function getCustomerGroupDescriptions($customer_group_id) {
-		$customer_group_data = array();
+		$customer_group_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_customer_group_description WHERE customer_group_id = :customer_group_id",
         [

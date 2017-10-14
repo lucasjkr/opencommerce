@@ -74,7 +74,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
     public function getTests($name, $legacyTests = false)
     {
         $fixturesDir = realpath($this->getFixturesDir());
-        $tests = array();
+        $tests = [];
 
         foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator($fixturesDir), RecursiveIteratorIterator::LEAVES_ONLY) as $file) {
             if (!preg_match('/\.test$/', $file)) {
@@ -221,7 +221,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
 
     protected static function parseTemplates($test)
     {
-        $templates = array();
+        $templates = [];
         preg_match_all('/--TEMPLATE(?:\((.*?)\))?--(.*?)(?=\-\-TEMPLATE|$)/s', $test, $matches, PREG_SET_ORDER);
         foreach ($matches as $match) {
             $templates[($match[1] ? $match[1] : 'index.twig')] = $match[2];

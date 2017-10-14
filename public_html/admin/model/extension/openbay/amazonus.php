@@ -306,7 +306,7 @@ class ModelExtensionOpenBayAmazonus extends Model {
 			return json_decode($message_row['messages']);
 		}
 
-		$result = array();
+		$result = [];
 
 		$insertion_rows = $this->db->query("SELECT `sku`, `insertion_id` FROM `oc_amazonus_product` WHERE `product_id` = '" . (int)$product_id . "' AND `version` = 2")->rows;
 
@@ -412,7 +412,7 @@ class ModelExtensionOpenBayAmazonus extends Model {
 				ON `p`.`product_id` = `pd`.`product_id`
 				AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'")->rows;
 
-			$result = array();
+			$result = [];
 			$this->load->model('extension/module/openstock');
 			$this->load->model('tool/image');
 			foreach($rows as $row) {
@@ -575,7 +575,7 @@ class ModelExtensionOpenBayAmazonus extends Model {
 
 		$sql .= " LIMIT " . (int)$data['start'] . ", " . (int)$data['limit'];
 
-		$results = array();
+		$results = [];
 
 		$rows = $this->db->query($sql)->rows;
 
@@ -592,7 +592,7 @@ class ModelExtensionOpenBayAmazonus extends Model {
 	}
 
 	public function updateAmazonSkusQuantities($skus) {
-		$sku_array = array();
+		$sku_array = [];
 
 		foreach ($skus as $sku) {
 			$sku_array[] = "'" . $this->db->escape($sku) . "'";
@@ -615,7 +615,7 @@ class ModelExtensionOpenBayAmazonus extends Model {
 			")->rows;
 		}
 
-		$return = array();
+		$return = [];
 
 		foreach ($rows as $row) {
 			$return[$row['amazonus_sku']] = $row['quantity'];
@@ -689,10 +689,10 @@ class ModelExtensionOpenBayAmazonus extends Model {
 				LIMIT " . (int)$start . "," . (int)$limit)->rows;
 		}
 
-		$products = array();
+		$products = [];
 
 		foreach ($rows as $row) {
-			$combinations = array();
+			$combinations = [];
 
 			if (isset($row['pov_id']) && !empty($row['pov_id'])) {
 				$variants = (isset($row['pov_id']) ? $this->model_setting_module_openstock->getVariant($row['pov_id']) : '');

@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionPaymentKlarnaInvoice extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/payment/klarna_invoice');
@@ -46,7 +46,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 			$data['success'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -67,7 +67,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
-		$data['countries'] = array();
+		$data['countries'] = [];
 
 		$data['countries'][] = array(
 			'name' => $this->language->get('text_germany'),
@@ -167,7 +167,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 				break;
 
 			case 'array':
-				$value = array();
+				$value = [];
 
 				$xpath = new DOMXPath($document);
 				$entries = $xpath->query('.//array/data/value', $child);

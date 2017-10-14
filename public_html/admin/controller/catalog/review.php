@@ -1,6 +1,6 @@
 <?php
 class ControllerCatalogReview extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('catalog/review');
@@ -231,7 +231,7 @@ class ControllerCatalogReview extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -246,7 +246,7 @@ class ControllerCatalogReview extends Controller {
 		$data['add'] = $this->url->link('catalog/review/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('catalog/review/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$data['reviews'] = array();
+		$data['reviews'] = [];
 
 		$filter_data = array(
 			'filter_product'    => $filter_product,
@@ -294,7 +294,7 @@ class ControllerCatalogReview extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -445,7 +445,7 @@ class ControllerCatalogReview extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),

@@ -98,7 +98,7 @@ class ModelLocalisationWeightClass extends Model {
 	}
 
 	public function getWeightClassDescriptions($weight_class_id) {
-		$weight_class_data = array();
+		$weight_class_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_weight_class_description WHERE weight_class_id = '" . (int)$weight_class_id . "'");
 

@@ -17,7 +17,7 @@ class ControllerCommonColumnLeft extends Controller {
 			);
 			
 			// Catalog
-			$catalog = array();
+			$catalog = [];
 			
 			if ($this->user->hasPermission('access', 'catalog/category')) {
 				$catalog[] = array(
@@ -52,7 +52,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Attributes
-			$attribute = array();
+			$attribute = [];
 			
 			if ($this->user->hasPermission('access', 'catalog/attribute')) {
 				$attribute[] = array(
@@ -129,7 +129,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Extension
-			$marketplace = array();
+			$marketplace = [];
 			
 			if ($this->user->hasPermission('access', 'marketplace/marketplace')) {		
 				$marketplace[] = array(
@@ -190,7 +190,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Design
-			$design = array();
+			$design = [];
 			
 			if ($this->user->hasPermission('access', 'design/layout')) {
 				$design[] = array(
@@ -243,7 +243,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Sales
-			$sale = array();
+			$sale = [];
 			
 			if ($this->user->hasPermission('access', 'sale/order')) {
 				$sale[] = array(
@@ -270,7 +270,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Voucher
-			$voucher = array();
+			$voucher = [];
 			
 			if ($this->user->hasPermission('access', 'sale/voucher')) {
 				$voucher[] = array(
@@ -307,7 +307,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Customer
-			$customer = array();
+			$customer = [];
 			
 			if ($this->user->hasPermission('access', 'customer/customer')) {
 				$customer[] = array(
@@ -352,7 +352,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Marketing
-			$marketing = array();
+			$marketing = [];
 
 			if ($this->user->hasPermission('access', 'marketing/affiliate')) {
 				$marketing[] = array(
@@ -397,7 +397,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// System
-			$system = array();
+			$system = [];
 			
 			if ($this->user->hasPermission('access', 'setting/setting')) {
 				$system[] = array(
@@ -408,7 +408,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 		
 			// Users
-			$user = array();
+			$user = [];
 			
 			if ($this->user->hasPermission('access', 'user/user')) {
 				$user[] = array(
@@ -443,7 +443,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Localisation
-			$localisation = array();
+			$localisation = [];
 			
 			if ($this->user->hasPermission('access', 'localisation/location')) {
 				$localisation[] = array(
@@ -486,7 +486,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Returns
-			$return = array();
+			$return = [];
 			
 			if ($this->user->hasPermission('access', 'localisation/return_status')) {
 				$return[] = array(
@@ -545,7 +545,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Tax		
-			$tax = array();
+			$tax = [];
 			
 			if ($this->user->hasPermission('access', 'localisation/tax_class')) {
 				$tax[] = array(
@@ -596,7 +596,7 @@ class ControllerCommonColumnLeft extends Controller {
 			}
 			
 			// Tools	
-			$maintenance = array();
+			$maintenance = [];
 			
 			if ($this->user->hasPermission('access', 'tool/upgrade')) {
 				$maintenance[] = array(
@@ -650,7 +650,7 @@ class ControllerCommonColumnLeft extends Controller {
 				);
 			}
 			
-			$report = array();
+			$report = [];
 							
 			if ($this->user->hasPermission('access', 'report/report')) {
 				$report[] = array(

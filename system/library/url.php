@@ -12,7 +12,7 @@
 */
 class Url {
 	private $url;
-	private $rewrite = array();
+	private $rewrite = [];
 	
 	/**
 	 * Constructor

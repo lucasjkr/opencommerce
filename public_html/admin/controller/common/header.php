@@ -53,7 +53,7 @@ class ControllerCommonHeader extends Controller {
 			} 		
 			
 			// Online Stores
-			$data['stores'] = array();
+			$data['stores'] = [];
 
 			$data['stores'][] = array(
 				'name' => $this->config->get('config_name'),

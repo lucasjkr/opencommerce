@@ -101,7 +101,7 @@ class ModelMarketingCoupon extends Model {
 	}
 
 	public function getCouponProducts($coupon_id) {
-		$coupon_product_data = array();
+		$coupon_product_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_coupon_product WHERE coupon_id = '" . (int)$coupon_id . "'");
 
@@ -113,7 +113,7 @@ class ModelMarketingCoupon extends Model {
 	}
 
 	public function getCouponCategories($coupon_id) {
-		$coupon_category_data = array();
+		$coupon_category_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_coupon_category WHERE coupon_id = '" . (int)$coupon_id . "'");
 

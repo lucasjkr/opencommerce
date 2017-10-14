@@ -55,7 +55,7 @@ final class Amazonus {
             'opencart_version' => VERSION
         );
 
-        $headers = array();
+        $headers = [];
         $headers[] = 'X-Endpoint-Version: 2';
 
 		$defaults = array(
@@ -103,7 +103,7 @@ final class Amazonus {
             'opencart_version' => VERSION
         );
 
-        $headers = array();
+        $headers = [];
         $headers[] = 'X-Endpoint-Version: 2';
 
 		$defaults = array(
@@ -143,7 +143,7 @@ final class Amazonus {
 			$this->load->model('extension/module/openstock');
 			$logger->write('Variant item');
 
-			$quantity_data = array();
+			$quantity_data = [];
 
 			// check if post data['variant'], if not then call db to get variants
 			if (!isset($data['variant'])) {
@@ -191,7 +191,7 @@ final class Amazonus {
 			$amazon_order = $this->getOrder($order['order_id']);
 			$amazon_order_products = $this->model_extension_openbay_amazonus->getAmazonusOrderedProducts($order['order_id']);
 
-			$products = array();
+			$products = [];
 
 			foreach ($amazon_order_products as $amazon_order_product) {
 				$products[] = array(
@@ -333,7 +333,7 @@ final class Amazonus {
 		$logger = new \Log('amazonus_stocks.log');
 		$logger->write('putStockUpdateBulk(), End inactive: ' . $end_inactive . ', ids: ' . json_encode($product_id_array));
 
-		$quantity_data = array();
+		$quantity_data = [];
 
 		foreach($product_id_array as $product_id) {
 			$linked_skus = $this->db->query("SELECT `amazonus_sku` FROM `oc_amazonus_product_link` WHERE `product_id` = '" . (int)$product_id . "'")->rows;
@@ -441,7 +441,7 @@ final class Amazonus {
 
 		$category = (string)$simplexml->filename;
 
-		$tabs = array();
+		$tabs = [];
 		foreach($simplexml->tabs->tab as $tab) {
 			$attributes = $tab->attributes();
 			$tabs[] = array(
@@ -450,7 +450,7 @@ final class Amazonus {
 			);
 		}
 
-		$fields = array();
+		$fields = [];
 		$field_types = array('required', 'desired', 'optional');
 		foreach ($field_types as $type) {
 			foreach ($simplexml->fields->$type->field as $field) {

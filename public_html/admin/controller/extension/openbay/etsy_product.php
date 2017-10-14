@@ -15,7 +15,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		$data['cancel']   = $this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'], true);
 		$data['user_token']    = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text' => $this->language->get('text_home'),
@@ -49,10 +49,10 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		if (isset($this->request->get['product_id'])) {
 			$product_images = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
 		} else {
-			$product_images = array();
+			$product_images = [];
 		}
 
-		$data['product_images'] = array();
+		$data['product_images'] = [];
 
 		foreach ($product_images as $product_image) {
 			if (is_file(DIR_IMAGE . $product_image['image'])) {
@@ -71,7 +71,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		$data['product'] = $product_info;
 		$data['product']['description_raw'] = trim(strip_tags(html_entity_decode($data['product']['description'], ENT_QUOTES, 'UTF-8')));
 
-		$setting = array();
+		$setting = [];
 
 		$setting['who_made'] = $this->openbay->etsy->getSetting('who_made');
 		if (is_array($setting['who_made'])) {
@@ -208,7 +208,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		$data['cancel']   = $this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'], true);
 		$data['user_token']    = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text' => $this->language->get('text_home'),
@@ -336,8 +336,8 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			}
 		}
 
-		$response = array();
-		$parent_categories = array();
+		$response = [];
+		$parent_categories = [];
 		$last_id = 0;
 
 		if (isset($this->request->get['id_path']) && $this->request->get['id_path'] != '' && $this->request->get['id_path'] != 0) {
@@ -373,7 +373,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 	}
 
 	private function formatCategories($category_data) {
-		$response = array();
+		$response = [];
 
 		foreach ($category_data as $category) {
 			$response[$category['id']] = array(
@@ -472,7 +472,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -538,7 +538,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -560,7 +560,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			'text' => $this->language->get('heading_title'),
 		);
 
-		$filter = array();
+		$filter = [];
 
 		if (!isset($this->request->get['status'])) {
 			$filter['status'] = 'active';
@@ -587,17 +587,17 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		unset($filter['page']);
 
 		if (isset($response['data']['error'])) {
-			$data['listings'] = array();
+			$data['listings'] = [];
 			$data['pagination'] = '';
 			$data['results'] = '';
 			$this->error['warning'] = $this->language->get('error_etsy') . $response['data']['error'];
 		} else {
-			$listings = array();
+			$listings = [];
 
 			foreach($response['data']['results'] as $listing) {
 				$product_link = $this->openbay->etsy->getLinkedProduct($listing['listing_id']);
 
-				$actions = array();
+				$actions = [];
 
 				if ($filter['status'] == 'inactive') {
 					$actions[] = 'activate_item';

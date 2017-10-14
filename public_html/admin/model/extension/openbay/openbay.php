@@ -9,7 +9,7 @@ class ModelExtensionOpenBayOpenbay extends Model {
 	}
 
 	public function updateTest() {
-		$this->error = array();
+		$this->error = [];
 
 		$this->openbay->log('Starting update test');
 
@@ -140,7 +140,7 @@ class ModelExtensionOpenBayOpenbay extends Model {
 	}
 
 	public function updateExtract() {
-		$this->error = array();
+		$this->error = [];
 
 		$web_root = preg_replace('/system\/$/', '', DIR_SYSTEM);
 
@@ -179,7 +179,7 @@ class ModelExtensionOpenBayOpenbay extends Model {
 	}
 
 	public function updateRemove($beta = 0) {
-		$this->error = array();
+		$this->error = [];
 
 		$web_root = preg_replace('/system\/$/', '', DIR_SYSTEM);
 
@@ -318,7 +318,7 @@ class ModelExtensionOpenBayOpenbay extends Model {
 	}
 
 	public function requirementTest() {
-		$error = array();
+		$error = [];
 
 		// check for mkdir enabled
 		if (!function_exists('mkdir')) {

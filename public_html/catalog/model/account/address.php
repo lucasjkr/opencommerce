@@ -79,7 +79,7 @@ class ModelAccountAddress extends Model {
 	}
 
 	public function getAddresses() {
-		$address_data = array();
+		$address_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_address WHERE customer_id = '" . (int)$this->customer->getId() . "'");
 

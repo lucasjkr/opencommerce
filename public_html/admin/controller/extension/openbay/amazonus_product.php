@@ -11,7 +11,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 		$this->document->addScript('view/javascript/openbay/js/openbay.js');
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -108,7 +108,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 			$variation = '';
 		}
 		$data['variation'] = $variation;
-		$data['errors'] = array();
+		$data['errors'] = [];
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$data_array = $this->request->post;
@@ -165,7 +165,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 			$data['edit_product_category'] = '';
 		}
 
-		$data['amazonus_categories'] = array();
+		$data['amazonus_categories'] = [];
 
 		$amazonus_templates = $this->openbay->amazonus->getCategoryTemplates();
 
@@ -196,7 +196,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 			$this->load->model('extension/module/openstock');
 			$data['options'] = $this->model_setting_module_openstock->getVariants($product_id);
 		} else {
-			$data['options'] = array();
+			$data['options'] = [];
 		}
 
 		$data['header'] = $this->load->controller('common/header');
@@ -319,7 +319,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 			$category_data = array('category' => (string)$saved_product['category']);
 			$fields_data = array('fields' => (array)$product_data_decoded['fields']);
 
-			$mp_array = array(); //Amazon US does not have marketplace selection
+			$mp_array = []; //Amazon US does not have marketplace selection
 			$marketplaces_data = array('marketplaces' => $mp_array);
 
 			$product_data = array_merge($category_data, $fields_data, $response_data, $marketplaces_data);
@@ -351,7 +351,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 		$this->load->model('tool/image');
 		$log = new Log('amazonus_product.log');
 
-		$result = array();
+		$result = [];
 
 		if (isset($this->request->get['xml'])) {
 			$request = array('template' => $this->request->get['xml'], 'version' => 2);
@@ -491,7 +491,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 			unset($defaults['shippingweightunitofmeasure']);
 		}
 
-		$filled_array = array();
+		$filled_array = [];
 
 		foreach($fields_array as $field) {
 
@@ -517,7 +517,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 
 		$saved_fields['Quantity'] = $this->model_extension_openbay_amazonus->getProductQuantity($product_id, $var);
 
-		$filled_array = array();
+		$filled_array = [];
 
 		foreach($fields_array as $field) {
 			$value_array = array('value' => '');
@@ -545,7 +545,7 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 	private function formatUrlsInText($text) {
 		$regex_url = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
 		preg_match_all($regex_url, $text, $matches);
-		$used_patterns = array();
+		$used_patterns = [];
 		foreach($matches[0] as $pattern) {
 			if (!array_key_exists($pattern, $used_patterns)) {
 				$used_patterns[$pattern]=true;

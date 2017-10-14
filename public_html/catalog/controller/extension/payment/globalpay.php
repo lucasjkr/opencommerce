@@ -23,7 +23,7 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 				'diners' => $this->language->get('text_card_diners'),
 			);
 
-			$data['cards'] = array();
+			$data['cards'] = [];
 
 			$accounts = $this->config->get('payment_globalpay_account');
 

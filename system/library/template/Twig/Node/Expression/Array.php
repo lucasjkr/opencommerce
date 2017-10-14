@@ -26,7 +26,7 @@ class Twig_Node_Expression_Array extends Twig_Node_Expression
 
     public function getKeyValuePairs()
     {
-        $pairs = array();
+        $pairs = [];
 
         foreach (array_chunk($this->nodes, 2) as $pair) {
             $pairs[] = array(

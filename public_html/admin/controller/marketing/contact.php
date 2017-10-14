@@ -1,6 +1,6 @@
 <?php
 class ControllerMarketingContact extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('marketing/contact');
@@ -9,7 +9,7 @@ class ControllerMarketingContact extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -41,7 +41,7 @@ class ControllerMarketingContact extends Controller {
 	public function send() {
 		$this->load->language('marketing/contact');
 
-		$json = array();
+		$json = [];
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
 			if (!$this->user->hasPermission('modify', 'marketing/contact')) {
@@ -85,7 +85,7 @@ class ControllerMarketingContact extends Controller {
 
 				$email_total = 0;
 
-				$emails = array();
+				$emails = [];
 
 				switch ($this->request->post['to']) {
 					case 'newsletter':
