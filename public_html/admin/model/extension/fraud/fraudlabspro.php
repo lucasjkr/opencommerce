@@ -50,8 +50,10 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 				`fraudlabspro_message` VARCHAR(50) NOT NULL,
 				`fraudlabspro_credits` VARCHAR(10) NOT NULL,
 				`api_key` CHAR(32) NOT NULL,
+				`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY (`order_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+              ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
 
 		$this->db->query("INSERT INTO `oc_order_status` (`language_id`, `name`) VALUES (1, 'Fraud');");
@@ -61,7 +63,10 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 		
 		$status_fraud_review_id = $this->db->getLastId();
 
-		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_review_status_id', '" . (int)$status_fraud_review_id . "', '0');");
+		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_review_status_id', :value, '0');",
+            [
+                ':value' => $status_fraud_review_id
+            ]);
 		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_approve_status_id', '2', '0');");
 		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_reject_status_id', '8', '0');");
 
@@ -75,7 +80,10 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 	}
 
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `oc_fraudlabspro` WHERE order_id = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_fraudlabspro` WHERE order_id = :order_id",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->row;
 	}
@@ -101,6 +109,7 @@ class ModelExtensionFraudFraudLabsPro extends Model {
 				curl_setopt($curl, CURLOPT_PORT, 443);
 			}
 
+            // LJK TODO: Replace with Gulp
 			curl_setopt($curl, CURLOPT_HEADER, false);
 			curl_setopt($curl, CURLINFO_HEADER_OUT, true);
 			curl_setopt($curl, CURLOPT_USERAGENT, $this->request->server['HTTP_USER_AGENT']);
