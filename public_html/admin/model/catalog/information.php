@@ -190,7 +190,7 @@ class ModelCatalogInformation extends Model {
 		if ($data) {
 			$sql = "SELECT * FROM oc_information i LEFT JOIN oc_information_description id ON (i.information_id = id.information_id) WHERE id.language_id = :language_id";
 
-            $args[':language_id'] => $this->config->get('config_language_id');
+            $args[':language_id'] = $this->config->get('config_language_id');
 
             $sort_data = array(
 				'id.title',
