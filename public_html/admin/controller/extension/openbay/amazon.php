@@ -34,7 +34,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('text_dashboard'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text'      => $this->language->get('text_home'),
@@ -79,7 +79,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -103,7 +103,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$data['link_overview'] = $this->url->link('extension/openbay/amazon', 'user_token=' . $this->session->data['user_token'], true);
 
-		$request_arg = array();
+		$request_arg = [];
 
 		if (isset($this->request->get['filter_date_start'])) {
 			$request_arg['date_start'] = date("Y-m-d", strtotime($this->request->get['filter_date_start']));
@@ -123,10 +123,10 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$xml = $this->openbay->amazon->getStockUpdatesStatus($request_arg);
 		$xml_object = simplexml_load_string($xml);
 
-		$data['table_data'] = array();
+		$data['table_data'] = [];
 
 		if ($xml_object !== false) {
-			$table_data = array();
+			$table_data = [];
 
 			foreach($xml_object->update as $update_node) {
 				$row = array(
@@ -135,7 +135,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 					'status' 		 => (string)$update_node->status,
 				);
 
-				$data_items = array();
+				$data_items = [];
 
 				foreach($update_node->data->product as $product_node) {
 					$data_items[] = array(
@@ -169,7 +169,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text'      => $this->language->get('text_home'),
@@ -191,7 +191,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$response = simplexml_load_string($this->openbay->amazon->call('plans/getPlans'));
 
-		$data['plans'] = array();
+		$data['plans'] = [];
 
 		if ($response) {
 			foreach ($response->Plan as $plan) {
@@ -255,7 +255,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			if (!isset($this->request->post['openbay_amazon_orders_marketplace_ids'])) {
-				$this->request->post['openbay_amazon_orders_marketplace_ids'] = array();
+				$this->request->post['openbay_amazon_orders_marketplace_ids'] = [];
 			}
 
 			$settings = array_merge($settings, $this->request->post);
@@ -279,7 +279,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$data['cancel'] = $this->url->link('extension/openbay/amazon', 'user_token=' . $this->session->data['user_token'], true);
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text'      => $this->language->get('text_home'),
@@ -392,7 +392,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -437,7 +437,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$data['link_overview'] = $this->url->link('extension/openbay/amazon', 'user_token=' . $this->session->data['user_token'], true);
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text'      => $this->language->get('text_home'),
@@ -460,7 +460,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->load->model('extension/openbay/amazon');
 		$saved_products = $this->model_extension_openbay_amazon->getSavedProducts();
 
-		$data['saved_products'] = array();
+		$data['saved_products'] = [];
 
 		foreach($saved_products as $saved_product) {
 			$data['saved_products'][] = array(
@@ -497,7 +497,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 	}
 
 	public function getVariants() {
-		$variants = array();
+		$variants = [];
 
 		if ($this->openbay->addonLoad('openstock') && isset($this->request->get['product_id'])) {
 			$this->load->model('extension/module/openstock');
@@ -538,7 +538,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 				$this->load->model('extension/module/openstock');
 				$option_stocks = $this->model_setting_module_openstock->getVariants($product_id);
 
-				$quantity_data = array();
+				$quantity_data = [];
 
 				foreach($option_stocks as $option_stock) {
 					if (isset($option_stock['sku']) && $option_stock['sku'] == $var) {
@@ -613,9 +613,9 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		} else {
 			$this->load->model('extension/openbay/amazon_listing');
 
-			$delete_search_results = array();
+			$delete_search_results = [];
 
-			$bulk_list_products = array();
+			$bulk_list_products = [];
 
 			foreach ($this->request->post['products'] as $product_id => $asin) {
 				$delete_search_results[] = $product_id;
@@ -628,7 +628,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			$status = false;
 
 			if ($bulk_list_products) {
-				$data = array();
+				$data = [];
 
 				$data['products'] = $bulk_list_products;
 				$data['marketplace'] = $this->request->post['marketplace'];
@@ -672,8 +672,8 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->load->model('extension/openbay/amazon_listing');
 		$this->load->language('extension/openbay/amazon_bulk_listing');
 
-		$json = array();
-		$search_data = array();
+		$json = [];
+		$search_data = [];
 
 		if (!empty($this->request->post['product_ids'])) {
 			foreach ($this->request->post['product_ids'] as $product_id) {
@@ -734,7 +734,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text'      => $this->language->get('text_home'),
@@ -804,7 +804,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 				$page = 1;
 			}
 
-			$filter = array();
+			$filter = [];
 
 			$filter['filter_marketplace'] = $filter_marketplace;
 			$filter['start'] = ($page - 1) * $this->config->get('config_limit_admin');
@@ -813,7 +813,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			$results = $this->model_extension_openbay_amazon->getProductSearch($filter);
 			$product_total = $this->model_extension_openbay_amazon->getProductSearchTotal($filter);
 
-			$data['products'] = array();
+			$data['products'] = [];
 
 			foreach ($results as $result) {
 				$product = $this->model_catalog_product->getProduct($result['product_id']);
@@ -834,7 +834,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 				$href = $this->url->link('catalog/product/edit', 'user_token=' . $this->session->data['user_token'] . '&product_id=' . $product['product_id'], true);
 
-				$search_results = array();
+				$search_results = [];
 
 				if ($result['data']) {
 					foreach ($result['data'] as $search_result) {
@@ -886,7 +886,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 		$data['breadcrumbs'][] = array(
 			'href'      => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
 			'text'      => $this->language->get('text_home'),
@@ -994,7 +994,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$results = $this->model_extension_openbay_amazon->getUnlinkedItemsFromReport($marketplace_code, $linked_item_limit, $linked_item_page);
 
-		$products = array();
+		$products = [];
 
 		foreach ($results as $result) {
 			$products[] = array(
@@ -1017,7 +1017,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$data['marketplaces'] = $marketplaces;
 		$data['marketplace_code'] = $marketplace_code;
 
-		$data['marketplaces_processing'] = array();
+		$data['marketplaces_processing'] = [];
 		if (is_array($this->config->get('openbay_amazon_processing_listing_reports'))) {
 			$data['marketplaces_processing'] = $this->config->get('openbay_amazon_processing_listing_reports');
 		}
@@ -1050,7 +1050,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$response = $this->openbay->amazon->call('report/listing', $request_data);
 		$response = json_decode($response, 1);
 
-		$json = array();
+		$json = [];
 		$json['status'] = $response['status'];
 
 		if ($json['status']) {
@@ -1071,8 +1071,8 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 	public function doBulkLinking() {
 		$this->load->model('extension/openbay/amazon');
 
-		$links = array();
-		$skus = array();
+		$links = [];
+		$skus = [];
 
 		if (!empty($this->request->post['link'])) {
 			foreach ($this->request->post['link'] as $link) {
@@ -1107,7 +1107,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$product_array = $this->db->query("SELECT `product_id` FROM `oc_product`")->rows;
 
-		$bulk_array = array();
+		$bulk_array = [];
 
 		foreach ($product_array as $product) {
 			$bulk_array[] = $product['product_id'];

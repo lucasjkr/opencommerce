@@ -1,7 +1,7 @@
 <?php
 class ControllerExtensionPaymentKlarnaAccount extends Controller {
-	private $error = array();
-	private $pclasses = array();
+	private $error = [];
+	private $pclasses = [];
 
 	public function index() {
 		$this->load->language('extension/payment/klarna_account');
@@ -47,7 +47,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 			$data['success'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -68,7 +68,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
-		$data['countries'] = array();
+		$data['countries'] = [];
 
 		$data['countries'][] = array(
 			'name' => $this->language->get('text_germany'),
@@ -196,7 +196,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 
 				$curl = curl_init();
 
-				$header = array();
+				$header = [];
 
 				$header[] = 'Content-Type: text/xml';
 				$header[] = 'Content-Length: ' . strlen($xml);
@@ -296,7 +296,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				$value = (int)$child->nodeValue;
 				break;
 			case 'array':
-				$value = array();
+				$value = [];
 
 				$xpath = new DOMXPath($document);
 				$entries = $xpath->query('.//array/data/value', $child);

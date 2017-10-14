@@ -43,7 +43,7 @@ function twig_var_dump(Twig_Environment $env, $context)
 
     $count = func_num_args();
     if (2 === $count) {
-        $vars = array();
+        $vars = [];
         foreach ($context as $key => $value) {
             if (!$value instanceof Twig_Template) {
                 $vars[$key] = $value;

@@ -22,7 +22,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 			$this->openbay->ebay->log('Openstock module not found');
 		}
 
-		$categories = array();
+		$categories = [];
 		$data['data'] = unserialize(gzuncompress(stripslashes(base64_decode(strtr($data['data'], '-_,', '+/=')))));
 		$new_data = base64_decode($data['data']);
 		unset($data['data']);
@@ -51,7 +51,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 				if (isset($parts[1])) {
 					if (!isset($categories[$parts[0]][$parts[1]])) {
 						if (!empty($parts[1])) {
-							$categories[$parts[0]][$parts[1]] = array();
+							$categories[$parts[0]][$parts[1]] = [];
 						}
 					}
 				}
@@ -59,7 +59,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 				if (isset($parts[2])) {
 					if (!isset($categories[$parts[0]][$parts[1]][$parts[2]])) {
 						if (!empty($parts[2])) {
-							$categories[$parts[0]][$parts[1]][$parts[2]] = array();
+							$categories[$parts[0]][$parts[1]][$parts[2]] = [];
 						}
 					}
 				}
@@ -67,7 +67,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 				if (isset($parts[3])) {
 					if (!isset($categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]])) {
 						if (!empty($parts[3])) {
-							$categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]] = array();
+							$categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]] = [];
 						}
 					}
 				}
@@ -75,7 +75,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 				if (isset($parts[4])) {
 					if (!isset($categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]])) {
 						if (!empty($parts[4])) {
-							$categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]] = array();
+							$categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]] = [];
 						}
 					}
 				}
@@ -83,13 +83,13 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 				if (isset($parts[5])) {
 					if (!isset($categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]])) {
 						if (!empty($parts[5])) {
-							$categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]] = array();
+							$categories[$parts[0]][$parts[1]][$parts[2]][$parts[3]][$parts[4]][$parts[5]] = [];
 						}
 					}
 				}
 			}
 
-			$cat_link = array();
+			$cat_link = [];
 			foreach ($categories as $key1 => $cat1) {
 				foreach ($cat1 as $key2 => $cat2) {
 					//final cat, add to array as node
@@ -332,7 +332,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 	}
 
 	public function getDisplayProducts() {
-		$data = array();
+		$data = [];
 		$data['search_keyword'] = $this->config->get('ebaydisplay_module_keywords');
 		$data['seller_id']      = $this->config->get('ebaydisplay_module_username');
 		$data['limit']          = $this->config->get('ebaydisplay_module_limit');

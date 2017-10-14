@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionModuleKlarnaCheckoutModule extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/module/klarna_checkout_module');
@@ -24,7 +24,7 @@ class ControllerExtensionModuleKlarnaCheckoutModule extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),

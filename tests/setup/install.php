@@ -25,7 +25,7 @@ $db = new DB(DB_DRIVER, DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE, DB_P
 foreach ($settings as $store_id => $store_settings) {
 	$query = $db->query("SELECT * FROM `oc_setting` WHERE store_id = '" . (int)$store_id . "'");
 
-	$old_store_config = array();
+	$old_store_config = [];
 
 	foreach ($query->rows as $result) {
 		if ($result['serialized'] == 1) {
@@ -124,7 +124,7 @@ function editSetting($code, $data, $store_id = 0) {
 function getInstalledExtension($type) {
 	global $db;
 
-	$extension_data = array();
+	$extension_data = [];
 
 	$query = $db->query("SELECT * FROM oc_extension WHERE `type` = '" . $db->escape($type) . "' ORDER BY code");
 

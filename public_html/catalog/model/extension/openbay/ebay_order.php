@@ -366,7 +366,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 					if ($product_id != false) {
 						$sku_parts = explode(':', $txn->item->variantsku);
-						$p_options = array();
+						$p_options = [];
 
 						foreach ($sku_parts as $part) {
 							$sql = "SELECT
@@ -426,7 +426,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$totals_language = $this->load->language('extension/openbay/ebay_order');
 
 		$name_parts     = $this->openbay->splitName((string)$order->address->name);
-		$user           = array();
+		$user           = [];
 		$user['fname']  = $name_parts['firstname'];
 		$user['lname']  = $name_parts['surname'];
 
@@ -550,7 +550,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 		$totals = number_format((double)$total_net + (double)$shipping_net + (double)$tax + (double)$discount_net, 4, '.', '');
 
-		$data = array();
+		$data = [];
 
 		$data['totals'][0] = array(
 			'code'          => 'sub_total',
@@ -687,7 +687,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 		$result = $this->db->query("SELECT * FROM `oc_ebay_transaction` WHERE `order_id` = '" . (int)$order_id . "'");
 
-		$lines = array();
+		$lines = [];
 
 		foreach ($result->rows as $line) {
 			$lines[] = $line;
@@ -737,7 +737,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 
 		$query = $this->db->query("SELECT `order_status_id` FROM `oc_order_history` WHERE `order_id` = '" . (int)$order_id . "'");
 
-		$status = array();
+		$status = [];
 
 		if ($query->num_rows) {
 			foreach ($query->rows as $row) {
@@ -870,7 +870,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				$subject = sprintf($language->get('text_new_subject'), html_entity_decode($order_info['store_name'], ENT_QUOTES, 'UTF-8'), $order_id);
 
 				// HTML Mail
-				$data = array();
+				$data = [];
 
 				$data['title'] = sprintf($language->get('text_new_subject'), $order_info['store_name'], $order_id);
 				$data['text_greeting'] = sprintf($language->get('text_new_greeting'), $order_info['store_name']);
@@ -991,10 +991,10 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 				);
 
 				$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
-				$data['products']         = array();
+				$data['products']         = [];
 
 				foreach ($order_product_query->rows as $product) {
-					$option_data = array();
+					$option_data = [];
 
 					$order_option_query = $this->db->query("SELECT * FROM oc_order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$product['order_product_id'] . "'");
 
@@ -1021,7 +1021,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 					);
 				}
 
-				$data['vouchers'] = array();
+				$data['vouchers'] = [];
 
 				foreach ($order_total_query->rows as $total) {
 					$data['totals'][] = array(

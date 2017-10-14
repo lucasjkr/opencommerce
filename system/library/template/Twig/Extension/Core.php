@@ -18,7 +18,7 @@ class Twig_Extension_Core extends Twig_Extension
     protected $dateFormats = array('F j, Y H:i', '%d days');
     protected $numberFormat = array(0, '.', ',');
     protected $timezone = null;
-    protected $escapers = array();
+    protected $escapers = [];
 
     /**
      * Defines a new escaper to be used via the escape filter.
@@ -847,7 +847,7 @@ function twig_split_filter(Twig_Environment $env, $value, $delimiter, $limit = n
         return array($value);
     }
 
-    $r = array();
+    $r = [];
     for ($i = 0; $i < $length; $i += $limit) {
         $r[] = mb_substr($value, $i, $limit, $charset);
     }

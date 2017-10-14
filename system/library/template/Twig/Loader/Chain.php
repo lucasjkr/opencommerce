@@ -16,8 +16,8 @@
  */
 class Twig_Loader_Chain implements Twig_LoaderInterface, Twig_ExistsLoaderInterface
 {
-    private $hasSourceCache = array();
-    protected $loaders = array();
+    private $hasSourceCache = [];
+    protected $loaders = [];
 
     /**
      * Constructor.
@@ -39,7 +39,7 @@ class Twig_Loader_Chain implements Twig_LoaderInterface, Twig_ExistsLoaderInterf
     public function addLoader(Twig_LoaderInterface $loader)
     {
         $this->loaders[] = $loader;
-        $this->hasSourceCache = array();
+        $this->hasSourceCache = [];
     }
 
     /**
@@ -47,7 +47,7 @@ class Twig_Loader_Chain implements Twig_LoaderInterface, Twig_ExistsLoaderInterf
      */
     public function getSource($name)
     {
-        $exceptions = array();
+        $exceptions = [];
         foreach ($this->loaders as $loader) {
             if ($loader instanceof Twig_ExistsLoaderInterface && !$loader->exists($name)) {
                 continue;
@@ -99,7 +99,7 @@ class Twig_Loader_Chain implements Twig_LoaderInterface, Twig_ExistsLoaderInterf
      */
     public function getCacheKey($name)
     {
-        $exceptions = array();
+        $exceptions = [];
         foreach ($this->loaders as $loader) {
             if ($loader instanceof Twig_ExistsLoaderInterface && !$loader->exists($name)) {
                 continue;
@@ -120,7 +120,7 @@ class Twig_Loader_Chain implements Twig_LoaderInterface, Twig_ExistsLoaderInterf
      */
     public function isFresh($name, $time)
     {
-        $exceptions = array();
+        $exceptions = [];
         foreach ($this->loaders as $loader) {
             if ($loader instanceof Twig_ExistsLoaderInterface && !$loader->exists($name)) {
                 continue;

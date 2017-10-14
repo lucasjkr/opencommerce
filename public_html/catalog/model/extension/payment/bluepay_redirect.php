@@ -15,7 +15,7 @@ class ModelExtensionPaymentBluePayRedirect extends Model {
 			$status = false;
 		}
 
-		$method_data = array();
+		$method_data = [];
 
 		if ($status) {
 			$method_data = array(
@@ -33,7 +33,7 @@ class ModelExtensionPaymentBluePayRedirect extends Model {
 
 		$query = $this->db->query("SELECT * FROM `oc_bluepay_redirect_card` WHERE customer_id = '" . (int)$customer_id . "'");
 
-		$card_data = array();
+		$card_data = [];
 
 		$this->load->model('account/address');
 

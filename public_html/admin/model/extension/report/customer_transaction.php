@@ -37,7 +37,7 @@ class ModelExtensionReportCustomerTransaction extends Model {
 	public function getTotalTransactions($data = array()) {
 		$sql = "SELECT COUNT(DISTINCT ct.customer_id) AS total FROM `oc_customer_transaction` ct LEFT JOIN `oc_customer` c ON (ct.customer_id = c.customer_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_date_start'])) {
 			$implode[] = "DATE(ct.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";

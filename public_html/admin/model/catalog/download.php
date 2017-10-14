@@ -106,7 +106,7 @@ class ModelCatalogDownload extends Model {
 	}
 
 	public function getDownloadDescriptions($download_id) {
-		$download_description_data = array();
+		$download_description_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_download_description WHERE download_id = :download_id",
             [

@@ -16,7 +16,7 @@ class ModelExtensionPaymentG2APay extends Model {
 			$status = false;
 		}
 
-		$method_data = array();
+		$method_data = [];
 
 		if ($status) {
 			$method_data = array(

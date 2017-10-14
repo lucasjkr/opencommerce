@@ -1,8 +1,8 @@
 <?php
 final class Openbay {
 	private $registry;
-	private $installed_modules = array();
-	public $installed_markets = array();
+	private $installed_modules = [];
+	public $installed_markets = [];
 	private $logging = 1;
 
 	public function __construct($registry) {
@@ -97,7 +97,7 @@ final class Openbay {
 	public function testDbTable($table) {
 		$res = $this->db->query("SELECT `table_name` AS `c` FROM `information_schema`.`tables` WHERE `table_schema` = DATABASE()");
 
-		$tables = array();
+		$tables = [];
 
 		foreach($res->rows as $row) {
 			$tables[] = $row['c'];
@@ -123,7 +123,7 @@ final class Openbay {
 	}
 
 	public function getTaxRates($tax_class_id) {
-		$tax_rates = array();
+		$tax_rates = [];
 
 		$tax_query = $this->db->query("SELECT
 					tr2.tax_rate_id,
@@ -316,7 +316,7 @@ final class Openbay {
 		$addon = strtolower((string)$addon);
 
 		if (empty($this->installed_modules)) {
-			$this->installed_modules = array();
+			$this->installed_modules = [];
 
 			$rows = $this->db->query("SELECT `code` FROM `oc_extension`")->rows;
 
@@ -339,13 +339,13 @@ final class Openbay {
 	}
 
 	public function getProductOptions($product_id) {
-		$product_option_data = array();
+		$product_option_data = [];
 
 		$product_option_query = $this->db->query("SELECT * FROM `oc_product_option` po LEFT JOIN `oc_option` o ON (po.option_id = o.option_id) LEFT JOIN `oc_option_description` od ON (o.option_id = od.option_id) WHERE po.product_id = '" . (int)$product_id . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY o.sort_order");
 
 		foreach ($product_option_query->rows as $product_option) {
 			if ($product_option['type'] == 'select' || $product_option['type'] == 'radio' || $product_option['type'] == 'checkbox' || $product_option['type'] == 'image') {
-				$product_option_value_data = array();
+				$product_option_value_data = [];
 
 				$product_option_value_query = $this->db->query("SELECT * FROM `oc_product_option_value` pov LEFT JOIN `oc_option_value` ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN `oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_id = '" . (int)$product_option['product_option_id'] . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY ov.sort_order");
 
@@ -403,7 +403,7 @@ final class Openbay {
 		$order_option_query = $this->db->query("SELECT * FROM `oc_order_option` WHERE `order_id` = '" . (int)$order_id . "' AND `order_product_id` = '" . (int)$order_product_id . "'");
 
 		if ($order_option_query->num_rows) {
-			$options = array();
+			$options = [];
 
 			foreach ($order_option_query->rows as $option) {
 				$options[] = $option['product_option_value_id'];

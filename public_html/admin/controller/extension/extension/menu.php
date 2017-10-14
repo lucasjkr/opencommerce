@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionExtensionMenu extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/extension/menu');
@@ -76,7 +76,7 @@ class ControllerExtensionExtensionMenu extends Controller {
 			}
 		}
 
-		$data['extensions'] = array();
+		$data['extensions'] = [];
 		
 		// Compatibility code for old extension folders
 		$files = glob(DIR_APPLICATION . 'controller/extension/menu/*.php');
@@ -98,7 +98,7 @@ class ControllerExtensionExtensionMenu extends Controller {
 			}
 		}
 
-		$sort_order = array();
+		$sort_order = [];
 
 		foreach ($data['extensions'] as $key => $value) {
 			$sort_order[$key] = $value['name'];

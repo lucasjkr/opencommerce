@@ -14,8 +14,8 @@ if (is_file(DIR_ROOT . 'config/paths.php')) {
 }
 
 // TEMPORARY - these will eventually be moved to paths.php
-define('DIR_APPLICATION',   '/vb_shared/_forks/opencommerce/public_html/catalog/');
-define('DIR_IMAGE',         '/vb_shared/_forks/opencommerce/public_html/image/');
+define('DIR_APPLICATION',   DIR_ROOT . 'public_html/catalog/');
+define('DIR_IMAGE',         DIR_ROOT . 'public_html/image/');
 define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');
 define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/theme/');
 

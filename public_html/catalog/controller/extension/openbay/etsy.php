@@ -23,7 +23,7 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 			exit();
 		}
 
-		$data = array();
+		$data = [];
 
 		if (isset($body['data']) && !empty($body['data'])) {
             $decrypted = $this->openbay->decrypt($body['data'], $this->openbay->etsy->getEncryptionKey(), $this->openbay->etsy->getEncryptionIv());

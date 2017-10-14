@@ -5,7 +5,7 @@ class ModelExtensionOpenBayEbay extends Model{
 
 		$this->model_setting_event->addEvent('openbay_ebay_add_order', 'catalog/model/checkout/order/addOrderHistory/after', 'extension/openbay/ebay/eventAddOrderHistory');
 
-		$settings = array();
+		$settings = [];
 		$settings["ebay_token"] = '';
 		$settings["ebay_secret"] = '';
 		$settings["ebay_encryption_key"] = '';
@@ -284,7 +284,7 @@ class ModelExtensionOpenBayEbay extends Model{
 
 		$qry = $this->db->query($sql);
 
-		$data = array();
+		$data = [];
 		if ($qry->num_rows) {
 			foreach ($qry->rows as $row) {
 				$data[$row['ebay_item_id']] = array(
@@ -322,7 +322,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function loadUnlinked($limit = 200, $page = 1, $filter = array()) {
-		$unlinked = array();
+		$unlinked = [];
 		$current = 1;
 		$stop_flag = 0;
 
@@ -408,7 +408,7 @@ class ModelExtensionOpenBayEbay extends Model{
 			$qry = $this->db->query("SELECT * FROM `oc_ebay_store_category` WHERE `parent_id` = '0' ORDER BY `CategoryName` ASC");
 
 			if ($qry->num_rows) {
-				$cats = array();
+				$cats = [];
 
 				foreach ($qry->rows as $row) {
 					$lev1 = $row['CategoryName'];
@@ -443,7 +443,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	public function getCategory($parent) {
 		$this->load->language('extension/openbay/ebay_new');
 
-		$json = array();
+		$json = [];
 
 		if (empty($parent)) {
 			$cat_qry = $this->db->query("SELECT * FROM `oc_ebay_category` WHERE `CategoryID` = `CategoryParentID`");
@@ -452,7 +452,7 @@ class ModelExtensionOpenBayEbay extends Model{
 		}
 
 		if ($cat_qry->num_rows) {
-			$json['cats'] = array();
+			$json['cats'] = [];
 			foreach ($cat_qry->rows as $row) {
 				$json['cats'][] = $row;
 			}
@@ -480,11 +480,11 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getShippingService($international, $type) {
-		$json = array();
+		$json = [];
 		$result = $this->db->query("SELECT * FROM `oc_ebay_shipping` WHERE `InternationalService` = '" . (int)$international . "' AND `ValidForSellingFlow` = '1' AND `ServiceType` LIKE '%" . $this->db->escape($type) . "%'");
 
 		if ($result->num_rows) {
-			$json['service'] = array();
+			$json['service'] = [];
 			foreach ($result->rows as $row) {
 				$json['service'][$row['ShippingService']] = $row;
 			}
@@ -497,7 +497,7 @@ class ModelExtensionOpenBayEbay extends Model{
 		$qry = $this->db->query("SELECT * FROM `oc_ebay_shipping_location` WHERE `shipping_location` != 'None' AND `shipping_location` != 'Worldwide'");
 
 		if ($qry->num_rows) {
-			$json = array();
+			$json = [];
 			foreach ($qry->rows as $row) {
 				$json[] = $row;
 			}
@@ -531,7 +531,7 @@ class ModelExtensionOpenBayEbay extends Model{
 
 	public function getPaymentTypes() {
 		$cat_payment    = $this->db->query("SELECT * FROM `oc_ebay_payment_method`");
-		$payments       = array();
+		$payments       = [];
 
 		foreach ($cat_payment->rows as $row) {
 			$payments[] = $row;
@@ -542,7 +542,7 @@ class ModelExtensionOpenBayEbay extends Model{
 
 	public function getPopularCategories() {
 		$res    = $this->db->query("SELECT * FROM `oc_ebay_category_history` ORDER BY `used` DESC LIMIT 5");
-		$cats   = array();
+		$cats   = [];
 
 		foreach ($res->rows as $row) {
 			$cats[] = $row;
@@ -578,7 +578,7 @@ class ModelExtensionOpenBayEbay extends Model{
 			$variant = 0;
 		}
 
-		$data2           = array();
+		$data2           = [];
 		$data2['data']   = $response;
 		$data2['error']  = $this->openbay->ebay->lasterror;
 		$data2['msg']    = $this->openbay->ebay->lastmsg;
@@ -604,7 +604,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function logCategoryUsed($category_id) {
-		$breadcrumb = array();
+		$breadcrumb = [];
 		$original_id = $category_id;
 		$stop       = false;
 		$i          = 0; //fallback to stop infinate loop
@@ -679,7 +679,7 @@ class ModelExtensionOpenBayEbay extends Model{
 	public function getLiveListingArray() {
 		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = 1");
 
-		$data = array();
+		$data = [];
 		if ($qry->num_rows) {
 			foreach ($qry->rows as $row) {
 				$data[$row['product_id']] = $row['ebay_item_id'];
@@ -726,7 +726,7 @@ class ModelExtensionOpenBayEbay extends Model{
 		} else {
 			$this->openbay->ebay->log('editSave() - variant item');
 
-			$variant_data = array();
+			$variant_data = [];
 			$this->load->model('tool/image');
 			$this->load->model('catalog/product');
 			$this->load->model('extension/module/openstock');
@@ -803,12 +803,12 @@ class ModelExtensionOpenBayEbay extends Model{
 	}
 
 	public function getProductAttributes($product_id) {
-		$product_attribute_group_data = array();
+		$product_attribute_group_data = [];
 
 		$product_attribute_group_query = $this->db->query("SELECT ag.attribute_group_id, agd.name FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_group ag ON (a.attribute_group_id = ag.attribute_group_id) LEFT JOIN oc_attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE pa.product_id = '" . (int)$product_id . "' AND agd.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY ag.attribute_group_id ORDER BY ag.sort_order, agd.name");
 
 		foreach ($product_attribute_group_query->rows as $product_attribute_group) {
-			$product_attribute_data = array();
+			$product_attribute_data = [];
 
 			$product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
 

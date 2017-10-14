@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionOpenbayEbayProfile extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function profileAll() {
 		$data = $this->load->language('extension/openbay/ebay_profile');
@@ -29,7 +29,7 @@ class ControllerExtensionOpenbayEbayProfile extends Controller {
 		$data['profiles'] = $this->model_extension_openbay_ebay_profile->getAll();
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -119,7 +119,7 @@ class ControllerExtensionOpenbayEbayProfile extends Controller {
 		$data['templates']                        = $this->model_extension_openbay_ebay_template->getAll();
 		$data['types']                            = $this->model_extension_openbay_ebay_profile->getTypes();
 
-		$setting                                  = array();
+		$setting                                  = [];
 		$setting['returns']                       = $this->openbay->ebay->getSetting('returns');
 		$setting['dispatch_times']                = $this->openbay->ebay->getSetting('dispatch_time_max');
 		$setting['countries']                     = $this->openbay->ebay->getSetting('countries');
@@ -146,7 +146,7 @@ class ControllerExtensionOpenbayEbayProfile extends Controller {
 			$data['error_warning'] = '';
 		}
 
-		$profile_info = array();
+		$profile_info = [];
 		if (isset($this->request->get['ebay_profile_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
 			$profile_info = $this->model_extension_openbay_ebay_profile->get($this->request->get['ebay_profile_id']);
 			$data['text_manage'] = $this->language->get('text_edit');
@@ -170,7 +170,7 @@ class ControllerExtensionOpenbayEbayProfile extends Controller {
 
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true),
@@ -289,7 +289,7 @@ class ControllerExtensionOpenbayEbayProfile extends Controller {
 		$this->load->language('extension/openbay/ebay_profile');
 
 		$profile_info = $this->model_extension_openbay_ebay_profile->get($this->request->get['ebay_profile_id']);
-		$data = array();
+		$data = [];
 
 		if ($profile_info['type'] == 0) {
 			$data['data'] = $profile_info['data'];

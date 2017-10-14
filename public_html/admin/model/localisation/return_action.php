@@ -81,7 +81,7 @@ class ModelLocalisationReturnAction extends Model {
 	}
 
 	public function getReturnActionDescriptions($return_action_id) {
-		$return_action_data = array();
+		$return_action_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_return_action WHERE return_action_id = '" . (int)$return_action_id . "'");
 

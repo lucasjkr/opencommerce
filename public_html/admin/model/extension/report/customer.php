@@ -1,7 +1,7 @@
 <?php
 class ModelExtensionReportCustomer extends Model {
 	public function getTotalCustomersByDay() {
-		$customer_data = array();
+		$customer_data = [];
 
 		for ($i = 0; $i < 24; $i++) {
 			$customer_data[$i] = array(
@@ -23,7 +23,7 @@ class ModelExtensionReportCustomer extends Model {
 	}
 
 	public function getTotalCustomersByWeek() {
-		$customer_data = array();
+		$customer_data = [];
 
 		$date_start = strtotime('-' . date('w') . ' days');
 
@@ -49,7 +49,7 @@ class ModelExtensionReportCustomer extends Model {
 	}
 
 	public function getTotalCustomersByMonth() {
-		$customer_data = array();
+		$customer_data = [];
 
 		for ($i = 1; $i <= date('t'); $i++) {
 			$date = date('Y') . '-' . date('m') . '-' . $i;
@@ -73,7 +73,7 @@ class ModelExtensionReportCustomer extends Model {
 	}
 
 	public function getTotalCustomersByYear() {
-		$customer_data = array();
+		$customer_data = [];
 
 		for ($i = 1; $i <= 12; $i++) {
 			$customer_data[$i] = array(
@@ -165,7 +165,7 @@ class ModelExtensionReportCustomer extends Model {
 	public function getCustomerActivities($data = array()) {
 		$sql = "SELECT ca.customer_activity_id, ca.customer_id, ca.key, ca.data, ca.ip, ca.date_added FROM oc_customer_activity ca LEFT JOIN oc_customer c ON (ca.customer_id = c.customer_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_date_start'])) {
 			$implode[] = "DATE(ca.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
@@ -209,7 +209,7 @@ class ModelExtensionReportCustomer extends Model {
 	public function getTotalCustomerActivities($data = array()) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_activity` ca LEFT JOIN oc_customer c ON (ca.customer_id = c.customer_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_date_start'])) {
 			$implode[] = "DATE(ca.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
@@ -239,7 +239,7 @@ class ModelExtensionReportCustomer extends Model {
 	public function getCustomerSearches($data = array()) {
 		$sql = "SELECT cs.customer_id, cs.keyword, cs.category_id, cs.products, cs.ip, cs.date_added, CONCAT(c.firstname, ' ', c.lastname) AS customer FROM oc_customer_search cs LEFT JOIN oc_customer c ON (cs.customer_id = c.customer_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_date_start'])) {
 			$implode[] = "DATE(cs.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
@@ -287,7 +287,7 @@ class ModelExtensionReportCustomer extends Model {
 	public function getTotalCustomerSearches($data = array()) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_search` cs LEFT JOIN oc_customer c ON (cs.customer_id = c.customer_id)";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_date_start'])) {
 			$implode[] = "DATE(cs.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";

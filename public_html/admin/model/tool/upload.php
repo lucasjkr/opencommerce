@@ -27,7 +27,7 @@ class ModelToolUpload extends Model {
 	public function getUploads($data = array()) {
 		$sql = "SELECT * FROM oc_upload";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_name'])) {
 			$implode[] = "name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";
@@ -83,7 +83,7 @@ class ModelToolUpload extends Model {
 	public function getTotalUploads($data = array()) {
 		$sql = "SELECT COUNT(*) AS total FROM oc_upload";
 
-		$implode = array();
+		$implode = [];
 
 		if (!empty($data['filter_name'])) {
 			$implode[] = "name LIKE '" . $this->db->escape((string)$data['filter_name']) . "%'";

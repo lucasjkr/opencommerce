@@ -20,7 +20,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
 					$total_order_products = count($order_products);
 
-					$fulfillment_items = array();
+					$fulfillment_items = [];
 
 					foreach ($order_products as $order_product) {
 						$product = $this->model_catalog_product->getProduct($order_product['product_id']);
@@ -42,7 +42,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
 					if (($total_order_products == $total_fulfillment_items) || ($this->config->get('openbay_fba_only_fill_complete') != 1)) {
 						if (!empty($fulfillment_items)) {
-							$request = array();
+							$request = [];
 
 							$datetime = new DateTime($order['date_added']);
 							$request['displayable_order_datetime'] = $datetime->format(DateTime::ISO8601);

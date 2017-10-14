@@ -49,7 +49,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$currency_to = $this->config->get('config_currency');
 		$order_currency = (string)$order_xml->Payment->CurrencyCode;
 
-		$products = array();
+		$products = [];
 
 		$products_total = 0;
 		$products_shipping = 0;
@@ -63,8 +63,8 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$amazon_order_id = (string)$order_xml->AmazonOrderId;
 
 		/* SKU => ORDER_ITEM_ID */
-		$product_mapping = array();
-		$product_gift_messages = array();
+		$product_mapping = [];
+		$product_gift_messages = [];
 
 		foreach ($order_xml->Items->Item as $item) {
 
@@ -385,7 +385,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$request = json_decode($decrypted, 1);
 
-		$data = array();
+		$data = [];
 
 		foreach ($request['products'] as $product) {
 			$data[] = array(
@@ -554,7 +554,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			if ($product_id === "all") {
 				$all_rows = $this->db->query("SELECT * FROM `oc_amazon_product`")->rows;
 
-				$response = array();
+				$response = [];
 				foreach ($all_rows as $row) {
 					unset($row['data']);
 					$response[] = $row;

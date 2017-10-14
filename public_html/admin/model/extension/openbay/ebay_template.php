@@ -36,7 +36,7 @@ class ModelExtensionOpenBayEbayTemplate extends Model {
 	public function getAll() {
 		$qry = $this->db->query("SELECT * FROM `oc_ebay_template`");
 
-		$templates = array();
+		$templates = [];
 
 		if($qry->num_rows) {
 			foreach($qry->rows as $row) {

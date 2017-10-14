@@ -1,6 +1,6 @@
 <?php
 class ControllerCatalogManufacturer extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('catalog/manufacturer');
@@ -143,7 +143,7 @@ class ControllerCatalogManufacturer extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -158,7 +158,7 @@ class ControllerCatalogManufacturer extends Controller {
 		$data['add'] = $this->url->link('catalog/manufacturer/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('catalog/manufacturer/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$data['manufacturers'] = array();
+		$data['manufacturers'] = [];
 
 		$filter_data = array(
 			'sort'  => $sort,
@@ -197,7 +197,7 @@ class ControllerCatalogManufacturer extends Controller {
 		if (isset($this->request->post['selected'])) {
 			$data['selected'] = (array)$this->request->post['selected'];
 		} else {
-			$data['selected'] = array();
+			$data['selected'] = [];
 		}
 
 		$url = '';
@@ -280,7 +280,7 @@ class ControllerCatalogManufacturer extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
@@ -316,7 +316,7 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->load->model('setting/store');
 
-		$data['stores'] = array();
+		$data['stores'] = [];
 		
 		$data['stores'][] = array(
 			'store_id' => 0,
@@ -377,7 +377,7 @@ class ControllerCatalogManufacturer extends Controller {
 		} elseif (isset($this->request->get['manufacturer_id'])) {
 			$data['manufacturer_seo_url'] = $this->model_catalog_manufacturer->getManufacturerSeoUrls($this->request->get['manufacturer_id']);
 		} else {
-			$data['manufacturer_seo_url'] = array();
+			$data['manufacturer_seo_url'] = [];
 		}
 				
 		$data['header'] = $this->load->controller('common/header');
@@ -440,7 +440,7 @@ class ControllerCatalogManufacturer extends Controller {
 	}
 
 	public function autocomplete() {
-		$json = array();
+		$json = [];
 
 		if (isset($this->request->get['filter_name'])) {
 			$this->load->model('catalog/manufacturer');
@@ -461,7 +461,7 @@ class ControllerCatalogManufacturer extends Controller {
 			}
 		}
 
-		$sort_order = array();
+		$sort_order = [];
 
 		foreach ($json as $key => $value) {
 			$sort_order[$key] = $value['name'];

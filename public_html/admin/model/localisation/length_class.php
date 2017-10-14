@@ -98,7 +98,7 @@ class ModelLocalisationLengthClass extends Model {
 	}
 
 	public function getLengthClassDescriptions($length_class_id) {
-		$length_class_data = array();
+		$length_class_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_length_class_description WHERE length_class_id = '" . (int)$length_class_id . "'");
 

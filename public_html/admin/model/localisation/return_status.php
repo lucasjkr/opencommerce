@@ -81,7 +81,7 @@ class ModelLocalisationReturnStatus extends Model {
 	}
 
 	public function getReturnStatusDescriptions($return_status_id) {
-		$return_status_data = array();
+		$return_status_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_return_status WHERE return_status_id = '" . (int)$return_status_id . "'");
 

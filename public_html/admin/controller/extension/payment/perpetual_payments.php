@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionPaymentPerpetualPayments extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/payment/perpetual_payments');
@@ -35,7 +35,7 @@ class ControllerExtensionPaymentPerpetualPayments extends Controller {
 			$data['error_auth_pass'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),

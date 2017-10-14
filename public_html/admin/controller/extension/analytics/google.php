@@ -1,6 +1,6 @@
 <?php
 class ControllerExtensionAnalyticsGoogle extends Controller {
-	private $error = array();
+	private $error = [];
 
 	public function index() {
 		$this->load->language('extension/analytics/google');
@@ -29,7 +29,7 @@ class ControllerExtensionAnalyticsGoogle extends Controller {
 			$data['error_code'] = '';
 		}
 
-		$data['breadcrumbs'] = array();
+		$data['breadcrumbs'] = [];
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),

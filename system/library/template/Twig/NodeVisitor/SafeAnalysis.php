@@ -11,8 +11,8 @@
 
 class Twig_NodeVisitor_SafeAnalysis extends Twig_BaseNodeVisitor
 {
-    protected $data = array();
-    protected $safeVars = array();
+    protected $data = [];
+    protected $safeVars = [];
 
     public function setSafeVars($safeVars)
     {

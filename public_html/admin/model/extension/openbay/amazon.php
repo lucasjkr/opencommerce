@@ -308,7 +308,7 @@ class ModelExtensionOpenBayAmazon extends Model {
 			return json_decode($message_row['messages']);
 		}
 
-		$result = array();
+		$result = [];
 
 		$insertion_rows = $this->db->query("SELECT `sku`, `insertion_id` FROM `oc_amazon_product` WHERE `product_id` = '" . (int)$product_id . "' AND `version` = 2")->rows;
 
@@ -416,7 +416,7 @@ class ModelExtensionOpenBayAmazon extends Model {
 				ON `p`.`product_id` = `pd`.`product_id`
 				AND `pd`.`language_id` = '" . (int)$this->config->get('config_language_id') . "'")->rows;
 
-			$result = array();
+			$result = [];
 			$this->load->model('extension/module/openstock');
 			$this->load->model('tool/image');
 			foreach($rows as $row) {
@@ -578,7 +578,7 @@ class ModelExtensionOpenBayAmazon extends Model {
 
 		$sql .= " LIMIT " . (int)$data['start'] . ", " . (int)$data['limit'];
 
-		$results = array();
+		$results = [];
 
 		$rows = $this->db->query($sql)->rows;
 
@@ -596,7 +596,7 @@ class ModelExtensionOpenBayAmazon extends Model {
 	}
 
 	public function updateAmazonSkusQuantities($skus) {
-		$sku_array = array();
+		$sku_array = [];
 
 		foreach ($skus as $sku) {
 			$sku_array[] = "'" . $this->db->escape($sku) . "'";
@@ -608,7 +608,7 @@ class ModelExtensionOpenBayAmazon extends Model {
 			$rows = $this->db->query("SELECT apl.amazon_sku, p.quantity FROM oc_amazon_product_link apl JOIN oc_product p ON apl.product_id = p.product_id WHERE apl.amazon_sku IN (" . implode(',', $sku_array) . ")")->rows;
 		}
 
-		$return = array();
+		$return = [];
 
 		foreach ($rows as $row) {
 			$return[$row['amazon_sku']] = $row['quantity'];
@@ -690,10 +690,10 @@ class ModelExtensionOpenBayAmazon extends Model {
 				LIMIT " . (int)$start . "," . (int)$limit)->rows;
 		}
 
-		$products = array();
+		$products = [];
 
 		foreach ($rows as $row) {
-			$combinations = array();
+			$combinations = [];
 
 			if (isset($row['pov_id']) && !empty($row['pov_id'])) {
 				$variants = (isset($row['pov_id']) ? $this->model_setting_module_openstock->getVariant($row['pov_id']) : '');

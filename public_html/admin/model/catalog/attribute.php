@@ -120,7 +120,7 @@ class ModelCatalogAttribute extends Model {
 	}
 
 	public function getAttributeDescriptions($attribute_id) {
-		$attribute_data = array();
+		$attribute_data = [];
 
 		$query = $this->db->query("SELECT * FROM oc_attribute_description WHERE attribute_id = :attribute_id",
             [

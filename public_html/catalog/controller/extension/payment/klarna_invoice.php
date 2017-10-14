@@ -8,7 +8,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 		if ($order_info) {
 			$this->load->language('extension/payment/klarna_invoice');
 
-			$data['days'] = array();
+			$data['days'] = [];
 
 			for ($i = 1; $i <= 31; $i++) {
 				$data['days'][] = array(
@@ -17,7 +17,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 				);
 			}
 
-			$data['months'] = array();
+			$data['months'] = [];
 
 			for ($i = 1; $i <= 12; $i++) {
 				$data['months'][] = array(
@@ -26,7 +26,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 				);
 			}
 
-			$data['years'] = array();
+			$data['years'] = [];
 
 			for ($i = date('Y'); $i >= 1900; $i--) {
 				$data['years'][] = array(
@@ -36,12 +36,12 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 			}
 
 			// Store Taxes to send to Klarna
-			$total_data = array();
+			$total_data = [];
 			$total = 0;
 
 			$this->load->model('setting/extension');
 
-			$sort_order = array();
+			$sort_order = [];
 
 			$results = $this->model_setting_extension->getExtensions('total');
 
@@ -51,13 +51,13 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 
 			array_multisort($sort_order, SORT_ASC, $results);
 
-			$klarna_tax = array();
+			$klarna_tax = [];
 
 			foreach ($results as $result) {
 				if ($this->config->get($result['code'] . '_status')) {
 					$this->load->model('extension/total/' . $result['code']);
 
-					$taxes = array();
+					$taxes = [];
 					
 					// We have to put the totals in an array so that they pass by reference.
 					$this->{'model_extension_total_' . $result['code']}->getTotal(array("totals"=>$total_data, "total"=>$total, "taxes"=>$taxes));
@@ -136,7 +136,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 	public function send() {
 		$this->load->language('extension/payment/klarna_invoice');
 
-		$json = array();
+		$json = [];
 
 		$this->load->model('checkout/order');
 
@@ -268,7 +268,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 				if (isset($this->session->data['klarna'][$this->session->data['order_id']])) {
 					$totals = $this->session->data['klarna'][$this->session->data['order_id']];
 				} else {
-					$totals = array();
+					$totals = [];
 				}
 
 				foreach ($totals as $total) {
@@ -350,7 +350,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 				$xml .= '  </params>';
 				$xml .= '</methodCall>';
 
-				$header = array();
+				$header = [];
 
 				$header[] = 'Content-Type: text/xml';
 				$header[] = 'Content-Length: ' . strlen($xml);

@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionOpenBayAmazonusListing extends Model {
-	private $tabs = array();
+	private $tabs = [];
 
 	public function search($search_string) {
 
@@ -10,7 +10,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 
 		$results = json_decode($this->openbay->amazonus->call('productv3/search', $search_params), 1);
 
-		$products = array();
+		$products = [];
 
 		if (!empty($results)) {
 			foreach ($results['Products'] as $result) {
@@ -111,7 +111,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 	}
 
 	public function deleteSearchResults($product_ids) {
-		$imploded_ids = array();
+		$imploded_ids = [];
 
 		foreach ($product_ids as $product_id) {
 			$imploded_ids[] = (int)$product_id;
@@ -127,7 +127,7 @@ class ModelExtensionOpenBayAmazonusListing extends Model {
 
 	public function doBulkListing($data) {
 		$this->load->model('catalog/product');
-		$request = array();
+		$request = [];
 
 		foreach($data['products'] as $product_id => $asin) {
 			$product = $this->model_catalog_product->getProduct($product_id);
