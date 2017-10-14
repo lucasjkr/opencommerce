@@ -1,7 +1,7 @@
 <?php
 class ModelExtensionDashboardSale extends Model {
 	public function getTotalSales($data = array()) {
-	    $args[];
+	    $args = [];
 		$sql = "SELECT SUM(total) AS total FROM `oc_order` WHERE order_status_id > '0'";
 
 		if (!empty($data['filter_date_added'])) {
