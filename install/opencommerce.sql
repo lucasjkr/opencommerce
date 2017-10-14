@@ -3574,7 +3574,7 @@ VALUES
 	(0,'config','config_owner','Your Name',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
 	(0,'config','config_address','Address 1',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
 	(0,'config','config_name','Your Store',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
-	(0,'config','config_seo_url','0',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
+	(0,'config','config_seo_url','1',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
 	(0,'config','config_file_max_size','300000',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
 	(0,'config','config_file_ext_allowed','zip\r\ntxt\r\npng\r\njpe\r\njpeg\r\njpg\r\ngif\r\nbmp\r\nico\r\ntiff\r\ntif\r\nsvg\r\nsvgz\r\nzip\r\nrar\r\nmsi\r\ncab\r\nmp3\r\nqt\r\nmov\r\npdf\r\npsd\r\nai\r\neps\r\nps\r\ndoc',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
 	(0,'config','config_file_mime_allowed','text/plain\r\nimage/png\r\nimage/jpeg\r\nimage/gif\r\nimage/bmp\r\nimage/tiff\r\nimage/svg+xml\r\napplication/zip\r\n&quot;application/zip&quot;\r\napplication/x-zip\r\n&quot;application/x-zip&quot;\r\napplication/x-zip-compressed\r\n&quot;application/x-zip-compressed&quot;\r\napplication/rar\r\n&quot;application/rar&quot;\r\napplication/x-rar\r\n&quot;application/x-rar&quot;\r\napplication/x-rar-compressed\r\n&quot;application/x-rar-compressed&quot;\r\napplication/octet-stream\r\n&quot;application/octet-stream&quot;\r\naudio/mpeg\r\nvideo/quicktime\r\napplication/pdf',0,'2017-10-06 10:23:43','2017-10-06 10:23:43'),
