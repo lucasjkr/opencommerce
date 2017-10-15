@@ -1,10 +1,7 @@
 <?php
 class ModelCatalogProduct extends Model {
 	public function addProduct($data) {
-		$this->db->query("INSERT INTO `oc_product` SET model = :model, location = :location, quantity = :quantity, minimum = :minimum, subtract = :subtract, 
-stock_status_id = :stock_status_id, date_available = :date_available, manufacturer_id = :manufacturer_id, shipping = :shipping, price = :price, 
-weight = :weight, weight_class_id = :weight_class_id, length = :length, width = :width, height = :height, length_class_id = :length_class_id, status = :status, 
-tax_class_id = :tax_class_id, sort_order = :sort_order",
+		$this->db->query("INSERT INTO `oc_product` SET model = :model, location = :location, quantity = :quantity, minimum = :minimum, subtract = :subtract, stock_status_id = :stock_status_id, date_available = :date_available, manufacturer_id = :manufacturer_id, shipping = :shipping, price = :price, weight = :weight, weight_class_id = :weight_class_id, length = :length, width = :width, height = :height, length_class_id = :length_class_id, status = :status, tax_class_id = :tax_class_id, sort_order = :sort_order",
         [
             ':model' => $data['model'],
             ':location' => $data['location'],
@@ -28,14 +25,6 @@ tax_class_id = :tax_class_id, sort_order = :sort_order",
         ]);
 
 		$product_id = $this->db->getLastId();
-
-		if (isset($data['image'])) {
-			$this->db->query("UPDATE `oc_product` SET image = :image WHERE product_id = :product_id",
-                [
-                    ':image' => $data['image'],
-                    ':product_id' => $product_id
-                ]);
-		}
 
 		foreach ($data['product_description'] as $language_id => $value) {
 			$this->db->query("INSERT INTO `oc_product_description` SET product_id = :product_id, language_id = :language_id, name = :name, description = :description, tag = :tag, meta_title = :meta_title, meta_description = :meta_description, meta_keyword = :meta_keyword",
@@ -215,10 +204,26 @@ tax_class_id = :tax_class_id, sort_order = :sort_order",
 
 		if (isset($data['product_related'])) {
 			foreach ($data['product_related'] as $related_id) {
-				$this->db->query("DELETE FROM `oc_product_related` WHERE `product_id` = '" . (int)$product_id . "' AND `related_id` = '" . (int)$related_id . "'");
-				$this->db->query("INSERT INTO `oc_product_related` SET `product_id` = '" . (int)$product_id . "', related_id = '" . (int)$related_id . "'");
-				$this->db->query("DELETE FROM `oc_product_related` WHERE `product_id` = '" . (int)$related_id . "' AND related_id = '" . (int)$product_id . "'");
-				$this->db->query("INSERT INTO `oc_product_related` SET `product_id` = '" . (int)$related_id . "', related_id = '" . (int)$product_id . "'");
+				$this->db->query("DELETE FROM `oc_product_related` WHERE `product_id` = :product_id  AND `related_id` = :$related_id",
+                    [
+                        ':product_id' => $product_id,
+                        ':related_id' => $related_id,
+                    ]);
+				$this->db->query("INSERT INTO `oc_product_related` SET `product_id` = :product_id, related_id = :related_id",
+                    [
+                        ':product_id' => $product_id,
+                        ':related_id' => $related_id,
+                    ]);
+				$this->db->query("DELETE FROM `oc_product_related` WHERE `product_id` = :related_id AND related_id = :product_id",
+                    [
+                        ':product_id' => $product_id,
+                        ':related_id' => $related_id,
+                    ]);
+				$this->db->query("INSERT INTO `oc_product_related` SET `product_id` = :related_id, related_id = :product_id",
+                    [
+                        ':product_id' => $product_id,
+                        ':related_id' => $related_id,
+                    ]);
 			}
 		}
 
