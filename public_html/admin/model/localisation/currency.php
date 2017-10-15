@@ -1,7 +1,16 @@
 <?php
 class ModelLocalisationCurrency extends Model {
 	public function addCurrency($data) {
-		$this->db->query("INSERT INTO oc_currency SET title = '" . $this->db->escape((string)$data['title']) . "', code = '" . $this->db->escape((string)$data['code']) . "', symbol_left = '" . $this->db->escape((string)$data['symbol_left']) . "', symbol_right = '" . $this->db->escape((string)$data['symbol_right']) . "', decimal_place = '" . $this->db->escape((string)$data['decimal_place']) . "', value = '" . $this->db->escape((string)$data['value']) . "', status = '" . (int)$data['status'] . "'");
+		$this->db->query("INSERT INTO oc_currency SET title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_place = :decimal_place, value = :value, status = :status",
+            [
+                ':title' => $data['title'],
+                ':code' => $data['code'],
+                ':symbol_left' => $data['symbol_left'],
+                ':symbol_right' = $data['symbol_right'],
+                ':decimal_place' => $data['decimal_place'],
+                ':value' => $data['value'],
+                ':status' => $data['status'] ,
+            ]);
 
 		$currency_id = $this->db->getLastId();
 
@@ -15,25 +24,44 @@ class ModelLocalisationCurrency extends Model {
 	}
 
 	public function editCurrency($currency_id, $data) {
-		$this->db->query("UPDATE oc_currency SET title = '" . $this->db->escape((string)$data['title']) . "', code = '" . $this->db->escape((string)$data['code']) . "', symbol_left = '" . $this->db->escape((string)$data['symbol_left']) . "', symbol_right = '" . $this->db->escape((string)$data['symbol_right']) . "', decimal_place = '" . $this->db->escape((string)$data['decimal_place']) . "', value = '" . $this->db->escape((string)$data['value']) . "', status = '" . (int)$data['status'] . "' WHERE currency_id = '" . (int)$currency_id . "'");
+		$this->db->query("UPDATE oc_currency SET title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_place = :decimal_place, value = :value, status = :status  WHERE currency_id = currency_id",
+            [
+                ':title' => $data['title'],
+                ':code' => $data['code'],
+                ':symbol_left' => $data['symbol_left'],
+                ':symbol_right' = $data['symbol_right'],
+                ':decimal_place' => $data['decimal_place'],
+                ':value' => $data['value'],
+                ':status' => $data['status'],
+                ':currency_id' => $currency_id
+            ]);
 
 		$this->cache->delete('currency');
 	}
 
 	public function deleteCurrency($currency_id) {
-		$this->db->query("DELETE FROM oc_currency WHERE currency_id = '" . (int)$currency_id . "'");
+		$this->db->query("DELETE FROM oc_currency WHERE currency_id = :currency_id",
+            [
+                ':currency_id' => $currency_id
+            ]);
 
 		$this->cache->delete('currency');
 	}
 
 	public function getCurrency($currency_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE currency_id = '" . (int)$currency_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE currency_id = :currency_id",
+            [
+                ':currency_id' => $currency_id
+            ]);
 
 		return $query->row;
 	}
 
-	public function getCurrencyByCode($currency) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE code = '" . $this->db->escape($currency) . "'");
+	public function getCurrencyByCode($code) {
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE code = :code",
+            [
+                ':code' => $code
+            ]);
 
 		return $query->row;
 	}
@@ -109,9 +137,16 @@ class ModelLocalisationCurrency extends Model {
 		$currency_data = [];
 
 		if ($force) {
-			$query = $this->db->query("SELECT * FROM oc_currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "'");
+			$query = $this->db->query("SELECT * FROM oc_currency WHERE code != :code",
+                [
+                    ':code' => $this->config->get('config_currency')
+                ]);
 		} else {
-			$query = $this->db->query("SELECT * FROM oc_currency WHERE code != '" . $this->db->escape($this->config->get('config_currency')) . "' AND date_modified < '" .  $this->db->escape(date('Y-m-d H:i:s', strtotime('-1 day'))) . "'");
+			$query = $this->db->query("SELECT * FROM oc_currency WHERE code != :code AND date_modified < :date_modified",
+                [
+                    ':code' => $this->config->get('config_currency'),
+                    ':date_modified' => date('Y-m-d H:i:s', strtotime('-1 day'))
+                ]);
 		}
 
 		foreach ($query->rows as $result) {
@@ -119,6 +154,9 @@ class ModelLocalisationCurrency extends Model {
 			$currency_data[] = $result['code'] . $this->config->get('config_currency') . '=X';
 		}
 
+		//LJK TODO:
+        // Convert to Gulp
+        // Add more methods (yahoo could be just one, coincap, google, etc.
 		$curl = curl_init();
 
 		curl_setopt($curl, CURLOPT_URL, 'http://download.finance.yahoo.com/d/quotes.csv?s=' . implode(',', $currency_data) . '&f=sl1&e=.json');
@@ -142,11 +180,19 @@ class ModelLocalisationCurrency extends Model {
 			}	
 						
 			if ((float)$value) {
-				$this->db->query("UPDATE oc_currency SET value = '" . (float)$value . "', date_modified = '" .  $this->db->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->db->escape($currency) . "'");
+				$this->db->query("UPDATE oc_currency SET value = :value WHERE code = :code",
+                    [
+                        ':value' => $value,
+                        ':code' => $currency,
+                    ]);
 			}
 		}
 
-		$this->db->query("UPDATE oc_currency SET value = '1.00000', date_modified = '" .  $this->db->escape(date('Y-m-d H:i:s')) . "' WHERE code = '" . $this->db->escape($this->config->get('config_currency')) . "'");
+		$this->db->query("UPDATE oc_currency SET value = :value WHERE code = :code",
+            [
+                ':value' => 1,
+                ':code' => $this->config->get('config_currency')
+            ]);
 
 		$this->cache->delete('currency');
 	}
