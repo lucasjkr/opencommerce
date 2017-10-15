@@ -1,15 +1,30 @@
 <?php
 class ModelLocalisationGeoZone extends Model {
 	public function addGeoZone($data) {
-		$this->db->query("INSERT INTO oc_geo_zone SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "'");
+		$this->db->query("INSERT INTO oc_geo_zone SET name = :name, description = :description",
+            [
+                ':name' => $data['name'],
+                ':description' => $data['description'],
+            ]);
 
 		$geo_zone_id = $this->db->getLastId();
 
 		if (isset($data['zone_to_geo_zone'])) {
+		    // LJK TODO: investigate - geo_zone_id is generated from the above query - there shouldn't be any way for the DELETE query to find anything to delete
 			foreach ($data['zone_to_geo_zone'] as $value) {
-				$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "' AND country_id = '" . (int)$value['country_id'] . "' AND zone_id = '" . (int)$value['zone_id'] . "'");
+				$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND zone_id = :zone_id",
+                    [
+                        ':geo_zone_id' => $geo_zone_id,
+                        ':country_id' => $value['country_id'],
+                        ':zone_id' => $value['zone_id']
+                    ]);
 
-				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = '" . (int)$value['country_id'] . "', zone_id = '" . (int)$value['zone_id'] . "', geo_zone_id = '" . (int)$geo_zone_id . "'");
+				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = :country_id, zone_id = :zone_id, geo_zone_id = :geo_zone_id",
+                    [
+                        ':country_id' => $value['country_id'],
+                        ':zone_id' => $value['zone_id'],
+                        ':geo_zone_id' => $geo_zone_id
+                    ]);
 			}
 		}
 
@@ -19,15 +34,34 @@ class ModelLocalisationGeoZone extends Model {
 	}
 
 	public function editGeoZone($geo_zone_id, $data) {
-		$this->db->query("UPDATE oc_geo_zone SET name = '" . $this->db->escape((string)$data['name']) . "', description = '" . $this->db->escape((string)$data['description']) . "' WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$this->db->query("UPDATE oc_geo_zone SET name = :name, description = :description WHERE geo_zone_id = :geo_zone_id",
+            [
+                ':name' => $data['name'],
+                ':description' => $data['description'],
+                ':geo_zone_id' => $geo_zone_id
+            ]);
 
-		$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id",
+            [
+                ':geo_zone_id' => $geo_zone_id
+            ]);
 
 		if (isset($data['zone_to_geo_zone'])) {
 			foreach ($data['zone_to_geo_zone'] as $value) {
-				$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "' AND country_id = '" . (int)$value['country_id'] . "' AND zone_id = '" . (int)$value['zone_id'] . "'");
+			    // LJK TODO the above query already appears to have deleted anythign this query would delete.
+				$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND zone_id = :zone_id",
+                    [
+                        ':geo_zone_id' => $geo_zone_id,
+                        ':country_id' => $value['country_id'],
+                        ':zone_id' => $value['zone_id'],
+                    ]);
 
-				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = '" . (int)$value['country_id'] . "', zone_id = '" . (int)$value['zone_id'] . "', geo_zone_id = '" . (int)$geo_zone_id . "'");
+				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = :country_id, zone_id = :zone_id, geo_zone_id = :geozone_id",
+                    [
+                        ':geo_zone_id' => $geo_zone_id,
+                        ':country_id' => $value['country_id'],
+                        ':zone_id' => $value['zone_id'],
+                    ]);
 			}
 		}
 
@@ -35,14 +69,23 @@ class ModelLocalisationGeoZone extends Model {
 	}
 
 	public function deleteGeoZone($geo_zone_id) {
-		$this->db->query("DELETE FROM oc_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
-		$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$this->db->query("DELETE FROM oc_geo_zone WHERE geo_zone_id = :geo_zone_id",
+            [
+                ':geo_zone_id' => $geo_zone_id
+            ]);
+		$this->db->query("DELETE FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id",
+            [
+                ':geo_zone_id' => $geo_zone_id
+            ]);
 
 		$this->cache->delete('geo_zone');
 	}
 
 	public function getGeoZone($geo_zone_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_geo_zone WHERE geo_zone_id =:geo_zone_id",
+            [
+                ':geo_zone_id' => $geo_zone_id
+            ]);
 
 		return $query->row;
 	}
@@ -105,25 +148,37 @@ class ModelLocalisationGeoZone extends Model {
 	}
 
 	public function getZoneToGeoZones($geo_zone_id) {
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id",
+            [
+                ':geo_zone_id' => $geo_zone_id
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getTotalZoneToGeoZoneByGeoZoneId($geo_zone_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$geo_zone_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id",
+            [
+                ':geo_zone_id' => $geo_zone_id
+            ]);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalZoneToGeoZoneByCountryId($country_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone_to_geo_zone WHERE country_id = '" . (int)$country_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone_to_geo_zone WHERE country_id = :country_id",
+            [
+                ':country_id' => $country_id
+            ]);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalZoneToGeoZoneByZoneId($zone_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone_to_geo_zone WHERE zone_id = '" . (int)$zone_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone_to_geo_zone WHERE zone_id = :zone_id",
+            [
+                ':zone_id' => $zone_id
+            ]);
 
 		return $query->row['total'];
 	}

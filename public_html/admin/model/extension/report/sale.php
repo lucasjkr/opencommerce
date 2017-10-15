@@ -2,12 +2,14 @@
 class ModelExtensionReportSale extends Model {
 	public function getTotalSales($data = array()) {
 		$sql = "SELECT SUM(total) AS total FROM `oc_order` WHERE order_status_id > '0'";
+        $args = [];
 
 		if (!empty($data['filter_date_added'])) {
-			$sql .= " AND DATE(date_added) = DATE('" . $this->db->escape((string)$data['filter_date_added']) . "')";
+			$sql .= " AND DATE(date_added) = DATE(:date_added)";
+            $args[':date_added'] = $data['filter_date_added'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
@@ -66,7 +68,10 @@ class ModelExtensionReportSale extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= DATE('" . $this->db->escape(date('Y-m-d', $date_start)) . "') GROUP BY DAYNAME(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= DATE(:date_start) GROUP BY DAYNAME(date_added)",
+            [
+                ':date_start' => date('Y-m-d', $date_start)
+            ]);
 
 		foreach ($query->rows as $result) {
 			$order_data[date('w', strtotime($result['date_added']))] = array(
@@ -96,7 +101,10 @@ class ModelExtensionReportSale extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= '" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "' GROUP BY DATE(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= :date_added GROUP BY DATE(date_added)",
+            [
+                ':date_added' => date('Y') . '-' . date('m') . '-1';
+            ]);
 
 		foreach ($query->rows as $result) {
 			$order_data[date('j', strtotime($result['date_added']))] = array(
@@ -138,19 +146,23 @@ class ModelExtensionReportSale extends Model {
 
 	public function getOrders($data = array()) {
 		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, COUNT(*) AS `orders`, SUM((SELECT SUM(op.quantity) FROM `oc_order_product` op WHERE op.order_id = o.order_id GROUP BY op.order_id)) AS products, SUM((SELECT SUM(ot.value) FROM `oc_order_total` ot WHERE ot.order_id = o.order_id AND ot.code = 'tax' GROUP BY ot.order_id)) AS tax, SUM(o.total) AS `total` FROM `oc_order` o";
+        $args = [];
 
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " WHERE o.order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
 			$sql .= " WHERE o.order_status_id > '0'";
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
 		if (!empty($data['filter_group'])) {
@@ -189,7 +201,7 @@ class ModelExtensionReportSale extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
