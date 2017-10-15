@@ -1,21 +1,48 @@
 <?php
 class ModelLocalisationLocation extends Model {
 	public function addLocation($data) {
-		$this->db->query("INSERT INTO oc_location SET name = '" . $this->db->escape((string)$data['name']) . "', address = '" . $this->db->escape((string)$data['address']) . "', geocode = '" . $this->db->escape((string)$data['geocode']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', fax = '" . $this->db->escape((string)$data['fax']) . "', image = '" . $this->db->escape((string)$data['image']) . "', open = '" . $this->db->escape((string)$data['open']) . "', comment = '" . $this->db->escape((string)$data['comment']) . "'");
+		$this->db->query("INSERT INTO oc_location SET name = :name, address = :address, geocode = :geocode, telephone = :telephone, fax = :fax, image = :image, open = :open, comment = :comment",
+            [
+                ':name' => $data['name'],
+                ':address' => $data['address'],
+                ':geocode' => $data['geocode'],
+                ':telephone' => $data['telephone'],
+                ':fax' => $data['fax'],
+                ':image' => $data['image'],
+                ':open' => $data['open'],
+                ':comment' => $data['comment']
+            ]);
 	
 		return $this->db->getLastId();
 	}
 
 	public function editLocation($location_id, $data) {
-		$this->db->query("UPDATE oc_location SET name = '" . $this->db->escape((string)$data['name']) . "', address = '" . $this->db->escape((string)$data['address']) . "', geocode = '" . $this->db->escape((string)$data['geocode']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', fax = '" . $this->db->escape((string)$data['fax']) . "', image = '" . $this->db->escape((string)$data['image']) . "', open = '" . $this->db->escape((string)$data['open']) . "', comment = '" . $this->db->escape((string)$data['comment']) . "' WHERE location_id = '" . (int)$location_id . "'");
+		$this->db->query("UPDATE oc_location SET name = :name , address = :address, geocode = :geocode, telephone = :telephone , fax = :fax, image = :image, open = :open, comment = :comment WHERE location_id = :location_id",
+            [
+                ':name' => $data['name'],
+                ':address' => $data['address'],
+                ':geocode' => $data['geocode'],
+                ':telephone' => $data['telephone'],
+                ':fax' => $data['fax'],
+                ':image' => $data['image'],
+                ':open' => $data['open'],
+                ':comment' => $data['comment'],
+                ':location_id' => $location_id
+            ]);
 	}
 
 	public function deleteLocation($location_id) {
-		$this->db->query("DELETE FROM oc_location WHERE location_id = " . (int)$location_id);
+		$this->db->query("DELETE FROM oc_location WHERE location_id = :location_id",
+            [
+                ':location_id' => $location_id
+            ]);
 	}
 
 	public function getLocation($location_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_location WHERE location_id = '" . (int)$location_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_location WHERE location_id = :location_id",
+            [
+                ':location_id' => $location_id
+            ]);
 
 		return $query->row;
 	}
