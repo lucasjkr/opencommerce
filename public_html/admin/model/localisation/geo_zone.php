@@ -10,7 +10,6 @@ class ModelLocalisationGeoZone extends Model {
 		$geo_zone_id = $this->db->getLastId();
 
 		if (isset($data['zone_to_geo_zone'])) {
-		    // LJK TODO: investigate - geo_zone_id is generated from the above query - there shouldn't be any way for the DELETE query to find anything to delete
 			foreach ($data['zone_to_geo_zone'] as $value) {
 				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = :country_id, zone_id = :zone_id, geo_zone_id = :geo_zone_id",
                     [
@@ -41,7 +40,6 @@ class ModelLocalisationGeoZone extends Model {
 
 		if (isset($data['zone_to_geo_zone'])) {
 			foreach ($data['zone_to_geo_zone'] as $value) {
-			    // LJK TODO the above query already appears to have deleted anythign this query would delete.
 				$this->db->query("INSERT INTO oc_zone_to_geo_zone SET country_id = :country_id, zone_id = :zone_id, geo_zone_id = :geozone_id",
                     [
                         ':geo_zone_id' => $geo_zone_id,

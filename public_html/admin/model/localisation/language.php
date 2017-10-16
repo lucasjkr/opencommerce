@@ -61,7 +61,7 @@ class ModelLocalisationLanguage extends Model {
                     ':title' => $banner_image['title'],
                     ':link' => $banner_image['link'],
                     ':image' => $banner_image['image'],
-                    ':sort_order' => $banner_image['sort_order',
+                    ':sort_order' => $banner_image['sort_order'],
                 ]);
 		}
 

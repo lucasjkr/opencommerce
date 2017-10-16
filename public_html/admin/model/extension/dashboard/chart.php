@@ -48,7 +48,10 @@ class ModelExtensionDashboardChart extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= DATE('" . $this->db->escape(date('Y-m-d', $date_start)) . "') GROUP BY DAYNAME(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= DATE(:date_added) GROUP BY DAYNAME(date_added)",
+            [
+                ':date_added' => date('Y-m-d', $date_start)
+            ]);
 
 		foreach ($query->rows as $result) {
 			$order_data[date('w', strtotime($result['date_added']))] = array(
@@ -78,7 +81,10 @@ class ModelExtensionDashboardChart extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= '" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "' GROUP BY DATE(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= :date_added GROUP BY DATE(date_added)",
+            [
+                ':date_added' => date('Y') . '-' . date('m') . '-1'
+            ]);
 
 		foreach ($query->rows as $result) {
 			$order_data[date('j', strtotime($result['date_added']))] = array(
@@ -154,7 +160,10 @@ class ModelExtensionDashboardChart extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= DATE('" . $this->db->escape(date('Y-m-d', $date_start)) . "') GROUP BY DAYNAME(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= DATE(:date_added) GROUP BY DAYNAME(date_added)",
+            [
+                ':date_added' => date('Y-m-d', $date_start)
+            ]);
 
 		foreach ($query->rows as $result) {
 			$customer_data[date('w', strtotime($result['date_added']))] = array(
@@ -178,7 +187,10 @@ class ModelExtensionDashboardChart extends Model {
 			);
 		}
 
-		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= '" . $this->db->escape(date('Y') . '-' . date('m') . '-1') . "' GROUP BY DATE(date_added)");
+		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_customer` WHERE DATE(date_added) >= :date_added GROUP BY DATE(date_added)",
+            [
+                ':date_added' => date('Y') . '-' . date('m') . '-1'
+            ]);
 
 		foreach ($query->rows as $result) {
 			$customer_data[date('j', strtotime($result['date_added']))] = array(

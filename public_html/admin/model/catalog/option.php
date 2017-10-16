@@ -146,7 +146,7 @@ class ModelCatalogOption extends Model {
 
 		if (!empty($data['filter_name'])) {
 			$sql .= " AND od.name LIKE :filter";
-            $args[':filter'] = $this->db->escape((string)$data['filter_name']) . '%';
+            $args[':filter'] = $data['filter_name'] . '%';
 		}
 
 		$sort_data = array(
