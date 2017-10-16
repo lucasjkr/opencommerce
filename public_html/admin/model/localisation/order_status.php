@@ -95,7 +95,7 @@ class ModelLocalisationOrderStatus extends Model {
 			if (!$order_status_data) {
 				$query = $this->db->query("SELECT order_status_id, name FROM oc_order_status WHERE language_id = :language_id ORDER BY name",
                     [
-                        ':language_id' => $this->config->get('config_language_id');
+                        ':language_id' => $this->config->get('config_language_id')
                     ]);
 
 				$order_status_data = $query->rows;
