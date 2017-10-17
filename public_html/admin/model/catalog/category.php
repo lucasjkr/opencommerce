@@ -21,8 +21,7 @@ class ModelCatalogCategory extends Model {
 		}
 
 		foreach ($data['category_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO oc_category_description SET category_id = :category_id, language_id = :language_id, name = :name, description = :description,
-                              meta_title = :meta_title, meta_description = :meta_description, meta_keyword = :meta_keyword",
+			$this->db->query("INSERT INTO oc_category_description SET category_id = :category_id, language_id = :language_id, name = :name, description = :description, meta_title = :meta_title, meta_description = :meta_description, meta_keyword = :meta_keyword",
                 [
                     ':category_id' => $category_id,
                     ':language_id' => $language_id,
@@ -362,31 +361,55 @@ class ModelCatalogCategory extends Model {
 	}
 
 	public function repairCategories($parent_id = 0) {
-		$query = $this->db->query("SELECT * FROM oc_category WHERE parent_id = '" . (int)$parent_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_category WHERE parent_id = :parent_id",
+            [
+                ':parent_id' => $parent_id
+            ]);
 
 		foreach ($query->rows as $category) {
 			// Delete the path below the current one
-			$this->db->query("DELETE FROM `oc_category_path` WHERE category_id = '" . (int)$category['category_id'] . "'");
+			$this->db->query("DELETE FROM `oc_category_path` WHERE category_id = :category_id",
+                [
+                    ':category_id' => $category['category_id']
+                ]);
 
 			// Fix for records with no paths
 			$level = 0;
 
-			$query = $this->db->query("SELECT * FROM `oc_category_path` WHERE category_id = '" . (int)$parent_id . "' ORDER BY level ASC");
+			$query = $this->db->query("SELECT * FROM `oc_category_path` WHERE category_id = :parent_id ORDER BY level ASC",
+                [
+                    ':parent_id' => $parent_id
+                ]);
 
 			foreach ($query->rows as $result) {
-				$this->db->query("INSERT INTO `oc_category_path` SET category_id = '" . (int)$category['category_id'] . "', `path_id` = '" . (int)$result['path_id'] . "', level = '" . (int)$level . "'");
+				$this->db->query("INSERT INTO `oc_category_path` SET category_id = :category_id, `path_id` = :path_id, level = :level ",
+                    [
+                        ':category_id' => $category['category_id'],
+                        ':path_id' => $result['path_id'],
+                        ':level' => $level
+                    ]);
 
 				$level++;
 			}
 
-			$this->db->query("REPLACE INTO `oc_category_path` SET category_id = '" . (int)$category['category_id'] . "', `path_id` = '" . (int)$category['category_id'] . "', level = '" . (int)$level . "'");
+			$this->db->query("REPLACE INTO `oc_category_path` SET category_id = :category_id, `path_id` = :path_id, level = :level",
+                [
+                    ':catgory_id' => $category['category_id'],
+                    ':path_id' => $category['category_id'],
+                    ':level' => $level,
+                ]);
 
 			$this->repairCategories($category['category_id']);
 		}
 	}
 
 	public function getCategory($category_id) {
-		$query = $this->db->query("SELECT DISTINCT *, (SELECT GROUP_CONCAT(cd1.name ORDER BY level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') FROM oc_category_path cp LEFT JOIN oc_category_description cd1 ON (cp.path_id = cd1.category_id AND cp.category_id != cp.path_id) WHERE cp.category_id = c.category_id AND cd1.language_id = '" . (int)$this->config->get('config_language_id') . "' GROUP BY cp.category_id) AS path FROM oc_category c LEFT JOIN oc_category_description cd2 ON (c.category_id = cd2.category_id) WHERE c.category_id = '" . (int)$category_id . "' AND cd2.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->db->query("SELECT DISTINCT *, (SELECT GROUP_CONCAT(cd1.name ORDER BY level SEPARATOR '&nbsp;&nbsp;&gt;&nbsp;&nbsp;') FROM oc_category_path cp LEFT JOIN oc_category_description cd1 ON (cp.path_id = cd1.category_id AND cp.category_id != cp.path_id) WHERE cp.category_id = c.category_id AND cd1.language_id :language_id GROUP BY cp.category_id) AS path FROM oc_category c LEFT JOIN oc_category_description cd2 ON (c.category_id = cd2.category_id) WHERE c.category_id = :category_id AND cd2.language_id = language_id_2",
+            [
+                ':category_id' => $category_id,
+                ':language_id' => $this->config->get('config_language_id'),
+                ':language_id_2' => $this->config->get('config_language_id')
+            ]);
 		
 		return $query->row;
 	}
