@@ -2,7 +2,7 @@
 class ModelLocalisationOrderStatus extends Model {
 	public function addOrderStatus($data) {
 		foreach ($data['order_status'] as $language_id => $value) {
-			// LJK TODO: Would order status id EVER be set when you're creating a new one?
+			// LJK TODO: Return to this - seems very awkward?
 		    if (isset($order_status_id)) {
 				$this->db->query("INSERT INTO oc_order_status SET order_status_id = :order_status_id , language_id = :language_id , name = :name",
                     [
