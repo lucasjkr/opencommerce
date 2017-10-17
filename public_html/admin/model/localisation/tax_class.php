@@ -1,13 +1,24 @@
 <?php
 class ModelLocalisationTaxClass extends Model {
 	public function addTaxClass($data) {
-		$this->db->query("INSERT INTO oc_tax_class SET title = '" . $this->db->escape((string)$data['title']) . "', description = '" . $this->db->escape((string)$data['description']) . "'");
+	    // LJK TODO: for consistency, title should be renamed to name
+		$this->db->query("INSERT INTO oc_tax_class SET title = :title, description = :description",
+            [
+                ':title' => $data['title'],
+                ':description' => $data['description']
+            ]);
 
 		$tax_class_id = $this->db->getLastId();
 
 		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
-				$this->db->query("INSERT INTO oc_tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
+				$this->db->query("INSERT INTO oc_tax_rule SET tax_class_id = :tax_class_id, tax_rate_id = :tax_rate_id, based = :based, priority = :priority",
+                    [
+                        ':tax_class_id' => $tax_class_id,
+                        ':tax_rate_id' => $tax_rule['tax_rate_id'],
+                        ':based' => $tax_rule['based'],
+                        ':priority' => $tax_rule[':priority']
+                    ]);
 			}
 		}
 
@@ -17,13 +28,27 @@ class ModelLocalisationTaxClass extends Model {
 	}
 
 	public function editTaxClass($tax_class_id, $data) {
-		$this->db->query("UPDATE oc_tax_class SET title = '" . $this->db->escape((string)$data['title']) . "', description = '" . $this->db->escape((string)$data['description']) . "' WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$this->db->query("UPDATE oc_tax_class SET title = :title, description = :description WHERE tax_class_id = :tax_class_id",
+            [
+                ':title' => $data['title'],
+                ':description' => $data['description'],
+                ':tax_class_id' => $tax_class_id
+            ]);
 
-		$this->db->query("DELETE FROM oc_tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$this->db->query("DELETE FROM oc_tax_rule WHERE tax_class_id = ;tax_class_id",
+            [
+                ':tax_class_id' => $tax_rule
+            ]);
 
 		if (isset($data['tax_rule'])) {
 			foreach ($data['tax_rule'] as $tax_rule) {
-				$this->db->query("INSERT INTO oc_tax_rule SET tax_class_id = '" . (int)$tax_class_id . "', tax_rate_id = '" . (int)$tax_rule['tax_rate_id'] . "', based = '" . $this->db->escape($tax_rule['based']) . "', priority = '" . (int)$tax_rule['priority'] . "'");
+				$this->db->query("INSERT INTO oc_tax_rule SET tax_class_id = :tax_class_id, tax_rate_id = :tax_rate_id, based = :based, priority = :priority",
+                    [
+                        ':tax_class_id' => $tax_class_id ,
+                        ':tax_rate_id' => $tax_rule['tax_rate_id'] ,
+                        ':based' => $tax_rule['based'],
+                        ':priority' => $tax_rule['priority']
+                    ]);
 			}
 		}
 
@@ -31,23 +56,30 @@ class ModelLocalisationTaxClass extends Model {
 	}
 
 	public function deleteTaxClass($tax_class_id) {
-		$this->db->query("DELETE FROM oc_tax_class WHERE tax_class_id = '" . (int)$tax_class_id . "'");
-		$this->db->query("DELETE FROM oc_tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$this->db->query("DELETE FROM oc_tax_class WHERE tax_class_id = :tax_class_id",
+            [
+                ':tax_class_id' => $tax_class_id
+            ]);
+		$this->db->query("DELETE FROM oc_tax_rule WHERE tax_class_id = tax_class_id",
+            [
+                ':tax_class_id' => $tax_class_id
+            ]);
 
 		$this->cache->delete('tax_class');
 	}
 
 	public function getTaxClass($tax_class_id) {
-		$query = $this->db->query("SELECT * FROM oc_tax_class WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_tax_class WHERE tax_class_id = tax_class_id",
+            [
+                ':tax_class_id' => $tax_class_id
+            ]);
 
 		return $query->row;
 	}
 
 	public function getTaxClasses($data = array()) {
 		if ($data) {
-			$sql = "SELECT * FROM oc_tax_class";
-
-			$sql .= " ORDER BY title";
+			$sql = "SELECT * FROM oc_tax_class ORDER BY title";
 
 			if (isset($data['order']) && ($data['order'] == 'DESC')) {
 				$sql .= " DESC";
@@ -92,13 +124,20 @@ class ModelLocalisationTaxClass extends Model {
 	}
 
 	public function getTaxRules($tax_class_id) {
-		$query = $this->db->query("SELECT * FROM oc_tax_rule WHERE tax_class_id = '" . (int)$tax_class_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_tax_rule WHERE tax_class_id = :tax_class_id",
+            [
+                ':tax_class_id' => $tax_class_id
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getTotalTaxRulesByTaxRateId($tax_rate_id) {
-		$query = $this->db->query("SELECT COUNT(DISTINCT tax_class_id) AS total FROM oc_tax_rule WHERE tax_rate_id = '" . (int)$tax_rate_id . "'");
+		$query = $this->db->query("SELECT COUNT(DISTINCT tax_class_id) AS total FROM oc_tax_rule WHERE tax_rate_id = :tax_rate_id",
+            [
+                ':tax_rate_id' => $tax_rate_id
+            ]);
+
 
 		return $query->row['total'];
 	}
