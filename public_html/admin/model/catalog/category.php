@@ -419,7 +419,6 @@ class ModelCatalogCategory extends Model {
         $args[':language_id_1'] = $this->config->get('config_language_id');
         $args[':language_id_2'] = $this->config->get('config_language_id');
 
-        // LJK TODO: Verify that the % does not get escaped
         if (!empty($data['filter_name'])) {
 			$sql .= " AND cd2.name LIKE :filter";
             $args[':filter'] = '%' . $data['filter_name'] . '%';
