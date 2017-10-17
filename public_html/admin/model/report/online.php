@@ -4,13 +4,16 @@ class ModelReportOnline extends Model {
 		$sql = "SELECT co.ip, co.customer_id, co.url, co.referer, co.date_added FROM oc_customer_online co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";
 
 		$implode = [];
+        $args = [];
 
 		if (!empty($data['filter_ip'])) {
-			$implode[] = "co.ip LIKE '" . $this->db->escape((string)$data['filter_ip']) . "'";
+			$implode[] = "co.ip LIKE :ip";
+            $args[':ip'] = $data['filter_ip'];
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
+			$implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE :name";
+            $args[':name'] = $data['filter_customer'];
 		}
 
 		if ($implode) {
@@ -31,7 +34,7 @@ class ModelReportOnline extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -40,20 +43,23 @@ class ModelReportOnline extends Model {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_online` co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";
 
 		$implode = [];
+        $args = [];
 
 		if (!empty($data['filter_ip'])) {
-			$implode[] = "co.ip LIKE '" . $this->db->escape((string)$data['filter_ip']) . "'";
+			$implode[] = "co.ip LIKE :ip";
+		    $args[':ip'] = $data['filter_ip'];
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE '" . $this->db->escape((string)$data['filter_customer']) . "'";
+			$implode[] = "co.customer_id > 0 AND CONCAT(c.firstname, ' ', c.lastname) LIKE :name";
+            $args[':name'] = $data['filter_customer'];
 		}
 
 		if ($implode) {
 			$sql .= " WHERE " . implode(" AND ", $implode);
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
