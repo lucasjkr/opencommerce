@@ -7,7 +7,7 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('report/statistics');
+		$this->load->model('report/statistics_admin');
 
 		$this->getList();	
 	}
@@ -17,12 +17,12 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('report/statistics');		
+		$this->load->model('report/statistics_admin');
 
 		if ($this->validate()) {
-			$this->load->model('sale/order');
+			$this->load->model('sale/order_admin');
 			
-			$this->model_report_statistics->editValue('order_sale', $this->model_sale_order->getTotalSales(array('filter_order_status' => implode(',', array_merge($this->config->get('config_complete_status'), $this->config->get('config_processing_status'))))));		
+			$this->model_report_statistics_admin->editValue('order_sale', $this->model_sale_order_admin->getTotalSales(array('filter_order_status' => implode(',', array_merge($this->config->get('config_complete_status'), $this->config->get('config_processing_status'))))));
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 			
@@ -37,12 +37,12 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('report/statistics');		
+		$this->load->model('report/statistics_admin');
 
 		if ($this->validate()) {
-			$this->load->model('sale/order');
+			$this->load->model('sale/order_admin');
 			
-			$this->model_report_statistics->editValue('order_processing', $this->model_sale_order->getTotalOrders(array('filter_order_status' => implode(',', $this->config->get('config_processing_status')))));		
+			$this->model_report_statistics_admin->editValue('order_processing', $this->model_sale_order_admin->getTotalOrders(array('filter_order_status' => implode(',', $this->config->get('config_processing_status')))));
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 			
@@ -57,12 +57,12 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));		
 		
-		$this->load->model('report/statistics');
+		$this->load->model('report/statistics_admin');
 		
 		if ($this->validate()) {
-			$this->load->model('sale/order');
+			$this->load->model('sale/order_admin');
 			
-			$this->model_report_statistics->editValue('order_complete', $this->model_sale_order->getTotalOrders(array('filter_order_status' => implode(',', $this->config->get('config_complete_status')))));		
+			$this->model_report_statistics_admin->editValue('order_complete', $this->model_sale_order_admin->getTotalOrders(array('filter_order_status' => implode(',', $this->config->get('config_complete_status')))));
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -77,14 +77,14 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));	
 		
-		$this->load->model('report/statistics');
+		$this->load->model('report/statistics_admin');
 		
 		if ($this->validate()) {
-			$this->load->model('localisation/order_status');
+			$this->load->model('localisation/order_status_admin');
 				
 			$order_status_data = [];
 	
-			$results = $this->model_localisation_order_status->getOrderStatuses();
+			$results = $this->model_localisation_order_status_admin->getOrderStatuses();
 	
 			foreach ($results as $result) {
 				if (!in_array($result['order_status_id'], array_merge($this->config->get('config_complete_status'), $this->config->get('config_processing_status')))) {
@@ -92,9 +92,9 @@ class ControllerReportStatistics extends Controller {
 				}
 			}		
 			
-			$this->load->model('sale/order');
+			$this->load->model('sale/order_admin');
 			
-			$this->model_report_statistics->editValue('order_other', $this->model_sale_order->getTotalOrders(array('filter_order_status' => implode(',', $order_status_data))));
+			$this->model_report_statistics_admin->editValue('order_other', $this->model_sale_order_admin->getTotalOrders(array('filter_order_status' => implode(',', $order_status_data))));
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 			
@@ -109,12 +109,12 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));	
 				
-		$this->load->model('report/statistics');
+		$this->load->model('report/statistics_admin');
 		
 		if ($this->validate()) {
-			$this->load->model('sale/return');
+			$this->load->model('sale/return_admin');
 			
-			$this->model_report_statistics->editValue('return', $this->model_sale_return->getTotalReturns(array('filter_return_status_id' => $this->config->get('config_return_status_id'))));
+			$this->model_report_statistics_admin->editValue('return', $this->model_sale_return_admin->getTotalReturns(array('filter_return_status_id' => $this->config->get('config_return_status_id'))));
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -129,12 +129,12 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));	
 				
-		$this->load->model('report/statistics');
+		$this->load->model('report/statistics_admin');
 		
 		if ($this->validate()) {		
-			$this->load->model('catalog/product');
+			$this->load->model('catalog/product_admin');
 			
-			$this->model_report_statistics->editValue('product', $this->model_catalog_product->getTotalProducts(array('filter_quantity' => 0)));
+			$this->model_report_statistics_admin->editValue('product', $this->model_catalog_product_admin->getTotalProducts(array('filter_quantity' => 0)));
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -149,12 +149,12 @@ class ControllerReportStatistics extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));	
 				
-		$this->load->model('report/statistics');	
+		$this->load->model('report/statistics_admin');
 		
 		if ($this->validate()) {	
-			$this->load->model('catalog/review');
+			$this->load->model('catalog/review_admin');
 				
-			$this->model_report_statistics->editValue('review', $this->model_catalog_review->getTotalReviews(array('filter_status' => 0)));
+			$this->model_report_statistics_admin->editValue('review', $this->model_catalog_review_admin->getTotalReviews(array('filter_status' => 0)));
 			
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -179,9 +179,9 @@ class ControllerReportStatistics extends Controller {
 
 		$data['statistics'] = [];
 		
-		$this->load->model('report/statistics');
+		$this->load->model('report/statistics_admin');
 		
-		$results = $this->model_report_statistics->getStatistics();
+		$results = $this->model_report_statistics_admin->getStatistics();
 		
 		foreach ($results as $result) {
 			$data['statistics'][] = array(

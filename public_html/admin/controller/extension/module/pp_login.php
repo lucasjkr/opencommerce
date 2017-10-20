@@ -5,12 +5,12 @@ class ControllerExtensionModulePPLogin extends Controller {
 	public function index() {
 		$this->load->language('extension/module/pp_login');
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('module_pp_login', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('module_pp_login', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -80,9 +80,9 @@ class ControllerExtensionModulePPLogin extends Controller {
 			$data['module_pp_login_debug'] = $this->config->get('module_pp_login_debug');
 		}
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		if (isset($this->request->post['module_pp_login_customer_group_id'])) {
 			$data['module_pp_login_customer_group_id'] = $this->request->post['module_pp_login_customer_group_id'];
@@ -104,9 +104,9 @@ class ControllerExtensionModulePPLogin extends Controller {
 			$data['module_pp_login_seamless'] = $this->config->get('module_pp_login_seamless');
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		$data['locales'] = [];
 
@@ -284,12 +284,12 @@ class ControllerExtensionModulePPLogin extends Controller {
 	public function install() {
 		$this->load->model('marketplace/event');
 
-		$this->model_setting_event->addEvent('pp_login', 'catalog/controller/account/logout/after', 'extension/module/pp_login/logout');
+		$this->model_setting_event_admin->addEvent('pp_login', 'catalog/controller/account/logout/after', 'extension/module/pp_login/logout');
 	}
 
 	public function uninstall() {
 		$this->load->model('marketplace/event');
 
-		$this->model_setting_event->deleteEventByCode('pp_login');
+		$this->model_setting_event_admin->deleteEventByCode('pp_login');
 	}
 }

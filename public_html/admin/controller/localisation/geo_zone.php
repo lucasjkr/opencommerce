@@ -7,7 +7,7 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_geo_zone->addGeoZone($this->request->post);
+			$this->model_localisation_geo_zone_admin->addGeoZone($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_geo_zone->editGeoZone($this->request->get['geo_zone_id'], $this->request->post);
+			$this->model_localisation_geo_zone_admin->editGeoZone($this->request->get['geo_zone_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationGeoZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $geo_zone_id) {
-				$this->model_localisation_geo_zone->deleteGeoZone($geo_zone_id);
+				$this->model_localisation_geo_zone_admin->deleteGeoZone($geo_zone_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationGeoZone extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$geo_zone_total = $this->model_localisation_geo_zone->getTotalGeoZones();
+		$geo_zone_total = $this->model_localisation_geo_zone_admin->getTotalGeoZones();
 
-		$results = $this->model_localisation_geo_zone->getGeoZones($filter_data);
+		$results = $this->model_localisation_geo_zone_admin->getGeoZones($filter_data);
 
 		foreach ($results as $result) {
 			$data['geo_zones'][] = array(
@@ -301,7 +301,7 @@ class ControllerLocalisationGeoZone extends Controller {
 		$data['cancel'] = $this->url->link('localisation/geo_zone', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['geo_zone_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$geo_zone_info = $this->model_localisation_geo_zone->getGeoZone($this->request->get['geo_zone_id']);
+			$geo_zone_info = $this->model_localisation_geo_zone_admin->getGeoZone($this->request->get['geo_zone_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -322,14 +322,14 @@ class ControllerLocalisationGeoZone extends Controller {
 			$data['description'] = '';
 		}
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
-		$data['countries'] = $this->model_localisation_country->getCountries();
+		$data['countries'] = $this->model_localisation_country_admin->getCountries();
 
 		if (isset($this->request->post['zone_to_geo_zone'])) {
 			$data['zone_to_geo_zones'] = $this->request->post['zone_to_geo_zone'];
 		} elseif (isset($this->request->get['geo_zone_id'])) {
-			$data['zone_to_geo_zones'] = $this->model_localisation_geo_zone->getZoneToGeoZones($this->request->get['geo_zone_id']);
+			$data['zone_to_geo_zones'] = $this->model_localisation_geo_zone_admin->getZoneToGeoZones($this->request->get['geo_zone_id']);
 		} else {
 			$data['zone_to_geo_zones'] = [];
 		}
@@ -362,10 +362,10 @@ class ControllerLocalisationGeoZone extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('localisation/tax_rate');
+		$this->load->model('localisation/tax_rate_admin');
 
 		foreach ($this->request->post['selected'] as $geo_zone_id) {
-			$tax_rate_total = $this->model_localisation_tax_rate->getTotalTaxRatesByGeoZoneId($geo_zone_id);
+			$tax_rate_total = $this->model_localisation_tax_rate_admin->getTotalTaxRatesByGeoZoneId($geo_zone_id);
 
 			if ($tax_rate_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_tax_rate'), $tax_rate_total);

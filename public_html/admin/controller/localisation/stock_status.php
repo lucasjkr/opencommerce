@@ -7,7 +7,7 @@ class ControllerLocalisationStockStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/stock_status');
+		$this->load->model('localisation/stock_status_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationStockStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/stock_status');
+		$this->load->model('localisation/stock_status_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_stock_status->addStockStatus($this->request->post);
+			$this->model_localisation_stock_status_admin->addStockStatus($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationStockStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/stock_status');
+		$this->load->model('localisation/stock_status_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_stock_status->editStockStatus($this->request->get['stock_status_id'], $this->request->post);
+			$this->model_localisation_stock_status_admin->editStockStatus($this->request->get['stock_status_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationStockStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/stock_status');
+		$this->load->model('localisation/stock_status_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $stock_status_id) {
-				$this->model_localisation_stock_status->deleteStockStatus($stock_status_id);
+				$this->model_localisation_stock_status_admin->deleteStockStatus($stock_status_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationStockStatus extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$stock_status_total = $this->model_localisation_stock_status->getTotalStockStatuses();
+		$stock_status_total = $this->model_localisation_stock_status_admin->getTotalStockStatuses();
 
-		$results = $this->model_localisation_stock_status->getStockStatuses($filter_data);
+		$results = $this->model_localisation_stock_status_admin->getStockStatuses($filter_data);
 
 		foreach ($results as $result) {
 			$data['stock_statuses'][] = array(
@@ -292,14 +292,14 @@ class ControllerLocalisationStockStatus extends Controller {
 
 		$data['cancel'] = $this->url->link('localisation/stock_status', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['stock_status'])) {
 			$data['stock_status'] = $this->request->post['stock_status'];
 		} elseif (isset($this->request->get['stock_status_id'])) {
-			$data['stock_status'] = $this->model_localisation_stock_status->getStockStatusDescriptions($this->request->get['stock_status_id']);
+			$data['stock_status'] = $this->model_localisation_stock_status_admin->getStockStatusDescriptions($this->request->get['stock_status_id']);
 		} else {
 			$data['stock_status'] = [];
 		}
@@ -330,11 +330,11 @@ class ControllerLocalisationStockStatus extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('catalog/product');
+		$this->load->model('setting/store_admin');
+		$this->load->model('catalog/product_admin');
 
 		foreach ($this->request->post['selected'] as $stock_status_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByStockStatusId($stock_status_id);
+			$product_total = $this->model_catalog_product_admin->getTotalProductsByStockStatusId($stock_status_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_product'), $product_total);

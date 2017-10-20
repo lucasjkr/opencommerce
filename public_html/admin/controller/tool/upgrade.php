@@ -59,9 +59,9 @@ class ControllerToolUpgrade extends Controller {
 
 		$request_data['extension'] = [];
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
-		$results = $this->model_setting_extension->getExtensionInstalls(0, 1000);
+		$results = $this->model_setting_extension_admin->getExtensionInstalls(0, 1000);
 
 		foreach ($results as $result) {
 			if ($result['extension_id']) {
@@ -504,9 +504,9 @@ class ControllerToolUpgrade extends Controller {
 				foreach ($files AS $file) {
 					$upgrade = basename($file, '.php');
 
-					$this->load->model('upgrade/' . $upgrade);
+					$this->load->model('upgrade/' . $upgrade . '_admin');
 
-					$this->{'model_upgrade_' . $upgrade}->upgrade();
+					$this->{'model_upgrade_' . $upgrade . '_admin'}->upgrade();
 				}
 			}
 

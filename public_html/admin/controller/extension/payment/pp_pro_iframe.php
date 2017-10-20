@@ -7,10 +7,10 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_pp_pro_iframe', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_pp_pro_iframe', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -82,8 +82,8 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 			$data['payment_pp_pro_iframe_total'] = $this->config->get('payment_pp_pro_iframe_total');
 		}
 
-		$this->load->model('localisation/order_status');
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->load->model('localisation/order_status_admin');
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_pp_pro_iframe_canceled_reversal_status_id'])) {
 			$data['payment_pp_pro_iframe_canceled_reversal_status_id'] = $this->request->post['payment_pp_pro_iframe_canceled_reversal_status_id'];
@@ -151,9 +151,9 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 			$data['payment_pp_pro_iframe_geo_zone_id'] = $this->config->get('payment_pp_pro_iframe_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_pp_pro_iframe_status'])) {
 			$data['payment_pp_pro_iframe_status'] = $this->request->post['payment_pp_pro_iframe_status'];
@@ -189,15 +189,13 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/pp_pro_iframe');
-
-		$this->model_extension_payment_pp_pro_iframe->install();
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
+		$this->model_extension_payment_pp_pro_iframe_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/pp_pro_iframe');
-
-		$this->model_extension_payment_pp_pro_iframe->uninstall();
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
+		$this->model_extension_payment_pp_pro_iframe_admin->uninstall();
 	}
 
 	protected function validate() {
@@ -221,10 +219,10 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 	}
 
 	public function order() {
-		$this->load->model('extension/payment/pp_pro_iframe');
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
 		$this->load->language('extension/payment/pp_pro_iframe');
 
-		$paypal_order = $this->model_extension_payment_pp_pro_iframe->getOrder($this->request->get['order_id']);
+		$paypal_order = $this->model_extension_payment_pp_pro_iframe_admin->getOrder($this->request->get['order_id']);
 
 		if ($paypal_order) {
 			$data['paypal_order'] = $paypal_order;
@@ -233,8 +231,8 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 			$data['order_id'] = (int)$this->request->get['order_id'];
 
-			$captured = number_format($this->model_extension_payment_pp_pro_iframe->getTotalCaptured($data['paypal_order']['paypal_iframe_order_id']), 2);
-			$refunded = number_format($this->model_extension_payment_pp_pro_iframe->getTotalRefunded($data['paypal_order']['paypal_iframe_order_id']), 2);
+			$captured = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalCaptured($data['paypal_order']['paypal_iframe_order_id']), 2);
+			$refunded = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalRefunded($data['paypal_order']['paypal_iframe_order_id']), 2);
 
 			$data['paypal_order']['captured'] = $captured;
 			$data['paypal_order']['refunded'] = $refunded;
@@ -246,8 +244,8 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 			$data['refund_link'] = $this->url->link('extension/payment/pp_pro_iframe/refund', 'user_token=' . $this->session->data['user_token'], true);
 			$data['resend_link'] = $this->url->link('extension/payment/pp_pro_iframe/resend', 'user_token=' . $this->session->data['user_token'], true);
 
-			$captured = number_format($this->model_extension_payment_pp_pro_iframe->getTotalCaptured($paypal_order['paypal_iframe_order_id']), 2);
-			$refunded = number_format($this->model_extension_payment_pp_pro_iframe->getTotalRefunded($paypal_order['paypal_iframe_order_id']), 2);
+			$captured = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalCaptured($paypal_order['paypal_iframe_order_id']), 2);
+			$refunded = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalRefunded($paypal_order['paypal_iframe_order_id']), 2);
 
 			$data['paypal_order'] = $paypal_order;
 
@@ -278,7 +276,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 	public function refund() {
 		$this->load->language('extension/payment/pp_pro_iframe');
-		$this->load->model('extension/payment/pp_pro_iframe');
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
 
 		$this->document->setTitle($this->language->get('text_refund'));
 
@@ -310,12 +308,12 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 		$data['transaction_id'] = $this->request->get['transaction_id'];
 
-		$pp_transaction = $this->model_extension_payment_pp_pro_iframe->getTransaction($this->request->get['transaction_id']);
+		$pp_transaction = $this->model_extension_payment_pp_pro_iframe_admin->getTransaction($this->request->get['transaction_id']);
 
 		$data['amount_original'] = $pp_transaction['AMT'];
 		$data['currency_code'] = $pp_transaction['CURRENCYCODE'];
 
-		$refunded = number_format($this->model_extension_payment_pp_pro_iframe->getTotalRefundedTransaction($this->request->get['transaction_id']), 2);
+		$refunded = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalRefundedTransaction($this->request->get['transaction_id']), 2);
 
 		if ($refunded != 0.00) {
 			$data['refund_available'] = number_format($data['amount_original'] + $refunded, 2);
@@ -349,15 +347,15 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 		 */
 		if (isset($this->request->post['transaction_id']) && isset($this->request->post['refund_full'])) {
 
-			$this->load->model('extension/payment/pp_pro_iframe');
+			$this->load->model('extension/payment/pp_pro_iframe_admin');
 			$this->load->language('extension/payment/pp_pro_iframe');
 
 			if ($this->request->post['refund_full'] == 0 && $this->request->post['amount'] == 0) {
 				$this->session->data['error'] = $this->language->get('error_capture');
 				$this->response->redirect($this->url->link('extension/payment/pp_pro_iframe/refund', 'user_token=' . $this->session->data['user_token'] . '&transaction_id=' . $this->request->post['transaction_id'], true));
 			} else {
-				$order_id = $this->model_extension_payment_pp_pro_iframe->getOrderId($this->request->post['transaction_id']);
-				$paypal_order = $this->model_extension_payment_pp_pro_iframe->getOrder($order_id);
+				$order_id = $this->model_extension_payment_pp_pro_iframe_admin->getOrderId($this->request->post['transaction_id']);
+				$paypal_order = $this->model_extension_payment_pp_pro_iframe_admin->getOrder($order_id);
 
 				if ($paypal_order) {
 					$call_data = [];
@@ -366,7 +364,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 					$call_data['NOTE'] = urlencode($this->request->post['refund_message']);
 					$call_data['MSGSUBID'] = uniqid(mt_rand(), true);
 
-					$current_transaction = $this->model_extension_payment_pp_pro_iframe->getLocalTransaction($this->request->post['transaction_id']);
+					$current_transaction = $this->model_extension_payment_pp_pro_iframe_admin->getLocalTransaction($this->request->post['transaction_id']);
 
 					if ($this->request->post['refund_full'] == 1) {
 						$call_data['REFUNDTYPE'] = 'Full';
@@ -376,7 +374,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 						$call_data['CURRENCYCODE'] = $this->request->post['currency_code'];
 					}
 
-					$result = $this->model_extension_payment_pp_pro_iframe->call($call_data);
+					$result = $this->model_extension_payment_pp_pro_iframe_admin->call($call_data);
 
 					$transaction = array(
 						'paypal_iframe_order_id' => $paypal_order['paypal_iframe_order_id'],
@@ -395,7 +393,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 					if ($result == false) {
 						$transaction['payment_status'] = 'Failed';
-						$this->model_extension_payment_pp_pro_iframe->addTransaction($transaction, $call_data);
+						$this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction, $call_data);
 						$this->response->redirect($this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $paypal_order['order_id'], true));
 					} else if ($result['ACK'] != 'Failure' && $result['ACK'] != 'FailureWithWarning') {
 
@@ -404,12 +402,12 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 						$transaction['pending_reason'] = $result['PENDINGREASON'];
 						$transaction['amount'] = '-' . $result['GROSSREFUNDAMT'];
 
-						$this->model_extension_payment_pp_pro_iframe->addTransaction($transaction);
+						$this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction);
 
 						if ($result['TOTALREFUNDEDAMOUNT'] == $this->request->post['amount_original']) {
-							$this->model_extension_payment_pp_pro_iframe->updateRefundTransaction($this->request->post['transaction_id'], 'Refunded');
+							$this->model_extension_payment_pp_pro_iframe_admin->updateRefundTransaction($this->request->post['transaction_id'], 'Refunded');
 						} else {
-							$this->model_extension_payment_pp_pro_iframe->updateRefundTransaction($this->request->post['transaction_id'], 'Partially-Refunded');
+							$this->model_extension_payment_pp_pro_iframe_admin->updateRefundTransaction($this->request->post['transaction_id'], 'Partially-Refunded');
 						}
 
 						//redirect back to the order
@@ -436,12 +434,12 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 	public function reauthorise() {
 		$this->load->language('extension/payment/pp_pro_iframe');
-		$this->load->model('extension/payment/pp_pro_iframe');
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
 
 		$json = [];
 
 		if (isset($this->request->post['order_id'])) {
-			$paypal_order = $this->model_extension_payment_pp_pro_iframe->getOrder($this->request->post['order_id']);
+			$paypal_order = $this->model_extension_payment_pp_pro_iframe_admin->getOrder($this->request->post['order_id']);
 
 			$call_data = [];
 			$call_data['METHOD'] = 'DoReauthorization';
@@ -449,10 +447,10 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 			$call_data['AMT'] = number_format($paypal_order['total'], 2);
 			$call_data['CURRENCYCODE'] = $paypal_order['currency_code'];
 
-			$result = $this->model_extension_payment_pp_pro_iframe->call($call_data);
+			$result = $this->model_extension_payment_pp_pro_iframe_admin->call($call_data);
 
 			if ($result['ACK'] != 'Failure' && $result['ACK'] != 'FailureWithWarning') {
-				$this->model_extension_payment_pp_pro_iframe->updateAuthorizationId($paypal_order['paypal_iframe_order_id'], $result['AUTHORIZATIONID']);
+				$this->model_extension_payment_pp_pro_iframe_admin->updateAuthorizationId($paypal_order['paypal_iframe_order_id'], $result['AUTHORIZATIONID']);
 
 				$transaction = array(
 					'paypal_iframe_order_id' => $paypal_order['paypal_iframe_order_id'],
@@ -469,7 +467,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 					'debug_data' => json_encode($result)
 				);
 
-				$this->model_extension_payment_pp_pro_iframe->addTransaction($transaction);
+				$this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction);
 
 				$transaction['date_added'] = date("Y-m-d H:i:s");
 
@@ -490,7 +488,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 	}
 
 	public function info() {
-		$this->load->model('extension/payment/pp_pro_iframe');
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
 		$this->load->language('extension/payment/pp_pro_iframe');
  
 		$data['breadcrumbs'] = [];
@@ -510,7 +508,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 			'href' => $this->url->link('extension/payment/pp_pro_iframe/info', 'user_token=' . $this->session->data['user_token'] . '&transaction_id=' . $this->request->get['transaction_id'], true)
 		);
 
-		$transaction = $this->model_extension_payment_pp_pro_iframe->getTransaction($this->request->get['transaction_id']);
+		$transaction = $this->model_extension_payment_pp_pro_iframe_admin->getTransaction($this->request->get['transaction_id']);
 		$transaction = array_map('urldecode', $transaction);
 
 		$data['transaction'] = $transaction;
@@ -540,9 +538,9 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 		 */
 		if (isset($this->request->post['order_id']) && $this->request->post['amount'] > 0 && isset($this->request->post['order_id']) && isset($this->request->post['complete'])) {
 
-			$this->load->model('extension/payment/pp_pro_iframe');
+			$this->load->model('extension/payment/pp_pro_iframe_admin');
 
-			$paypal_order = $this->model_extension_payment_pp_pro_iframe->getOrder($this->request->post['order_id']);
+			$paypal_order = $this->model_extension_payment_pp_pro_iframe_admin->getOrder($this->request->post['order_id']);
 
 			if ($this->request->post['complete'] == 1) {
 				$complete = 'Complete';
@@ -558,7 +556,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 			$call_data['COMPLETETYPE'] = $complete;
 			$call_data['MSGSUBID'] = uniqid(mt_rand(), true);
 
-			$result = $this->model_extension_payment_pp_pro_iframe->call($call_data);
+			$result = $this->model_extension_payment_pp_pro_iframe_admin->call($call_data);
 
 			$transaction = array(
 				'paypal_iframe_order_id' => $paypal_order['paypal_iframe_order_id'],
@@ -577,7 +575,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 			if ($result == false) {
 				$transaction['amount'] = number_format($this->request->post['amount'], 2);
-				$paypal_iframe_order_transaction_id = $this->model_extension_payment_pp_pro_iframe->addTransaction($transaction, $call_data);
+				$paypal_iframe_order_transaction_id = $this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction, $call_data);
 
 				$json['error'] = true;
 
@@ -593,13 +591,13 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 				$transaction['pending_reason'] = (isset($result['PENDINGREASON']) ? $result['PENDINGREASON'] : '');
 				$transaction['amount'] = $result['AMT'];
 
-				$this->model_extension_payment_pp_pro_iframe->addTransaction($transaction);
+				$this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction);
 
 				unset($transaction['debug_data']);
 				$transaction['date_added'] = date("Y-m-d H:i:s");
 
-				$captured = number_format($this->model_extension_payment_pp_pro_iframe->getTotalCaptured($paypal_order['paypal_iframe_order_id']), 2);
-				$refunded = number_format($this->model_extension_payment_pp_pro_iframe->getTotalRefunded($paypal_order['paypal_iframe_order_id']), 2);
+				$captured = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalCaptured($paypal_order['paypal_iframe_order_id']), 2);
+				$refunded = number_format($this->model_extension_payment_pp_pro_iframe_admin->getTotalRefunded($paypal_order['paypal_iframe_order_id']), 2);
 
 				$transaction['captured'] = $captured;
 				$transaction['refunded'] = $refunded;
@@ -608,7 +606,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 				$transaction['status'] = 0;
 				if ($transaction['remaining'] == 0.00) {
 					$transaction['status'] = 1;
-					$this->model_extension_payment_pp_pro_iframe->updateOrder('Complete', $this->request->post['order_id']);
+					$this->model_extension_payment_pp_pro_iframe_admin->updateOrder('Complete', $this->request->post['order_id']);
 				}
 
 				$transaction['void'] = '';
@@ -629,8 +627,8 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 						'transaction_entity' => 'auth',
 					);
 
-					$this->model_extension_payment_pp_pro_iframe->addTransaction($transaction['void']);
-					$this->model_extension_payment_pp_pro_iframe->updateOrder('Complete', $this->request->post['order_id']);
+					$this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction['void']);
+					$this->model_extension_payment_pp_pro_iframe_admin->updateOrder('Complete', $this->request->post['order_id']);
 					$transaction['void']['date_added'] = date("Y-m-d H:i:s");
 					$transaction['status'] = 1;
 				}
@@ -655,15 +653,15 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 		$this->load->language('extension/payment/pp_pro_iframe');
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/pp_pro_iframe');
+			$this->load->model('extension/payment/pp_pro_iframe_admin');
 
-			$paypal_order = $this->model_extension_payment_pp_pro_iframe->getOrder($this->request->post['order_id']);
+			$paypal_order = $this->model_extension_payment_pp_pro_iframe_admin->getOrder($this->request->post['order_id']);
 
 			$call_data = [];
 			$call_data['METHOD'] = 'DoVoid';
 			$call_data['AUTHORIZATIONID'] = $paypal_order['authorization_id'];
 
-			$result = $this->model_extension_payment_pp_pro_iframe->call($call_data);
+			$result = $this->model_extension_payment_pp_pro_iframe_admin->call($call_data);
 
 			if ($result['ACK'] != 'Failure' && $result['ACK'] != 'FailureWithWarning') {
 				$transaction = array(
@@ -681,8 +679,8 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 					'debug_data' => json_encode($result)
 				);
 
-				$this->model_extension_payment_pp_pro_iframe->addTransaction($transaction);
-				$this->model_extension_payment_pp_pro_iframe->updateOrder('Complete', $this->request->post['order_id']);
+				$this->model_extension_payment_pp_pro_iframe_admin->addTransaction($transaction);
+				$this->model_extension_payment_pp_pro_iframe_admin->updateOrder('Complete', $this->request->post['order_id']);
 
 				unset($transaction['debug_data']);
 				$transaction['date_added'] = date("Y-m-d H:i:s");
@@ -704,26 +702,26 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 	}
 
 	public function resend() {
-		$this->load->model('extension/payment/pp_pro_iframe');
+		$this->load->model('extension/payment/pp_pro_iframe_admin');
 		$this->load->language('extension/payment/pp_pro_iframe');
 
 		$json = [];
 
 		if (isset($this->request->get['paypal_iframe_order_transaction_id'])) {
-			$transaction = $this->model_extension_payment_pp_pro_iframe->getFailedTransaction($this->request->get['paypal_iframe_order_transaction_id']);
+			$transaction = $this->model_extension_payment_pp_pro_iframe_admin->getFailedTransaction($this->request->get['paypal_iframe_order_transaction_id']);
 
 			if ($transaction) {
 				$call_data = json_decode($transaction['call_data'], true);
 
-				$result = $this->model_extension_payment_pp_pro_iframe->call($call_data);
+				$result = $this->model_extension_payment_pp_pro_iframe_admin->call($call_data);
 
 				if ($result) {
-					$parent_transaction = $this->model_extension_payment_pp_pro_iframe->getLocalTransaction($transaction['parent_id']);
+					$parent_transaction = $this->model_extension_payment_pp_pro_iframe_admin->getLocalTransaction($transaction['parent_id']);
 
 					if ($parent_transaction['amount'] == abs($transaction['amount'])) {
-						$this->model_extension_payment_pp_pro_iframe->updateRefundTransaction($transaction['parent_id'], 'Refunded');
+						$this->model_extension_payment_pp_pro_iframe_admin->updateRefundTransaction($transaction['parent_id'], 'Refunded');
 					} else {
-						$this->model_extension_payment_pp_pro_iframe->updateRefundTransaction($transaction['parent_id'], 'Partially-Refunded');
+						$this->model_extension_payment_pp_pro_iframe_admin->updateRefundTransaction($transaction['parent_id'], 'Partially-Refunded');
 					}
 
 					if (isset($result['REFUNDTRANSACTIONID'])) {
@@ -752,7 +750,7 @@ class ControllerExtensionPaymentPPProIframe extends Controller {
 
 					$transaction['pending_reason'] = (isset($result['PENDINGREASON']) ? $result['PENDINGREASON'] : '');
 
-					$this->model_extension_payment_pp_pro_iframe->updateTransaction($transaction);
+					$this->model_extension_payment_pp_pro_iframe_admin->updateTransaction($transaction);
 
 					$json['success'] = $this->language->get('success_transaction_resent');
 				} else {

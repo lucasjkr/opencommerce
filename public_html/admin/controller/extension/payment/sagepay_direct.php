@@ -7,10 +7,10 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_sagepay_direct', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_sagepay_direct', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -92,9 +92,9 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 			$data['payment_sagepay_direct_order_status_id'] = $this->config->get('payment_sagepay_direct_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_sagepay_direct_geo_zone_id'])) {
 			$data['payment_sagepay_direct_geo_zone_id'] = $this->request->post['payment_sagepay_direct_geo_zone_id'];
@@ -102,9 +102,9 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 			$data['payment_sagepay_direct_geo_zone_id'] = $this->config->get('payment_sagepay_direct_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_sagepay_direct_status'])) {
 			$data['payment_sagepay_direct_status'] = $this->request->post['payment_sagepay_direct_status'];
@@ -148,26 +148,25 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/sagepay_direct');
-		$this->model_extension_payment_sagepay_direct->install();
+		$this->load->model('extension/payment/sagepay_direct_admin');
+		$this->model_extension_payment_sagepay_direct_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/sagepay_direct');
-		$this->model_extension_payment_sagepay_direct->uninstall();
+		$this->load->model('extension/payment/sagepay_direct_admin');
+		$this->model_extension_payment_sagepay_direct_admin->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('payment_sagepay_direct_status')) {
-			$this->load->model('extension/payment/sagepay_direct');
+			$this->load->model('extension/payment/sagepay_direct_admin');
 
-			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct->getOrder($this->request->get['order_id']);
+			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($sagepay_direct_order)) {
 				$this->load->language('extension/payment/sagepay_direct');
 
-				$sagepay_direct_order['total_released'] = $this->model_extension_payment_sagepay_direct->getTotalReleased($sagepay_direct_order['sagepay_direct_order_id']);
-
+				$sagepay_direct_order['total_released'] = $this->model_extension_payment_sagepay_direct_admin->getTotalReleased($sagepay_direct_order['sagepay_direct_order_id']);
 				$sagepay_direct_order['total_formatted'] = $this->currency->format($sagepay_direct_order['total'], $sagepay_direct_order['currency_code'], false, false);
 				$sagepay_direct_order['total_released_formatted'] = $this->currency->format($sagepay_direct_order['total_released'], $sagepay_direct_order['currency_code'], false, false);
 
@@ -189,17 +188,17 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/sagepay_direct');
+			$this->load->model('extension/payment/sagepay_direct_admin');
 
-			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct->getOrder($this->request->post['order_id']);
+			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct_admin->getOrder($this->request->post['order_id']);
 
-			$void_response = $this->model_extension_payment_sagepay_direct->void($this->request->post['order_id']);
+			$void_response = $this->model_extension_payment_sagepay_direct_admin->void($this->request->post['order_id']);
 
-			$this->model_extension_payment_sagepay_direct->logger('Void result', $void_response);
+			$this->model_extension_payment_sagepay_direct_admin->logger('Void result', $void_response);
 
 			if ($void_response['Status'] == 'OK') {
-				$this->model_extension_payment_sagepay_direct->addTransaction($sagepay_direct_order['sagepay_direct_order_id'], 'void', 0.00);
-				$this->model_extension_payment_sagepay_direct->updateVoidStatus($sagepay_direct_order['sagepay_direct_order_id'], 1);
+				$this->model_extension_payment_sagepay_direct_admin->addTransaction($sagepay_direct_order['sagepay_direct_order_id'], 'void', 0.00);
+				$this->model_extension_payment_sagepay_direct_admin->updateVoidStatus($sagepay_direct_order['sagepay_direct_order_id'], 1);
 
 				$json['msg'] = $this->language->get('text_void_ok');
 
@@ -224,21 +223,21 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('extension/payment/sagepay_direct');
+			$this->load->model('extension/payment/sagepay_direct_admin');
 
-			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct->getOrder($this->request->post['order_id']);
+			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct_admin->getOrder($this->request->post['order_id']);
 
-			$release_response = $this->model_extension_payment_sagepay_direct->release($this->request->post['order_id'], $this->request->post['amount']);
+			$release_response = $this->model_extension_payment_sagepay_direct_admin->release($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_sagepay_direct->logger('Release result', $release_response);
+			$this->model_extension_payment_sagepay_direct_admin->logger('Release result', $release_response);
 
 			if ($release_response['Status'] == 'OK') {
-				$this->model_extension_payment_sagepay_direct->addTransaction($sagepay_direct_order['sagepay_direct_order_id'], 'payment', $this->request->post['amount']);
+				$this->model_extension_payment_sagepay_direct_admin->addTransaction($sagepay_direct_order['sagepay_direct_order_id'], 'payment', $this->request->post['amount']);
 
-				$total_released = $this->model_extension_payment_sagepay_direct->getTotalReleased($sagepay_direct_order['sagepay_direct_order_id']);
+				$total_released = $this->model_extension_payment_sagepay_direct_admin->getTotalReleased($sagepay_direct_order['sagepay_direct_order_id']);
 
 				if ($total_released >= $sagepay_direct_order['total'] || $sagepay_direct_order['settle_type'] == 0) {
-					$this->model_extension_payment_sagepay_direct->updateReleaseStatus($sagepay_direct_order['sagepay_direct_order_id'], 1);
+					$this->model_extension_payment_sagepay_direct_admin->updateReleaseStatus($sagepay_direct_order['sagepay_direct_order_id'], 1);
 					$release_status = 1;
 					$json['msg'] = $this->language->get('text_release_ok_order');
 				} else {
@@ -270,22 +269,22 @@ class ControllerExtensionPaymentSagepayDirect extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('extension/payment/sagepay_direct');
+			$this->load->model('extension/payment/sagepay_direct_admin');
 
-			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct->getOrder($this->request->post['order_id']);
+			$sagepay_direct_order = $this->model_extension_payment_sagepay_direct_admin->getOrder($this->request->post['order_id']);
 
-			$rebate_response = $this->model_extension_payment_sagepay_direct->rebate($this->request->post['order_id'], $this->request->post['amount']);
+			$rebate_response = $this->model_extension_payment_sagepay_direct_admin->rebate($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_sagepay_direct->logger('Rebate result', $rebate_response);
+			$this->model_extension_payment_sagepay_direct_admin->logger('Rebate result', $rebate_response);
 
 			if ($rebate_response['Status'] == 'OK') {
-				$this->model_extension_payment_sagepay_direct->addTransaction($sagepay_direct_order['sagepay_direct_order_id'], 'rebate', $this->request->post['amount'] * -1);
+				$this->model_extension_payment_sagepay_direct_admin->addTransaction($sagepay_direct_order['sagepay_direct_order_id'], 'rebate', $this->request->post['amount'] * -1);
 
-				$total_rebated = $this->model_extension_payment_sagepay_direct->getTotalRebated($sagepay_direct_order['sagepay_direct_order_id']);
-				$total_released = $this->model_extension_payment_sagepay_direct->getTotalReleased($sagepay_direct_order['sagepay_direct_order_id']);
+				$total_rebated = $this->model_extension_payment_sagepay_direct_admin->getTotalRebated($sagepay_direct_order['sagepay_direct_order_id']);
+				$total_released = $this->model_extension_payment_sagepay_direct_admin->getTotalReleased($sagepay_direct_order['sagepay_direct_order_id']);
 
 				if ($total_released <= 0 && $sagepay_direct_order['release_status'] == 1) {
-					$this->model_extension_payment_sagepay_direct->updateRebateStatus($sagepay_direct_order['sagepay_direct_order_id'], 1);
+					$this->model_extension_payment_sagepay_direct_admin->updateRebateStatus($sagepay_direct_order['sagepay_direct_order_id'], 1);
 					$rebate_status = 1;
 					$json['msg'] = $this->language->get('text_rebate_ok_order');
 				} else {

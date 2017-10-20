@@ -85,9 +85,9 @@ class ControllerExtensionModuleHTML extends Controller {
 			$data['module_description'] = [];
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['status'])) {
 			$data['status'] = $this->request->post['status'];

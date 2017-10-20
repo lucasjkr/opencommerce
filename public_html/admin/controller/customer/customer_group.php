@@ -7,7 +7,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_customer_customer_group->addCustomerGroup($this->request->post);
+			$this->model_customer_customer_group_admin->addCustomerGroup($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_customer_customer_group->editCustomerGroup($this->request->get['customer_group_id'], $this->request->post);
+			$this->model_customer_customer_group_admin->editCustomerGroup($this->request->get['customer_group_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $customer_group_id) {
-				$this->model_customer_customer_group->deleteCustomerGroup($customer_group_id);
+				$this->model_customer_customer_group_admin->deleteCustomerGroup($customer_group_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerCustomerCustomerGroup extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$customer_group_total = $this->model_customer_customer_group->getTotalCustomerGroups();
+		$customer_group_total = $this->model_customer_customer_group_admin->getTotalCustomerGroups();
 
-		$results = $this->model_customer_customer_group->getCustomerGroups($filter_data);
+		$results = $this->model_customer_customer_group_admin->getCustomerGroups($filter_data);
 
 		foreach ($results as $result) {
 			$data['customer_groups'][] = array(
@@ -295,17 +295,17 @@ class ControllerCustomerCustomerGroup extends Controller {
 		$data['cancel'] = $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['customer_group_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$customer_group_info = $this->model_customer_customer_group->getCustomerGroup($this->request->get['customer_group_id']);
+			$customer_group_info = $this->model_customer_customer_group_admin->getCustomerGroup($this->request->get['customer_group_id']);
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['customer_group_description'])) {
 			$data['customer_group_description'] = $this->request->post['customer_group_description'];
 		} elseif (isset($this->request->get['customer_group_id'])) {
-			$data['customer_group_description'] = $this->model_customer_customer_group->getCustomerGroupDescriptions($this->request->get['customer_group_id']);
+			$data['customer_group_description'] = $this->model_customer_customer_group_admin->getCustomerGroupDescriptions($this->request->get['customer_group_id']);
 		} else {
 			$data['customer_group_description'] = [];
 		}
@@ -352,21 +352,21 @@ class ControllerCustomerCustomerGroup extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('customer/customer');
+		$this->load->model('setting/store_admin');
+		$this->load->model('customer/customer_admin');
 
 		foreach ($this->request->post['selected'] as $customer_group_id) {
 			if ($this->config->get('config_customer_group_id') == $customer_group_id) {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByCustomerGroupId($customer_group_id);
+			$store_total = $this->model_setting_store_admin->getTotalStoresByCustomerGroupId($customer_group_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
 			}
 
-			$customer_total = $this->model_customer_customer->getTotalCustomersByCustomerGroupId($customer_group_id);
+			$customer_total = $this->model_customer_customer_admin->getTotalCustomersByCustomerGroupId($customer_group_id);
 
 			if ($customer_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_customer'), $customer_total);

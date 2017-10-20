@@ -7,7 +7,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
 		$this->getList();
 	}
@@ -17,7 +17,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
 		$this->getForm();
 	}
@@ -27,7 +27,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
 		$this->getForm();
 	}
@@ -220,9 +220,9 @@ class ControllerSaleOrder extends Controller {
 			'limit'                  => $this->config->get('config_limit_admin')
 		);
 
-		$order_total = $this->model_sale_order->getTotalOrders($filter_data);
+		$order_total = $this->model_sale_order_admin->getTotalOrders($filter_data);
 
-		$results = $this->model_sale_order->getOrders($filter_data);
+		$results = $this->model_sale_order_admin->getOrders($filter_data);
 
 		foreach ($results as $result) {
 			$data['orders'][] = array(
@@ -366,26 +366,26 @@ class ControllerSaleOrder extends Controller {
 		$data['sort'] = $sort;
 		$data['order'] = $order;
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		// API login
 		$data['catalog'] = HTTP_ROOT;
 		
 		// API login
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
-		$api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
+		$api_info = $this->model_user_api_admin->getApi($this->config->get('config_api_id'));
 
 		if ($api_info && $this->user->hasPermission('modify', 'sale/order')) {
 			$session = new Session($this->config->get('session_engine'), $this->registry);
 			
 			$session->start();
 					
-			$this->model_user_api->deleteApiSessionBySessonId($session->getId());
+			$this->model_user_api_admin->deleteApiSessionBySessonId($session->getId());
 			
-			$this->model_user_api->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
+			$this->model_user_api_admin->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
 			
 			$session->data['api_id'] = $api_info['api_id'];
 
@@ -463,7 +463,7 @@ class ControllerSaleOrder extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		if (isset($this->request->get['order_id'])) {
-			$order_info = $this->model_sale_order->getOrder($this->request->get['order_id']);
+			$order_info = $this->model_sale_order_admin->getOrder($this->request->get['order_id']);
 		}
 
 		if (!empty($order_info)) {
@@ -480,9 +480,9 @@ class ControllerSaleOrder extends Controller {
 			$data['telephone'] = $order_info['telephone'];
 			$data['account_custom_field'] = $order_info['custom_field'];
 
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
-			$data['addresses'] = $this->model_customer_customer->getAddresses($order_info['customer_id']);
+			$data['addresses'] = $this->model_customer_customer_admin->getAddresses($order_info['customer_id']);
 
 			$data['payment_firstname'] = $order_info['payment_firstname'];
 			$data['payment_lastname'] = $order_info['payment_lastname'];
@@ -513,14 +513,14 @@ class ControllerSaleOrder extends Controller {
 			// Products
 			$data['order_products'] = [];
 
-			$products = $this->model_sale_order->getOrderProducts($this->request->get['order_id']);
+			$products = $this->model_sale_order_admin->getOrderProducts($this->request->get['order_id']);
 
 			foreach ($products as $product) {
 				$data['order_products'][] = array(
 					'product_id' => $product['product_id'],
 					'name'       => $product['name'],
 					'model'      => $product['model'],
-					'option'     => $this->model_sale_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']),
+					'option'     => $this->model_sale_order_admin->getOrderOptions($this->request->get['order_id'], $product['order_product_id']),
 					'quantity'   => $product['quantity'],
 					'price'      => $product['price'],
 					'total'      => $product['total'],
@@ -529,7 +529,7 @@ class ControllerSaleOrder extends Controller {
 			}
 
 			// Vouchers
-			$data['order_vouchers'] = $this->model_sale_order->getOrderVouchers($this->request->get['order_id']);
+			$data['order_vouchers'] = $this->model_sale_order_admin->getOrderVouchers($this->request->get['order_id']);
 
 			$data['coupon'] = '';
 			$data['voucher'] = '';
@@ -537,7 +537,7 @@ class ControllerSaleOrder extends Controller {
 
 			$data['order_totals'] = [];
 
-			$order_totals = $this->model_sale_order->getOrderTotals($this->request->get['order_id']);
+			$order_totals = $this->model_sale_order_admin->getOrderTotals($this->request->get['order_id']);
 
 			foreach ($order_totals as $order_total) {
 				// If coupon, voucher or reward points
@@ -612,7 +612,7 @@ class ControllerSaleOrder extends Controller {
 		}
 
 		// Stores
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		$data['stores'] = [];
 
@@ -621,7 +621,7 @@ class ControllerSaleOrder extends Controller {
 			'name'     => $this->language->get('text_default')
 		);
 
-		$results = $this->model_setting_store->getStores();
+		$results = $this->model_setting_store_admin->getStores();
 
 		foreach ($results as $result) {
 			$data['stores'][] = array(
@@ -631,12 +631,12 @@ class ControllerSaleOrder extends Controller {
 		}
 
 		// Customer Groups
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		// Custom Fields
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		$data['custom_fields'] = [];
 
@@ -645,12 +645,12 @@ class ControllerSaleOrder extends Controller {
 			'order' => 'ASC'
 		);
 
-		$custom_fields = $this->model_customer_custom_field->getCustomFields($filter_data);
+		$custom_fields = $this->model_customer_custom_field_admin->getCustomFields($filter_data);
 
 		foreach ($custom_fields as $custom_field) {
 			$data['custom_fields'][] = array(
 				'custom_field_id'    => $custom_field['custom_field_id'],
-				'custom_field_value' => $this->model_customer_custom_field->getCustomFieldValues($custom_field['custom_field_id']),
+				'custom_field_value' => $this->model_customer_custom_field_admin->getCustomFieldValues($custom_field['custom_field_id']),
 				'name'               => $custom_field['name'],
 				'value'              => $custom_field['value'],
 				'type'               => $custom_field['type'],
@@ -659,40 +659,40 @@ class ControllerSaleOrder extends Controller {
 			);
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
-		$data['countries'] = $this->model_localisation_country->getCountries();
+		$data['countries'] = $this->model_localisation_country_admin->getCountries();
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
-		$data['currencies'] = $this->model_localisation_currency->getCurrencies();
+		$data['currencies'] = $this->model_localisation_currency_admin->getCurrencies();
 
 		$data['voucher_min'] = $this->config->get('config_voucher_min');
 
-		$this->load->model('sale/voucher_theme');
+		$this->load->model('sale/voucher_theme_admin');
 
-		$data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
+		$data['voucher_themes'] = $this->model_sale_voucher_theme_admin->getVoucherThemes();
 
 		// API login
 		$data['catalog'] = HTTP_ROOT;
 		
 		// API login
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
-		$api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
+		$api_info = $this->model_user_api_admin->getApi($this->config->get('config_api_id'));
 
 		if ($api_info && $this->user->hasPermission('modify', 'sale/order')) {
 			$session = new Session($this->config->get('session_engine'), $this->registry);
 			
 			$session->start();
 					
-			$this->model_user_api->deleteApiSessionBySessonId($session->getId());
+			$this->model_user_api_admin->deleteApiSessionBySessonId($session->getId());
 			
-			$this->model_user_api->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
+			$this->model_user_api_admin->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
 			
 			$session->data['api_id'] = $api_info['api_id'];
 
@@ -709,7 +709,7 @@ class ControllerSaleOrder extends Controller {
 	}
 
 	public function info() {
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
 		if (isset($this->request->get['order_id'])) {
 			$order_id = (int)$this->request->get['order_id'];
@@ -717,7 +717,7 @@ class ControllerSaleOrder extends Controller {
 			$order_id = 0;
 		}
 
-		$order_info = $this->model_sale_order->getOrder($order_id);
+		$order_info = $this->model_sale_order_admin->getOrder($order_id);
 
 		if ($order_info) {
 			$this->load->language('sale/order');
@@ -816,9 +816,9 @@ class ControllerSaleOrder extends Controller {
 				$data['customer'] = '';
 			}
 
-			$this->load->model('customer/customer_group');
+			$this->load->model('customer/customer_group_admin');
 
-			$customer_group_info = $this->model_customer_customer_group->getCustomerGroup($order_info['customer_group_id']);
+			$customer_group_info = $this->model_customer_customer_group_admin->getCustomerGroup($order_info['customer_group_id']);
 
 			if ($customer_group_info) {
 				$data['customer_group'] = $customer_group_info['name'];
@@ -903,16 +903,16 @@ class ControllerSaleOrder extends Controller {
 			$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
 
 			// Uploaded files
-			$this->load->model('tool/upload');
+			$this->load->model('tool/upload_admin');
 
 			$data['products'] = [];
 
-			$products = $this->model_sale_order->getOrderProducts($this->request->get['order_id']);
+			$products = $this->model_sale_order_admin->getOrderProducts($this->request->get['order_id']);
 
 			foreach ($products as $product) {
 				$option_data = [];
 
-				$options = $this->model_sale_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
+				$options = $this->model_sale_order_admin->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
 
 				foreach ($options as $option) {
 					if ($option['type'] != 'file') {
@@ -922,7 +922,7 @@ class ControllerSaleOrder extends Controller {
 							'type'  => $option['type']
 						);
 					} else {
-						$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
+						$upload_info = $this->model_tool_upload_admin->getUploadByCode($option['value']);
 
 						if ($upload_info) {
 							$option_data[] = array(
@@ -950,7 +950,7 @@ class ControllerSaleOrder extends Controller {
 
 			$data['vouchers'] = [];
 
-			$vouchers = $this->model_sale_order->getOrderVouchers($this->request->get['order_id']);
+			$vouchers = $this->model_sale_order_admin->getOrderVouchers($this->request->get['order_id']);
 
 			foreach ($vouchers as $voucher) {
 				$data['vouchers'][] = array(
@@ -962,7 +962,7 @@ class ControllerSaleOrder extends Controller {
 
 			$data['totals'] = [];
 
-			$totals = $this->model_sale_order->getOrderTotals($this->request->get['order_id']);
+			$totals = $this->model_sale_order_admin->getOrderTotals($this->request->get['order_id']);
 
 			foreach ($totals as $total) {
 				$data['totals'][] = array(
@@ -973,17 +973,17 @@ class ControllerSaleOrder extends Controller {
 
 			$data['comment'] = nl2br($order_info['comment']);
 
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
         	$data['affiliate'] = '';
 
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
-			$data['commission_total'] = $this->model_customer_customer->getTotalTransactionsByOrderId($this->request->get['order_id']);
+			$data['commission_total'] = $this->model_customer_customer_admin->getTotalTransactionsByOrderId($this->request->get['order_id']);
 
-			$this->load->model('localisation/order_status');
+			$this->load->model('localisation/order_status_admin');
 
-			$order_status_info = $this->model_localisation_order_status->getOrderStatus($order_info['order_status_id']);
+			$order_status_info = $this->model_localisation_order_status_admin->getOrderStatus($order_info['order_status_id']);
 
 			if ($order_status_info) {
 				$data['order_status'] = $order_status_info['name'];
@@ -991,14 +991,14 @@ class ControllerSaleOrder extends Controller {
 				$data['order_status'] = '';
 			}
 
-			$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+			$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 			$data['order_status_id'] = $order_info['order_status_id'];
 
 			$data['account_custom_field'] = $order_info['custom_field'];
 
 			// Custom Fields
-			$this->load->model('customer/custom_field');
+			$this->load->model('customer/custom_field_admin');
 
 			$data['account_custom_fields'] = [];
 
@@ -1007,12 +1007,12 @@ class ControllerSaleOrder extends Controller {
 				'order' => 'ASC'
 			);
 
-			$custom_fields = $this->model_customer_custom_field->getCustomFields($filter_data);
+			$custom_fields = $this->model_customer_custom_field_admin->getCustomFields($filter_data);
 
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['location'] == 'account' && isset($order_info['custom_field'][$custom_field['custom_field_id']])) {
 					if ($custom_field['type'] == 'select' || $custom_field['type'] == 'radio') {
-						$custom_field_value_info = $this->model_customer_custom_field->getCustomFieldValue($order_info['custom_field'][$custom_field['custom_field_id']]);
+						$custom_field_value_info = $this->model_customer_custom_field_admin->getCustomFieldValue($order_info['custom_field'][$custom_field['custom_field_id']]);
 
 						if ($custom_field_value_info) {
 							$data['account_custom_fields'][] = array(
@@ -1024,7 +1024,7 @@ class ControllerSaleOrder extends Controller {
 
 					if ($custom_field['type'] == 'checkbox' && is_array($order_info['custom_field'][$custom_field['custom_field_id']])) {
 						foreach ($order_info['custom_field'][$custom_field['custom_field_id']] as $custom_field_value_id) {
-							$custom_field_value_info = $this->model_customer_custom_field->getCustomFieldValue($custom_field_value_id);
+							$custom_field_value_info = $this->model_customer_custom_field_admin->getCustomFieldValue($custom_field_value_id);
 
 							if ($custom_field_value_info) {
 								$data['account_custom_fields'][] = array(
@@ -1043,7 +1043,7 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					if ($custom_field['type'] == 'file') {
-						$upload_info = $this->model_tool_upload->getUploadByCode($order_info['custom_field'][$custom_field['custom_field_id']]);
+						$upload_info = $this->model_tool_upload_admin->getUploadByCode($order_info['custom_field'][$custom_field['custom_field_id']]);
 
 						if ($upload_info) {
 							$data['account_custom_fields'][] = array(
@@ -1061,7 +1061,7 @@ class ControllerSaleOrder extends Controller {
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['location'] == 'address' && isset($order_info['payment_custom_field'][$custom_field['custom_field_id']])) {
 					if ($custom_field['type'] == 'select' || $custom_field['type'] == 'radio') {
-						$custom_field_value_info = $this->model_customer_custom_field->getCustomFieldValue($order_info['payment_custom_field'][$custom_field['custom_field_id']]);
+						$custom_field_value_info = $this->model_customer_custom_field_admin->getCustomFieldValue($order_info['payment_custom_field'][$custom_field['custom_field_id']]);
 
 						if ($custom_field_value_info) {
 							$data['payment_custom_fields'][] = array(
@@ -1074,7 +1074,7 @@ class ControllerSaleOrder extends Controller {
 
 					if ($custom_field['type'] == 'checkbox' && is_array($order_info['payment_custom_field'][$custom_field['custom_field_id']])) {
 						foreach ($order_info['payment_custom_field'][$custom_field['custom_field_id']] as $custom_field_value_id) {
-							$custom_field_value_info = $this->model_customer_custom_field->getCustomFieldValue($custom_field_value_id);
+							$custom_field_value_info = $this->model_customer_custom_field_admin->getCustomFieldValue($custom_field_value_id);
 
 							if ($custom_field_value_info) {
 								$data['payment_custom_fields'][] = array(
@@ -1095,7 +1095,7 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					if ($custom_field['type'] == 'file') {
-						$upload_info = $this->model_tool_upload->getUploadByCode($order_info['payment_custom_field'][$custom_field['custom_field_id']]);
+						$upload_info = $this->model_tool_upload_admin->getUploadByCode($order_info['payment_custom_field'][$custom_field['custom_field_id']]);
 
 						if ($upload_info) {
 							$data['payment_custom_fields'][] = array(
@@ -1114,7 +1114,7 @@ class ControllerSaleOrder extends Controller {
 			foreach ($custom_fields as $custom_field) {
 				if ($custom_field['location'] == 'address' && isset($order_info['shipping_custom_field'][$custom_field['custom_field_id']])) {
 					if ($custom_field['type'] == 'select' || $custom_field['type'] == 'radio') {
-						$custom_field_value_info = $this->model_customer_custom_field->getCustomFieldValue($order_info['shipping_custom_field'][$custom_field['custom_field_id']]);
+						$custom_field_value_info = $this->model_customer_custom_field_admin->getCustomFieldValue($order_info['shipping_custom_field'][$custom_field['custom_field_id']]);
 
 						if ($custom_field_value_info) {
 							$data['shipping_custom_fields'][] = array(
@@ -1127,7 +1127,7 @@ class ControllerSaleOrder extends Controller {
 
 					if ($custom_field['type'] == 'checkbox' && is_array($order_info['shipping_custom_field'][$custom_field['custom_field_id']])) {
 						foreach ($order_info['shipping_custom_field'][$custom_field['custom_field_id']] as $custom_field_value_id) {
-							$custom_field_value_info = $this->model_customer_custom_field->getCustomFieldValue($custom_field_value_id);
+							$custom_field_value_info = $this->model_customer_custom_field_admin->getCustomFieldValue($custom_field_value_id);
 
 							if ($custom_field_value_info) {
 								$data['shipping_custom_fields'][] = array(
@@ -1148,7 +1148,7 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					if ($custom_field['type'] == 'file') {
-						$upload_info = $this->model_tool_upload->getUploadByCode($order_info['shipping_custom_field'][$custom_field['custom_field_id']]);
+						$upload_info = $this->model_tool_upload_admin->getUploadByCode($order_info['shipping_custom_field'][$custom_field['custom_field_id']]);
 
 						if ($upload_info) {
 							$data['shipping_custom_fields'][] = array(
@@ -1187,9 +1187,9 @@ class ControllerSaleOrder extends Controller {
 				}
 			}
 
-			$this->load->model('setting/extension');
+			$this->load->model('setting/extension_admin');
 
-			$extensions = $this->model_setting_extension->getInstalled('fraud');
+			$extensions = $this->model_setting_extension_admin->getInstalled('fraud');
 
 			foreach ($extensions as $extension) {
 				if ($this->config->get('fraud_' . $extension . '_status')) {
@@ -1211,18 +1211,18 @@ class ControllerSaleOrder extends Controller {
 			$data['catalog'] = HTTP_ROOT;
 			
 			// API login
-			$this->load->model('user/api');
+			$this->load->model('user/api_admin');
 
-			$api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
+			$api_info = $this->model_user_api_admin->getApi($this->config->get('config_api_id'));
 
 			if ($api_info && $this->user->hasPermission('modify', 'sale/order')) {
 				$session = new Session($this->config->get('session_engine'), $this->registry);
 				
 				$session->start();
 				
-				$this->model_user_api->deleteApiSessionBySessonId($session->getId());
+				$this->model_user_api_admin->deleteApiSessionBySessonId($session->getId());
 				
-				$this->model_user_api->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
+				$this->model_user_api_admin->addApiSession($api_info['api_id'], $session->getId(), $this->request->server['REMOTE_ADDR']);
 				
 				$session->data['api_id'] = $api_info['api_id'];
 
@@ -1263,9 +1263,9 @@ class ControllerSaleOrder extends Controller {
 		if (!$this->user->hasPermission('modify', 'sale/order')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('sale/order');
+			$this->load->model('sale/order_admin');
 
-			$invoice_no = $this->model_sale_order->createInvoiceNo($order_id);
+			$invoice_no = $this->model_sale_order_admin->createInvoiceNo($order_id);
 
 			if ($invoice_no) {
 				$json['invoice_no'] = $invoice_no;
@@ -1295,9 +1295,9 @@ class ControllerSaleOrder extends Controller {
 
 		$data['histories'] = [];
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
-		$results = $this->model_sale_order->getOrderHistories($order_id, ($page - 1) * 10, 10);
+		$results = $this->model_sale_order_admin->getOrderHistories($order_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
 			$data['histories'][] = array(
@@ -1308,7 +1308,7 @@ class ControllerSaleOrder extends Controller {
 			);
 		}
 
-		$history_total = $this->model_sale_order->getTotalOrderHistories($order_id);
+		$history_total = $this->model_sale_order_admin->getTotalOrderHistories($order_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $history_total;
@@ -1333,9 +1333,9 @@ class ControllerSaleOrder extends Controller {
 		$data['direction'] = $this->language->get('direction');
 		$data['lang'] = $this->language->get('code');
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		$data['orders'] = [];
 
@@ -1348,10 +1348,10 @@ class ControllerSaleOrder extends Controller {
 		}
 
 		foreach ($orders as $order_id) {
-			$order_info = $this->model_sale_order->getOrder($order_id);
+			$order_info = $this->model_sale_order_admin->getOrder($order_id);
 
 			if ($order_info) {
-				$store_info = $this->model_setting_setting->getSetting('config', $order_info['store_id']);
+				$store_info = $this->model_setting_setting_admin->getSetting('config', $order_info['store_id']);
 
 				if ($store_info) {
 					$store_address = $store_info['config_address'];
@@ -1439,22 +1439,22 @@ class ControllerSaleOrder extends Controller {
 
 				$shipping_address = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
 
-				$this->load->model('tool/upload');
+				$this->load->model('tool/upload_admin');
 
 				$product_data = [];
 
-				$products = $this->model_sale_order->getOrderProducts($order_id);
+				$products = $this->model_sale_order_admin->getOrderProducts($order_id);
 
 				foreach ($products as $product) {
 					$option_data = [];
 
-					$options = $this->model_sale_order->getOrderOptions($order_id, $product['order_product_id']);
+					$options = $this->model_sale_order_admin->getOrderOptions($order_id, $product['order_product_id']);
 
 					foreach ($options as $option) {
 						if ($option['type'] != 'file') {
 							$value = $option['value'];
 						} else {
-							$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
+							$upload_info = $this->model_tool_upload_admin->getUploadByCode($option['value']);
 
 							if ($upload_info) {
 								$value = $upload_info['name'];
@@ -1481,7 +1481,7 @@ class ControllerSaleOrder extends Controller {
 
 				$voucher_data = [];
 
-				$vouchers = $this->model_sale_order->getOrderVouchers($order_id);
+				$vouchers = $this->model_sale_order_admin->getOrderVouchers($order_id);
 
 				foreach ($vouchers as $voucher) {
 					$voucher_data[] = array(
@@ -1492,7 +1492,7 @@ class ControllerSaleOrder extends Controller {
 
 				$total_data = [];
 
-				$totals = $this->model_sale_order->getOrderTotals($order_id);
+				$totals = $this->model_sale_order_admin->getOrderTotals($order_id);
 
 				foreach ($totals as $total) {
 					$total_data[] = array(
@@ -1538,11 +1538,11 @@ class ControllerSaleOrder extends Controller {
 		$data['direction'] = $this->language->get('direction');
 		$data['lang'] = $this->language->get('code');
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		$data['orders'] = [];
 
@@ -1555,11 +1555,11 @@ class ControllerSaleOrder extends Controller {
 		}
 
 		foreach ($orders as $order_id) {
-			$order_info = $this->model_sale_order->getOrder($order_id);
+			$order_info = $this->model_sale_order_admin->getOrder($order_id);
 
 			// Make sure there is a shipping method
 			if ($order_info && $order_info['shipping_code']) {
-				$store_info = $this->model_setting_setting->getSetting('config', $order_info['store_id']);
+				$store_info = $this->model_setting_setting_admin->getSetting('config', $order_info['store_id']);
 
 				if ($store_info) {
 					$store_address = $store_info['config_address'];
@@ -1611,27 +1611,27 @@ class ControllerSaleOrder extends Controller {
 
 				$shipping_address = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
 
-				$this->load->model('tool/upload');
+				$this->load->model('tool/upload_admin');
 
 				$product_data = [];
 
-				$products = $this->model_sale_order->getOrderProducts($order_id);
+				$products = $this->model_sale_order_admin->getOrderProducts($order_id);
 
 				foreach ($products as $product) {
 					$option_weight = 0;
 
-					$product_info = $this->model_catalog_product->getProduct($product['product_id']);
+					$product_info = $this->model_catalog_product_admin->getProduct($product['product_id']);
 
 					if ($product_info) {
 						$option_data = [];
 
-						$options = $this->model_sale_order->getOrderOptions($order_id, $product['order_product_id']);
+						$options = $this->model_sale_order_admin->getOrderOptions($order_id, $product['order_product_id']);
 
 						foreach ($options as $option) {
 							if ($option['type'] != 'file') {
 								$value = $option['value'];
 							} else {
-								$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
+								$upload_info = $this->model_tool_upload_admin->getUploadByCode($option['value']);
 
 								if ($upload_info) {
 									$value = $upload_info['name'];
@@ -1645,7 +1645,7 @@ class ControllerSaleOrder extends Controller {
 								'value' => $value
 							);
 
-							$product_option_value_info = $this->model_catalog_product->getProductOptionValue($product['product_id'], $option['product_option_value_id']);
+							$product_option_value_info = $this->model_catalog_product_admin->getProductOptionValue($product['product_id'], $option['product_option_value_id']);
 
 							if ($product_option_value_info) {
 								if ($product_option_value_info['weight_prefix'] == '+') {

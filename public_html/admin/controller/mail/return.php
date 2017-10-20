@@ -26,9 +26,9 @@ class ControllerMailReturn extends Controller {
 		}		
 		
 		if ($notify) {
-			$this->load->model('sale/return');
+			$this->load->model('sale/return_admin');
 			
-			$return_info = $this->model_sale_return->getReturn($return_id);
+			$return_info = $this->model_sale_return_admin->getReturn($return_id);
 			
 			if ($return_info) {
 				$this->load->language('mail/return');

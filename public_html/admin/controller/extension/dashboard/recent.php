@@ -7,10 +7,10 @@ class ControllerExtensionDashboardRecent extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dashboard_recent', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('dashboard_recent', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -98,9 +98,9 @@ class ControllerExtensionDashboardRecent extends Controller {
 			'limit' => 5
 		);
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 		
-		$results = $this->model_sale_order->getOrders($filter_data);
+		$results = $this->model_sale_order_admin->getOrders($filter_data);
 
 		foreach ($results as $result) {
 			$data['orders'][] = array(

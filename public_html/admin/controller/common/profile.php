@@ -7,7 +7,7 @@ class ControllerCommonProfile extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
+		$this->load->model('user/user_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$user_data = array_merge($this->request->post, array(
@@ -15,7 +15,7 @@ class ControllerCommonProfile extends Controller {
 				'status'        => 1,
 			));
 			
-			$this->model_user_user->editUser($this->user->getId(), $user_data);
+			$this->model_user_user_admin->editUser($this->user->getId(), $user_data);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -89,7 +89,7 @@ class ControllerCommonProfile extends Controller {
 		$data['cancel'] = $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true);
 
 		if ($this->request->server['REQUEST_METHOD'] != 'POST') {
-			$user_info = $this->model_user_user->getUser($this->user->getId());
+			$user_info = $this->model_user_user_admin->getUser($this->user->getId());
 		}
 
 		if (isset($this->request->post['password'])) {
@@ -136,17 +136,17 @@ class ControllerCommonProfile extends Controller {
 			$data['image'] = '';
 		}
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['image'], 100, 100);
 		} elseif (!empty($user_info) && $user_info['image'] && is_file(DIR_IMAGE . $user_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($user_info['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($user_info['image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 		
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -160,7 +160,7 @@ class ControllerCommonProfile extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
+		$user_info = $this->model_user_user_admin->getUserByEmail($this->request->post['email']);
 
 		if ($user_info && ($this->user->getId() != $user_info['user_id'])) {
 			$this->error['warning'] = $this->language->get('error_username_exists');
@@ -178,7 +178,7 @@ class ControllerCommonProfile extends Controller {
 			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
+		$user_info = $this->model_user_user_admin->getUserByEmail($this->request->post['email']);
 
 		if ($user_info && ($this->user->getId() != $user_info['user_id'])) {
 			$this->error['warning'] = $this->language->get('error_email_exists');

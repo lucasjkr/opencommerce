@@ -5,10 +5,10 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('report_customer_search', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('report_customer_search', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -109,7 +109,7 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 		}
 
 		$this->load->model('extension/report/customer');
-		$this->load->model('catalog/category');
+		$this->load->model('catalog/category_admin');
 
 		$data['searches'] = [];
 
@@ -128,7 +128,7 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 		$results = $this->model_extension_report_customer->getCustomerSearches($filter_data);
 
 		foreach ($results as $result) {
-			$category_info = $this->model_catalog_category->getCategory($result['category_id']);
+			$category_info = $this->model_catalog_category_admin->getCategory($result['category_id']);
 
 			if ($category_info) {
 				$category = ($category_info['path']) ? $category_info['path'] . ' &gt; ' . $category_info['name'] : $category_info['name'];

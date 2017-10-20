@@ -7,7 +7,7 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_country->addCountry($this->request->post);
+			$this->model_localisation_country_admin->addCountry($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_country->editCountry($this->request->get['country_id'], $this->request->post);
+			$this->model_localisation_country_admin->editCountry($this->request->get['country_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationCountry extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $country_id) {
-				$this->model_localisation_country->deleteCountry($country_id);
+				$this->model_localisation_country_admin->deleteCountry($country_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationCountry extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$country_total = $this->model_localisation_country->getTotalCountries();
+		$country_total = $this->model_localisation_country_admin->getTotalCountries();
 
-		$results = $this->model_localisation_country->getCountries($filter_data);
+		$results = $this->model_localisation_country_admin->getCountries($filter_data);
 
 		foreach ($results as $result) {
 			$data['countries'][] = array(
@@ -297,7 +297,7 @@ class ControllerLocalisationCountry extends Controller {
 		$data['cancel'] = $this->url->link('localisation/country', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['country_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
+			$country_info = $this->model_localisation_country_admin->getCountry($this->request->get['country_id']);
 		}
 
 		if (isset($this->request->post['name'])) {
@@ -372,35 +372,35 @@ class ControllerLocalisationCountry extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('customer/customer');
-		$this->load->model('localisation/zone');
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('setting/store_admin');
+		$this->load->model('customer/customer_admin');
+		$this->load->model('localisation/zone_admin');
+		$this->load->model('localisation/geo_zone_admin');
 
 		foreach ($this->request->post['selected'] as $country_id) {
 			if ($this->config->get('config_country_id') == $country_id) {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByCountryId($country_id);
+			$store_total = $this->model_setting_store_admin->getTotalStoresByCountryId($country_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
 			}
 
-			$address_total = $this->model_customer_customer->getTotalAddressesByCountryId($country_id);
+			$address_total = $this->model_customer_customer_admin->getTotalAddressesByCountryId($country_id);
 
 			if ($address_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_address'), $address_total);
 			}
 
-			$zone_total = $this->model_localisation_zone->getTotalZonesByCountryId($country_id);
+			$zone_total = $this->model_localisation_zone_admin->getTotalZonesByCountryId($country_id);
 
 			if ($zone_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_zone'), $zone_total);
 			}
 
-			$zone_to_geo_zone_total = $this->model_localisation_geo_zone->getTotalZoneToGeoZoneByCountryId($country_id);
+			$zone_to_geo_zone_total = $this->model_localisation_geo_zone_admin->getTotalZoneToGeoZoneByCountryId($country_id);
 
 			if ($zone_to_geo_zone_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_zone_to_geo_zone'), $zone_to_geo_zone_total);
@@ -413,12 +413,12 @@ class ControllerLocalisationCountry extends Controller {
 	public function country() {
 		$json = [];
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
-		$country_info = $this->model_localisation_country->getCountry($this->request->get['country_id']);
+		$country_info = $this->model_localisation_country_admin->getCountry($this->request->get['country_id']);
 
 		if ($country_info) {
-			$this->load->model('localisation/zone');
+			$this->load->model('localisation/zone_admin');
 
 			$json = array(
 				'country_id'        => $country_info['country_id'],
@@ -427,7 +427,7 @@ class ControllerLocalisationCountry extends Controller {
 				'iso_code_3'        => $country_info['iso_code_3'],
 				'address_format'    => $country_info['address_format'],
 				'postcode_required' => $country_info['postcode_required'],
-				'zone'              => $this->model_localisation_zone->getZonesByCountryId($this->request->get['country_id']),
+				'zone'              => $this->model_localisation_zone_admin->getZonesByCountryId($this->request->get['country_id']),
 				'status'            => $country_info['status']
 			);
 		}

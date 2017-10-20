@@ -3,12 +3,12 @@ class ControllerExtensionModulePPButton extends Controller {
 	public function index() {
 		$this->load->language('extension/module/pp_button');
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('module_pp_button', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('module_pp_button', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -57,11 +57,11 @@ class ControllerExtensionModulePPButton extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		$settings['module_pp_button_status'] = 1;
 
-		$this->model_setting_setting->editSetting('module_pp_button', $settings);
+		$this->model_setting_setting_admin->editSetting('module_pp_button', $settings);
 	}
 
 	public function configure() {
@@ -70,13 +70,13 @@ class ControllerExtensionModulePPButton extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/extension/module')) {
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], true));
 		} else {
-			$this->load->model('setting/extension');
-			$this->load->model('user/user_group');
+			$this->load->model('setting/extension_admin');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_setting_extension->install('module', 'pp_button');
+			$this->model_setting_extension_admin->install('module', 'pp_button');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/module/pp_button');
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/module/pp_button');
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/module/pp_button');
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/module/pp_button');
 
 			$this->install();
 

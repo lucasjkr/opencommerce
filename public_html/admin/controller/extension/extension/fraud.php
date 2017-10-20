@@ -5,7 +5,7 @@ class ControllerExtensionExtensionFraud extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/fraud');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		$this->getList();
 	}
@@ -13,15 +13,15 @@ class ControllerExtensionExtensionFraud extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/fraud');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->install('fraud', $this->request->get['extension']);
+			$this->model_setting_extension_admin->install('fraud', $this->request->get['extension']);
 
-			$this->load->model('user/user_group');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/fraud/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/fraud/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/fraud/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/fraud/' . $this->request->get['extension']);
 
 			// Call install method if it exsits
 			$this->load->controller('extension/fraud/' . $this->request->get['extension'] . '/install');
@@ -35,10 +35,10 @@ class ControllerExtensionExtensionFraud extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/fraud');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->uninstall('fraud', $this->request->get['extension']);
+			$this->model_setting_extension_admin->uninstall('fraud', $this->request->get['extension']);
 
 			// Call uninstall method if it exsits
 			$this->load->controller('extension/fraud/' . $this->request->get['extension'] . '/uninstall');
@@ -64,11 +64,11 @@ class ControllerExtensionExtensionFraud extends Controller {
 			$data['success'] = '';
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('fraud');
+		$extensions = $this->model_setting_extension_admin->getInstalled('fraud');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/fraud/' . $value . '.php') && !is_file(DIR_APPLICATION . 'controller/fraud/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('fraud', $value);
+				$this->model_setting_extension_admin->uninstall('fraud', $value);
 
 				unset($extensions[$key]);
 			}

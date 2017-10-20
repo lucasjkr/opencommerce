@@ -7,7 +7,7 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/marketing');
+		$this->load->model('marketing/marketing_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/marketing');
+		$this->load->model('marketing/marketing_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_marketing_marketing->addMarketing($this->request->post);
+			$this->model_marketing_marketing_admin->addMarketing($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -61,10 +61,10 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/marketing');
+		$this->load->model('marketing/marketing_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_marketing_marketing->editMarketing($this->request->get['marketing_id'], $this->request->post);
+			$this->model_marketing_marketing_admin->editMarketing($this->request->get['marketing_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -105,11 +105,11 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/marketing');
+		$this->load->model('marketing/marketing_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $marketing_id) {
-				$this->model_marketing_marketing->deleteMarketing($marketing_id);
+				$this->model_marketing_marketing_admin->deleteMarketing($marketing_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -240,9 +240,9 @@ class ControllerMarketingMarketing extends Controller {
 			'limit'             => $this->config->get('config_limit_admin')
 		);
 
-		$marketing_total = $this->model_marketing_marketing->getTotalMarketings($filter_data);
+		$marketing_total = $this->model_marketing_marketing_admin->getTotalMarketings($filter_data);
 
-		$results = $this->model_marketing_marketing->getMarketings($filter_data);
+		$results = $this->model_marketing_marketing_admin->getMarketings($filter_data);
 
 		foreach ($results as $result) {
 			$data['marketings'][] = array(
@@ -428,7 +428,7 @@ class ControllerMarketingMarketing extends Controller {
 		$data['cancel'] = $this->url->link('marketing/marketing', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['marketing_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$marketing_info = $this->model_marketing_marketing->getMarketing($this->request->get['marketing_id']);
+			$marketing_info = $this->model_marketing_marketing_admin->getMarketing($this->request->get['marketing_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -479,7 +479,7 @@ class ControllerMarketingMarketing extends Controller {
 			$this->error['code'] = $this->language->get('error_code');
 		}
 
-		$marketing_info = $this->model_marketing_marketing->getMarketingByCode($this->request->post['code']);
+		$marketing_info = $this->model_marketing_marketing_admin->getMarketingByCode($this->request->post['code']);
 
 		if ($marketing_info && (!isset($this->request->get['marketing_id']) || ($this->request->get['marketing_id'] != $marketing_info['marketing_id']))) {
 			$this->error['code'] = $this->language->get('error_exists');
@@ -513,14 +513,14 @@ class ControllerMarketingMarketing extends Controller {
 
 		$data['reports'] = [];
 
-		$this->load->model('marketing/marketing');
-		$this->load->model('customer/customer');
-		$this->load->model('setting/store');
+		$this->load->model('marketing/marketing_admin');
+		$this->load->model('customer/customer_admin');
+		$this->load->model('setting/store_admin');
 
-		$results = $this->model_marketing_marketing->getReports($marketing_id, ($page - 1) * 10, 10);
+		$results = $this->model_marketing_marketing_admin->getReports($marketing_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$store_info = $this->model_setting_store->getStore($result['store_id']);
+			$store_info = $this->model_setting_store_admin->getStore($result['store_id']);
 
 			if ($store_info) {
 				$store = $store_info['name'];
@@ -532,7 +532,7 @@ class ControllerMarketingMarketing extends Controller {
 
 			$data['reports'][] = array(
 				'ip'         => $result['ip'],
-				'account'    => $this->model_customer_customer->getTotalCustomersByIp($result['ip']),
+				'account'    => $this->model_customer_customer_admin->getTotalCustomersByIp($result['ip']),
 				'store'      => $store,
 				'country'    => $result['country'],
 				'date_added' => date($this->language->get('datetime_format'), strtotime($result['date_added'])),
@@ -540,7 +540,7 @@ class ControllerMarketingMarketing extends Controller {
 			);
 		}
 
-		$report_total = $this->model_marketing_marketing->getTotalReports($marketing_id);
+		$report_total = $this->model_marketing_marketing_admin->getTotalReports($marketing_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $report_total;

@@ -7,7 +7,7 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_class');
+		$this->load->model('localisation/tax_class_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_class');
+		$this->load->model('localisation/tax_class_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_tax_class->addTaxClass($this->request->post);
+			$this->model_localisation_tax_class_admin->addTaxClass($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_class');
+		$this->load->model('localisation/tax_class_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_tax_class->editTaxClass($this->request->get['tax_class_id'], $this->request->post);
+			$this->model_localisation_tax_class_admin->editTaxClass($this->request->get['tax_class_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationTaxClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/tax_class');
+		$this->load->model('localisation/tax_class_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $tax_class_id) {
-				$this->model_localisation_tax_class->deleteTaxClass($tax_class_id);
+				$this->model_localisation_tax_class_admin->deleteTaxClass($tax_class_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationTaxClass extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$tax_class_total = $this->model_localisation_tax_class->getTotalTaxClasses();
+		$tax_class_total = $this->model_localisation_tax_class_admin->getTotalTaxClasses();
 
-		$results = $this->model_localisation_tax_class->getTaxClasses($filter_data);
+		$results = $this->model_localisation_tax_class_admin->getTaxClasses($filter_data);
 
 		foreach ($results as $result) {
 			$data['tax_classes'][] = array(
@@ -299,7 +299,7 @@ class ControllerLocalisationTaxClass extends Controller {
 		$data['cancel'] = $this->url->link('localisation/tax_class', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['tax_class_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$tax_class_info = $this->model_localisation_tax_class->getTaxClass($this->request->get['tax_class_id']);
+			$tax_class_info = $this->model_localisation_tax_class_admin->getTaxClass($this->request->get['tax_class_id']);
 		}
 
 		if (isset($this->request->post['title'])) {
@@ -318,14 +318,14 @@ class ControllerLocalisationTaxClass extends Controller {
 			$data['description'] = '';
 		}
 
-		$this->load->model('localisation/tax_rate');
+		$this->load->model('localisation/tax_rate_admin');
 
-		$data['tax_rates'] = $this->model_localisation_tax_rate->getTaxRates();
+		$data['tax_rates'] = $this->model_localisation_tax_rate_admin->getTaxRates();
 
 		if (isset($this->request->post['tax_rule'])) {
 			$data['tax_rules'] = $this->request->post['tax_rule'];
 		} elseif (isset($this->request->get['tax_class_id'])) {
-			$data['tax_rules'] = $this->model_localisation_tax_class->getTaxRules($this->request->get['tax_class_id']);
+			$data['tax_rules'] = $this->model_localisation_tax_class_admin->getTaxRules($this->request->get['tax_class_id']);
 		} else {
 			$data['tax_rules'] = [];
 		}
@@ -358,10 +358,10 @@ class ControllerLocalisationTaxClass extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		foreach ($this->request->post['selected'] as $tax_class_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByTaxClassId($tax_class_id);
+			$product_total = $this->model_catalog_product_admin->getTotalProductsByTaxClassId($tax_class_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_product'), $product_total);

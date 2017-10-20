@@ -7,7 +7,7 @@ class ControllerUserUser extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
+		$this->load->model('user/user_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerUserUser extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
+		$this->load->model('user/user_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user->addUser($this->request->post);
+			$this->model_user_user_admin->addUser($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerUserUser extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
+		$this->load->model('user/user_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_user->editUser($this->request->get['user_id'], $this->request->post);
+			$this->model_user_user_admin->editUser($this->request->get['user_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerUserUser extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/user');
+		$this->load->model('user/user_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $user_id) {
-				$this->model_user_user->deleteUser($user_id);
+				$this->model_user_user_admin->deleteUser($user_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerUserUser extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$user_total = $this->model_user_user->getTotalUsers();
+		$user_total = $this->model_user_user_admin->getTotalUsers();
 
-		$results = $this->model_user_user->getUsers($filter_data);
+		$results = $this->model_user_user_admin->getUsers($filter_data);
 
 		foreach ($results as $result) {
 			$data['users'][] = array(
@@ -327,7 +327,7 @@ class ControllerUserUser extends Controller {
 		$data['cancel'] = $this->url->link('user/user', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['user_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$user_info = $this->model_user_user->getUser($this->request->get['user_id']);
+			$user_info = $this->model_user_user_admin->getUser($this->request->get['user_id']);
 		}
 
 		if (isset($this->request->post['email'])) {
@@ -346,9 +346,9 @@ class ControllerUserUser extends Controller {
 			$data['user_group_id'] = '';
 		}
 
-		$this->load->model('user/user_group');
+		$this->load->model('user/user_group_admin');
 
-		$data['user_groups'] = $this->model_user_user_group->getUserGroups();
+		$data['user_groups'] = $this->model_user_user_group_admin->getUserGroups();
 
 		if (isset($this->request->post['password'])) {
 			$data['password'] = $this->request->post['password'];
@@ -394,17 +394,17 @@ class ControllerUserUser extends Controller {
 			$data['image'] = '';
 		}
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['image'], 100, 100);
 		} elseif (!empty($user_info) && $user_info['image'] && is_file(DIR_IMAGE . $user_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($user_info['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($user_info['image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 		
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['status'])) {
 			$data['status'] = $this->request->post['status'];
@@ -430,7 +430,7 @@ class ControllerUserUser extends Controller {
 			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
+		$user_info = $this->model_user_user_admin->getUserByEmail($this->request->post['email']);
 
 		if (!isset($this->request->get['user_id'])) {
 			if ($user_info) {
@@ -454,7 +454,7 @@ class ControllerUserUser extends Controller {
 			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		$user_info = $this->model_user_user->getUserByEmail($this->request->post['email']);
+		$user_info = $this->model_user_user_admin->getUserByEmail($this->request->post['email']);
 
 		if (!isset($this->request->get['user_id'])) {
 			if ($user_info) {

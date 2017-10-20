@@ -7,7 +7,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_order_status->addOrderStatus($this->request->post);
+			$this->model_localisation_order_status_admin->addOrderStatus($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_order_status->editOrderStatus($this->request->get['order_status_id'], $this->request->post);
+			$this->model_localisation_order_status_admin->editOrderStatus($this->request->get['order_status_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $order_status_id) {
-				$this->model_localisation_order_status->deleteOrderStatus($order_status_id);
+				$this->model_localisation_order_status_admin->deleteOrderStatus($order_status_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationOrderStatus extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$order_status_total = $this->model_localisation_order_status->getTotalOrderStatuses();
+		$order_status_total = $this->model_localisation_order_status_admin->getTotalOrderStatuses();
 
-		$results = $this->model_localisation_order_status->getOrderStatuses($filter_data);
+		$results = $this->model_localisation_order_status_admin->getOrderStatuses($filter_data);
 
 		foreach ($results as $result) {
 			$data['order_statuses'][] = array(
@@ -292,14 +292,14 @@ class ControllerLocalisationOrderStatus extends Controller {
 
 		$data['cancel'] = $this->url->link('localisation/order_status', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['order_status'])) {
 			$data['order_status'] = $this->request->post['order_status'];
 		} elseif (isset($this->request->get['order_status_id'])) {
-			$data['order_status'] = $this->model_localisation_order_status->getOrderStatusDescriptions($this->request->get['order_status_id']);
+			$data['order_status'] = $this->model_localisation_order_status_admin->getOrderStatusDescriptions($this->request->get['order_status_id']);
 		} else {
 			$data['order_status'] = [];
 		}
@@ -330,8 +330,8 @@ class ControllerLocalisationOrderStatus extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('sale/order');
+		$this->load->model('setting/store_admin');
+		$this->load->model('sale/order_admin');
 
 		foreach ($this->request->post['selected'] as $order_status_id) {
 			if ($this->config->get('config_order_status_id') == $order_status_id) {
@@ -342,19 +342,19 @@ class ControllerLocalisationOrderStatus extends Controller {
 				$this->error['warning'] = $this->language->get('error_download');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByOrderStatusId($order_status_id);
+			$store_total = $this->model_setting_store_admin->getTotalStoresByOrderStatusId($order_status_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
 			}
 
-			$order_total = $this->model_sale_order->getTotalOrdersByOrderStatusId($order_status_id);
+			$order_total = $this->model_sale_order_admin->getTotalOrdersByOrderStatusId($order_status_id);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_order'), $order_total);
 			}
 
-			$order_total = $this->model_sale_order->getTotalOrderHistoriesByOrderStatusId($order_status_id);
+			$order_total = $this->model_sale_order_admin->getTotalOrderHistoriesByOrderStatusId($order_status_id);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_order'), $order_total);

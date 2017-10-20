@@ -7,10 +7,10 @@ class ControllerExtensionPaymentPayMate extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_paymate', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_paymate', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -88,9 +88,9 @@ class ControllerExtensionPaymentPayMate extends Controller {
 			$data['payment_paymate_order_status_id'] = $this->config->get('payment_paymate_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_paymate_geo_zone_id'])) {
 			$data['payment_paymate_geo_zone_id'] = $this->request->post['payment_paymate_geo_zone_id'];
@@ -98,9 +98,9 @@ class ControllerExtensionPaymentPayMate extends Controller {
 			$data['payment_paymate_geo_zone_id'] = $this->config->get('payment_paymate_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_paymate_status'])) {
 			$data['payment_paymate_status'] = $this->request->post['payment_paymate_status'];

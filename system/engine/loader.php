@@ -70,7 +70,7 @@ final class Loader {
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 		
 		if (!$this->registry->has('model_' . str_replace('/', '_', $route))) {
-			$file  = DIR_APPLICATION . 'model/' . $route . '.php';
+			$file  = DIR_ROOT. 'common/model/' . $route . '.php';
 			$class = 'Model' . preg_replace('/[^a-zA-Z0-9]/', '', $route);
 			
 			if (is_file($file)) {
