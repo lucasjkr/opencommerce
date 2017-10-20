@@ -1,5 +1,5 @@
 <?php
-class ModelToolUploadAdmin extends Model {
+class ModelToolUpload extends Model {
 //  These models are used by catalog AND admin
     public function addUpload($name, $filename) {
         $code = sha1(random_bytes(32), true);
