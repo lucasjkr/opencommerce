@@ -557,7 +557,7 @@ class ControllerSaleOrder extends Controller {
 		} else {
 			$data['order_id'] = 0;
 			$data['store_id'] = 0;
-			$data['store_url'] = HTTP_ROOT
+			$data['store_url'] = HTTP_ROOT;
 			
 			$data['customer'] = '';
 			$data['customer_id'] = '';
