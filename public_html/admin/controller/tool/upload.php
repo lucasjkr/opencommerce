@@ -7,7 +7,7 @@ class ControllerToolUpload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('tool/upload_admin');
+		$this->load->model('tool/upload');
 
 		$this->getList();
 	}
@@ -17,18 +17,18 @@ class ControllerToolUpload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('tool/upload_admin');
+		$this->load->model('tool/upload');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $upload_id) {
 				// Remove file before deleting DB record.
-				$upload_info = $this->model_tool_upload_admin->getUpload($upload_id);
+				$upload_info = $this->model_tool_upload->getUpload($upload_id);
 
 				if ($upload_info && is_file(DIR_UPLOAD . $upload_info['filename'])) {
 					unlink(DIR_UPLOAD . $upload_info['filename']);
 				}
 
-				$this->model_tool_upload_admin->deleteUpload($upload_id);
+				$this->model_tool_upload->deleteUpload($upload_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -139,9 +139,9 @@ class ControllerToolUpload extends Controller {
 			'limit'             => $this->config->get('config_limit_admin')
 		);
 
-		$upload_total = $this->model_tool_upload_admin->getTotalUploads($filter_data);
+		$upload_total = $this->model_tool_upload->getTotalUploads($filter_data);
 
-		$results = $this->model_tool_upload_admin->getUploads($filter_data);
+		$results = $this->model_tool_upload->getUploads($filter_data);
 
 		foreach ($results as $result) {
 			$data['uploads'][] = array(
@@ -249,7 +249,7 @@ class ControllerToolUpload extends Controller {
 	}
 
 	public function download() {
-		$this->load->model('tool/upload_admin');
+		$this->load->model('tool/upload');
 
 		if (isset($this->request->get['code'])) {
 			$code = $this->request->get['code'];
@@ -257,7 +257,7 @@ class ControllerToolUpload extends Controller {
 			$code = 0;
 		}
 
-		$upload_info = $this->model_tool_upload_admin->getUploadByCode($code);
+		$upload_info = $this->model_tool_upload->getUploadByCode($code);
 
 		if ($upload_info) {
 			$file = DIR_UPLOAD . $upload_info['filename'];
@@ -371,9 +371,9 @@ class ControllerToolUpload extends Controller {
 			move_uploaded_file($this->request->files['file']['tmp_name'], DIR_UPLOAD . $file);
 
 			// Hide the uploaded file name so people can not link to it directly.
-			$this->load->model('tool/upload_admin');
+			$this->load->model('tool/upload');
 
-			$json['code'] = $this->model_tool_upload_admin->addUpload($filename, $file);
+			$json['code'] = $this->model_tool_upload->addUpload($filename, $file);
 
 			$json['success'] = $this->language->get('text_upload');
 		}

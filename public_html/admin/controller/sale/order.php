@@ -903,7 +903,7 @@ class ControllerSaleOrder extends Controller {
 			$data['shipping_address'] = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
 
 			// Uploaded files
-			$this->load->model('tool/upload_admin');
+			$this->load->model('tool/upload');
 
 			$data['products'] = [];
 
@@ -922,7 +922,7 @@ class ControllerSaleOrder extends Controller {
 							'type'  => $option['type']
 						);
 					} else {
-						$upload_info = $this->model_tool_upload_admin->getUploadByCode($option['value']);
+						$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
 
 						if ($upload_info) {
 							$option_data[] = array(
@@ -1043,7 +1043,7 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					if ($custom_field['type'] == 'file') {
-						$upload_info = $this->model_tool_upload_admin->getUploadByCode($order_info['custom_field'][$custom_field['custom_field_id']]);
+						$upload_info = $this->model_tool_upload->getUploadByCode($order_info['custom_field'][$custom_field['custom_field_id']]);
 
 						if ($upload_info) {
 							$data['account_custom_fields'][] = array(
@@ -1095,7 +1095,7 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					if ($custom_field['type'] == 'file') {
-						$upload_info = $this->model_tool_upload_admin->getUploadByCode($order_info['payment_custom_field'][$custom_field['custom_field_id']]);
+						$upload_info = $this->model_tool_upload->getUploadByCode($order_info['payment_custom_field'][$custom_field['custom_field_id']]);
 
 						if ($upload_info) {
 							$data['payment_custom_fields'][] = array(
@@ -1148,7 +1148,7 @@ class ControllerSaleOrder extends Controller {
 					}
 
 					if ($custom_field['type'] == 'file') {
-						$upload_info = $this->model_tool_upload_admin->getUploadByCode($order_info['shipping_custom_field'][$custom_field['custom_field_id']]);
+						$upload_info = $this->model_tool_upload->getUploadByCode($order_info['shipping_custom_field'][$custom_field['custom_field_id']]);
 
 						if ($upload_info) {
 							$data['shipping_custom_fields'][] = array(
@@ -1439,7 +1439,7 @@ class ControllerSaleOrder extends Controller {
 
 				$shipping_address = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
 
-				$this->load->model('tool/upload_admin');
+				$this->load->model('tool/upload');
 
 				$product_data = [];
 
@@ -1454,7 +1454,7 @@ class ControllerSaleOrder extends Controller {
 						if ($option['type'] != 'file') {
 							$value = $option['value'];
 						} else {
-							$upload_info = $this->model_tool_upload_admin->getUploadByCode($option['value']);
+							$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
 
 							if ($upload_info) {
 								$value = $upload_info['name'];
@@ -1611,7 +1611,7 @@ class ControllerSaleOrder extends Controller {
 
 				$shipping_address = str_replace(array("\r\n", "\r", "\n"), '<br />', preg_replace(array("/\s\s+/", "/\r\r+/", "/\n\n+/"), '<br />', trim(str_replace($find, $replace, $format))));
 
-				$this->load->model('tool/upload_admin');
+				$this->load->model('tool/upload');
 
 				$product_data = [];
 
@@ -1631,7 +1631,7 @@ class ControllerSaleOrder extends Controller {
 							if ($option['type'] != 'file') {
 								$value = $option['value'];
 							} else {
-								$upload_info = $this->model_tool_upload_admin->getUploadByCode($option['value']);
+								$upload_info = $this->model_tool_upload->getUploadByCode($option['value']);
 
 								if ($upload_info) {
 									$value = $upload_info['name'];
