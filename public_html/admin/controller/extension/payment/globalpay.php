@@ -7,10 +7,10 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_globalpay', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_globalpay', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -100,9 +100,9 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 			$data['payment_globalpay_geo_zone_id'] = $this->config->get('payment_globalpay_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_globalpay_total'])) {
 			$data['payment_globalpay_total'] = $this->request->post['payment_globalpay_total'];
@@ -188,9 +188,9 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 			$data['payment_globalpay_order_status_decline_bank_id'] = $this->config->get('payment_globalpay_order_status_decline_bank_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_globalpay_live_url'])) {
 			$data['payment_globalpay_live_url'] = $this->request->post['payment_globalpay_live_url'];
@@ -220,21 +220,20 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/globalpay');
-
-		$this->model_extension_payment_globalpay->install();
+		$this->load->model('extension/payment/globalpay_admin');
+		$this->model_extension_payment_globalpay_admin->install();
 	}
 
 	public function order() {
 		if ($this->config->get('payment_globalpay_status')) {
-			$this->load->model('extension/payment/globalpay');
+			$this->load->model('extension/payment/globalpay_admin');
 
-			$globalpay_order = $this->model_extension_payment_globalpay->getOrder($this->request->get['order_id']);
+			$globalpay_order = $this->model_extension_payment_globalpay_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($globalpay_order)) {
 				$this->load->language('extension/payment/globalpay');
 
-				$globalpay_order['total_captured'] = $this->model_extension_payment_globalpay->getTotalCaptured($globalpay_order['globalpay_order_id']);
+				$globalpay_order['total_captured'] = $this->model_extension_payment_globalpay_admin->getTotalCaptured($globalpay_order['globalpay_order_id']);
 
 				$globalpay_order['total_formatted'] = $this->currency->format($globalpay_order['total'], $globalpay_order['currency_code'], 1, true);
 				$globalpay_order['total_captured_formatted'] = $this->currency->format($globalpay_order['total_captured'], $globalpay_order['currency_code'], 1, true);
@@ -257,17 +256,17 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/globalpay');
+			$this->load->model('extension/payment/globalpay_admin');
 
-			$globalpay_order = $this->model_extension_payment_globalpay->getOrder($this->request->post['order_id']);
+			$globalpay_order = $this->model_extension_payment_globalpay_admin->getOrder($this->request->post['order_id']);
 
-			$void_response = $this->model_extension_payment_globalpay->void($this->request->post['order_id']);
+			$void_response = $this->model_extension_payment_globalpay_admin->void($this->request->post['order_id']);
 
-			$this->model_extension_payment_globalpay->logger('Void result:\r\n' . print_r($void_response, 1));
+			$this->model_extension_payment_globalpay_admin->logger('Void result:\r\n' . print_r($void_response, 1));
 
 			if (isset($void_response->result) && $void_response->result == '00') {
-				$this->model_extension_payment_globalpay->addTransaction($globalpay_order['globalpay_order_id'], 'void', 0.00);
-				$this->model_extension_payment_globalpay->updateVoidStatus($globalpay_order['globalpay_order_id'], 1);
+				$this->model_extension_payment_globalpay_admin->addTransaction($globalpay_order['globalpay_order_id'], 'void', 0.00);
+				$this->model_extension_payment_globalpay_admin->updateVoidStatus($globalpay_order['globalpay_order_id'], 1);
 
 				$json['msg'] = $this->language->get('text_void_ok');
 				$json['data'] = [];
@@ -291,21 +290,21 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('extension/payment/globalpay');
+			$this->load->model('extension/payment/globalpay_admin');
 
-			$globalpay_order = $this->model_extension_payment_globalpay->getOrder($this->request->post['order_id']);
+			$globalpay_order = $this->model_extension_payment_globalpay_admin->getOrder($this->request->post['order_id']);
 
-			$capture_response = $this->model_extension_payment_globalpay->capture($this->request->post['order_id'], $this->request->post['amount']);
+			$capture_response = $this->model_extension_payment_globalpay_admin->capture($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_globalpay->logger('Settle result:\r\n' . print_r($capture_response, 1));
+			$this->model_extension_payment_globalpay_admin->logger('Settle result:\r\n' . print_r($capture_response, 1));
 
 			if (isset($capture_response->result) && $capture_response->result == '00') {
-				$this->model_extension_payment_globalpay->addTransaction($globalpay_order['globalpay_order_id'], 'payment', $this->request->post['amount']);
+				$this->model_extension_payment_globalpay_admin->addTransaction($globalpay_order['globalpay_order_id'], 'payment', $this->request->post['amount']);
 
-				$total_captured = $this->model_extension_payment_globalpay->getTotalCaptured($globalpay_order['globalpay_order_id']);
+				$total_captured = $this->model_extension_payment_globalpay_admin->getTotalCaptured($globalpay_order['globalpay_order_id']);
 
 				if ($total_captured >= $globalpay_order['total'] || $globalpay_order['settle_type'] == 0) {
-					$this->model_extension_payment_globalpay->updateCaptureStatus($globalpay_order['globalpay_order_id'], 1);
+					$this->model_extension_payment_globalpay_admin->updateCaptureStatus($globalpay_order['globalpay_order_id'], 1);
 					$capture_status = 1;
 					$json['msg'] = $this->language->get('text_capture_ok_order');
 				} else {
@@ -313,7 +312,7 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 					$json['msg'] = $this->language->get('text_capture_ok');
 				}
 
-				$this->model_extension_payment_globalpay->updateForRebate($globalpay_order['globalpay_order_id'], $capture_response->pasref, $capture_response->orderid);
+				$this->model_extension_payment_globalpay_admin->updateForRebate($globalpay_order['globalpay_order_id'], $capture_response->pasref, $capture_response->orderid);
 
 				$json['data'] = [];
 				$json['data']['date_added'] = date("Y-m-d H:i:s");
@@ -339,22 +338,22 @@ class ControllerExtensionPaymentGlobalpay extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('extension/payment/globalpay');
+			$this->load->model('extension/payment/globalpay_admin');
 
-			$globalpay_order = $this->model_extension_payment_globalpay->getOrder($this->request->post['order_id']);
+			$globalpay_order = $this->model_extension_payment_globalpay_admin->getOrder($this->request->post['order_id']);
 
-			$rebate_response = $this->model_extension_payment_globalpay->rebate($this->request->post['order_id'], $this->request->post['amount']);
+			$rebate_response = $this->model_extension_payment_globalpay_admin->rebate($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_globalpay->logger('Rebate result:\r\n' . print_r($rebate_response, 1));
+			$this->model_extension_payment_globalpay_admin->logger('Rebate result:\r\n' . print_r($rebate_response, 1));
 
 			if (isset($rebate_response->result) && $rebate_response->result == '00') {
-				$this->model_extension_payment_globalpay->addTransaction($globalpay_order['globalpay_order_id'], 'rebate', $this->request->post['amount']*-1);
+				$this->model_extension_payment_globalpay_admin->addTransaction($globalpay_order['globalpay_order_id'], 'rebate', $this->request->post['amount']*-1);
 
-				$total_rebated = $this->model_extension_payment_globalpay->getTotalRebated($globalpay_order['globalpay_order_id']);
-				$total_captured = $this->model_extension_payment_globalpay->getTotalCaptured($globalpay_order['globalpay_order_id']);
+				$total_rebated = $this->model_extension_payment_globalpay_admin->getTotalRebated($globalpay_order['globalpay_order_id']);
+				$total_captured = $this->model_extension_payment_globalpay_admin->getTotalCaptured($globalpay_order['globalpay_order_id']);
 
 				if ($total_captured <= 0 && $globalpay_order['capture_status'] == 1) {
-					$this->model_extension_payment_globalpay->updateRebateStatus($globalpay_order['globalpay_order_id'], 1);
+					$this->model_extension_payment_globalpay_admin->updateRebateStatus($globalpay_order['globalpay_order_id'], 1);
 					$rebate_status = 1;
 					$json['msg'] = $this->language->get('text_rebate_ok_order');
 				} else {

@@ -7,7 +7,7 @@ class ControllerCatalogRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/recurring');
+		$this->load->model('catalog/recurring_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCatalogRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/recurring');
+		$this->load->model('catalog/recurring_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_recurring->addRecurring($this->request->post);
+			$this->model_catalog_recurring_admin->addRecurring($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerCatalogRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/recurring');
+		$this->load->model('catalog/recurring_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_recurring->editRecurring($this->request->get['recurring_id'], $this->request->post);
+			$this->model_catalog_recurring_admin->editRecurring($this->request->get['recurring_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerCatalogRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/recurring');
+		$this->load->model('catalog/recurring_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $recurring_id) {
-				$this->model_catalog_recurring->deleteRecurring($recurring_id);
+				$this->model_catalog_recurring_admin->deleteRecurring($recurring_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -115,11 +115,11 @@ class ControllerCatalogRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/recurring');
+		$this->load->model('catalog/recurring_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateCopy()) {
 			foreach ($this->request->post['selected'] as $recurring_id) {
-				$this->model_catalog_recurring->copyRecurring($recurring_id);
+				$this->model_catalog_recurring_admin->copyRecurring($recurring_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -202,9 +202,8 @@ class ControllerCatalogRecurring extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$recurring_total = $this->model_catalog_recurring->getTotalRecurrings();
-
-		$results = $this->model_catalog_recurring->getRecurrings($filter_data);
+		$recurring_total = $this->model_catalog_recurring_admin->getTotalRecurrings();
+		$results = $this->model_catalog_recurring_admin->getRecurrings($filter_data);
 
 		foreach ($results as $result) {
 			$data['recurrings'][] = array(
@@ -330,19 +329,19 @@ class ControllerCatalogRecurring extends Controller {
 		$data['cancel'] = $this->url->link('catalog/recurring', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['recurring_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$recurring_info = $this->model_catalog_recurring->getRecurring($this->request->get['recurring_id']);
+			$recurring_info = $this->model_catalog_recurring_admin->getRecurring($this->request->get['recurring_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['recurring_description'])) {
 			$data['recurring_description'] = $this->request->post['recurring_description'];
 		} elseif (!empty($recurring_info)) {
-			$data['recurring_description'] = $this->model_catalog_recurring->getRecurringDescription($recurring_info['recurring_id']);
+			$data['recurring_description'] = $this->model_catalog_recurring_admin->getRecurringDescription($recurring_info['recurring_id']);
 		} else {
 			$data['recurring_description'] = [];
 		}
@@ -491,10 +490,10 @@ class ControllerCatalogRecurring extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		foreach ($this->request->post['selected'] as $recurring_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByProfileId($recurring_id);
+			$product_total = $this->model_catalog_product_admin->getTotalProductsByProfileId($recurring_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_product'), $product_total);

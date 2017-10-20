@@ -5,10 +5,10 @@ class ControllerExtensionReportSaleShipping extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('report_sale_shipping', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('report_sale_shipping', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -131,9 +131,9 @@ class ControllerExtensionReportSaleShipping extends Controller {
 		
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		$data['groups'] = [];
 

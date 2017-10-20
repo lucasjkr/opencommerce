@@ -7,7 +7,7 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/manufacturer_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/manufacturer_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_manufacturer->addManufacturer($this->request->post);
+			$this->model_catalog_manufacturer_admin->addManufacturer($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/manufacturer_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_manufacturer->editManufacturer($this->request->get['manufacturer_id'], $this->request->post);
+			$this->model_catalog_manufacturer_admin->editManufacturer($this->request->get['manufacturer_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerCatalogManufacturer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/manufacturer_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $manufacturer_id) {
-				$this->model_catalog_manufacturer->deleteManufacturer($manufacturer_id);
+				$this->model_catalog_manufacturer_admin->deleteManufacturer($manufacturer_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,8 @@ class ControllerCatalogManufacturer extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$manufacturer_total = $this->model_catalog_manufacturer->getTotalManufacturers();
-
-		$results = $this->model_catalog_manufacturer->getManufacturers($filter_data);
+		$manufacturer_total = $this->model_catalog_manufacturer_admin->getTotalManufacturers();
+		$results = $this->model_catalog_manufacturer_admin->getManufacturers($filter_data);
 
 		foreach ($results as $result) {
 			$data['manufacturers'][] = array(
@@ -301,7 +300,7 @@ class ControllerCatalogManufacturer extends Controller {
 		$data['cancel'] = $this->url->link('catalog/manufacturer', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['manufacturer_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$manufacturer_info = $this->model_catalog_manufacturer->getManufacturer($this->request->get['manufacturer_id']);
+			$manufacturer_info = $this->model_catalog_manufacturer_admin->getManufacturer($this->request->get['manufacturer_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -314,7 +313,7 @@ class ControllerCatalogManufacturer extends Controller {
 			$data['name'] = '';
 		}
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		$data['stores'] = [];
 		
@@ -323,7 +322,7 @@ class ControllerCatalogManufacturer extends Controller {
 			'name'     => $this->language->get('text_default')
 		);
 		
-		$stores = $this->model_setting_store->getStores();
+		$stores = $this->model_setting_store_admin->getStores();
 
 		foreach ($stores as $store) {
 			$data['stores'][] = array(
@@ -335,7 +334,7 @@ class ControllerCatalogManufacturer extends Controller {
 		if (isset($this->request->post['manufacturer_store'])) {
 			$data['manufacturer_store'] = $this->request->post['manufacturer_store'];
 		} elseif (isset($this->request->get['manufacturer_id'])) {
-			$data['manufacturer_store'] = $this->model_catalog_manufacturer->getManufacturerStores($this->request->get['manufacturer_id']);
+			$data['manufacturer_store'] = $this->model_catalog_manufacturer_admin->getManufacturerStores($this->request->get['manufacturer_id']);
 		} else {
 			$data['manufacturer_store'] = array(0);
 		}
@@ -348,17 +347,17 @@ class ControllerCatalogManufacturer extends Controller {
 			$data['image'] = '';
 		}
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['image'], 100, 100);
 		} elseif (!empty($manufacturer_info) && is_file(DIR_IMAGE . $manufacturer_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($manufacturer_info['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($manufacturer_info['image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['sort_order'])) {
 			$data['sort_order'] = $this->request->post['sort_order'];
@@ -368,14 +367,14 @@ class ControllerCatalogManufacturer extends Controller {
 			$data['sort_order'] = '';
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 		
 		if (isset($this->request->post['manufacturer_seo_url'])) {
 			$data['manufacturer_seo_url'] = $this->request->post['manufacturer_seo_url'];
 		} elseif (isset($this->request->get['manufacturer_id'])) {
-			$data['manufacturer_seo_url'] = $this->model_catalog_manufacturer->getManufacturerSeoUrls($this->request->get['manufacturer_id']);
+			$data['manufacturer_seo_url'] = $this->model_catalog_manufacturer_admin->getManufacturerSeoUrls($this->request->get['manufacturer_id']);
 		} else {
 			$data['manufacturer_seo_url'] = [];
 		}
@@ -397,7 +396,7 @@ class ControllerCatalogManufacturer extends Controller {
 		}
 
 		if ($this->request->post['manufacturer_seo_url']) {
-			$this->load->model('design/seo_url');
+			$this->load->model('design/seo_url_admin');
 			
 			foreach ($this->request->post['manufacturer_seo_url'] as $store_id => $language) {
 				foreach ($language as $language_id => $keyword) {
@@ -406,7 +405,7 @@ class ControllerCatalogManufacturer extends Controller {
 							$this->error['keyword'][$store_id][$language_id] = $this->language->get('error_unique');
 						}							
 						
-						$seo_urls = $this->model_design_seo_url->getSeoUrlsByKeyword($keyword);
+						$seo_urls = $this->model_design_seo_url_admin->getSeoUrlsByKeyword($keyword);
 						
 						foreach ($seo_urls as $seo_url) {
 							if (($seo_url['store_id'] == $store_id) && (!isset($this->request->get['manufacturer_id']) || (($seo_url['query'] != 'manufacturer_id=' . $this->request->get['manufacturer_id'])))) {
@@ -426,10 +425,10 @@ class ControllerCatalogManufacturer extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		foreach ($this->request->post['selected'] as $manufacturer_id) {
-			$product_total = $this->model_catalog_product->getTotalProductsByManufacturerId($manufacturer_id);
+			$product_total = $this->model_catalog_product_admin->getTotalProductsByManufacturerId($manufacturer_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_product'), $product_total);
@@ -443,7 +442,7 @@ class ControllerCatalogManufacturer extends Controller {
 		$json = [];
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/manufacturer');
+			$this->load->model('catalog/manufacturer_admin');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],
@@ -451,7 +450,7 @@ class ControllerCatalogManufacturer extends Controller {
 				'limit'       => 5
 			);
 
-			$results = $this->model_catalog_manufacturer->getManufacturers($filter_data);
+			$results = $this->model_catalog_manufacturer_admin->getManufacturers($filter_data);
 
 			foreach ($results as $result) {
 				$json[] = array(

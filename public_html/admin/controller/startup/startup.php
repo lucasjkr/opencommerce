@@ -16,7 +16,10 @@ class ControllerStartupStartup extends Controller {
 		$this->config->set('template_cache', $this->config->get('developer_theme'));
 				
 		// Language
-		$query = $this->db->query("SELECT * FROM `oc_language` WHERE code = '" . $this->db->escape($this->config->get('config_admin_language')) . "'");
+		$query = $this->db->query("SELECT * FROM `oc_language` WHERE code = :code",
+            [
+                ':code' => $this->config->get('config_admin_language')
+            ]);
 		
 		if ($query->num_rows) {
 			$this->config->set('config_language_id', $query->row['language_id']);
@@ -54,10 +57,13 @@ class ControllerStartupStartup extends Controller {
 		
 		// Cart
 		$this->registry->set('cart', new Cart\Cart($this->registry));
-		
+
+        // LJK TODO - probably remove this, since its useless
 		// Encryption
 		$this->registry->set('encryption', new Encryption($this->config->get('config_encryption')));
-		
+
+        // LJK TODO remove this
+        // Even if extension is useful, it shouldn't be hard coded in,
 		// OpenBay Pro
 		$this->registry->set('openbay', new Openbay($this->registry));
 	}

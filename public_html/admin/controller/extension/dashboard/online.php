@@ -7,10 +7,10 @@ class ControllerExtensionDashboardOnline extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dashboard_online', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('dashboard_online', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -89,10 +89,10 @@ class ControllerExtensionDashboardOnline extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		// Total Orders
-		$this->load->model('extension/dashboard/online');
+		$this->load->model('extension/dashboard/online_admin');
 
 		// Customers Online
-		$online_total = $this->model_extension_dashboard_online->getTotalOnline();
+		$online_total = $this->model_extension_dashboard_online_admin->getTotalOnline();
 
 		if ($online_total > 1000000000000) {
 			$data['total'] = round($online_total / 1000000000000, 1) . 'T';

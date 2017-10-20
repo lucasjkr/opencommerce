@@ -7,10 +7,10 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_bank_transfer', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_bank_transfer', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -50,7 +50,7 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
 		$data['payment_bank_transfer'] = [];
 
@@ -78,9 +78,9 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 			$data['payment_bank_transfer_order_status_id'] = $this->config->get('payment_bank_transfer_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_bank_transfer_geo_zone_id'])) {
 			$data['payment_bank_transfer_geo_zone_id'] = $this->request->post['payment_bank_transfer_geo_zone_id'];
@@ -88,9 +88,9 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 			$data['payment_bank_transfer_geo_zone_id'] = $this->config->get('payment_bank_transfer_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_bank_transfer_status'])) {
 			$data['payment_bank_transfer_status'] = $this->request->post['payment_bank_transfer_status'];
@@ -116,7 +116,7 @@ class ControllerExtensionPaymentBankTransfer extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
 		$languages = $this->model_localisation_language->getLanguages();
 

@@ -7,7 +7,7 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/zone');
+		$this->load->model('localisation/zone_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/zone');
+		$this->load->model('localisation/zone_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_zone->addZone($this->request->post);
+			$this->model_localisation_zone_admin->addZone($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/zone');
+		$this->load->model('localisation/zone_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_zone->editZone($this->request->get['zone_id'], $this->request->post);
+			$this->model_localisation_zone_admin->editZone($this->request->get['zone_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationZone extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/zone');
+		$this->load->model('localisation/zone_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $zone_id) {
-				$this->model_localisation_zone->deleteZone($zone_id);
+				$this->model_localisation_zone_admin->deleteZone($zone_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationZone extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$zone_total = $this->model_localisation_zone->getTotalZones();
+		$zone_total = $this->model_localisation_zone_admin->getTotalZones();
 
-		$results = $this->model_localisation_zone->getZones($filter_data);
+		$results = $this->model_localisation_zone_admin->getZones($filter_data);
 
 		foreach ($results as $result) {
 			$data['zones'][] = array(
@@ -297,7 +297,7 @@ class ControllerLocalisationZone extends Controller {
 		$data['cancel'] = $this->url->link('localisation/zone', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['zone_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$zone_info = $this->model_localisation_zone->getZone($this->request->get['zone_id']);
+			$zone_info = $this->model_localisation_zone_admin->getZone($this->request->get['zone_id']);
 		}
 
 		if (isset($this->request->post['status'])) {
@@ -332,9 +332,9 @@ class ControllerLocalisationZone extends Controller {
 			$data['country_id'] = '';
 		}
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
-		$data['countries'] = $this->model_localisation_country->getCountries();
+		$data['countries'] = $this->model_localisation_country_admin->getCountries();
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -360,28 +360,28 @@ class ControllerLocalisationZone extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('customer/customer');
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('setting/store_admin');
+		$this->load->model('customer/customer_admin');
+		$this->load->model('localisation/geo_zone_admin');
 
 		foreach ($this->request->post['selected'] as $zone_id) {
 			if ($this->config->get('config_zone_id') == $zone_id) {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByZoneId($zone_id);
+			$store_total = $this->model_setting_store_admin->getTotalStoresByZoneId($zone_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
 			}
 
-			$address_total = $this->model_customer_customer->getTotalAddressesByZoneId($zone_id);
+			$address_total = $this->model_customer_customer_admin->getTotalAddressesByZoneId($zone_id);
 
 			if ($address_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_address'), $address_total);
 			}
 
-			$zone_to_geo_zone_total = $this->model_localisation_geo_zone->getTotalZoneToGeoZoneByZoneId($zone_id);
+			$zone_to_geo_zone_total = $this->model_localisation_geo_zone_admin->getTotalZoneToGeoZoneByZoneId($zone_id);
 
 			if ($zone_to_geo_zone_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_zone_to_geo_zone'), $zone_to_geo_zone_total);

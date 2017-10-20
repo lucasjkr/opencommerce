@@ -1,14 +1,14 @@
 <?php
 class ControllerMailCustomer extends Controller {
 	public function approve(&$route, &$args, &$output) {
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 		
-		$customer_info = $this->model_customer_customer->getCustomer($args[0]);
+		$customer_info = $this->model_customer_customer_admin->getCustomer($args[0]);
 
 		if ($customer_info) {
-			$this->load->model('setting/store');
+			$this->load->model('setting/store_admin');
 	
-			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
+			$store_info = $this->model_setting_store_admin->getStore($customer_info['store_id']);
 	
 			if ($store_info) {
 				$store_name = html_entity_decode($store_info['name'], ENT_QUOTES, 'UTF-8');
@@ -18,7 +18,7 @@ class ControllerMailCustomer extends Controller {
 				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
 			}
 			
-			$this->load->model('localisation/language');
+			$this->load->model('localisation/language_admin');
 			
 			$language_info = $this->model_localisation_language->getLanguage($customer_info['language_id']);
 
@@ -57,14 +57,14 @@ class ControllerMailCustomer extends Controller {
 	}
 	
 	public function deny(&$route, &$args, &$output) {
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 		
-		$customer_info = $this->model_customer_customer->getCustomer($args[0]);
+		$customer_info = $this->model_customer_customer_admin->getCustomer($args[0]);
 
 		if ($customer_info) {
-			$this->load->model('setting/store');
+			$this->load->model('setting/store_admin');
 
-			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
+			$store_info = $this->model_setting_store_admin->getStore($customer_info['store_id']);
 
 			if ($store_info) {
 				$store_name = html_entity_decode($store_info['name'], ENT_QUOTES, 'UTF-8');
@@ -74,7 +74,7 @@ class ControllerMailCustomer extends Controller {
 				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
 			}
 
-			$this->load->model('localisation/language');
+			$this->load->model('localisation/language_admin');
 			
 			$language_info = $this->model_localisation_language->getLanguage($customer_info['language_id']);
 

@@ -51,8 +51,8 @@ class ControllerReportOnline extends Controller {
 		
 		$data['refresh'] = $this->url->link('report/online', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$this->load->model('report/online');
-		$this->load->model('customer/customer');		
+		$this->load->model('report/online_admin');
+		$this->load->model('customer/customer_admin');		
 
 		$data['customers'] = [];
 
@@ -63,12 +63,12 @@ class ControllerReportOnline extends Controller {
 			'limit'           => $this->config->get('config_limit_admin')
 		);
 
-		$customer_total = $this->model_report_online->getTotalOnline($filter_data);
+		$customer_total = $this->model_report_online_admin->getTotalOnline($filter_data);
 
-		$results = $this->model_report_online->getOnline($filter_data);
+		$results = $this->model_report_online_admin->getOnline($filter_data);
 
 		foreach ($results as $result) {
-			$customer_info = $this->model_customer_customer->getCustomer($result['customer_id']);
+			$customer_info = $this->model_customer_customer_admin->getCustomer($result['customer_id']);
 
 			if ($customer_info) {
 				$customer = $customer_info['firstname'] . ' ' . $customer_info['lastname'];

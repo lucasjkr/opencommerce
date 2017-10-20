@@ -7,7 +7,7 @@ class ControllerSaleRecurring extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/recurring');
+		$this->load->model('sale/recurring_admin');
 
 		$this->getList();
 	}
@@ -132,9 +132,9 @@ class ControllerSaleRecurring extends Controller {
 			'limit'                     => $this->config->get('config_limit_admin')
 		);
 
-		$recurrings_total = $this->model_sale_recurring->getTotalRecurrings($filter_data);
+		$recurrings_total = $this->model_sale_recurring_admin->getTotalRecurrings($filter_data);
 
-		$results = $this->model_sale_recurring->getRecurrings($filter_data);
+		$results = $this->model_sale_recurring_admin->getRecurrings($filter_data);
 
 		foreach ($results as $result) {
 			if ($result['status']) {
@@ -291,7 +291,7 @@ class ControllerSaleRecurring extends Controller {
 	}
 
 	public function info() {
-		$this->load->model('sale/recurring');
+		$this->load->model('sale/recurring_admin');
 		
 		if (isset($this->request->get['order_recurring_id'])) {
 			$order_recurring_id = $this->request->get['order_recurring_id'];
@@ -299,7 +299,7 @@ class ControllerSaleRecurring extends Controller {
 			$order_recurring_id = 0;
 		}
 		
-		$order_recurring_info = $this->model_sale_recurring->getRecurring($order_recurring_id);
+		$order_recurring_info = $this->model_sale_recurring_admin->getRecurring($order_recurring_id);
 
 		if ($order_recurring_info) {
 			$this->load->language('sale/recurring');
@@ -379,9 +379,9 @@ class ControllerSaleRecurring extends Controller {
 				$data['recurring_status'] = '';
 			}
 			
-			$this->load->model('sale/order');
+			$this->load->model('sale/order_admin');
 
-			$order_info = $this->model_sale_order->getOrder($order_recurring_info['order_id']);
+			$order_info = $this->model_sale_order_admin->getOrder($order_recurring_info['order_id']);
 			
 			$data['payment_method'] = $order_info['payment_method'];
 			
@@ -408,7 +408,7 @@ class ControllerSaleRecurring extends Controller {
 			// Transactions
 			$data['transactions'] = [];
 			
-			$transactions = $this->model_sale_recurring->getRecurringTransactions($order_recurring_info['order_recurring_id']);
+			$transactions = $this->model_sale_recurring_admin->getRecurringTransactions($order_recurring_info['order_recurring_id']);
 
 			foreach ($transactions as $transaction) {
 				$data['transactions'][] = array(

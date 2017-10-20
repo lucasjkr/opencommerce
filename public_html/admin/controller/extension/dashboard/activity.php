@@ -7,10 +7,10 @@ class ControllerExtensionDashboardActivity extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dashboard_activity', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('dashboard_activity', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -90,9 +90,9 @@ class ControllerExtensionDashboardActivity extends Controller {
 
 		$data['activities'] = [];
 
-		$this->load->model('extension/dashboard/activity');
+		$this->load->model('extension/dashboard/activity_admin');
 
-		$results = $this->model_extension_dashboard_activity->getActivities();
+		$results = $this->model_extension_dashboard_activity_admin->getActivities();
 
 		foreach ($results as $result) {
 			$comment = vsprintf($this->language->get('text_activity_' . $result['key']), json_decode($result['data'], true));

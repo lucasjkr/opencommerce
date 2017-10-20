@@ -2,29 +2,29 @@
 class ControllerExtensionOpenbayFba extends Controller {
     public function install() {
         $this->load->model('extension/openbay/fba');
-        $this->load->model('setting/setting');
-        $this->load->model('setting/extension');
-        $this->load->model('user/user_group');
+        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/extension_admin');
+        $this->load->model('user/user_group_admin');
 
-        $this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/fba');
-        $this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/fba');
+        $this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/fba');
+        $this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/fba');
 
         $this->model_extension_openbay_fba->install();
     }
 
     public function uninstall() {
         $this->load->model('extension/openbay/fba');
-        $this->load->model('setting/setting');
-        $this->load->model('setting/extension');
+        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/extension_admin');
 
         $this->model_extension_openbay_fba->uninstall();
-        $this->model_setting_extension->uninstall('openbay', $this->request->get['extension']);
-        $this->model_setting_setting->deleteSetting($this->request->get['extension']);
+        $this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
+        $this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
     }
 
     public function index() {
-        $this->load->model('setting/setting');
-        $this->load->model('localisation/order_status');
+        $this->load->model('setting/setting_admin');
+        $this->load->model('localisation/order_status_admin');
         $this->load->model('extension/openbay/fba');
 
         $data = $this->load->language('extension/openbay/fba');
@@ -74,12 +74,12 @@ class ControllerExtensionOpenbayFba extends Controller {
         $this->document->setTitle($this->language->get('heading_title'));
         $this->document->addScript('view/javascript/openbay/js/faq.js');
 
-        $this->load->model('setting/setting');
+        $this->load->model('setting/setting_admin');
         $this->load->model('extension/openbay/fba');
-        $this->load->model('localisation/order_status');
+        $this->load->model('localisation/order_status_admin');
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-            $this->model_setting_setting->editSetting('openbay_fba', $this->request->post);
+            $this->model_setting_setting_admin->editSetting('openbay_fba', $this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
             $this->response->redirect($this->url->link('extension/openbay/fba', 'user_token=' . $this->session->data['user_token'], true));
         }
@@ -211,7 +211,7 @@ class ControllerExtensionOpenbayFba extends Controller {
         }
 
         $data['api_server'] = $this->openbay->fba->getServerUrl();
-        $data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+        $data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
         $data['header'] = $this->load->controller('common/header');
         $data['column_left'] = $this->load->controller('common/column_left');
@@ -517,21 +517,21 @@ class ControllerExtensionOpenbayFba extends Controller {
 
             $this->openbay->fba->log('resendFulfillment request for order ID: ' . $order_id);
 
-            $this->load->model('sale/order');
+            $this->load->model('sale/order_admin');
             $this->load->model('catalog/product');
 
-            $order = $this->model_sale_order->getOrder($order_id);
+            $order = $this->model_sale_order_admin->getOrder($order_id);
 
             if ($order['shipping_method']) {
                 if ($this->config->get('openbay_fba_order_trigger_status') == $order['order_status_id']) {
                     $fba_fulfillment_id = $this->openbay->fba->createFBAFulfillmentID($order_id, 1);
 
-                    $order_products = $this->model_sale_order->getOrderProducts($order_id);
+                    $order_products = $this->model_sale_order_admin->getOrderProducts($order_id);
 
                     $fulfillment_items = [];
 
                     foreach ($order_products as $order_product) {
-                        $product = $this->model_catalog_product->getProduct($order_product['product_id']);
+                        $product = $this->model_catalog_product_admin->getProduct($order_product['product_id']);
 
                         if ($product['location'] == 'FBA') {
                             $fulfillment_items[] = array(
@@ -727,7 +727,7 @@ class ControllerExtensionOpenbayFba extends Controller {
         $this->document->setTitle($this->language->get('heading_title'));
         $this->document->addScript('view/javascript/openbay/js/faq.js');
 
-        $this->load->model('sale/order');
+        $this->load->model('sale/order_admin');
         $this->load->model('catalog/product');
 
         if (!isset($this->request->get['order_id'])) {
@@ -736,7 +736,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
         $order_id = (int)$this->request->get['order_id'];
         $order_fba = $this->openbay->fba->getFBAOrder($order_id);
-        $order_info = $this->model_sale_order->getOrder($order_id);
+        $order_info = $this->model_sale_order_admin->getOrder($order_id);
 
         if ($order_fba['status'] == 2 || $order_fba['status'] == 3 || $order_fba['status'] == 4) {
             $data['fulfillment_id'] = $order_fba['fba_order_fulfillment_ref'];
@@ -856,14 +856,14 @@ class ControllerExtensionOpenbayFba extends Controller {
 
         $data['products'] = [];
 
-        $products = $this->model_sale_order->getOrderProducts($this->request->get['order_id']);
+        $products = $this->model_sale_order_admin->getOrderProducts($this->request->get['order_id']);
 
         foreach ($products as $product) {
             $option_data = [];
 
-            $product_info = $this->model_catalog_product->getProduct($product['product_id']);
+            $product_info = $this->model_catalog_product_admin->getProduct($product['product_id']);
 
-            $options = $this->model_sale_order->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
+            $options = $this->model_sale_order_admin->getOrderOptions($this->request->get['order_id'], $product['order_product_id']);
 
             foreach ($options as $option) {
                 if ($option['type'] != 'file') {

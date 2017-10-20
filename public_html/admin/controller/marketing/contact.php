@@ -23,13 +23,13 @@ class ControllerMarketingContact extends Controller {
 
 		$data['cancel'] = $this->url->link('marketing/contact', 'user_token=' . $this->session->data['user_token'], true);
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
-		$data['stores'] = $this->model_setting_store->getStores();
+		$data['stores'] = $this->model_setting_store_admin->getStores();
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -57,9 +57,9 @@ class ControllerMarketingContact extends Controller {
 			}
 
 			if (!$json) {
-				$this->load->model('setting/store');
+				$this->load->model('setting/store_admin');
 
-				$store_info = $this->model_setting_store->getStore($this->request->post['store_id']);
+				$store_info = $this->model_setting_store_admin->getStore($this->request->post['store_id']);
 
 				if ($store_info) {
 					$store_name = $store_info['name'];
@@ -67,15 +67,15 @@ class ControllerMarketingContact extends Controller {
 					$store_name = $this->config->get('config_name');
 				}
 				
-				$this->load->model('setting/setting');
-				$setting = $this->model_setting_setting->getSetting('config', $this->request->post['store_id']);
+				$this->load->model('setting/setting_admin');
+				$setting = $this->model_setting_setting_admin->getSetting('config', $this->request->post['store_id']);
 				$store_email = isset($setting['config_email']) ? $setting['config_email'] : $this->config->get('config_email');
 
-				$this->load->model('customer/customer');
+				$this->load->model('customer/customer_admin');
 
-				$this->load->model('customer/customer_group');
+				$this->load->model('customer/customer_group_admin');
 
-				$this->load->model('sale/order');
+				$this->load->model('sale/order_admin');
 
 				if (isset($this->request->get['page'])) {
 					$page = $this->request->get['page'];
@@ -95,9 +95,9 @@ class ControllerMarketingContact extends Controller {
 							'limit'             => 10
 						);
 
-						$email_total = $this->model_customer_customer->getTotalCustomers($customer_data);
+						$email_total = $this->model_customer_customer_admin->getTotalCustomers($customer_data);
 
-						$results = $this->model_customer_customer->getCustomers($customer_data);
+						$results = $this->model_customer_customer_admin->getCustomers($customer_data);
 
 						foreach ($results as $result) {
 							$emails[] = $result['email'];
@@ -109,9 +109,9 @@ class ControllerMarketingContact extends Controller {
 							'limit' => 10
 						);
 
-						$email_total = $this->model_customer_customer->getTotalCustomers($customer_data);
+						$email_total = $this->model_customer_customer_admin->getTotalCustomers($customer_data);
 
-						$results = $this->model_customer_customer->getCustomers($customer_data);
+						$results = $this->model_customer_customer_admin->getCustomers($customer_data);
 
 						foreach ($results as $result) {
 							$emails[] = $result['email'];
@@ -124,9 +124,9 @@ class ControllerMarketingContact extends Controller {
 							'limit'                    => 10
 						);
 
-						$email_total = $this->model_customer_customer->getTotalCustomers($customer_data);
+						$email_total = $this->model_customer_customer_admin->getTotalCustomers($customer_data);
 
-						$results = $this->model_customer_customer->getCustomers($customer_data);
+						$results = $this->model_customer_customer_admin->getCustomers($customer_data);
 
 						foreach ($results as $result) {
 							$emails[$result['customer_id']] = $result['email'];
@@ -135,7 +135,7 @@ class ControllerMarketingContact extends Controller {
 					case 'customer':
 						if (!empty($this->request->post['customer'])) {
 							foreach ($this->request->post['customer'] as $customer_id) {
-								$customer_info = $this->model_customer_customer->getCustomer($customer_id);
+								$customer_info = $this->model_customer_customer_admin->getCustomer($customer_id);
 
 								if ($customer_info) {
 									$emails[] = $customer_info['email'];
@@ -150,9 +150,9 @@ class ControllerMarketingContact extends Controller {
 							'limit'            => 10
 						);
 
-						$email_total = $this->model_customer_customer->getTotalCustomers($affiliate_data);
+						$email_total = $this->model_customer_customer_admin->getTotalCustomers($affiliate_data);
 
-						$results = $this->model_customer_customer->getCustomers($affiliate_data);
+						$results = $this->model_customer_customer_admin->getCustomers($affiliate_data);
 
 						foreach ($results as $result) {
 							$emails[] = $result['email'];
@@ -161,7 +161,7 @@ class ControllerMarketingContact extends Controller {
 					case 'affiliate':
 						if (!empty($this->request->post['affiliate'])) {
 							foreach ($this->request->post['affiliate'] as $affiliate_id) {
-								$affiliate_info = $this->model_customer_customer->getCustomer($affiliate_id);
+								$affiliate_info = $this->model_customer_customer_admin->getCustomer($affiliate_id);
 
 								if ($affiliate_info) {
 									$emails[] = $affiliate_info['email'];
@@ -171,9 +171,9 @@ class ControllerMarketingContact extends Controller {
 						break;
 					case 'product':
 						if (isset($this->request->post['product'])) {
-							$email_total = $this->model_sale_order->getTotalEmailsByProductsOrdered($this->request->post['product']);
+							$email_total = $this->model_sale_order_admin->getTotalEmailsByProductsOrdered($this->request->post['product']);
 
-							$results = $this->model_sale_order->getEmailsByProductsOrdered($this->request->post['product'], ($page - 1) * 10, 10);
+							$results = $this->model_sale_order_admin->getEmailsByProductsOrdered($this->request->post['product'], ($page - 1) * 10, 10);
 
 							foreach ($results as $result) {
 								$emails[] = $result['email'];

@@ -7,7 +7,7 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_customer_customer->addCustomer($this->request->post);
+			$this->model_customer_customer_admin->addCustomer($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -73,10 +73,10 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_customer_customer->editCustomer($this->request->get['customer_id'], $this->request->post);
+			$this->model_customer_customer_admin->editCustomer($this->request->get['customer_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -129,11 +129,11 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $customer_id) {
-				$this->model_customer_customer->deleteCustomer($customer_id);
+				$this->model_customer_customer_admin->deleteCustomer($customer_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -187,10 +187,10 @@ class ControllerCustomerCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		if (isset($this->request->get['email']) && $this->validateUnlock()) {
-			$this->model_customer_customer->deleteLoginAttempts($this->request->get['email']);
+			$this->model_customer_customer_admin->deleteLoginAttempts($this->request->get['email']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -346,9 +346,9 @@ class ControllerCustomerCustomer extends Controller {
 		$data['add'] = $this->url->link('customer/customer/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('customer/customer/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
-		$stores = $this->model_setting_store->getStores();
+		$stores = $this->model_setting_store_admin->getStores();
 		
 		$data['customers'] = [];
 
@@ -365,12 +365,12 @@ class ControllerCustomerCustomer extends Controller {
 			'limit'                    => $this->config->get('config_limit_admin')
 		);
 
-		$customer_total = $this->model_customer_customer->getTotalCustomers($filter_data);
+		$customer_total = $this->model_customer_customer_admin->getTotalCustomers($filter_data);
 
-		$results = $this->model_customer_customer->getCustomers($filter_data);
+		$results = $this->model_customer_customer_admin->getCustomers($filter_data);
 
 		foreach ($results as $result) {
-			$login_info = $this->model_customer_customer->getTotalLoginAttempts($result['email']);
+			$login_info = $this->model_customer_customer_admin->getTotalLoginAttempts($result['email']);
 
 			if ($login_info && $login_info['total'] >= $this->config->get('config_login_attempts')) {
 				$unlock = $this->url->link('customer/customer/unlock', 'user_token=' . $this->session->data['user_token'] . '&email=' . $result['email'] . $url, true);
@@ -522,9 +522,9 @@ class ControllerCustomerCustomer extends Controller {
 		$data['filter_ip'] = $filter_ip;
 		$data['filter_date_added'] = $filter_date_added;
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		$data['sort'] = $sort;
 		$data['order'] = $order;
@@ -684,12 +684,12 @@ class ControllerCustomerCustomer extends Controller {
 		$data['cancel'] = $this->url->link('customer/customer', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['customer_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$customer_info = $this->model_customer_customer->getCustomer($this->request->get['customer_id']);
+			$customer_info = $this->model_customer_customer_admin->getCustomer($this->request->get['customer_id']);
 		}
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		if (isset($this->request->post['customer_group_id'])) {
 			$data['customer_group_id'] = $this->request->post['customer_group_id'];
@@ -732,7 +732,7 @@ class ControllerCustomerCustomer extends Controller {
 		}
 		
 		// Custom Fields
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		$data['custom_fields'] = [];
 
@@ -741,12 +741,12 @@ class ControllerCustomerCustomer extends Controller {
 			'order' => 'ASC'
 		);
 
-		$custom_fields = $this->model_customer_custom_field->getCustomFields($filter_data);
+		$custom_fields = $this->model_customer_custom_field_admin->getCustomFields($filter_data);
 
 		foreach ($custom_fields as $custom_field) {
 			$data['custom_fields'][] = array(
 				'custom_field_id'    => $custom_field['custom_field_id'],
-				'custom_field_value' => $this->model_customer_custom_field->getCustomFieldValues($custom_field['custom_field_id']),
+				'custom_field_value' => $this->model_customer_custom_field_admin->getCustomFieldValues($custom_field['custom_field_id']),
 				'name'               => $custom_field['name'],
 				'value'              => $custom_field['value'],
 				'type'               => $custom_field['type'],
@@ -799,14 +799,16 @@ class ControllerCustomerCustomer extends Controller {
 			$data['confirm'] = '';
 		}
 
-		$this->load->model('localisation/country');
+		// LJK TODO _ I think countries should be in the session or globals
+        // Not that DB is hard to access, but seems silly to have to pull this list over and over when it likely never changes
+		$this->load->model('localisation/country_admin');
 
-		$data['countries'] = $this->model_localisation_country->getCountries();
+		$data['countries'] = $this->model_localisation_country_admin->getCountries();
 
 		if (isset($this->request->post['address'])) {
 			$data['addresses'] = $this->request->post['address'];
 		} elseif (isset($this->request->get['customer_id'])) {
-			$data['addresses'] = $this->model_customer_customer->getAddresses($this->request->get['customer_id']);
+			$data['addresses'] = $this->model_customer_customer_admin->getAddresses($this->request->get['customer_id']);
 		} else {
 			$data['addresses'] = [];
 		}
@@ -843,7 +845,7 @@ class ControllerCustomerCustomer extends Controller {
 			$this->error['email'] = $this->language->get('error_email');
 		}
 
-		$customer_info = $this->model_customer_customer->getCustomerByEmail($this->request->post['email']);
+		$customer_info = $this->model_customer_customer_admin->getCustomerByEmail($this->request->post['email']);
 
 		if (!isset($this->request->get['customer_id'])) {
 			if ($customer_info) {
@@ -860,9 +862,9 @@ class ControllerCustomerCustomer extends Controller {
 		}
 
 		// Custom field validation
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
-		$custom_fields = $this->model_customer_custom_field->getCustomFields(array('filter_customer_group_id' => $this->request->post['customer_group_id']));
+		$custom_fields = $this->model_customer_custom_field_admin->getCustomFields(array('filter_customer_group_id' => $this->request->post['customer_group_id']));
 
 		foreach ($custom_fields as $custom_field) {
 			if (($custom_field['location'] == 'account') && $custom_field['required'] && empty($this->request->post['custom_field'][$custom_field['custom_field_id']])) {
@@ -900,9 +902,9 @@ class ControllerCustomerCustomer extends Controller {
 					$this->error['address'][$key]['city'] = $this->language->get('error_city');
 				}
 
-				$this->load->model('localisation/country');
+				$this->load->model('localisation/country_admin');
 
-				$country_info = $this->model_localisation_country->getCountry($value['country_id']);
+				$country_info = $this->model_localisation_country_admin->getCountry($value['country_id']);
 
 				if ($country_info && $country_info['postcode_required'] && (utf8_strlen($value['postcode']) < 2 || utf8_strlen($value['postcode']) > 10)) {
 					$this->error['address'][$key]['postcode'] = $this->language->get('error_postcode');
@@ -956,15 +958,15 @@ class ControllerCustomerCustomer extends Controller {
 			$customer_id = 0;
 		}
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
-		$customer_info = $this->model_customer_customer->getCustomer($customer_id);
+		$customer_info = $this->model_customer_customer_admin->getCustomer($customer_id);
 
 		if ($customer_info) {
 			// Create token to login with
 			$token = token(64);
 
-			$this->model_customer_customer->editToken($customer_id, $token);
+			$this->model_customer_customer_admin->editToken($customer_id, $token);
 
 			if (isset($this->request->get['store_id'])) {
 				$store_id = $this->request->get['store_id'];
@@ -972,16 +974,17 @@ class ControllerCustomerCustomer extends Controller {
 				$store_id = 0;
 			}
 
-			$this->load->model('setting/setting');
+            // LJK TODO - this might be unnecessary
+			$this->load->model('setting/setting_admin');
 
-			$this->load->model('setting/store');
+			$this->load->model('setting/store_admin');
 
-			$store_info = $this->model_setting_store->getStore($store_id);
+			$store_info = $this->model_setting_store_admin->getStore($store_id);
 
 			if ($store_info) {
-				$this->response->redirect(($this->model_setting_setting->getSettingValue('config_secure', $store_id) ? $store_info['ssl'] : $store_info['url']) . 'index.php?route=account/login/token&email=' . urlencode($customer_info['email']). '&login_token=' . $token);
+				$this->response->redirect(($this->model_setting_setting_admin->getSettingValue('config_secure', $store_id) ? $store_info['ssl'] : $store_info['url']) . 'index.php?route=account/login/token&email=' . urlencode($customer_info['email']). '&login_token=' . $token);
 			} else {
-				$this->response->redirect(($this->model_setting_setting->getSettingValue('config_secure', 0) ? HTTPS_CATALOG : HTTP_CATALOG) . 'index.php?route=account/login/token&email=' . urlencode($customer_info['email']) . '&login_token=' . $token);
+				$this->response->redirect(($this->model_setting_setting_admin->getSettingValue('config_secure', 0) ? HTTPS_CATALOG : HTTP_CATALOG) . 'index.php?route=account/login/token&email=' . urlencode($customer_info['email']) . '&login_token=' . $token);
 			}
 		} else {
 			$this->load->language('error/not_found');
@@ -1011,7 +1014,7 @@ class ControllerCustomerCustomer extends Controller {
 	public function history() {
 		$this->load->language('customer/customer');
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		if (isset($this->request->get['customer_id'])) {
 			$customer_id = $this->request->get['customer_id'];
@@ -1027,7 +1030,7 @@ class ControllerCustomerCustomer extends Controller {
 
 		$data['histories'] = [];
 
-		$results = $this->model_customer_customer->getHistories($customer_id, ($page - 1) * 10, 10);
+		$results = $this->model_customer_customer_admin->getHistories($customer_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
 			$data['histories'][] = array(
@@ -1036,7 +1039,7 @@ class ControllerCustomerCustomer extends Controller {
 			);
 		}
 
-		$history_total = $this->model_customer_customer->getTotalHistories($customer_id);
+		$history_total = $this->model_customer_customer_admin->getTotalHistories($customer_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $history_total;
@@ -1065,9 +1068,9 @@ class ControllerCustomerCustomer extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
-			$this->model_customer_customer->addHistory($customer_id, $this->request->post['comment']);
+			$this->model_customer_customer_admin->addHistory($customer_id, $this->request->post['comment']);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -1091,11 +1094,11 @@ class ControllerCustomerCustomer extends Controller {
 			$page = 1;
 		}
 
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
 		$data['transactions'] = [];
 
-		$results = $this->model_customer_customer->getTransactions($customer_id, ($page - 1) * 10, 10);
+		$results = $this->model_customer_customer_admin->getTransactions($customer_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
 			$data['transactions'][] = array(
@@ -1105,9 +1108,9 @@ class ControllerCustomerCustomer extends Controller {
 			);
 		}
 
-		$data['balance'] = $this->currency->format($this->model_customer_customer->getTransactionTotal($customer_id), $this->config->get('config_currency'));
+		$data['balance'] = $this->currency->format($this->model_customer_customer_admin->getTransactionTotal($customer_id), $this->config->get('config_currency'));
 
-		$transaction_total = $this->model_customer_customer->getTotalTransactions($customer_id);
+		$transaction_total = $this->model_customer_customer_admin->getTotalTransactions($customer_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $transaction_total;
@@ -1136,9 +1139,9 @@ class ControllerCustomerCustomer extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
-			$this->model_customer_customer->addTransaction($customer_id, $this->request->post['description'], $this->request->post['amount']);
+			$this->model_customer_customer_admin->addTransaction($customer_id, $this->request->post['description'], $this->request->post['amount']);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -1162,15 +1165,15 @@ class ControllerCustomerCustomer extends Controller {
 			$page = 1;
 		}
 
-		$this->load->model('customer/customer');
-		$this->load->model('setting/store');
+		$this->load->model('customer/customer_admin');
+		$this->load->model('setting/store_admin');
 
 		$data['ips'] = [];
 
-		$results = $this->model_customer_customer->getIps($customer_id, ($page - 1) * 10, 10);
+		$results = $this->model_customer_customer_admin->getIps($customer_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$store_info = $this->model_setting_store->getStore($result['store_id']);
+			$store_info = $this->model_setting_store_admin->getStore($result['store_id']);
 
 			if ($store_info) {
 				$store = $store_info['name'];
@@ -1182,7 +1185,7 @@ class ControllerCustomerCustomer extends Controller {
 
 			$data['ips'][] = array(
 				'ip'         => $result['ip'],
-				'account'    => $this->model_customer_customer->getTotalCustomersByIp($result['ip']),
+				'account'    => $this->model_customer_customer_admin->getTotalCustomersByIp($result['ip']),
 				'store'      => $store,
 				'country'    => $result['country'],
 				'date_added' => date($this->language->get('datetime_format'), strtotime($result['date_added'])),
@@ -1190,7 +1193,7 @@ class ControllerCustomerCustomer extends Controller {
 			);
 		}
 
-		$ip_total = $this->model_customer_customer->getTotalIps($customer_id);
+		$ip_total = $this->model_customer_customer_admin->getTotalIps($customer_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $ip_total;
@@ -1227,7 +1230,7 @@ class ControllerCustomerCustomer extends Controller {
 				$filter_affiliate = '';
 			}
 			
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
 			$filter_data = array(
 				'filter_name'      => $filter_name,
@@ -1237,7 +1240,7 @@ class ControllerCustomerCustomer extends Controller {
 				'limit'            => 5
 			);
 
-			$results = $this->model_customer_customer->getCustomers($filter_data);
+			$results = $this->model_customer_customer_admin->getCustomers($filter_data);
 
 			foreach ($results as $result) {
 				$json[] = array(
@@ -1250,7 +1253,7 @@ class ControllerCustomerCustomer extends Controller {
 					'email'             => $result['email'],
 					'telephone'         => $result['telephone'],
 					'custom_field'      => json_decode($result['custom_field'], true),
-					'address'           => $this->model_customer_customer->getAddresses($result['customer_id'])
+					'address'           => $this->model_customer_customer_admin->getAddresses($result['customer_id'])
 				);
 			}
 		}
@@ -1270,7 +1273,7 @@ class ControllerCustomerCustomer extends Controller {
 	public function customfield() {
 		$json = [];
 
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		// Customer Group
 		if (isset($this->request->get['customer_group_id'])) {
@@ -1279,7 +1282,7 @@ class ControllerCustomerCustomer extends Controller {
 			$customer_group_id = $this->config->get('config_customer_group_id');
 		}
 
-		$custom_fields = $this->model_customer_custom_field->getCustomFields(array('filter_customer_group_id' => $customer_group_id));
+		$custom_fields = $this->model_customer_custom_field_admin->getCustomFields(array('filter_customer_group_id' => $customer_group_id));
 
 		foreach ($custom_fields as $custom_field) {
 			$json[] = array(
@@ -1296,9 +1299,9 @@ class ControllerCustomerCustomer extends Controller {
 		$json = [];
 
 		if (!empty($this->request->get['address_id'])) {
-			$this->load->model('customer/customer');
+			$this->load->model('customer/customer_admin');
 
-			$json = $this->model_customer_customer->getAddress($this->request->get['address_id']);
+			$json = $this->model_customer_customer_admin->getAddress($this->request->get['address_id']);
 		}
 
 		$this->response->addHeader('Content-Type: application/json');

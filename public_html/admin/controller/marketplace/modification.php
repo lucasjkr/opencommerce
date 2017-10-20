@@ -12,7 +12,7 @@ class ControllerMarketplaceModification extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 
 		$this->getList();
 	}
@@ -22,11 +22,11 @@ class ControllerMarketplaceModification extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 
 		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $modification_id) {
-				$this->model_setting_modification->deleteModification($modification_id);
+				$this->model_setting_modification_admin->deleteModification($modification_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -56,15 +56,15 @@ class ControllerMarketplaceModification extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 
 		if ($this->validate()) {
 			// Just before files are deleted, if config settings say maintenance mode is off then turn it on
 			$maintenance = $this->config->get('config_maintenance');
 
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_setting->editSettingValue('config', 'config_maintenance', true);
+			$this->model_setting_setting_admin->editSettingValue('config', 'config_maintenance', true);
 
 			//Log
 			$log = [];
@@ -123,7 +123,7 @@ class ControllerMarketplaceModification extends Controller {
 			}
 
 			// Get the default modification file
-			$results = $this->model_setting_modification->getModifications();
+			$results = $this->model_setting_modification_admin->getModifications();
 
 			foreach ($results as $result) {
 				if ($result['status']) {
@@ -419,7 +419,7 @@ class ControllerMarketplaceModification extends Controller {
 			}
 
 			// Maintance mode back to original settings
-			$this->model_setting_setting->editSettingValue('config', 'config_maintenance', $maintenance);
+			$this->model_setting_setting_admin->editSettingValue('config', 'config_maintenance', $maintenance);
 
 			// Do not return success message if refresh() was called with $data
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -449,7 +449,7 @@ class ControllerMarketplaceModification extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 
 		if ($this->validate()) {
 			$files = [];
@@ -516,10 +516,10 @@ class ControllerMarketplaceModification extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 
 		if (isset($this->request->get['modification_id']) && $this->validate()) {
-			$this->model_setting_modification->enableModification($this->request->get['modification_id']);
+			$this->model_setting_modification_admin->enableModification($this->request->get['modification_id']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -548,10 +548,10 @@ class ControllerMarketplaceModification extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 
 		if (isset($this->request->get['modification_id']) && $this->validate()) {
-			$this->model_setting_modification->disableModification($this->request->get['modification_id']);
+			$this->model_setting_modification_admin->disableModification($this->request->get['modification_id']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -580,7 +580,7 @@ class ControllerMarketplaceModification extends Controller {
 		
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/modification');
+		$this->load->model('setting/modification_admin');
 		
 		if ($this->validate()) {
 			$handle = fopen(DIR_LOGS . 'ocmod.log', 'w+');
@@ -667,9 +667,9 @@ class ControllerMarketplaceModification extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$modification_total = $this->model_setting_modification->getTotalModifications();
+		$modification_total = $this->model_setting_modification_admin->getTotalModifications();
 
-		$results = $this->model_setting_modification->getModifications($filter_data);
+		$results = $this->model_setting_modification_admin->getModifications($filter_data);
 
 		foreach ($results as $result) {
 			$data['modifications'][] = array(

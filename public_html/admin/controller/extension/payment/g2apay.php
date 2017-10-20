@@ -9,10 +9,10 @@ class ControllerExtensionPaymentG2APay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_g2apay', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_g2apay', $this->request->post);
 
 			$this->session->data['complete'] = $this->language->get('text_complete');
 
@@ -102,8 +102,8 @@ class ControllerExtensionPaymentG2APay extends Controller {
 			'href' => $this->url->link('extension/payment/g2apay', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$this->load->model('localisation/order_status');
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$this->load->model('localisation/order_status_admin');
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		$data['action'] = $this->url->link('extension/payment/g2apay', 'user_token=' . $this->session->data['user_token'], true);
 
@@ -155,9 +155,9 @@ class ControllerExtensionPaymentG2APay extends Controller {
 			$data['payment_g2apay_ipn_uri'] = $this->config->get('payment_g2apay_ipn_uri');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_g2apay_geo_zone_id'])) {
 			$data['payment_g2apay_geo_zone_id'] = $this->request->post['payment_g2apay_geo_zone_id'];
@@ -165,9 +165,9 @@ class ControllerExtensionPaymentG2APay extends Controller {
 			$data['payment_g2apay_geo_zone_id'] = $this->config->get('payment_g2apay_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_g2apay_status'])) {
 			$data['payment_g2apay_status'] = $this->request->post['payment_g2apay_status'];
@@ -198,14 +198,14 @@ class ControllerExtensionPaymentG2APay extends Controller {
 
 		if ($this->config->get('payment_g2apay_status')) {
 
-			$this->load->model('extension/payment/g2apay');
+			$this->load->model('extension/payment/g2apay_admin');
 
-			$g2apay_order = $this->model_extension_payment_g2apay->getOrder($this->request->get['order_id']);
+			$g2apay_order = $this->model_extension_payment_g2apay_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($g2apay_order)) {
 				$this->load->language('extension/payment/g2apay');
 
-				$g2apay_order['total_released'] = $this->model_extension_payment_g2apay->getTotalReleased($g2apay_order['g2apay_order_id']);
+				$g2apay_order['total_released'] = $this->model_extension_payment_g2apay_admin->getTotalReleased($g2apay_order['g2apay_order_id']);
 
 				$g2apay_order['total_formatted'] = $this->currency->format($g2apay_order['total'], $g2apay_order['currency_code'], false);
 				$g2apay_order['total_released_formatted'] = $this->currency->format($g2apay_order['total_released'], $g2apay_order['currency_code'], false);
@@ -225,22 +225,22 @@ class ControllerExtensionPaymentG2APay extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('extension/payment/g2apay');
+			$this->load->model('extension/payment/g2apay_admin');
 
-			$g2apay_order = $this->model_extension_payment_g2apay->getOrder($this->request->post['order_id']);
+			$g2apay_order = $this->model_extension_payment_g2apay_admin->getOrder($this->request->post['order_id']);
 
-			$refund_response = $this->model_extension_payment_g2apay->refund($g2apay_order, $this->request->post['amount']);
+			$refund_response = $this->model_extension_payment_g2apay_admin->refund($g2apay_order, $this->request->post['amount']);
 
-			$this->model_extension_payment_g2apay->logger($refund_response);
+			$this->model_extension_payment_g2apay_admin->logger($refund_response);
 
 			if ($refund_response == 'ok') {
-				$this->model_extension_payment_g2apay->addTransaction($g2apay_order['g2apay_order_id'], 'refund', $this->request->post['amount'] * -1);
+				$this->model_extension_payment_g2apay_admin->addTransaction($g2apay_order['g2apay_order_id'], 'refund', $this->request->post['amount'] * -1);
 
-				$total_refunded = $this->model_extension_payment_g2apay->getTotalRefunded($g2apay_order['g2apay_order_id']);
-				$total_released = $this->model_extension_payment_g2apay->getTotalReleased($g2apay_order['g2apay_order_id']);
+				$total_refunded = $this->model_extension_payment_g2apay_admin->getTotalRefunded($g2apay_order['g2apay_order_id']);
+				$total_released = $this->model_extension_payment_g2apay_admin->getTotalReleased($g2apay_order['g2apay_order_id']);
 
 				if ($total_released <= 0 && $g2apay_order['release_status'] == 1) {
-					$this->model_extension_payment_g2apay->updateRefundStatus($g2apay_order['g2apay_order_id'], 1);
+					$this->model_extension_payment_g2apay_admin->updateRefundStatus($g2apay_order['g2apay_order_id'], 1);
 					$refund_status = 1;
 					$json['msg'] = $this->language->get('text_refund_ok_order');
 				} else {
@@ -269,13 +269,13 @@ class ControllerExtensionPaymentG2APay extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/g2apay');
-		$this->model_extension_payment_g2apay->install();
+		$this->load->model('extension/payment/g2apay_admin');
+		$this->model_extension_payment_g2apay_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/g2apay');
-		$this->model_extension_payment_g2apay->uninstall();
+		$this->load->model('extension/payment/g2apay_admin');
+		$this->model_extension_payment_g2apay_admin->uninstall();
 	}
 
 	protected function validate() {

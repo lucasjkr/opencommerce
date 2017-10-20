@@ -7,10 +7,10 @@ class ControllerExtensionPaymentCardinity extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_cardinity', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_cardinity', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -86,9 +86,9 @@ class ControllerExtensionPaymentCardinity extends Controller {
 			$data['payment_cardinity_order_status_id'] = $this->config->get('payment_cardinity_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_cardinity_geo_zone_id'])) {
 			$data['payment_cardinity_geo_zone_id'] = $this->request->post['payment_cardinity_geo_zone_id'];
@@ -96,9 +96,9 @@ class ControllerExtensionPaymentCardinity extends Controller {
 			$data['payment_cardinity_geo_zone_id'] = $this->config->get('payment_cardinity_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_cardinity_status'])) {
 			$data['payment_cardinity_status'] = $this->request->post['payment_cardinity_status'];
@@ -131,7 +131,7 @@ class ControllerExtensionPaymentCardinity extends Controller {
 	public function getPayment() {
 		$this->load->language('extension/payment/cardinity');
 
-		$this->load->model('extension/payment/cardinity');
+		$this->load->model('extension/payment/cardinity_admin');
 
 		$data['column_refund'] = $this->language->get('column_refund');
 		$data['column_date'] = $this->language->get('column_date');
@@ -145,12 +145,12 @@ class ControllerExtensionPaymentCardinity extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$client = $this->model_extension_payment_cardinity->createClient(array(
+		$client = $this->model_extension_payment_cardinity_admin->createClient(array(
 			'key'    => $this->config->get('payment_cardinity_key'),
 			'secret' => $this->config->get('payment_cardinity_secret')
 		));
 
-		$order = $this->model_extension_payment_cardinity->getOrder($this->request->get['order_id']);
+		$order = $this->model_extension_payment_cardinity_admin->getOrder($this->request->get['order_id']);
 
 		$data['payment'] = false;
 
@@ -159,7 +159,7 @@ class ControllerExtensionPaymentCardinity extends Controller {
 		if ($order && $order['payment_id']) {
 			$data['payment'] = true;
 
-			$payment = $this->model_extension_payment_cardinity->getPayment($client, $order['payment_id']);
+			$payment = $this->model_extension_payment_cardinity_admin->getPayment($client, $order['payment_id']);
 
 			$data['refund_action'] = false;
 
@@ -173,7 +173,7 @@ class ControllerExtensionPaymentCardinity extends Controller {
 
 			$max_refund_amount = $payment->getAmount();
 
-			$refunds = $this->model_extension_payment_cardinity->getRefunds($client, $order['payment_id']);
+			$refunds = $this->model_extension_payment_cardinity_admin->getRefunds($client, $order['payment_id']);
 
 			if ($refunds) {
 				foreach ($refunds as $refund) {
@@ -211,18 +211,18 @@ class ControllerExtensionPaymentCardinity extends Controller {
 	public function refund() {
 		$this->load->language('extension/payment/cardinity');
 
-		$this->load->model('extension/payment/cardinity');
+		$this->load->model('extension/payment/cardinity_admin');
 
 		$json = [];
 
 		$success = $error = '';
 
-		$client = $this->model_extension_payment_cardinity->createClient(array(
+		$client = $this->model_extension_payment_cardinity_admin->createClient(array(
 			'key'    => $this->config->get('payment_cardinity_key'),
 			'secret' => $this->config->get('payment_cardinity_secret')
 		));
 
-		$refund = $this->model_extension_payment_cardinity->refundPayment($client, $this->request->post['payment_id'], (float)number_format($this->request->post['amount'], 2), $this->request->post['description']);
+		$refund = $this->model_extension_payment_cardinity_admin->refundPayment($client, $this->request->post['payment_id'], (float)number_format($this->request->post['amount'], 2), $this->request->post['description']);
 
 		if ($refund) {
 			$success = $this->language->get('text_success_action');
@@ -238,7 +238,7 @@ class ControllerExtensionPaymentCardinity extends Controller {
 	}
 
 	protected function validate() {
-		$this->load->model('extension/payment/cardinity');
+		$this->load->model('extension/payment/cardinity_admin');
 
 		$check_credentials = true;
 
@@ -271,12 +271,12 @@ class ControllerExtensionPaymentCardinity extends Controller {
 		}
 
 		if ($check_credentials) {
-			$client = $this->model_extension_payment_cardinity->createClient(array(
+			$client = $this->model_extension_payment_cardinity_admin->createClient(array(
 				'key'    => $this->request->post['payment_cardinity_key'],
 				'secret' => $this->request->post['payment_cardinity_secret']
 			));
 
-			$verify_credentials = $this->model_extension_payment_cardinity->verifyCredentials($client);
+			$verify_credentials = $this->model_extension_payment_cardinity_admin->verifyCredentials($client);
 
 			if (!$verify_credentials) {
 				$this->error['warning'] = $this->language->get('error_connection');
@@ -291,14 +291,14 @@ class ControllerExtensionPaymentCardinity extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/cardinity');
+		$this->load->model('extension/payment/cardinity_admin');
 
-		$this->model_extension_payment_cardinity->install();
+		$this->model_extension_payment_cardinity_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/cardinity');
+		$this->load->model('extension/payment/cardinity_admin');
 
-		$this->model_extension_payment_cardinity->uninstall();
+		$this->model_extension_payment_cardinity_admin->uninstall();
 	}
 }

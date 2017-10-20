@@ -28,10 +28,10 @@ class ControllerReportReport extends Controller {
 		// Reports
 		$data['reports'] = [];
 		
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		// Get a list of installed modules
-		$extensions = $this->model_setting_extension->getInstalled('report');
+		$extensions = $this->model_setting_extension_admin->getInstalled('report');
 		
 		// Add all the modules which have multiple settings for each module
 		foreach ($extensions as $code) {

@@ -7,7 +7,7 @@ class ControllerDesignBanner extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/banner');
+		$this->load->model('design/banner_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerDesignBanner extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/banner');
+		$this->load->model('design/banner_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_banner->addBanner($this->request->post);
+			$this->model_design_banner_admin->addBanner($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerDesignBanner extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/banner');
+		$this->load->model('design/banner_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_banner->editBanner($this->request->get['banner_id'], $this->request->post);
+			$this->model_design_banner_admin->editBanner($this->request->get['banner_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerDesignBanner extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/banner');
+		$this->load->model('design/banner_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $banner_id) {
-				$this->model_design_banner->deleteBanner($banner_id);
+				$this->model_design_banner_admin->deleteBanner($banner_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerDesignBanner extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$banner_total = $this->model_design_banner->getTotalBanners();
+		$banner_total = $this->model_design_banner_admin->getTotalBanners();
 
-		$results = $this->model_design_banner->getBanners($filter_data);
+		$results = $this->model_design_banner_admin->getBanners($filter_data);
 
 		foreach ($results as $result) {
 			$data['banners'][] = array(
@@ -301,7 +301,7 @@ class ControllerDesignBanner extends Controller {
 		$data['cancel'] = $this->url->link('design/banner', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['banner_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$banner_info = $this->model_design_banner->getBanner($this->request->get['banner_id']);
+			$banner_info = $this->model_design_banner_admin->getBanner($this->request->get['banner_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -322,16 +322,16 @@ class ControllerDesignBanner extends Controller {
 			$data['status'] = true;
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['banner_image'])) {
 			$banner_images = $this->request->post['banner_image'];
 		} elseif (isset($this->request->get['banner_id'])) {
-			$banner_images = $this->model_design_banner->getBannerImages($this->request->get['banner_id']);
+			$banner_images = $this->model_design_banner_admin->getBannerImages($this->request->get['banner_id']);
 		} else {
 			$banner_images = [];
 		}
@@ -352,13 +352,13 @@ class ControllerDesignBanner extends Controller {
 					'title'      => $banner_image['title'],
 					'link'       => $banner_image['link'],
 					'image'      => $image,
-					'thumb'      => $this->model_tool_image->resize($thumb, 100, 100),
+					'thumb'      => $this->model_tool_image_admin->resize($thumb, 100, 100),
 					'sort_order' => $banner_image['sort_order']
 				);
 			}
 		}
 
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

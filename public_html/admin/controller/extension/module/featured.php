@@ -91,7 +91,7 @@ class ControllerExtensionModuleFeatured extends Controller {
 			$data['name'] = '';
 		}
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		$data['products'] = [];
 
@@ -104,7 +104,7 @@ class ControllerExtensionModuleFeatured extends Controller {
 		}
 
 		foreach ($products as $product_id) {
-			$product_info = $this->model_catalog_product->getProduct($product_id);
+			$product_info = $this->model_catalog_product_admin->getProduct($product_id);
 
 			if ($product_info) {
 				$data['products'][] = array(

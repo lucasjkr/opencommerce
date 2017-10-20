@@ -5,7 +5,7 @@ class ControllerExtensionExtensionDashboard extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/dashboard');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		$this->getList();
 	}
@@ -13,15 +13,15 @@ class ControllerExtensionExtensionDashboard extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/dashboard');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->install('dashboard', $this->request->get['extension']);
+			$this->model_setting_extension_admin->install('dashboard', $this->request->get['extension']);
 
-			$this->load->model('user/user_group');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/dashboard/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/dashboard/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/dashboard/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/dashboard/' . $this->request->get['extension']);
 
 			// Call install method if it exsits
 			$this->load->controller('extension/dashboard/' . $this->request->get['extension'] . '/install');
@@ -35,10 +35,10 @@ class ControllerExtensionExtensionDashboard extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/dashboard');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->uninstall('dashboard', $this->request->get['extension']);
+			$this->model_setting_extension_admin->uninstall('dashboard', $this->request->get['extension']);
 
 			// Call uninstall method if it exsits
 			$this->load->controller('extension/dashboard/' . $this->request->get['extension'] . '/uninstall');
@@ -64,11 +64,11 @@ class ControllerExtensionExtensionDashboard extends Controller {
 			$data['success'] = '';
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('dashboard');
+		$extensions = $this->model_setting_extension_admin->getInstalled('dashboard');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/dashboard/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('dashboard', $value);
+				$this->model_setting_extension_admin->uninstall('dashboard', $value);
 
 				unset($extensions[$key]);
 			}

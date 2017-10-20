@@ -7,7 +7,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$status = false;
@@ -25,7 +25,7 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 				'klarna_invoice_status'   => $status
 			);
 
-			$this->model_setting_setting->editSetting('payment_klarna_invoice', array_merge($this->request->post, $klarna_data));
+			$this->model_setting_setting_admin->editSetting('payment_klarna_invoice', array_merge($this->request->post, $klarna_data));
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -105,13 +105,13 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 			$data['payment_klarna_invoice'] = $this->config->get('payment_klarna_invoice');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		$file = DIR_LOGS . 'klarna_invoice.log';
 

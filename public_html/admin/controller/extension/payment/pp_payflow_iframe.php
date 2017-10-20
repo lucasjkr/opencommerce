@@ -7,10 +7,10 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_pp_payflow_iframe', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_pp_payflow_iframe', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -110,9 +110,9 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 			$data['payment_pp_payflow_iframe_total'] = $this->config->get('payment_pp_payflow_iframe_total');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_pp_payflow_iframe_order_status_id'])) {
 			$data['payment_pp_payflow_iframe_order_status_id'] = $this->request->post['payment_pp_payflow_iframe_order_status_id'];
@@ -126,9 +126,9 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 			$data['payment_pp_payflow_iframe_geo_zone_id'] = $this->config->get('payment_pp_payflow_iframe_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_pp_payflow_iframe_status'])) {
 			$data['payment_pp_payflow_iframe_status'] = $this->request->post['payment_pp_payflow_iframe_status'];
@@ -167,23 +167,21 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
-
-		$this->model_extension_payment_pp_payflow_iframe->install();
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
+		$this->model_extension_payment_pp_payflow_iframe_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
-
-		$this->model_extension_payment_pp_payflow_iframe->uninstall();
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
+		$this->model_extension_payment_pp_payflow_iframe_admin->uninstall();
 	}
 
 	public function refund() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
-		$this->load->model('sale/order');
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
+		$this->load->model('sale/order_admin');
 		$this->load->language('extension/payment/pp_payflow_iframe');
 
-		$transaction = $this->model_extension_payment_pp_payflow_iframe->getTransaction($this->request->get['transaction_reference']);
+		$transaction = $this->model_extension_payment_pp_payflow_iframe_admin->getTransaction($this->request->get['transaction_reference']);
 
 		if ($transaction) {
 			$this->document->setTitle($this->language->get('heading_refund'));
@@ -227,13 +225,13 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 	}
 
 	public function doRefund() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
 		$this->load->language('extension/payment/pp_payflow_iframe');
 		$json = [];
 
 		if (isset($this->request->post['transaction_reference']) && isset($this->request->post['amount'])) {
 
-			$transaction = $this->model_extension_payment_pp_payflow_iframe->getTransaction($this->request->post['transaction_reference']);
+			$transaction = $this->model_extension_payment_pp_payflow_iframe_admin->getTransaction($this->request->post['transaction_reference']);
 
 			if ($transaction) {
 				$call_data = array(
@@ -243,7 +241,7 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 					'AMT'     => $this->request->post['amount'],
 				);
 
-				$result = $this->model_extension_payment_pp_payflow_iframe->call($call_data);
+				$result = $this->model_extension_payment_pp_payflow_iframe_admin->call($call_data);
 
 				if ($result['RESULT'] == 0) {
 					$json['success'] = $this->language->get('text_refund_issued');
@@ -255,7 +253,7 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 						'amount' => $this->request->post['amount'],
 					);
 
-					$this->model_extension_payment_pp_payflow_iframe->addTransaction($data);
+					$this->model_extension_payment_pp_payflow_iframe_admin->addTransaction($data);
 				} else {
 					$json['error'] = $result['RESPMSG'];
 				}
@@ -271,15 +269,15 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 	}
 
 	public function capture() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
-		$this->load->model('sale/order');
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
+		$this->load->model('sale/order_admin');
 		$this->load->language('extension/payment/pp_payflow_iframe');
 
 		if (isset($this->request->post['order_id']) && isset($this->request->post['amount']) && isset($this->request->post['complete'])) {
 			$order_id = $this->request->post['order_id'];
-			$paypal_order = $this->model_extension_payment_pp_payflow_iframe->getOrder($order_id);
-			$paypal_transactions = $this->model_extension_payment_pp_payflow_iframe->getTransactions($order_id);
-			$order_info = $this->model_sale_order->getOrder($order_id);
+			$paypal_order = $this->model_extension_payment_pp_payflow_iframe_admin->getOrder($order_id);
+			$paypal_transactions = $this->model_extension_payment_pp_payflow_iframe_admin->getTransactions($order_id);
+			$order_info = $this->model_sale_order_admin->getOrder($order_id);
 
 			if ($paypal_order && $order_info) {
 				if ($this->request->post['complete'] == 1) {
@@ -296,7 +294,7 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 					'CAPTURECOMPLETE' => $complete
 				);
 
-				$result = $this->model_extension_payment_pp_payflow_iframe->call($call_data);
+				$result = $this->model_extension_payment_pp_payflow_iframe_admin->call($call_data);
 
 				if ($result['RESULT'] == 0) {
 
@@ -307,8 +305,8 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 						'amount'                => $this->request->post['amount']
 					);
 
-					$this->model_extension_payment_pp_payflow_iframe->addTransaction($data);
-					$this->model_extension_payment_pp_payflow_iframe->updateOrderStatus($order_id, $this->request->post['complete']);
+					$this->model_extension_payment_pp_payflow_iframe_admin->addTransaction($data);
+					$this->model_extension_payment_pp_payflow_iframe_admin->updateOrderStatus($order_id, $this->request->post['complete']);
 
 					$actions = [];
 
@@ -339,12 +337,12 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 	}
 
 	public function void() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
 		$this->load->language('extension/payment/pp_payflow_iframe');
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
 			$order_id = $this->request->post['order_id'];
-			$paypal_order = $this->model_extension_payment_pp_payflow_iframe->getOrder($order_id);
+			$paypal_order = $this->model_extension_payment_pp_payflow_iframe_admin->getOrder($order_id);
 
 			if ($paypal_order) {
 				$call_data = array(
@@ -353,11 +351,11 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 					'ORIGID' => $paypal_order['transaction_reference'],
 				);
 
-				$result = $this->model_extension_payment_pp_payflow_iframe->call($call_data);
+				$result = $this->model_extension_payment_pp_payflow_iframe_admin->call($call_data);
 
 				if ($result['RESULT'] == 0) {
 					$json['success'] = $this->language->get('text_void_success');
-					$this->model_extension_payment_pp_payflow_iframe->updateOrderStatus($order_id, 1);
+					$this->model_extension_payment_pp_payflow_iframe_admin->updateOrderStatus($order_id, 1);
 
 					$data = array(
 						'order_id' => $order_id,
@@ -366,8 +364,8 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 						'amount' => '',
 					);
 
-					$this->model_extension_payment_pp_payflow_iframe->addTransaction($data);
-					$this->model_extension_payment_pp_payflow_iframe->updateOrderStatus($order_id, 1);
+					$this->model_extension_payment_pp_payflow_iframe_admin->addTransaction($data);
+					$this->model_extension_payment_pp_payflow_iframe_admin->updateOrderStatus($order_id, 1);
 
 					$json['success'] = array(
 						'transaction_type' => $this->language->get('text_void'),
@@ -390,12 +388,12 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 	}
 
 	public function order() {
-		$this->load->model('extension/payment/pp_payflow_iframe');
+		$this->load->model('extension/payment/pp_payflow_iframe_admin');
 		$this->load->language('extension/payment/pp_payflow_iframe');
 
 		$order_id = $this->request->get['order_id'];
 
-		$paypal_order = $this->model_extension_payment_pp_payflow_iframe->getOrder($order_id);
+		$paypal_order = $this->model_extension_payment_pp_payflow_iframe_admin->getOrder($order_id);
 
 		if ($paypal_order) {
 			$data['complete'] = $paypal_order['complete'];
@@ -406,7 +404,7 @@ class ControllerExtensionPaymentPPPayflowIframe extends Controller {
 
 			$data['transactions'] = [];
 
-			$transactions = $this->model_extension_payment_pp_payflow_iframe->getTransactions($order_id);
+			$transactions = $this->model_extension_payment_pp_payflow_iframe_admin->getTransactions($order_id);
 
 			foreach ($transactions as $transaction) {
 				$actions = [];

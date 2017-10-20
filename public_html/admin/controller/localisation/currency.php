@@ -7,7 +7,7 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_currency->addCurrency($this->request->post);
+			$this->model_localisation_currency_admin->addCurrency($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_currency->editCurrency($this->request->get['currency_id'], $this->request->post);
+			$this->model_localisation_currency_admin->editCurrency($this->request->get['currency_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $currency_id) {
-				$this->model_localisation_currency->deleteCurrency($currency_id);
+				$this->model_localisation_currency_admin->deleteCurrency($currency_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -115,10 +115,10 @@ class ControllerLocalisationCurrency extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
 		if ($this->validateRefresh()) {
-			$this->model_localisation_currency->refresh(true);
+			$this->model_localisation_currency_admin->refresh(true);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -200,9 +200,9 @@ class ControllerLocalisationCurrency extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$currency_total = $this->model_localisation_currency->getTotalCurrencies();
+		$currency_total = $this->model_localisation_currency_admin->getTotalCurrencies();
 
-		$results = $this->model_localisation_currency->getCurrencies($filter_data);
+		$results = $this->model_localisation_currency_admin->getCurrencies($filter_data);
 
 		foreach ($results as $result) {
 			$data['currencies'][] = array(
@@ -338,7 +338,7 @@ class ControllerLocalisationCurrency extends Controller {
 		$data['cancel'] = $this->url->link('localisation/currency', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['currency_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$currency_info = $this->model_localisation_currency->getCurrency($this->request->get['currency_id']);
+			$currency_info = $this->model_localisation_currency_admin->getCurrency($this->request->get['currency_id']);
 		}
 
 		if (isset($this->request->post['title'])) {
@@ -425,25 +425,25 @@ class ControllerLocalisationCurrency extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('sale/order');
+		$this->load->model('setting/store_admin');
+		$this->load->model('sale/order_admin');
 
 		foreach ($this->request->post['selected'] as $currency_id) {
-			$currency_info = $this->model_localisation_currency->getCurrency($currency_id);
+			$currency_info = $this->model_localisation_currency_admin->getCurrency($currency_id);
 
 			if ($currency_info) {
 				if ($this->config->get('config_currency') == $currency_info['code']) {
 					$this->error['warning'] = $this->language->get('error_default');
 				}
 
-				$store_total = $this->model_setting_store->getTotalStoresByCurrency($currency_info['code']);
+				$store_total = $this->model_setting_store_admin->getTotalStoresByCurrency($currency_info['code']);
 
 				if ($store_total) {
 					$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
 				}
 			}
 
-			$order_total = $this->model_sale_order->getTotalOrdersByCurrencyId($currency_id);
+			$order_total = $this->model_sale_order_admin->getTotalOrdersByCurrencyId($currency_id);
 
 			if ($order_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_order'), $order_total);

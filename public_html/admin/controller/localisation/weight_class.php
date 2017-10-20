@@ -7,7 +7,7 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class');
+		$this->load->model('localisation/weight_class_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class');
+		$this->load->model('localisation/weight_class_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_weight_class->addWeightClass($this->request->post);
+			$this->model_localisation_weight_class_admin->addWeightClass($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class');
+		$this->load->model('localisation/weight_class_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_weight_class->editWeightClass($this->request->get['weight_class_id'], $this->request->post);
+			$this->model_localisation_weight_class_admin->editWeightClass($this->request->get['weight_class_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class');
+		$this->load->model('localisation/weight_class_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $weight_class_id) {
-				$this->model_localisation_weight_class->deleteWeightClass($weight_class_id);
+				$this->model_localisation_weight_class_admin->deleteWeightClass($weight_class_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationWeightClass extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$weight_class_total = $this->model_localisation_weight_class->getTotalWeightClasses();
+		$weight_class_total = $this->model_localisation_weight_class_admin->getTotalWeightClasses();
 
-		$results = $this->model_localisation_weight_class->getWeightClasses($filter_data);
+		$results = $this->model_localisation_weight_class_admin->getWeightClasses($filter_data);
 
 		foreach ($results as $result) {
 			$data['weight_classes'][] = array(
@@ -303,17 +303,17 @@ class ControllerLocalisationWeightClass extends Controller {
 		$data['cancel'] = $this->url->link('localisation/weight_class', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['weight_class_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$weight_class_info = $this->model_localisation_weight_class->getWeightClass($this->request->get['weight_class_id']);
+			$weight_class_info = $this->model_localisation_weight_class_admin->getWeightClass($this->request->get['weight_class_id']);
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['weight_class_description'])) {
 			$data['weight_class_description'] = $this->request->post['weight_class_description'];
 		} elseif (isset($this->request->get['weight_class_id'])) {
-			$data['weight_class_description'] = $this->model_localisation_weight_class->getWeightClassDescriptions($this->request->get['weight_class_id']);
+			$data['weight_class_description'] = $this->model_localisation_weight_class_admin->getWeightClassDescriptions($this->request->get['weight_class_id']);
 		} else {
 			$data['weight_class_description'] = [];
 		}
@@ -356,14 +356,14 @@ class ControllerLocalisationWeightClass extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		foreach ($this->request->post['selected'] as $weight_class_id) {
 			if ($this->config->get('config_weight_class_id') == $weight_class_id) {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$product_total = $this->model_catalog_product->getTotalProductsByWeightClassId($weight_class_id);
+			$product_total = $this->model_catalog_product_admin->getTotalProductsByWeightClassId($weight_class_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_product'), $product_total);
