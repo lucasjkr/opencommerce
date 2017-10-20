@@ -7,7 +7,7 @@ class ControllerMarketplaceCron extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/cron_admin');
+		$this->load->model('setting/cron');
 
 		$this->getList();
 	}
@@ -17,11 +17,11 @@ class ControllerMarketplaceCron extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/cron_admin');
+		$this->load->model('setting/cron');
 
 		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $cron_id) {
-				$this->model_setting_cron_admin->deleteCron($cron_id);
+				$this->model_setting_cron->deleteCron($cron_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -102,9 +102,9 @@ class ControllerMarketplaceCron extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$cron_total = $this->model_setting_cron_admin->getTotalCrons();
+		$cron_total = $this->model_setting_cron->getTotalCrons();
 
-		$results = $this->model_setting_cron_admin->getCrons($filter_data);
+		$results = $this->model_setting_cron->getCrons($filter_data);
 
 		foreach ($results as $result) {
 			$data['crons'][] = array(
@@ -212,9 +212,9 @@ class ControllerMarketplaceCron extends Controller {
 		if (!$this->user->hasPermission('modify', 'marketplace/cron')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('setting/cron_admin');
+			$this->load->model('setting/cron');
 
-			$this->model_setting_cron_admin->editStatus($cron_id, 1);
+			$this->model_setting_cron->editStatus($cron_id, 1);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -237,9 +237,9 @@ class ControllerMarketplaceCron extends Controller {
 		if (!$this->user->hasPermission('modify', 'marketplace/cron')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('setting/cron_admin');
+			$this->load->model('setting/cron');
 
-			$this->model_setting_cron_admin->editStatus($cron_id, 0);
+			$this->model_setting_cron->editStatus($cron_id, 0);
 
 			$json['success'] = $this->language->get('text_success');
 		}
