@@ -2,7 +2,7 @@
 class ModelToolUploadAdmin extends Model {
 //  These models are used by catalog AND admin
     public function addUpload($name, $filename) {
-        $code = sha1(random_bytes(32), true));
+        $code = sha1(random_bytes(32), true);
 
         $this->db->query("INSERT INTO `oc_upload` SET `name` = :name, `filename` = :filename, `code` = :code",
             [
