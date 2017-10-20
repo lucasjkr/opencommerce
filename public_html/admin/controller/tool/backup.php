@@ -19,7 +19,7 @@ class ControllerToolBackup extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('tool/backup_admin');
+		$this->load->model('tool/backup');
 
 		$ignore = array(
 			'oc_user',
@@ -28,7 +28,7 @@ class ControllerToolBackup extends Controller {
 
 		$data['tables'] = [];
 
-		$results = $this->model_tool_backup_admin->getTables();
+		$results = $this->model_tool_backup->getTables();
 
 		foreach ($results as $result) {
 			if (!in_array($result, $ignore)) {
@@ -118,9 +118,9 @@ class ControllerToolBackup extends Controller {
 			$json['error'] = $this->language->get('error_directory');
 		}
 
-		$this->load->model('tool/backup_admin');
+		$this->load->model('tool/backup');
 
-		$allowed = $this->model_tool_backup_admin->getTables();
+		$allowed = $this->model_tool_backup->getTables();
 
 		foreach ($backup as $table) {
 			if (!in_array($table, $allowed)) {
@@ -146,9 +146,9 @@ class ControllerToolBackup extends Controller {
 					$output .= 'TRUNCATE TABLE `' . $this->db->escape($table) . '`;' . "\n\n";
 				}
 
-				$record_total = $this->model_tool_backup_admin->getTotalRecords($table);
+				$record_total = $this->model_tool_backup->getTotalRecords($table);
 
-				$results = $this->model_tool_backup_admin->getRecords($table, ($page - 1) * 200, 200);
+				$results = $this->model_tool_backup->getRecords($table, ($page - 1) * 200, 200);
 
 				foreach ($results as $result) {
 					$fields = '';

@@ -1,5 +1,8 @@
 <?php
-class ModelToolBackupAdmin extends Model {
+class ModelToolBackup extends Model {
+    // LJK TODO: These are admin-only functions; should add a check somewhere within to make sure that the logged in
+    // user is allowed to access it. Leaving it only to the controller for the page means that a stupid dev or bad
+    // plugin could open this to regular visitors
 	public function getTables() {
 		$table_data = [];
 
