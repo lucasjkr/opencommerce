@@ -7,6 +7,12 @@ class ModelAccountActivity extends Model {
 			$customer_id = 0;
 		}
 
-		$this->db->query("INSERT INTO `oc_customer_activity` SET `customer_id` = '" . (int)$customer_id . "', `key` = '" . $this->db->escape($key) . "', `data` = '" . $this->db->escape(json_encode($data)) . "', `ip` = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "'");
+		$this->db->query("INSERT INTO `oc_customer_activity` SET `customer_id` = :customer_id, `key` = :key, `data` = :data, `ip` = :ip",
+            [
+                ':customer_id' => $customer_id,
+                ':key' => $key,
+                ':data' => json_encode($data),
+                ':ip' => $this->request->server['REMOTE_ADDR']
+            ]);
 	}
 }
