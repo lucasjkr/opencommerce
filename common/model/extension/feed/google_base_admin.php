@@ -49,7 +49,7 @@ class ModelExtensionFeedGoogleBaseAdmin extends Model {
 
     public function getGoogleBaseCategories($data = array()) {
         $sql = "SELECT * FROM `oc_google_base_category` WHERE name LIKE :filter_name ORDER BY name ASC";
-        $args[':filter_name'] = '%' . $data['filter_name']) . '%';
+        $args[':filter_name'] = '%' . $data['filter_name'] . '%';
 
 		if (isset($data['start']) || isset($data['limit'])) {
 			if ($data['start'] < 0) {
@@ -84,7 +84,7 @@ class ModelExtensionFeedGoogleBaseAdmin extends Model {
 	public function deleteCategory($category_id) {
 		$this->db->query("DELETE FROM oc_google_base_category_to_category WHERE category_id = :category_id",
             [
-                ':category_id' => $data['category_id']
+                ':category_id' => $category_id
             ]);
 	}
 

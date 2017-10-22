@@ -23,6 +23,8 @@ class ControllerAccountRegister extends Controller {
 
 			$customer_id = $this->model_account_customer->addCustomer($this->request->post);
 
+            // LJK TODO: This is bad - we should track unregistered accounts attempting to login, so we can see if there
+            // are some that are ready to be attacked. Generic accounts, etc that we can block from even creating an account
 			// Clear any previous login attempts for unregistered accounts.
 			$this->model_account_customer->deleteLoginAttempts($this->request->post['email']);
 
