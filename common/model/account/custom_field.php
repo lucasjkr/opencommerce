@@ -1,8 +1,9 @@
 <?php
 class ModelAccountCustomField extends Model {
 	public function getCustomField($custom_field_id) {
-		$query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.status = '1' AND cf.custom_field_id = :custom_field_id AND cfd.language_id = :language_id",
+		$query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.status = :status AND cf.custom_field_id = :custom_field_id AND cfd.language_id = :language_id",
             [
+                ':status' => 1,
                 ':custom_field_id' => $custom_field_id,
                 ':language_id' => $this->config->get('config_language_id')
             ]);
@@ -14,8 +15,9 @@ class ModelAccountCustomField extends Model {
 		$custom_field_data = [];
 
 		if (!$customer_group_id) {
-			$custom_field_query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.status = '1' AND cfd.language_id = :language_id AND cf.status = '1' ORDER BY cf.sort_order ASC",
+			$custom_field_query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.status = :status AND cfd.language_id = :language_id ORDER BY cf.sort_order ASC",
                 [
+                    ':status' => 1,
                     ':language_id' => $this->config->get('config_language_id')
                 ]);
 		} else {
