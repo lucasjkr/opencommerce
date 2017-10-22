@@ -393,7 +393,7 @@ final class Openbay {
 		if($order_products->num_rows > 0) {
 			return $order_products->rows;
 		} else {
-			return array();
+			return [];
 		}
 	}
 

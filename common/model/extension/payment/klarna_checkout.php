@@ -56,7 +56,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 
 	public function getMethod($address, $total) {
 		// Not shown in the payment method list
-		return array();
+		return [];
 	}
 
 	public function getConnector($accounts, $currency) {
@@ -143,7 +143,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 		return $query->rows;
 	}
 
-	public function checkForPaymentTaxes($products = array()) {
+	public function checkForPaymentTaxes($products = []) {
 		foreach ($products as $product) {
 			$query = $this->db->query("SELECT COUNT(*) AS `total` FROM oc_tax_rule WHERE `based` = 'payment' AND `tax_class_id` = '" . (int)$product['tax_class_id'] . "'");
 
@@ -168,7 +168,7 @@ class ModelExtensionPaymentKlarnaCheckout extends Model {
 			}
 		}
 
-		return array();
+		return [];
 	}
 
 	public function log($data, $step = 6) {

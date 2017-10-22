@@ -321,7 +321,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 		return $this->openbay->ebay->call('item/getItemsById/', array('item_ids' => $item_ids));
 	}
 
-	public function loadUnlinked($limit = 200, $page = 1, $filter = array()) {
+	public function loadUnlinked($limit = 200, $page = 1, $filter = []) {
 		$unlinked = [];
 		$current = 1;
 		$stop_flag = 0;
@@ -366,12 +366,12 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 	}
 
 	public function loadItemLinks() {
-		$local      = $this->openbay->ebay->getLiveListingArray();
+		$local      = $this->openbay->ebay->getLiveListing[];
 		$response   = $this->openbay->ebay->getEbayActiveListings();
 
 		$data = array(
-			'unlinked'  => array(),
-			'linked'    => array()
+			'unlinked'  => [],
+			'linked'    => []
 		);
 
 		if (!empty($response)) {
@@ -676,7 +676,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 		return $this->openbay->ebay->call('plan/myPlan/');
 	}
 
-	public function getLiveListingArray() {
+	public function getLiveListing[] {
 		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = 1");
 
 		$data = [];
@@ -692,7 +692,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 	public function verifyCredentials() {
 		$this->request->post['domain'] = "https://" . STORE_URL;
 
-		$data = $this->openbay->ebay->call('account/validate/', $this->request->post, array(), 'json', 1);
+		$data = $this->openbay->ebay->call('account/validate/', $this->request->post, [], 'json', 1);
 
 		$return = array('error' => $this->openbay->ebay->lasterror, 'msg' => $this->openbay->ebay->lastmsg);
 

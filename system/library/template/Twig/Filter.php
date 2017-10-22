@@ -25,7 +25,7 @@ abstract class Twig_Filter implements Twig_FilterInterface, Twig_FilterCallableI
     protected $options;
     protected $arguments = [];
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = array_merge(array(
             'needs_environment' => false,

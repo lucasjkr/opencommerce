@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionReportMarketingAdmin extends Model {
-	public function getMarketing($data = array()) {
+	public function getMarketing($data = []) {
 		$sql = "SELECT m.marketing_id, m.name AS campaign, m.code, m.clicks AS clicks, (SELECT COUNT(DISTINCT order_id) FROM `oc_order` o1 WHERE o1.marketing_id = m.marketing_id";
         $args = [];
 
@@ -59,7 +59,7 @@ class ModelExtensionReportMarketingAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalMarketing($data = array()) {
+	public function getTotalMarketing($data = []) {
 		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_marketing`");
 
 		return $query->row['total'];

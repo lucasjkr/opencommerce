@@ -57,7 +57,7 @@ class ModelExtensionOpenBayEbayProfileAdmin extends Model{
 			foreach ($qry->rows as $row) {
 				$row['link_edit']   = $this->url->link('extension/openbay/ebay_profile/edit', 'user_token=' . $this->session->data['user_token'] . '&ebay_profile_id=' . $row['ebay_profile_id'], true);
 				$row['link_delete'] = $this->url->link('extension/openbay/ebay_profile/delete', 'user_token=' . $this->session->data['user_token'] . '&ebay_profile_id=' . $row['ebay_profile_id'], true);
-				$row['data']        = !empty($row['data']) ? unserialize($row['data']) : array();
+				$row['data']        = !empty($row['data']) ? unserialize($row['data']) : [];
 				$profiles[]         = $row;
 			}
 

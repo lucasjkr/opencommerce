@@ -49,7 +49,7 @@ final class Ebay {
         $this->encryption_iv = $encryption_iv;
     }
 
-	public function call($call, array $post = null, array $options = array(), $content_type = 'json', $status_override = false) {
+	public function call($call, array $post = null, array $options = [], $content_type = 'json', $status_override = false) {
 		if ($this->config->get('ebay_status') == 1 || $status_override == true) {
 			$this->lasterror    = '';
 			$this->lastmsg      = '';
@@ -127,7 +127,7 @@ final class Ebay {
 		}
 	}
 
-	public function callNoResponse($call, array $post = null, array $options = array(), $content_type = 'json') {
+	public function callNoResponse($call, array $post = null, array $options = [], $content_type = 'json') {
 		if ($this->config->get('ebay_status') == 1) {
 			$this->log('openbay_noresponse_call(' . $call . ') - Data :' .  json_encode($post));
 
@@ -258,12 +258,12 @@ final class Ebay {
 		 */
 	}
 
-	public function getLiveListingArray() {
+	public function getLiveListing[] {
 	/*
 	 * Returns the list of linked items with eBay from the database
 	 * @return array ([product id] = ebay item id)
 	 */
-		$this->log('getLiveListingArray()');
+		$this->log('getLiveListing[]');
 
 		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = '1'");
 
@@ -277,9 +277,9 @@ final class Ebay {
 		return $data;
 	}
 
-	public function getEndedListingArray() {
-		$this->log('getEndedListingArray()');
-		$active = $this->getLiveListingArray();
+	public function getEndedListing[] {
+		$this->log('getEndedListing[]');
+		$active = $this->getLiveListing[];
 
 		$qry = $this->db->query("SELECT e.* FROM (SELECT `product_id`, MAX(`ebay_listing_id`) as `ebay_listing_id` FROM `oc_ebay_listing` WHERE `status` = 0 GROUP BY `product_id`) `a` INNER JOIN `oc_ebay_listing` `e` ON (`e`.`ebay_listing_id` = `a`.`ebay_listing_id`)");
 
@@ -299,7 +299,7 @@ final class Ebay {
 		return $data;
 	}
 
-	public function getLiveProductArray() {
+	public function getLiveProduct[] {
 		/**
 		* Returns the list of linked items with eBay from the database
 		* @return array ([ebay item id] = product id)
@@ -443,7 +443,7 @@ final class Ebay {
 		return $this->call('item/getItemAllList/');
 	}
 
-	public function getEbayItemList($limit = 100, $page = 1, $filter = array()) {
+	public function getEbayItemList($limit = 100, $page = 1, $filter = []) {
 		$this->log('getEbayItemList() - Get active eBay items from API');
 		return $this->call('item/getItemListLimited/', array('page' => $page, 'limit' => $limit, 'filter' => $filter));
 	}
@@ -547,7 +547,7 @@ final class Ebay {
 		}
 
 		// Get the active OpenCart items that were linked to eBay If they have stock now, relist them.
-		$ended_data = $this->getEndedListingArray();
+		$ended_data = $this->getEndedListing[];
 
 		/**
 		 * Get the active OpenCart items that are also linked
@@ -557,7 +557,7 @@ final class Ebay {
 		 * If listing active and local stock not the same, update it
 		 */
 		$ebay_listings = $this->getEbayActiveListings();
-		$live_data = $this->getLiveListingArray();
+		$live_data = $this->getLiveListing[];
 
 		$linked_items        = [];
 		$linked_ended_items   = [];
@@ -699,7 +699,7 @@ final class Ebay {
 		}
 	}
 
-	public function productUpdateListen($product_id, $data = array()) {
+	public function productUpdateListen($product_id, $data = []) {
 		$this->log('productUpdateListen(' . $product_id . ')');
 
 		$item_id = $this->getEbayItemId($product_id);
@@ -817,7 +817,7 @@ final class Ebay {
 		}
 	}
 
-	public function orderStatusListen($order_id, $status_id, $data = array()) {
+	public function orderStatusListen($order_id, $status_id, $data = []) {
 		$ebay_order = $this->getOrder($order_id);
 
 		if (isset($ebay_order['smp_id'])) {
@@ -1139,7 +1139,7 @@ final class Ebay {
 	}
 
 	public function updateCategories() {
-		$cat_array = $this->call('setup/getEbayCategories/', array(), array(), 'json', true);
+		$cat_array = $this->call('setup/getEbayCategories/', [], [], 'json', true);
 
 		if ($this->lasterror != true) {
 			$this->db->query("TRUNCATE TABLE `oc_ebay_category`");
@@ -1175,7 +1175,7 @@ final class Ebay {
 	}
 
 	public function updateSettings() {
-		$response = $this->call('setup/getEbayDetails/', array(), array(), 'json', true);
+		$response = $this->call('setup/getEbayDetails/', [], [], 'json', true);
 
 		$this->log('Getting eBay settings / sync');
 
@@ -1440,7 +1440,7 @@ final class Ebay {
 	}
 
 	public function updateStore() {
-		$store = $this->call('setup/getSellerStore/', array(), array(), 'json', true);
+		$store = $this->call('setup/getSellerStore/', [], [], 'json', true);
 
 		if ($this->lasterror != true) {
 			if ($store['store'] == true) {

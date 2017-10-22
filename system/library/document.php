@@ -141,7 +141,7 @@ class Document {
 		if (isset($this->scripts[$postion])) {
 			return $this->scripts[$postion];
 		} else {
-			return array();
+			return [];
 		}
 	}
 }

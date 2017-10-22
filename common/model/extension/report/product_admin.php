@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionReportProductAdmin extends Model {
-	public function getProductsViewed($data = array()) {
+	public function getProductsViewed($data = []) {
 		$sql = "SELECT pd.name, p.model, p.viewed FROM oc_product p LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = :language_id AND p.viewed > 0 ORDER BY p.viewed DESC";
         $args[':language_id'] = $this->config->get('config_language_id');
 
@@ -37,7 +37,7 @@ class ModelExtensionReportProductAdmin extends Model {
 		$this->db->query("UPDATE oc_product SET viewed = '0'");
 	}
 
-	public function getPurchased($data = array()) {
+	public function getPurchased($data = []) {
 		$sql = "SELECT op.name, op.model, SUM(op.quantity) AS quantity, SUM((op.price + op.tax) * op.quantity) AS total FROM oc_order_product op LEFT JOIN `oc_order` o ON (op.order_id = o.order_id)";
         $args = [];
 

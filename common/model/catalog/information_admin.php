@@ -186,16 +186,16 @@ class ModelCatalogInformationAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getInformations($data = array()) {
+	public function getInformations($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_information i LEFT JOIN oc_information_description id ON (i.information_id = id.information_id) WHERE id.language_id = :language_id";
 
             $args[':language_id'] = $this->config->get('config_language_id');
 
-            $sort_data = array(
+            $sort_data = [
 				'id.title',
 				'i.sort_order'
-			);
+			];
 
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];

@@ -123,7 +123,7 @@ class ModelSaleOrderAdmin extends Model {
 		}
 	}
 
-	public function getOrders($data = array()) {
+	public function getOrders($data = []) {
 		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM oc_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `oc_order` o";
 
 		if (!empty($data['filter_order_status'])) {
@@ -232,7 +232,7 @@ class ModelSaleOrderAdmin extends Model {
 		return $query->rows;
 	}
 	
-	public function getTotalOrders($data = array()) {
+	public function getTotalOrders($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_order`";
 
 		if (!empty($data['filter_order_status'])) {
@@ -338,7 +338,7 @@ class ModelSaleOrderAdmin extends Model {
 		return $query->row['total'];
 	}
 	
-	public function getTotalSales($data = array()) {
+	public function getTotalSales($data = []) {
 		$sql = "SELECT SUM(total) AS total FROM `oc_order`";
 
 		if (!empty($data['filter_order_status'])) {

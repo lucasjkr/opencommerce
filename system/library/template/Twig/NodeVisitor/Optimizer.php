@@ -60,7 +60,7 @@ class Twig_NodeVisitor_Optimizer extends Twig_BaseNodeVisitor
             if ($this->inABody) {
                 if (!$node instanceof Twig_Node_Expression) {
                     if (get_class($node) !== 'Twig_Node') {
-                        array_unshift($this->prependedNodes, array());
+                        array_unshift($this->prependedNodes, []);
                     }
                 } else {
                     $node = $this->optimizeVariables($node, $env);

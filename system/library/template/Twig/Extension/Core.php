@@ -727,7 +727,7 @@ function twig_slice(Twig_Environment $env, $item, $start, $length = null, $prese
             try {
                 return iterator_to_array(new LimitIterator($item, $start, $length === null ? -1 : $length), $preserveKeys);
             } catch (OutOfBoundsException $exception) {
-                return array();
+                return [];
             }
         }
 
@@ -892,7 +892,7 @@ function twig_get_array_keys_filter($array)
     }
 
     if (!is_array($array)) {
-        return array();
+        return [];
     }
 
     return array_keys($array);
@@ -1138,7 +1138,7 @@ function twig_escape_filter_is_safe(Twig_Node $filterArgs)
             return array($arg->getAttribute('value'));
         }
 
-        return array();
+        return [];
     }
 
     return array('html');
@@ -1385,7 +1385,7 @@ function twig_ensure_traversable($seq)
         return $seq;
     }
 
-    return array();
+    return [];
 }
 
 /**
@@ -1408,7 +1408,7 @@ function twig_test_empty($value)
         return 0 == count($value);
     }
 
-    return '' === $value || false === $value || null === $value || array() === $value;
+    return '' === $value || false === $value || null === $value || [] === $value;
 }
 
 /**
@@ -1443,7 +1443,7 @@ function twig_test_iterable($value)
  *
  * @return string The rendered template
  */
-function twig_include(Twig_Environment $env, $context, $template, $variables = array(), $withContext = true, $ignoreMissing = false, $sandboxed = false)
+function twig_include(Twig_Environment $env, $context, $template, $variables = [], $withContext = true, $ignoreMissing = false, $sandboxed = false)
 {
     $alreadySandboxed = false;
     $sandbox = null;

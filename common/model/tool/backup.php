@@ -33,7 +33,7 @@ class ModelToolBackup extends Model {
 		if ($query->num_rows) {
 			return $query->rows;
 		} else {
-			return array();
+			return [];
 		}
 	}
 

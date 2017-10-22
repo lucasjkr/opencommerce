@@ -74,7 +74,7 @@ class ModelLocalisationGeoZoneAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getGeoZones($data = array()) {
+	public function getGeoZones($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_geo_zone";
 

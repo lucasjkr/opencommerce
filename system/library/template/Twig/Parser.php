@@ -93,7 +93,7 @@ class Twig_Parser implements Twig_ParserInterface
         $this->macros = [];
         $this->traits = [];
         $this->blockStack = [];
-        $this->importedSymbols = array(array());
+        $this->importedSymbols = array([]);
         $this->embeddedTemplates = [];
 
         try {
@@ -163,7 +163,7 @@ class Twig_Parser implements Twig_ParserInterface
                             return $rv[0];
                         }
 
-                        return new Twig_Node($rv, array(), $lineno);
+                        return new Twig_Node($rv, [], $lineno);
                     }
 
                     $subparser = $this->handlers->getTokenParser($token->getValue());
@@ -199,7 +199,7 @@ class Twig_Parser implements Twig_ParserInterface
             return $rv[0];
         }
 
-        return new Twig_Node($rv, array(), $lineno);
+        return new Twig_Node($rv, [], $lineno);
     }
 
     public function addHandler($name, $class)
@@ -244,7 +244,7 @@ class Twig_Parser implements Twig_ParserInterface
 
     public function setBlock($name, Twig_Node_Block $value)
     {
-        $this->blocks[$name] = new Twig_Node_Body(array($value), array(), $value->getLine());
+        $this->blocks[$name] = new Twig_Node_Body(array($value), [], $value->getLine());
     }
 
     public function hasMacro($name)
@@ -316,7 +316,7 @@ class Twig_Parser implements Twig_ParserInterface
 
     public function pushLocalScope()
     {
-        array_unshift($this->importedSymbols, array());
+        array_unshift($this->importedSymbols, []);
     }
 
     public function popLocalScope()

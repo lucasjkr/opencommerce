@@ -27,7 +27,7 @@ class Twig_NodeTraverser
      * @param Twig_Environment            $env      A Twig_Environment instance
      * @param Twig_NodeVisitorInterface[] $visitors An array of Twig_NodeVisitorInterface instances
      */
-    public function __construct(Twig_Environment $env, array $visitors = array())
+    public function __construct(Twig_Environment $env, array $visitors = [])
     {
         $this->env = $env;
         foreach ($visitors as $visitor) {

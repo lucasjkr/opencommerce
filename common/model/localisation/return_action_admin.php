@@ -63,7 +63,7 @@ class ModelLocalisationReturnActionAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getReturnActions($data = array()) {
+	public function getReturnActions($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_return_action WHERE language_id = :language_id ORDER BY name";
             $args[':language_id'] = $this->config->get('config_language_id');

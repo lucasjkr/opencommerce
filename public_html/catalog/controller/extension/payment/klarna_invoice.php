@@ -332,11 +332,11 @@ class ControllerExtensionPaymentKlarnaInvoice extends Controller {
 					$goods_list,
 					$order_info['comment'],
 					array('delay_adjust' => 1),
-					array(),
-					array(),
-					array(),
-					array(),
-					array()
+					[],
+					[],
+					[],
+					[],
+					[]
 				);
 
 				$xml  = '<methodCall>';

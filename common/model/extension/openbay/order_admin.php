@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionOpenBayOrderAdmin extends Model {
-	public function getTotalOrders($data = array()) {
+	public function getTotalOrders($data = []) {
 		$sql = "SELECT COUNT(*) AS `total` FROM `oc_order` AS o";
 
 		if ($this->config->get('ebay_status')) {
@@ -54,7 +54,7 @@ class ModelExtensionOpenBayOrderAdmin extends Model {
 		return $query->row['total'];
 	}
 
-	public function getOrders($data = array()) {
+	public function getOrders($data = []) {
 		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM oc_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS status, o.currency_code, o.currency_value, o.date_added, IF(eto.order_id IS NULL, IF(ao.order_id IS NULL, IF(auso.order_id IS NULL, IF(eo.order_id IS NULL, 'web', 'ebay'), 'amazonus'), 'amazon'), 'etsy') AS channel FROM `oc_order` o";
 
 		if ($this->config->get('ebay_status')) {

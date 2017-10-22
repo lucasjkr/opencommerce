@@ -1118,7 +1118,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 		return !$this->error;
 	}
 
-	private function initialise($access_token = '', $credentials = array()) {
+	private function initialise($access_token = '', $credentials = []) {
 		$this->load->model('extension/payment/pp_braintree');
 
 		if ($access_token != '') {

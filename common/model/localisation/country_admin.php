@@ -49,7 +49,7 @@ class ModelLocalisationCountryAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getCountries($data = array()) {
+	public function getCountries($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_country";
 

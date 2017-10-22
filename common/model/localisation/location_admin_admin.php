@@ -47,7 +47,7 @@ class ModelLocalisationLocationAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getLocations($data = array()) {
+	public function getLocations($data = []) {
 		$sql = "SELECT location_id, name, address FROM oc_location";
 
 		$sort_data = array(

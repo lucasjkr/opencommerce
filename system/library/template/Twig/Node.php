@@ -33,7 +33,7 @@ class Twig_Node implements Twig_NodeInterface
      * @param int    $lineno     The line number
      * @param string $tag        The tag name associated with the Node
      */
-    public function __construct(array $nodes = array(), array $attributes = array(), $lineno = 0, $tag = null)
+    public function __construct(array $nodes = [], array $attributes = [], $lineno = 0, $tag = null)
     {
         $this->nodes = $nodes;
         $this->attributes = $attributes;

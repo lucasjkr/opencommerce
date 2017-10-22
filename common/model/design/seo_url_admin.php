@@ -37,11 +37,11 @@ class ModelDesignSeoUrlAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getSeoUrls($data = array()) {
+	public function getSeoUrls($data = []) {
 	    $args = [];
-		$sql = "SELECT *, (SELECT `name` FROM `oc_store` s WHERE s.store_id = su.store_id) AS store, (SELECT `name` FROM `oc_language` l WHERE l.language_id = su.language_id) AS language FROM `oc_seo_url` su";
-
 		$implode = [];
+
+		$sql = "SELECT *, (SELECT `name` FROM `oc_store` s WHERE s.store_id = su.store_id) AS store, (SELECT `name` FROM `oc_language` l WHERE l.language_id = su.language_id) AS language FROM `oc_seo_url` su";
 
 		if (!empty($data['filter_query'])) {
 			$implode[] = "`query` LIKE :query";
@@ -67,12 +67,12 @@ class ModelDesignSeoUrlAdmin extends Model {
 			$sql .= " WHERE " . implode(" AND ", $implode);
 		}	
 		
-		$sort_data = array(
+		$sort_data = [
 			'query',
 			'keyword',
 			'language_id',
 			'store_id'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -103,7 +103,7 @@ class ModelDesignSeoUrlAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalSeoUrls($data = array()) {
+	public function getTotalSeoUrls($data = []) {
 	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM `oc_seo_url`";
 		

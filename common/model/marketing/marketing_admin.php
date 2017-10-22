@@ -26,7 +26,7 @@ class ModelMarketingMarketingAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getMarketings($data = array()) {
+	public function getMarketings($data = []) {
 		$implode = [];
 
 		$order_statuses = $this->config->get('config_complete_status');
@@ -90,7 +90,7 @@ class ModelMarketingMarketingAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalMarketings($data = array()) {
+	public function getTotalMarketings($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM oc_marketing";
 
 		$implode = [];

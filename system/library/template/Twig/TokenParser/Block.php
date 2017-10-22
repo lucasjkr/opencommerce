@@ -30,7 +30,7 @@ class Twig_TokenParser_Block extends Twig_TokenParser
         if ($this->parser->hasBlock($name)) {
             throw new Twig_Error_Syntax(sprintf("The block '%s' has already been defined line %d.", $name, $this->parser->getBlock($name)->getLine()), $stream->getCurrent()->getLine(), $stream->getFilename());
         }
-        $this->parser->setBlock($name, $block = new Twig_Node_Block($name, new Twig_Node(array()), $lineno));
+        $this->parser->setBlock($name, $block = new Twig_Node_Block($name, new Twig_Node([]), $lineno));
         $this->parser->pushLocalScope();
         $this->parser->pushBlockStack($name);
 

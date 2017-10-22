@@ -27,7 +27,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function getExtensions()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -35,7 +35,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function getTwigFilters()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function getTwigFunctions()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -51,7 +51,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
      */
     protected function getTwigTests()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -108,7 +108,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
 
         if ($legacyTests && empty($tests)) {
             // add a dummy test to avoid a PHPUnit message
-            return array(array('not', '-', '', array(), '', array()));
+            return array(array('not', '-', '', [], '', []));
         }
 
         return $tests;
@@ -134,7 +134,7 @@ abstract class Twig_Test_IntegrationTestCase extends PHPUnit_Framework_TestCase
             $config = array_merge(array(
                 'cache' => false,
                 'strict_variables' => true,
-            ), $match[2] ? eval($match[2].';') : array());
+            ), $match[2] ? eval($match[2].';') : []);
             $twig = new Twig_Environment($loader, $config);
             $twig->addGlobal('global', 'global');
             foreach ($this->getExtensions() as $extension) {

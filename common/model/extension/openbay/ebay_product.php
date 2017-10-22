@@ -175,7 +175,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 			$this->openbay->ebay->log('Categories set not to be created');
 		}
 
-		$current = $this->openbay->ebay->getLiveListingArray();
+		$current = $this->openbay->ebay->getLiveListing[];
 
 		foreach ($new_data_1 as $item) {
 			if (!in_array($item['ItemID'], $current)) {

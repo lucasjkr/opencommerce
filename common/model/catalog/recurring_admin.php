@@ -113,15 +113,14 @@ class ModelCatalogRecurringAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$recurring_description_data[$result['language_id']] = array('name' => $result['name']);
+			$recurring_description_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $recurring_description_data;
 	}
 
-	public function getRecurrings($data = array()) {
+	public function getRecurrings($data = []) {
 		$sql = "SELECT * FROM `oc_recurring` r LEFT JOIN oc_recurring_description rd ON (r.recurring_id = rd.recurring_id) WHERE rd.language_id = :language_id";
-
         $args[':language_id'] = $this->config->get('config_language_id');
 
 		if (!empty($data['filter_name'])) {
@@ -129,10 +128,10 @@ class ModelCatalogRecurringAdmin extends Model {
             $args[':name'] =  $data['filter_name'] . '%';
 		}
 
-		$sort_data = array(
+		$sort_data = [
 			'rd.name',
 			'r.sort_order'
-		);
+        ];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];

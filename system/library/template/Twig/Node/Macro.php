@@ -91,7 +91,7 @@ class Twig_Node_Macro extends Twig_Node
                 ->repr($count)
                 ->raw(' ? array_slice(func_get_args(), ')
                 ->repr($count)
-                ->raw(") : array(),\n")
+                ->raw(") : [],\n")
             ;
         }
 

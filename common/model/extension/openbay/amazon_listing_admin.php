@@ -193,7 +193,7 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 					'sku' => $product['sku'],
 					'quantity' => $product['quantity'],
 					'price' => number_format($price, 2, '.', ''),
-					'sale' => array(),
+					'sale' => [],
 					'condition' => (isset($data['condition']) ? $data['condition'] : ''),
 					'condition_note' => (isset($data['condition_note']) ? $data['condition_note'] : ''),
 					'start_selling' => (isset($data['start_selling']) ? $data['start_selling'] : ''),

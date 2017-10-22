@@ -680,7 +680,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			die();
 		}
 
-		$response = $this->openbay->etsy->call('v1/etsy/product/listing/' . (int)$data['etsy_item_id'] . '/delete/', 'POST', array());
+		$response = $this->openbay->etsy->call('v1/etsy/product/listing/' . (int)$data['etsy_item_id'] . '/delete/', 'POST', []);
 
 		if (isset($response['data']['error'])) {
 			echo json_encode(array('error' => $this->language->get('error_etsy') . $response['data']['error']));
@@ -707,7 +707,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			die();
 		}
 
-		$response = $this->openbay->etsy->call('v1/etsy/product/listing/' . (int)$data['etsy_item_id'] . '/inactive/', 'POST', array());
+		$response = $this->openbay->etsy->call('v1/etsy/product/listing/' . (int)$data['etsy_item_id'] . '/inactive/', 'POST', []);
 
 		if (isset($response['data']['error'])) {
 			echo json_encode(array('error' => $this->language->get('error_etsy') . $response['data']['error']));
@@ -736,7 +736,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			die();
 		}
 
-		$response = $this->openbay->etsy->call('v1/etsy/product/listing/' . (int)$data['etsy_item_id'] . '/active/', 'POST', array());
+		$response = $this->openbay->etsy->call('v1/etsy/product/listing/' . (int)$data['etsy_item_id'] . '/active/', 'POST', []);
 
 		if (isset($response['data']['error'])) {
 			echo json_encode(array('error' => $this->language->get('error_etsy') . $response['data']['error']));

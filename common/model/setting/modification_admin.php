@@ -26,7 +26,7 @@ class ModelSettingModificationAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getModifications($data = array()) {
+	public function getModifications($data = []) {
 		$sql = "SELECT * FROM `oc_modification`";
 
 		$sort_data = array(

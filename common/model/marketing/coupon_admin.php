@@ -59,7 +59,7 @@ class ModelMarketingCouponAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getCoupons($data = array()) {
+	public function getCoupons($data = []) {
 		$sql = "SELECT coupon_id, name, code, discount, date_start, date_end, status FROM oc_coupon";
 
 		$sort_data = array(

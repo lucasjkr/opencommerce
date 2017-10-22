@@ -123,7 +123,7 @@ class ControllerExtensionOpenbayAmazonus extends Controller {
 				'tax' => $tax_total / (int)$item->Ordered,
 				'reward' => '0',
 				'option' => $this->model_extension_openbay_amazonus_order->getProductOptionsByVar($product_var),
-				'download' => array(),
+				'download' => [],
 			);
 
 			$product_mapping[(string)$item->Sku] = (string)$item->OrderItemId;
@@ -240,7 +240,7 @@ class ControllerExtensionOpenbayAmazonus extends Controller {
 			'user_agent' => 'OpenBay Pro for Amazon US',
 			'accept_language' => '',
 			'products' => $products,
-			'vouchers' => array(),
+			'vouchers' => [],
             'marketing_id' => 0,
             'tracking' => 0,
 			'totals' => array(

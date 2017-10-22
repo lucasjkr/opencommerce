@@ -50,7 +50,7 @@ class ModelCatalogReviewAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getReviews($data = array()) {
+	public function getReviews($data = []) {
 		$sql = "SELECT r.review_id, pd.name, r.author, r.rating, r.status, r.date_added FROM `oc_review` r LEFT JOIN `oc_product_description` pd ON (r.product_id = pd.product_id) WHERE pd.language_id = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');
@@ -75,13 +75,13 @@ class ModelCatalogReviewAdmin extends Model {
             $args[':date_added'] = $data['filter_date_added'];
 		}
 
-		$sort_data = array(
+		$sort_data = [
 			'pd.name',
 			'r.author',
 			'r.rating',
 			'r.status',
 			'r.date_added'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -112,7 +112,7 @@ class ModelCatalogReviewAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalReviews($data = array()) {
+	public function getTotalReviews($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_review` r LEFT JOIN `oc_product_description` pd ON (r.product_id = pd.product_id) WHERE pd.language_id = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');

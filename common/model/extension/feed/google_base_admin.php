@@ -47,7 +47,7 @@ class ModelExtensionFeedGoogleBaseAdmin extends Model {
         }
     }
 
-    public function getGoogleBaseCategories($data = array()) {
+    public function getGoogleBaseCategories($data = []) {
         $sql = "SELECT * FROM `oc_google_base_category` WHERE name LIKE :filter_name ORDER BY name ASC";
         $args[':filter_name'] = '%' . $data['filter_name'] . '%';
 
@@ -88,7 +88,7 @@ class ModelExtensionFeedGoogleBaseAdmin extends Model {
             ]);
 	}
 
-    public function getCategories($data = array()) {
+    public function getCategories($data = []) {
         $sql = "SELECT google_base_category_id, (SELECT name FROM `oc_google_base_category` gbc WHERE gbc.google_base_category_id = gbc2c.google_base_category_id) AS google_base_category, category_id, (SELECT name FROM `oc_category_description` cd WHERE cd.category_id = gbc2c.category_id AND cd.language_id = :language_id) AS category FROM `oc_google_base_category_to_category` gbc2c ORDER BY google_base_category ASC";
         $args[':language_id'] = $this->config->get('config_language_id');
 

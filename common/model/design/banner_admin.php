@@ -78,13 +78,13 @@ class ModelDesignBannerAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getBanners($data = array()) {
+	public function getBanners($data = []) {
 		$sql = "SELECT * FROM oc_banner";
 
-		$sort_data = array(
+		$sort_data = [
 			'name',
 			'status'
-		);
+        ];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -124,12 +124,12 @@ class ModelDesignBannerAdmin extends Model {
             ]);
 
 		foreach ($banner_image_query->rows as $banner_image) {
-			$banner_image_data[$banner_image['language_id']][] = array(
+			$banner_image_data[$banner_image['language_id']][] = [
 				'title'      => $banner_image['title'],
 				'link'       => $banner_image['link'],
 				'image'      => $banner_image['image'],
 				'sort_order' => $banner_image['sort_order']
-			);
+			];
 		}
 
 		return $banner_image_data;

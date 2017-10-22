@@ -83,14 +83,14 @@ class ModelCustomerCustomerGroupAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getCustomerGroups($data = array()) {
+	public function getCustomerGroups($data = []) {
 		$sql = "SELECT * FROM oc_customer_group cg LEFT JOIN oc_customer_group_description cgd ON (cg.customer_group_id = cgd.customer_group_id) WHERE cgd.language_id = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');
-		$sort_data = array(
+		$sort_data = [
 			'cgd.name',
 			'cg.sort_order'
-		);
+        ];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -130,10 +130,10 @@ class ModelCustomerCustomerGroupAdmin extends Model {
         ]);
 
 		foreach ($query->rows as $result) {
-			$customer_group_data[$result['language_id']] = array(
+			$customer_group_data[$result['language_id']] = [
 				'name'        => $result['name'],
 				'description' => $result['description']
-			);
+            ];
 		}
 
 		return $customer_group_data;

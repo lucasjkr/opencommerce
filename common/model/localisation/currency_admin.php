@@ -66,7 +66,7 @@ class ModelLocalisationCurrencyAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getCurrencies($data = array()) {
+	public function getCurrencies($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_currency";
 

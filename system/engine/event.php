@@ -56,7 +56,7 @@ class Event {
 	 * @param	string	$event
 	 * @param	array	$args
  	*/		
-	public function trigger($event, array $args = array()) {
+	public function trigger($event, array $args = []) {
 		foreach ($this->data as $value) {
 			if (preg_match('/^' . str_replace(array('\*', '\?'), array('.*', '.'), preg_quote($value['trigger'], '/')) . '/', $event)) {
 				$result = $value['action']->execute($this->registry, $args);

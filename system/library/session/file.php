@@ -19,7 +19,7 @@ class File {
 
 			return unserialize($data);
 		} else {
-			return array();
+			return [];
 		}
 	}
 

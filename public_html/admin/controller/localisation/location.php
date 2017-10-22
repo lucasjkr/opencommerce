@@ -143,7 +143,7 @@ class ControllerLocalisationLocation extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['breadcrumbs'] =   array();
+		$data['breadcrumbs'] =   [];
 
 		$data['breadcrumbs'][] =   array(
 			'text' =>  $this->language->get('text_home'),

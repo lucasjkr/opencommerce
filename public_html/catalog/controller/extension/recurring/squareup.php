@@ -75,9 +75,9 @@ class ControllerExtensionRecurringSquareup extends Controller {
         $this->load->library('squareup');
 
         $result = array(
-            'transaction_success' => array(),
-            'transaction_error' => array(),
-            'transaction_fail' => array(),
+            'transaction_success' => [],
+            'transaction_error' => [],
+            'transaction_fail' => [],
             'token_update_error' => ''
         );
 

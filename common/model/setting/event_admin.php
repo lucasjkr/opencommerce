@@ -35,7 +35,7 @@ class ModelSettingEventAdmin extends Model {
 		return $query->row;
 	}
 		
-	public function getEvents($data = array()) {
+	public function getEvents($data = []) {
 		$sql = "SELECT * FROM `oc_event`";
 
 		$sort_data = array(

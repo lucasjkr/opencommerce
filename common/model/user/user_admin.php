@@ -71,7 +71,7 @@ class ModelUserUserAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getUsers($data = array()) {
+	public function getUsers($data = []) {
 		$sql = "SELECT * FROM `oc_user`";
 
 		$sort_data = array(

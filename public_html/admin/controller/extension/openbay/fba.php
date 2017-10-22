@@ -247,7 +247,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             $this->openbay->fba->setEncryptionKey($this->request->post['openbay_fba_encryption_key']);
             $this->openbay->fba->setEncryptionIv($this->request->post['openbay_fba_encryption_iv']);
 
-            $response = $this->openbay->fba->call("v1/fba/status/", array(), 'GET');
+            $response = $this->openbay->fba->call("v1/fba/status/", [], 'GET');
         } else {
             $response = array(
                 "result" => null,
@@ -308,7 +308,7 @@ class ControllerExtensionOpenbayFba extends Controller {
             'text' => $data['heading_title'],
         );
 
-        $response = $this->openbay->fba->call("v1/fba/fulfillments/" . $this->request->get['fulfillment_id'] . "/", array());
+        $response = $this->openbay->fba->call("v1/fba/fulfillments/" . $this->request->get['fulfillment_id'] . "/", []);
         $data['response'] = $response['body'];
 
         if ($response['error'] == true || $response['response_http'] != 200) {
@@ -379,7 +379,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
         $data['fulfillments'] = [];
 
-        $response = $this->openbay->fba->call("v1/fba/fulfillments/".$request_url, array(), 'GET');
+        $response = $this->openbay->fba->call("v1/fba/fulfillments/".$request_url, [], 'GET');
 
         if (isset($response['body']) && is_array($response['body'])) {
             foreach ($response['body'] as $fulfillment_order) {
@@ -436,7 +436,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
             $fba_fulfillment_id = $this->openbay->fba->createFBAFulfillmentID($order_id, 1);
 
-            $response = $this->openbay->fba->call("v1/fba/fulfillments/" . $this->config->get('openbay_fba_order_prefix') . $order_id . '-' . $fba_order_fulfillment_id . "/ship/", array(), 'GET');
+            $response = $this->openbay->fba->call("v1/fba/fulfillments/" . $this->config->get('openbay_fba_order_prefix') . $order_id . '-' . $fba_order_fulfillment_id . "/ship/", [], 'GET');
 
 
 
@@ -448,7 +448,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
                 //$this->openbay->fba->updateFBAOrderStatus($order_id, 1);
             } else {
-                $this->openbay->fba->populateFBAFulfillment(json_encode(array()), json_encode($response), $response['response_http'], $fba_fulfillment_id);
+                $this->openbay->fba->populateFBAFulfillment(json_encode([]), json_encode($response), $response['response_http'], $fba_fulfillment_id);
 
                 $this->openbay->fba->updateFBAOrderStatus($order_id, 3);
 
@@ -480,7 +480,7 @@ class ControllerExtensionOpenbayFba extends Controller {
 
             $fba_fulfillment_id = $this->openbay->fba->createFBAFulfillmentID($order_id, 2);
 
-            $response = $this->openbay->fba->call("v1/fba/fulfillments/" . $this->config->get('openbay_fba_order_prefix') . $order_id . '-' . $fba_order_fulfillment_id . "/cancel/", array(), 'POST');
+            $response = $this->openbay->fba->call("v1/fba/fulfillments/" . $this->config->get('openbay_fba_order_prefix') . $order_id . '-' . $fba_order_fulfillment_id . "/cancel/", [], 'POST');
 
             if (!isset($response['response_http']) || $response['response_http'] != 200) {
                 /**
@@ -488,7 +488,7 @@ class ControllerExtensionOpenbayFba extends Controller {
                  */
                 $errors[] = $this->language->get('error_amazon_request');
             } else {
-                $this->openbay->fba->populateFBAFulfillment(json_encode(array()), json_encode($response), $response['response_http'], $fba_fulfillment_id);
+                $this->openbay->fba->populateFBAFulfillment(json_encode([]), json_encode($response), $response['response_http'], $fba_fulfillment_id);
 
                 $this->openbay->fba->updateFBAOrderStatus($order_id, 4);
 

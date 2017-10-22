@@ -66,7 +66,7 @@ class ControllerExtensionPaymentPPStandard extends Controller {
 					'model'    => '',
 					'price'    => $total,
 					'quantity' => 1,
-					'option'   => array(),
+					'option'   => [],
 					'weight'   => 0
 				);
 			} else {

@@ -159,7 +159,7 @@ class ModelExtensionOpenBayAmazonusAdmin extends Model {
 
 		$var = isset($data_array['optionVar']) ? $data_array['optionVar'] : '';
 
-		$marketplaces = isset($data_array['marketplace_ids']) ? serialize($data_array['marketplace_ids']) : serialize(array());
+		$marketplaces = isset($data_array['marketplace_ids']) ? serialize($data_array['marketplace_ids']) : serialize([]);
 
 		$data_encoded = json_encode(array('fields' => $data_array['fields']));
 
@@ -544,7 +544,7 @@ class ModelExtensionOpenBayAmazonusAdmin extends Model {
 		return $result;
 	}
 
-	public function getProductSearchTotal($data = array()) {
+	public function getProductSearchTotal($data = []) {
 		$sql = "
 			SELECT COUNT(*) AS product_total
 			FROM oc_product p
@@ -560,7 +560,7 @@ class ModelExtensionOpenBayAmazonusAdmin extends Model {
 		return $this->db->query($sql)->row['product_total'];
 	}
 
-	public function getProductSearch($data = array()) {
+	public function getProductSearch($data = []) {
 		$sql = "
 			SELECT p.product_id, aps.status, aps.data, aps.matches
 			FROM oc_product p

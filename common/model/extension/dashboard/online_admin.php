@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionDashboardOnlineAdmin extends Model {
-	public function getTotalOnline($data = array()) {
+	public function getTotalOnline($data = []) {
 	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_online` co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";
 

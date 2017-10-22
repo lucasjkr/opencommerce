@@ -21,7 +21,7 @@ class ModelSaleReturnAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getReturns($data = array()) {
+	public function getReturns($data = []) {
 		$sql = "SELECT *, CONCAT(r.firstname, ' ', r.lastname) AS customer, (SELECT rs.name FROM oc_return_status rs WHERE rs.return_status_id = r.return_status_id AND rs.language_id = '" . (int)$this->config->get('config_language_id') . "') AS return_status FROM `oc_return` r";
 
 		$implode = [];
@@ -102,7 +102,7 @@ class ModelSaleReturnAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalReturns($data = array()) {
+	public function getTotalReturns($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_return`r";
 
 		$implode = [];

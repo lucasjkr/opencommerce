@@ -1,6 +1,6 @@
 <?php
 class ModelReportOnlineAdmin extends Model {
-	public function getOnline($data = array()) {
+	public function getOnline($data = []) {
 		$sql = "SELECT co.ip, co.customer_id, co.url, co.referer, co.date_added FROM oc_customer_online co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";
 
 		$implode = [];
@@ -39,7 +39,7 @@ class ModelReportOnlineAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalOnline($data = array()) {
+	public function getTotalOnline($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_online` co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";
 
 		$implode = [];
