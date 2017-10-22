@@ -60,8 +60,10 @@ class ModelExtensionPaymentDividoAdmin extends Model {
 				`product_id` INT(11) NOT NULL,
 				`display` CHAR(7) NOT NULL,
 				`plans` text,
+				`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY (`product_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_divido_lookup` (
@@ -70,8 +72,10 @@ class ModelExtensionPaymentDividoAdmin extends Model {
 				`proposal_id` CHAR(40),
 				`application_id` CHAR(40),
 				`deposit_amount` NUMERIC(6,2),
+				`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`order_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

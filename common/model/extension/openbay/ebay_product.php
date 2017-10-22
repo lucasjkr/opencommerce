@@ -11,7 +11,16 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 		//check for ebay import img table
 		$res = $this->db->query("SHOW TABLES LIKE 'oc_ebay_image_import'");
 		if ($res->num_rows == 0) {
-			$this->db->query("CREATE TABLE IF NOT EXISTS `oc_ebay_image_import` (`id` int(11) NOT NULL AUTO_INCREMENT, `image_original` text NOT NULL, `image_new` text NOT NULL, `name` text NOT NULL, `product_id` int(11) NOT NULL, `imgcount` int(11) NOT NULL, PRIMARY KEY (`id`)) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+			$this->db->query("
+              CREATE TABLE IF NOT EXISTS `oc_ebay_image_import` (
+                `id` int(11) NOT NULL AUTO_INCREMENT, 
+                `image_original` text NOT NULL, 
+                `image_new` text NOT NULL, 
+                `name` text NOT NULL, 
+                `product_id` int(11) NOT NULL, 
+                `imgcount` int(11) NOT NULL, 
+                PRIMARY KEY (`id`)) 
+                ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		}
 
 		if ($this->openbay->addonLoad('openstock')) {
@@ -245,9 +254,7 @@ class ModelExtensionOpenBayEbayProduct extends Model {
 						`minimum`               = '1',
 						`status`                = '1',
 						" . $openstock_sql . "
-						`date_available`        = now(),
-						`date_added`            = now(),
-						`date_modified`         = now()
+						`date_available`        = now()
 				");
 
 				$product_id = $this->db->getLastId();

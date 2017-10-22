@@ -281,9 +281,10 @@ class ModelExtensionPaymentLaybuyAdmin extends Model {
 			`transaction` int(11) NOT NULL DEFAULT '2',
 			`paypal_profile_id` varchar(250) NOT NULL DEFAULT '',
 			`laybuy_ref_no` int(11) NOT NULL DEFAULT '0',
-			`date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY (`laybuy_transaction_id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("CREATE TABLE IF NOT EXISTS `oc_laybuy_revise_request` (
 			`laybuy_revise_request_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -313,9 +314,10 @@ class ModelExtensionPaymentLaybuyAdmin extends Model {
 			`paypal_profile_id` varchar(250) NOT NULL DEFAULT '',
 			`laybuy_ref_no` int(11) NOT NULL DEFAULT '0',
 			`payment_type` tinyint(1) NOT NULL DEFAULT '1',
-			`date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY (`laybuy_revise_request_id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->load->model('setting/event');
 
@@ -343,13 +345,13 @@ class ModelExtensionPaymentLaybuyAdmin extends Model {
 	}
 
 	public function updateOrderStatus($order_id, $order_status_id, $comment) {
-		$this->db->query("UPDATE `oc_order` SET `order_status_id` = '" . (int)$order_status_id . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_order` SET `order_status_id` = '" . (int)$order_status_id . "' WHERE `order_id` = '" . (int)$order_id . "'");
 
-		$this->db->query("INSERT INTO `oc_order_history` SET `order_id` = '" . (int)$order_id . "', `order_status_id` = '" . (int)$order_status_id . "', `notify` = '0', `comment` = '" . $this->db->escape($comment) . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_order_history` SET `order_id` = '" . (int)$order_id . "', `order_status_id` = '" . (int)$order_status_id . "', `notify` = '0', `comment` = '" . $this->db->escape($comment) . "'");
 	}
 
 	public function updateRevisedTransaction($id, $data = array()) {
-		$this->db->query("UPDATE `oc_laybuy_revise_request` SET `laybuy_transaction_id` = '" . (int)$data['transaction_id'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', `order_id` = '" . (int)$data['order_id'] . "', `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `address` = '" . $this->db->escape((string)$data['address']) . "', `suburb` = '" . $this->db->escape((string)$data['suburb']) . "', `state` = '" . $this->db->escape((string)$data['state']) . "', `country` = '" . $this->db->escape((string)$data['country']) . "', `postcode` = '" . $this->db->escape((string)$data['postcode']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `amount` = '" . (float)$data['amount'] . "', `currency` = '" . $this->db->escape((string)$data['currency']) . "', `downpayment` = '" . $this->db->escape((string)$data['downpayment']) . "', `months` = '" . (int)$data['months'] . "', `downpayment_amount` = '" . (float)$data['downpayment_amount'] . "', `payment_amounts` = '" . (float)$data['payment_amounts'] . "', `first_payment_due` = '" . $this->db->escape((string)$data['first_payment_due']) . "', `last_payment_due` = '" . $this->db->escape((string)$data['last_payment_due']) . "', `store_id` = '" . (int)$data['store_id'] . "', `status` = '" . (int)$data['status'] . "', `report` = '" . $this->db->escape((string)$data['report']) . "', `transaction` = '" . (int)$data['transaction'] . "', `paypal_profile_id` = '" . $this->db->escape((string)$data['paypal_profile_id']) . "', `laybuy_ref_no` = '" . (int)$data['laybuy_ref_no'] . "', `payment_type` = '" . (int)$data['payment_type'] . "', `date_added` = NOW() WHERE `laybuy_revise_request_id` = '" . (int)$id . "'");
+		$this->db->query("UPDATE `oc_laybuy_revise_request` SET `laybuy_transaction_id` = '" . (int)$data['transaction_id'] . "', `type` = '" . $this->db->escape((string)$data['type']) . "', `order_id` = '" . (int)$data['order_id'] . "', `firstname` = '" . $this->db->escape((string)$data['firstname']) . "', `lastname` = '" . $this->db->escape((string)$data['lastname']) . "', `address` = '" . $this->db->escape((string)$data['address']) . "', `suburb` = '" . $this->db->escape((string)$data['suburb']) . "', `state` = '" . $this->db->escape((string)$data['state']) . "', `country` = '" . $this->db->escape((string)$data['country']) . "', `postcode` = '" . $this->db->escape((string)$data['postcode']) . "', `email` = '" . $this->db->escape((string)$data['email']) . "', `amount` = '" . (float)$data['amount'] . "', `currency` = '" . $this->db->escape((string)$data['currency']) . "', `downpayment` = '" . $this->db->escape((string)$data['downpayment']) . "', `months` = '" . (int)$data['months'] . "', `downpayment_amount` = '" . (float)$data['downpayment_amount'] . "', `payment_amounts` = '" . (float)$data['payment_amounts'] . "', `first_payment_due` = '" . $this->db->escape((string)$data['first_payment_due']) . "', `last_payment_due` = '" . $this->db->escape((string)$data['last_payment_due']) . "', `store_id` = '" . (int)$data['store_id'] . "', `status` = '" . (int)$data['status'] . "', `report` = '" . $this->db->escape((string)$data['report']) . "', `transaction` = '" . (int)$data['transaction'] . "', `paypal_profile_id` = '" . $this->db->escape((string)$data['paypal_profile_id']) . "', `laybuy_ref_no` = '" . (int)$data['laybuy_ref_no'] . "', `payment_type` = '" . (int)$data['payment_type'] . "' WHERE `laybuy_revise_request_id` = '" . (int)$id . "'");
 	}
 
 	public function updateTransaction($id, $status, $report, $transaction) {

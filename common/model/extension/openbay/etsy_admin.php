@@ -21,7 +21,7 @@ class ModelExtensionOpenBayEtsyAdmin extends Model{
 					`last_updated` DATETIME NOT NULL,
 					`data` TEXT NOT NULL,
 					PRIMARY KEY (`etsy_setting_option_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 				CREATE TABLE IF NOT EXISTS `oc_etsy_listing` (
@@ -32,7 +32,7 @@ class ModelExtensionOpenBayEtsyAdmin extends Model{
 				  `created` DATETIME NOT NULL,
 				  PRIMARY KEY (`etsy_listing_id`),
   				  KEY `product_id` (`product_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 				CREATE TABLE IF NOT EXISTS `oc_etsy_order` (
@@ -43,13 +43,13 @@ class ModelExtensionOpenBayEtsyAdmin extends Model{
 				  `shipped` int(1) NOT NULL,
 				  PRIMARY KEY (`etsy_order_id`),
   				  KEY `order_id` (`order_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 				CREATE TABLE IF NOT EXISTS `oc_etsy_order_lock` (
 				  `order_id` int(11) NOT NULL,
 				  PRIMARY KEY (`order_id`)
-				) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;");
+				) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

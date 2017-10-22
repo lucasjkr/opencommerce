@@ -7,9 +7,10 @@ class ModelExtensionPaymentPilibabaAdmin extends Model {
 			`amount` double NOT NULL,
 			`fee` double NOT NULL,
 			`tracking` VARCHAR(50) NOT NULL DEFAULT '',
-			`date_added` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+			`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			PRIMARY KEY (`pilibaba_order_id`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

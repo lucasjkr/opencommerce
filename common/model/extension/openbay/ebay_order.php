@@ -277,7 +277,6 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		   `currency_code`            = '" . $this->db->escape($currency['code']) . "',
 		   `currency_value`           = '" . (double)$currency['value'] . "',
 		   `ip`                       = '',
-		   `date_added`               = '" . $this->db->escape($created_date) . "',
 		   `customer_id`              = 0
 		");
 
@@ -729,7 +728,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 	}
 
 	public function updatePaymentDetails($order_id, $order) {
-		$this->db->query("UPDATE `oc_order` SET `payment_method` = '" . $this->db->escape($order->payment->method) . "', `total` = '" . (double)$order->order->total . "', `date_modified` = NOW() WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_order` SET `payment_method` = '" . $this->db->escape($order->payment->method) . "', `total` = '" . (double)$order->order->total . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function getHistory($order_id) {
@@ -765,7 +764,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$notify = $this->config->get('ebay_update_notify');
 
 		if ($order_info) {
-			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "' WHERE order_id = '" . (int)$order_id . "'");
 
 			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "'");
 
@@ -829,7 +828,7 @@ class ModelExtensionOpenBayEbayOrder extends Model{
 		$notify = $this->config->get('ebay_confirm_notify');
 
 		if ($order_info && !$order_info['order_status_id']) {
-			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "', date_modified = NOW() WHERE order_id = '" . (int)$order_id . "'");
+			$this->db->query("UPDATE `oc_order` SET order_status_id = '" . (int)$order_status_id . "' WHERE order_id = '" . (int)$order_id . "'");
 			$this->db->query("INSERT INTO oc_order_history SET order_id = '" . (int)$order_id . "', order_status_id = '" . (int)$order_status_id . "', notify = '" . (int)$notify . "', comment = '" . $this->db->escape($comment) . "'");
 
 			if (isset($order_info['email']) && !empty($order_info['email']) && $notify == 1){

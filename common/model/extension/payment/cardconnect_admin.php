@@ -11,9 +11,10 @@ class ModelExtensionPaymentCardConnectAdmin extends Model {
 			  `type` VARCHAR(50) NOT NULL DEFAULT '',
 			  `account` VARCHAR(4) NOT NULL DEFAULT '',
 			  `expiry` VARCHAR(4) NOT NULL DEFAULT '',
-			  `date_added` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`cardconnect_card_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_cardconnect_order` (
@@ -25,9 +26,10 @@ class ModelExtensionPaymentCardConnectAdmin extends Model {
 			  `authcode` VARCHAR(6) NOT NULL DEFAULT '',
 			  `currency_code` VARCHAR(3) NOT NULL DEFAULT '',
 			  `total` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
-			  `date_added` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`cardconnect_order_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_cardconnect_order_transaction` (
@@ -37,10 +39,10 @@ class ModelExtensionPaymentCardConnectAdmin extends Model {
 			  `retref` VARCHAR(12) NOT NULL DEFAULT '',
 			  `amount` DECIMAL(10, 2) NOT NULL DEFAULT '0.00',
 			  `status` VARCHAR(255) NOT NULL DEFAULT '',
-			  `date_modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
-			  `date_added` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00',
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`cardconnect_order_transaction_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {
@@ -311,11 +313,11 @@ class ModelExtensionPaymentCardConnectAdmin extends Model {
 	}
 
 	public function updateTransactionStatusByRetref($retref, $status) {
-		$this->db->query("UPDATE `oc_cardconnect_order_transaction` SET `status` = '" . $this->db->escape($status) . "', `date_modified` = NOW() WHERE `retref` = '" . $this->db->escape($retref) . "'");
+		$this->db->query("UPDATE `oc_cardconnect_order_transaction` SET `status` = '" . $this->db->escape($status) . "' WHERE `retref` = '" . $this->db->escape($retref) . "'");
 	}
 
 	public function addTransaction($cardconnect_order_id, $type, $retref, $amount, $status) {
-		$this->db->query("INSERT INTO `oc_cardconnect_order_transaction` SET `cardconnect_order_id` = '" . (int)$cardconnect_order_id . "', `type` = '" . $this->db->escape($type) . "', `retref` = '" . $this->db->escape($retref) . "', `amount` = '" . (float)$amount . "', `status` = '" . $this->db->escape($status) . "', `date_modified` = NOW(), `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_cardconnect_order_transaction` SET `cardconnect_order_id` = '" . (int)$cardconnect_order_id . "', `type` = '" . $this->db->escape($type) . "', `retref` = '" . $this->db->escape($retref) . "', `amount` = '" . (float)$amount . "', `status` = '" . $this->db->escape($status) . "'");
 	}
 
 	public function log($data) {

@@ -3,6 +3,7 @@
 class ModelExtensionPaymentEwayAdmin extends Model {
 
 	public function install() {
+	    // LJK TODO: there are created and modified fields - need to traverse the controllers to kill them off
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_eway_order` (
 			  `eway_order_id` int(11) NOT NULL AUTO_INCREMENT,
@@ -16,8 +17,10 @@ class ModelExtensionPaymentEwayAdmin extends Model {
 			  `capture_status` INT(1) DEFAULT NULL,
 			  `void_status` INT(1) DEFAULT NULL,
 			  `refund_status` INT(1) DEFAULT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`eway_order_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_eway_transactions` (
@@ -27,8 +30,10 @@ class ModelExtensionPaymentEwayAdmin extends Model {
 			  `created` DATETIME NOT NULL,
 			  `type` ENUM('auth', 'payment', 'refund', 'void') DEFAULT NULL,
 			  `amount` DECIMAL( 10, 2 ) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`eway_order_transaction_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_eway_card` (
@@ -39,8 +44,10 @@ class ModelExtensionPaymentEwayAdmin extends Model {
 			  `digits` VARCHAR(4) NOT NULL,
 			  `expiry` VARCHAR(5) NOT NULL,
 			  `type` VARCHAR(50) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`card_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

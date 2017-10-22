@@ -112,7 +112,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	public function setOrderShipping($order_id, $has_free_shipping) {
-		$this->db->query("INSERT INTO `oc_amazon_login_pay_order` SET `order_id` = '" . (int)$order_id . "', `free_shipping` = '" . (int)$has_free_shipping . "',`date_added` = now(), `modified` = now() ");
+		$this->db->query("INSERT INTO `oc_amazon_login_pay_order` SET `order_id` = '" . (int)$order_id . "', `free_shipping` = '" . (int)$has_free_shipping . "', `modified` = now() ");
 		return $this->db->getLastId();
 	}
 
@@ -136,7 +136,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 	}
 
 	public function addTransaction($amazon_login_pay_order_id, $amazon_authorization_id, $amazon_capture_id, $type, $status, $total) {
-		$this->db->query("INSERT INTO `oc_amazon_login_pay_order_transaction` SET `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `amazon_capture_id` = '" . $this->db->escape($amazon_capture_id) . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `status` = '" . $this->db->escape($status) . "', `amount` = '" . $total . "'");
+		$this->db->query("INSERT INTO `oc_amazon_login_pay_order_transaction` SET `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `amazon_capture_id` = '" . $this->db->escape($amazon_capture_id) . "', `type` = '" . $this->db->escape($type) . "', `status` = '" . $this->db->escape($status) . "', `amount` = '" . $total . "'");
 	}
 
 	public function closeOrderRef($amazon_order_reference_id) {
