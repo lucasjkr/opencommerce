@@ -17,6 +17,7 @@ final class Twig {
 
 		if ($cache) {
 			$config['cache'] = DIR_CACHE;
+            $config['auto_reload'] = true;
 		}
 
 		$this->twig = new \Twig_Environment($loader, $config);
