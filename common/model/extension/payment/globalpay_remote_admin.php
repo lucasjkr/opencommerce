@@ -9,8 +9,6 @@ class ModelExtensionPaymentGlobalpayRemoteAdmin extends Model {
 			  `order_ref_previous` CHAR(50) NOT NULL,
 			  `pasref` VARCHAR(50) NOT NULL,
 			  `pasref_previous` VARCHAR(50) NOT NULL,
-			  `date_added` DATETIME NOT NULL,
-			  `date_modified` DATETIME NOT NULL,
 			  `capture_status` INT(1) DEFAULT NULL,
 			  `void_status` INT(1) DEFAULT NULL,
 			  `settle_type` INT(1) DEFAULT NULL,
@@ -19,8 +17,10 @@ class ModelExtensionPaymentGlobalpayRemoteAdmin extends Model {
 			  `authcode` VARCHAR(30) NOT NULL,
 			  `account` VARCHAR(30) NOT NULL,
 			  `total` DECIMAL( 10, 2 ) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`globalpay_remote_order_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_globalpay_remote_order_transaction` (
@@ -29,8 +29,10 @@ class ModelExtensionPaymentGlobalpayRemoteAdmin extends Model {
 			  `date_added` DATETIME NOT NULL,
 			  `type` ENUM('auth', 'payment', 'rebate', 'void') DEFAULT NULL,
 			  `amount` DECIMAL( 10, 2 ) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`globalpay_remote_order_transaction_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function void($order_id) {
@@ -236,7 +238,7 @@ class ModelExtensionPaymentGlobalpayRemoteAdmin extends Model {
 	}
 
 	public function addTransaction($globalpay_remote_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `oc_globalpay_remote_order_transaction` SET `globalpay_remote_order_id` = '" . (int)$globalpay_remote_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
+		$this->db->query("INSERT INTO `oc_globalpay_remote_order_transaction` SET `globalpay_remote_order_id` = '" . (int)$globalpay_remote_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
 	}
 
 	public function logger($message) {

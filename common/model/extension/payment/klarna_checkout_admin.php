@@ -208,8 +208,10 @@ class ModelExtensionPaymentKlarnaCheckoutAdmin extends Model {
 			  `order_id` INT(11) NOT NULL,
 			  `order_ref` VARCHAR(255) NOT NULL,
 			  `data` text NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`klarna_checkout_order_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

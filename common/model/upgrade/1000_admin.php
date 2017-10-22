@@ -14,7 +14,7 @@ class ModelUpgrade1000Admin extends Model {
 				`country` varchar(2) NOT NULL,
 				`date_added` datetime NOT NULL,
 				PRIMARY KEY (`marketing_report_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		}
 
 		// customer_affiliate_report
@@ -30,7 +30,7 @@ class ModelUpgrade1000Admin extends Model {
 				`country` varchar(2) NOT NULL,
 				`date_added` datetime NOT NULL,
 				PRIMARY KEY (`customer_affiliate_report_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		}
 
 		// download_report
@@ -46,7 +46,7 @@ class ModelUpgrade1000Admin extends Model {
 				`country` varchar(2) NOT NULL,
 				`date_added` datetime NOT NULL,
 				PRIMARY KEY (`download_report_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		}
 
 		// customer_ip

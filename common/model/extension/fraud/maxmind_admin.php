@@ -57,7 +57,7 @@ class ModelExtensionFraudMaxMindAdmin extends Model {
 			  `error` text NOT NULL,
 			  `date_added` datetime NOT NULL,
 			  PRIMARY KEY (`order_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");		
 	}
 

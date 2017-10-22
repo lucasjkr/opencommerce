@@ -8,9 +8,11 @@ class ModelExtensionPaymentPPPayflowIFrameAdmin extends Model {
 				`transaction_reference` varchar(255) DEFAULT NULL,
 				`transaction_type` varchar(1) DEFAULT NULL,
 				`complete` tinyint(4) NOT NULL DEFAULT '0',
+				`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY(`order_id`),
 				KEY `secure_token_id` (`secure_token_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE `oc_paypal_payflow_iframe_order_transaction` (
@@ -19,9 +21,11 @@ class ModelExtensionPaymentPPPayflowIFrameAdmin extends Model {
 				`transaction_type` char(1) NOT NULL,
 				`time` datetime NOT NULL,
 				`amount` decimal(10,4) DEFAULT NULL,
+				`date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 				PRIMARY KEY (`transaction_reference`),
 				KEY `order_id` (`order_id`)
-			) ENGINE=MyISAM DEFAULT CHARSET=utf8;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

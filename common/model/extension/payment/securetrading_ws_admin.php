@@ -15,8 +15,10 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 			  `rebate_status` INT(1) DEFAULT NULL,
 			  `currency_code` CHAR(3) NOT NULL,
 			  `total` DECIMAL( 10, 2 ) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`securetrading_ws_order_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_securetrading_ws_order_transaction` (
@@ -25,8 +27,10 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 			  `created` DATETIME NOT NULL,
 			  `type` ENUM('auth', 'payment', 'rebate', 'reversed') DEFAULT NULL,
 			  `amount` DECIMAL( 10, 2 ) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`securetrading_ws_order_transaction_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {

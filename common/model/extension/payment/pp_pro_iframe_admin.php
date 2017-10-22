@@ -5,14 +5,14 @@ class ModelExtensionPaymentPPProIframeAdmin extends Model {
 			CREATE TABLE IF NOT EXISTS `oc_paypal_iframe_order` (
 			  `paypal_iframe_order_id` int(11) NOT NULL AUTO_INCREMENT,
 			  `order_id` int(11) NOT NULL,
-			  `date_added` DATETIME NOT NULL,
-			  `date_modified` DATETIME NOT NULL,
 			  `capture_status` ENUM('Complete','NotComplete') DEFAULT NULL,
 			  `currency_code` CHAR(3) NOT NULL,
 			  `authorization_id` VARCHAR(30) NOT NULL,
 			  `total` DECIMAL( 10, 2 ) NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`paypal_iframe_order_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 
 		$this->db->query("
 			CREATE TABLE IF NOT EXISTS `oc_paypal_iframe_order_transaction` (
@@ -20,7 +20,6 @@ class ModelExtensionPaymentPPProIframeAdmin extends Model {
 			  `paypal_iframe_order_id` int(11) NOT NULL,
 			  `transaction_id` CHAR(20) NOT NULL,
 			  `parent_id` CHAR(20) NOT NULL,
-			  `date_added` DATETIME NOT NULL,
 			  `note` VARCHAR(255) NOT NULL,
 			  `msgsubid` CHAR(38) NOT NULL,
 			  `receipt_id` CHAR(20) NOT NULL,
@@ -31,8 +30,10 @@ class ModelExtensionPaymentPPProIframeAdmin extends Model {
 			  `amount` DECIMAL( 10, 2 ) NOT NULL,
 			  `debug_data` TEXT NOT NULL,
 			  `call_data` TEXT NOT NULL,
+			  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+              `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 			  PRIMARY KEY (`paypal_iframe_order_transaction_id`)
-			) ENGINE=MyISAM DEFAULT COLLATE=utf8_general_ci;");
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 	}
 
 	public function uninstall() {
@@ -137,7 +138,7 @@ class ModelExtensionPaymentPPProIframeAdmin extends Model {
 	}
 
 	public function updateOrder($capture_status, $order_id) {
-		$this->db->query("UPDATE `oc_paypal_iframe_order` SET `date_modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_paypal_iframe_order` SET `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function updateTransaction($transaction) {
@@ -162,7 +163,7 @@ class ModelExtensionPaymentPPProIframeAdmin extends Model {
 	}
 
 	public function addTransaction($transaction_data, $request_data = array()) {
-		$this->db->query("INSERT INTO `oc_paypal_iframe_order_transaction` SET `paypal_iframe_order_id` = '" . (int)$transaction_data['paypal_iframe_order_id'] . "', `transaction_id` = '" . $this->db->escape($transaction_data['transaction_id']) . "', `parent_id` = '" . $this->db->escape($transaction_data['parent_id']) . "', `date_added` = NOW(), `note` = '" . $this->db->escape($transaction_data['note']) . "', `msgsubid` = '" . $this->db->escape($transaction_data['msgsubid']) . "', `receipt_id` = '" . $this->db->escape($transaction_data['receipt_id']) . "', `payment_type` = '" . $this->db->escape($transaction_data['payment_type']) . "', `payment_status` = '" . $this->db->escape($transaction_data['payment_status']) . "', `pending_reason` = '" . $this->db->escape($transaction_data['pending_reason']) . "', `transaction_entity` = '" . $this->db->escape($transaction_data['transaction_entity']) . "', `amount` = '" . (float)$transaction_data['amount'] . "', `debug_data` = '" . $this->db->escape($transaction_data['debug_data']) . "'");
+		$this->db->query("INSERT INTO `oc_paypal_iframe_order_transaction` SET `paypal_iframe_order_id` = '" . (int)$transaction_data['paypal_iframe_order_id'] . "', `transaction_id` = '" . $this->db->escape($transaction_data['transaction_id']) . "', `parent_id` = '" . $this->db->escape($transaction_data['parent_id']) . "', `note` = '" . $this->db->escape($transaction_data['note']) . "', `msgsubid` = '" . $this->db->escape($transaction_data['msgsubid']) . "', `receipt_id` = '" . $this->db->escape($transaction_data['receipt_id']) . "', `payment_type` = '" . $this->db->escape($transaction_data['payment_type']) . "', `payment_status` = '" . $this->db->escape($transaction_data['payment_status']) . "', `pending_reason` = '" . $this->db->escape($transaction_data['pending_reason']) . "', `transaction_entity` = '" . $this->db->escape($transaction_data['transaction_entity']) . "', `amount` = '" . (float)$transaction_data['amount'] . "', `debug_data` = '" . $this->db->escape($transaction_data['debug_data']) . "'");
 
 		$paypal_iframe_order_transaction_id = $this->db->getLastId();
 

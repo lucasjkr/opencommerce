@@ -100,7 +100,7 @@ class ModelExtensionPaymentCardConnect extends Model {
 	}
 
 	public function addCard($cardconnect_order_id, $customer_id, $profileid, $token, $type, $account, $expiry) {
-		$this->db->query("INSERT INTO `oc_cardconnect_card` SET `cardconnect_order_id` = '" . (int)$cardconnect_order_id . "', `customer_id` = '" . (int)$customer_id . "', `profileid` = '" . $this->db->escape($profileid) . "', `token` = '" . $this->db->escape($token) . "', `type` = '" . $this->db->escape($type) . "', `account` = '" . $this->db->escape($account) . "', `expiry` = '" . $this->db->escape($expiry) . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_cardconnect_card` SET `cardconnect_order_id` = '" . (int)$cardconnect_order_id . "', `customer_id` = '" . (int)$customer_id . "', `profileid` = '" . $this->db->escape($profileid) . "', `token` = '" . $this->db->escape($token) . "', `type` = '" . $this->db->escape($type) . "', `account` = '" . $this->db->escape($account) . "', `expiry` = '" . $this->db->escape($expiry) . "'");
 	}
 
 	public function deleteCard($token, $customer_id) {
@@ -108,13 +108,13 @@ class ModelExtensionPaymentCardConnect extends Model {
 	}
 
 	public function addOrder($order_info, $payment_method) {
-		$this->db->query("INSERT INTO `oc_cardconnect_order` SET `order_id` = '" . (int)$order_info['order_id'] . "', `customer_id` = '" . (int)$this->customer->getId() . "', `payment_method` = '" . $this->db->escape($payment_method) . "', `retref` = '" . $this->db->escape($order_info['retref']) . "', `authcode` = '" . $this->db->escape($order_info['authcode']) . "', `currency_code` = '" . $this->db->escape($order_info['currency_code']) . "', `total` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "', `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_cardconnect_order` SET `order_id` = '" . (int)$order_info['order_id'] . "', `customer_id` = '" . (int)$this->customer->getId() . "', `payment_method` = '" . $this->db->escape($payment_method) . "', `retref` = '" . $this->db->escape($order_info['retref']) . "', `authcode` = '" . $this->db->escape($order_info['authcode']) . "', `currency_code` = '" . $this->db->escape($order_info['currency_code']) . "', `total` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
 
 		return $this->db->getLastId();
 	}
 
 	public function addTransaction($cardconnect_order_id, $type, $status, $order_info) {
-		$this->db->query("INSERT INTO `oc_cardconnect_order_transaction` SET `cardconnect_order_id` = '" . (int)$cardconnect_order_id . "', `type` = '" . $this->db->escape($type) . "', `retref` = '" . $this->db->escape($order_info['retref']) . "', `amount` = '" . (float)$this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "', `status` = '" . $this->db->escape($status) . "', `date_modified` = NOW(), `date_added` = NOW()");
+		$this->db->query("INSERT INTO `oc_cardconnect_order_transaction` SET `cardconnect_order_id` = '" . (int)$cardconnect_order_id . "', `type` = '" . $this->db->escape($type) . "', `retref` = '" . $this->db->escape($order_info['retref']) . "', `amount` = '" . (float)$this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "', `status` = '" . $this->db->escape($status) . "'");
 	}
 
 	public function getSettlementStatuses($merchant_id, $date) {
@@ -152,7 +152,7 @@ class ModelExtensionPaymentCardConnect extends Model {
 	}
 
 	public function updateTransactionStatusByRetref($retref, $status) {
-		$this->db->query("UPDATE `oc_cardconnect_order_transaction` SET `status` = '" . $this->db->escape($status) . "', `date_modified` = NOW() WHERE `retref` = '" . $this->db->escape($retref) . "'");
+		$this->db->query("UPDATE `oc_cardconnect_order_transaction` SET `status` = '" . $this->db->escape($status) . "' WHERE `retref` = '" . $this->db->escape($retref) . "'");
 	}
 
 	public function updateCronRunTime() {

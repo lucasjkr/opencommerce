@@ -109,7 +109,7 @@ class ModelExtensionOpenBayAmazonOrder extends Model {
 	}
 
 	public function updateOrderStatus($order_id, $status_id) {
-		$this->db->query("INSERT INTO `oc_order_history` (`order_id`, `order_status_id`, `notify`, `comment`, `date_added`) VALUES (" . (int)$order_id . ", " . (int)$status_id . ", 0, '', NOW())");
+		$this->db->query("INSERT INTO `oc_order_history` (`order_id`, `order_status_id`, `notify`, `comment`) VALUES (" . (int)$order_id . ", " . (int)$status_id . ", 0, '')");
 
 		$this->db->query("UPDATE `oc_order` SET `order_status_id` = " . (int)$status_id . " WHERE `order_id` = " . (int)$order_id);
 	}

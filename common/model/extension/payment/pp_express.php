@@ -36,8 +36,6 @@ class ModelExtensionPaymentPPExpress extends Model {
 
 		$this->db->query("INSERT INTO `oc_paypal_order` SET
 			`order_id` = '" . (int)$order_data['order_id'] . "',
-			`date_added` = NOW(),
-			`date_modified` = NOW(),
 			`capture_status` = '" . $this->db->escape($order_data['capture_status']) . "',
 			`currency_code` = '" . $this->db->escape($order_data['currency_code']) . "',
 			`total` = '" . (float)$order_data['total'] . "',
@@ -55,7 +53,6 @@ class ModelExtensionPaymentPPExpress extends Model {
 			`paypal_order_id` = '" . (int)$transaction_data['paypal_order_id'] . "',
 			`transaction_id` = '" . $this->db->escape($transaction_data['transaction_id']) . "',
 			`parent_id` = '" . $this->db->escape($transaction_data['parent_id']) . "',
-			`date_added` = NOW(),
 			`note` = '" . $this->db->escape($transaction_data['note']) . "',
 			`msgsubid` = '" . $this->db->escape($transaction_data['msgsubid']) . "',
 			`receipt_id` = '" . $this->db->escape($transaction_data['receipt_id']) . "',
@@ -256,7 +253,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 	}
 
 	public function updateOrder($capture_status, $order_id) {
-		$this->db->query("UPDATE `oc_paypal_order` SET `date_modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_paypal_order` SET `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
 	public function call($data) {

@@ -42,7 +42,7 @@ class ModelExtensionPaymentG2APay extends Model {
 	}
 
 	public function addTransaction($g2apay_order_id, $type, $order_info) {
-		$this->db->query("INSERT INTO `oc_g2apay_order_transaction` SET `g2apay_order_id` = '" . (int)$g2apay_order_id . "', `date_added` = now(), `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_g2apay_order_transaction` SET `g2apay_order_id` = '" . (int)$g2apay_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
 	}
 
 	public function getG2aOrder($order_id) {
