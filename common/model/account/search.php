@@ -1,6 +1,18 @@
 <?php
 class ModelAccountSearch extends Model {
 	public function addSearch($data) {
-		$this->db->query("INSERT INTO `oc_customer_search` SET `store_id` = '" . (int)$this->config->get('config_store_id') . "', `language_id` = '" . (int)$this->config->get('config_language_id') . "', `customer_id` = '" . (int)$data['customer_id'] . "', `keyword` = '" . $this->db->escape((string)$data['keyword']) . "', `category_id` = '" . (int)$data['category_id'] . "', `sub_category` = '" . (int)$data['sub_category'] . "', `description` = '" . (int)$data['description'] . "', `products` = '" . (int)$data['products'] . "', `ip` = '" . $this->db->escape((string)$data['ip']) . "'");
+		$this->db->query("INSERT INTO `oc_customer_search` SET `store_id` = :store_id, `language_id` = :language_id, `customer_id` = :customer_id, `keyword` = :keyword, `category_id` = :category_id, `sub_category` = :sub_category, `description` = :description, `products` = :products, `ip` = :ip",
+            [
+                ':store_id' => $this->config->get('config_store_id'),
+                ':language_id' => $this->config->get('config_language_id'),
+                ':customer_id' => $data['customer_id'],
+                ':keyword' => $data['keyword'],
+                ':category_id' => $data['category_id'],
+                ':sub_category' => $data['sub_category'],
+                ':description' => $data['description'],
+                ':products' => $data['products'],
+                ':ip' => $data['ip']
+
+            ]);
 	}
 }
