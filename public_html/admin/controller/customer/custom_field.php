@@ -7,7 +7,7 @@ class ControllerCustomerCustomField extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCustomerCustomField extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_customer_custom_field->addCustomField($this->request->post);
+			$this->model_customer_custom_field_admin->addCustomField($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerCustomerCustomField extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_customer_custom_field->editCustomField($this->request->get['custom_field_id'], $this->request->post);
+			$this->model_customer_custom_field_admin->editCustomField($this->request->get['custom_field_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerCustomerCustomField extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('customer/custom_field');
+		$this->load->model('customer/custom_field_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $custom_field_id) {
-				$this->model_customer_custom_field->deleteCustomField($custom_field_id);
+				$this->model_customer_custom_field_admin->deleteCustomField($custom_field_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerCustomerCustomField extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$custom_field_total = $this->model_customer_custom_field->getTotalCustomFields();
+		$custom_field_total = $this->model_customer_custom_field_admin->getTotalCustomFields();
 
-		$results = $this->model_customer_custom_field->getCustomFields($filter_data);
+		$results = $this->model_customer_custom_field_admin->getCustomFields($filter_data);
 
 		foreach ($results as $result) {
 			$type = '';
@@ -342,19 +342,19 @@ class ControllerCustomerCustomField extends Controller {
 		$data['cancel'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['custom_field_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$custom_field_info = $this->model_customer_custom_field->getCustomField($this->request->get['custom_field_id']);
+			$custom_field_info = $this->model_customer_custom_field_admin->getCustomField($this->request->get['custom_field_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['custom_field_description'])) {
 			$data['custom_field_description'] = $this->request->post['custom_field_description'];
 		} elseif (isset($this->request->get['custom_field_id'])) {
-			$data['custom_field_description'] = $this->model_customer_custom_field->getCustomFieldDescriptions($this->request->get['custom_field_id']);
+			$data['custom_field_description'] = $this->model_customer_custom_field_admin->getCustomFieldDescriptions($this->request->get['custom_field_id']);
 		} else {
 			$data['custom_field_description'] = [];
 		}
@@ -410,7 +410,7 @@ class ControllerCustomerCustomField extends Controller {
 		if (isset($this->request->post['custom_field_value'])) {
 			$custom_field_values = $this->request->post['custom_field_value'];
 		} elseif (isset($this->request->get['custom_field_id'])) {
-			$custom_field_values = $this->model_customer_custom_field->getCustomFieldValueDescriptions($this->request->get['custom_field_id']);
+			$custom_field_values = $this->model_customer_custom_field_admin->getCustomFieldValueDescriptions($this->request->get['custom_field_id']);
 		} else {
 			$custom_field_values = [];
 		}
@@ -428,7 +428,7 @@ class ControllerCustomerCustomField extends Controller {
 		if (isset($this->request->post['custom_field_customer_group'])) {
 			$custom_field_customer_groups = $this->request->post['custom_field_customer_group'];
 		} elseif (isset($this->request->get['custom_field_id'])) {
-			$custom_field_customer_groups = $this->model_customer_custom_field->getCustomFieldCustomerGroups($this->request->get['custom_field_id']);
+			$custom_field_customer_groups = $this->model_customer_custom_field_admin->getCustomFieldCustomerGroups($this->request->get['custom_field_id']);
 		} else {
 			$custom_field_customer_groups = [];
 		}
@@ -447,9 +447,9 @@ class ControllerCustomerCustomField extends Controller {
 			}
 		}
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

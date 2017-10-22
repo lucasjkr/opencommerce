@@ -7,10 +7,10 @@ class ControllerExtensionDashboardCustomer extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dashboard_customer', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('dashboard_customer', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -89,11 +89,11 @@ class ControllerExtensionDashboardCustomer extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		// Total Orders
-		$this->load->model('customer/customer');
+		$this->load->model('customer/customer_admin');
 
-		$today = $this->model_customer_customer->getTotalCustomers(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
+		$today = $this->model_customer_customer_admin->getTotalCustomers(array('filter_date_added' => date('Y-m-d', strtotime('-1 day'))));
 
-		$yesterday = $this->model_customer_customer->getTotalCustomers(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
+		$yesterday = $this->model_customer_customer_admin->getTotalCustomers(array('filter_date_added' => date('Y-m-d', strtotime('-2 day'))));
 
 		$difference = $today - $yesterday;
 
@@ -103,7 +103,7 @@ class ControllerExtensionDashboardCustomer extends Controller {
 			$data['percentage'] = 0;
 		}
 
-		$customer_total = $this->model_customer_customer->getTotalCustomers();
+		$customer_total = $this->model_customer_customer_admin->getTotalCustomers();
 
 		if ($customer_total > 1000000000000) {
 			$data['total'] = round($customer_total / 1000000000000, 1) . 'T';

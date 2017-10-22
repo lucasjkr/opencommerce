@@ -17,9 +17,9 @@ class ControllerCommonDeveloper extends Controller {
 		if ($eval === true) {
 			$data['eval'] = true;
 		} else {
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_setting->editSetting('developer', array('developer_theme' => 1), 0);
+			$this->model_setting_setting_admin->editSetting('developer', array('developer_theme' => 1), 0);
 		
 			$data['eval'] = false;			
 		}
@@ -35,9 +35,9 @@ class ControllerCommonDeveloper extends Controller {
 		if (!$this->user->hasPermission('modify', 'common/developer')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_setting->editSetting('developer', $this->request->post, 0);
+			$this->model_setting_setting_admin->editSetting('developer', $this->request->post, 0);
 
 			$json['success'] = $this->language->get('text_success');
 		}

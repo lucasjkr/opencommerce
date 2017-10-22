@@ -5,7 +5,7 @@ class ControllerExtensionExtensionReport extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/report');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		$this->getList();
 	}
@@ -13,15 +13,15 @@ class ControllerExtensionExtensionReport extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/report');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->install('report', $this->request->get['extension']);
+			$this->model_setting_extension_admin->install('report', $this->request->get['extension']);
 
-			$this->load->model('user/user_group');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/report/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/report/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/report/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/report/' . $this->request->get['extension']);
 
 			$this->load->controller('extension/report/' . $this->request->get['extension'] . '/install');
 
@@ -34,10 +34,10 @@ class ControllerExtensionExtensionReport extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/report');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->uninstall('report', $this->request->get['extension']);
+			$this->model_setting_extension_admin->uninstall('report', $this->request->get['extension']);
 
 			$this->load->controller('extension/report/' . $this->request->get['extension'] . '/uninstall');
 
@@ -62,13 +62,13 @@ class ControllerExtensionExtensionReport extends Controller {
 			$data['success'] = '';
 		}
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
-		$extensions = $this->model_setting_extension->getInstalled('report');
+		$extensions = $this->model_setting_extension_admin->getInstalled('report');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/report/' . $value . '.php') && !is_file(DIR_APPLICATION . 'controller/report/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('report', $value);
+				$this->model_setting_extension_admin->uninstall('report', $value);
 
 				unset($extensions[$key]);
 			}

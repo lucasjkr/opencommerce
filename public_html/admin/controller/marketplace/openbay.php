@@ -5,21 +5,21 @@ class ControllerMarketplaceOpenbay extends Controller {
 	public function install() {
 		$this->load->language('marketplace/openbay');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if (!$this->user->hasPermission('modify', 'marketplace/openbay')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 
 			$this->response->redirect($this->url->link('marketplace/openbay', 'user_token=' . $this->session->data['user_token'], true));
 		} else {
-			$this->model_setting_extension->install('openbay', $this->request->get['extension']);
+			$this->model_setting_extension_admin->install('openbay', $this->request->get['extension']);
 
 			$this->session->data['success'] = $this->language->get('text_install_success');
 
-			$this->load->model('user/user_group');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/' . $this->request->get['extension']);
 
 			require_once(DIR_APPLICATION . 'controller/extension/openbay/' . $this->request->get['extension'] . '.php');
 
@@ -37,7 +37,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 	public function uninstall() {
 		$this->load->language('marketplace/openbay');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if (!$this->user->hasPermission('modify', 'marketplace/openbay')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
@@ -48,12 +48,12 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 			require_once(DIR_APPLICATION . 'controller/extension/openbay/' . $this->request->get['extension'] . '.php');
 
-			$this->load->model('setting/extension');
-			$this->load->model('setting/setting');
+			$this->load->model('setting/extension_admin');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_extension->uninstall('openbay', $this->request->get['extension']);
+			$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
 
-			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
+			$this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
 
 			$class = 'ControllerExtensionOpenbay' . str_replace('_', '', $this->request->get['extension']);
 			$class = new $class($this->registry);
@@ -68,8 +68,8 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 	public function index() {
 		$this->load->model('extension/openbay/openbay');
-		$this->load->model('setting/extension');
-		$this->load->model('setting/setting');
+		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/setting_admin');
 		$this->load->model('extension/openbay/version');
 		$data = $this->load->language('marketplace/openbay');
 
@@ -105,11 +105,11 @@ class ControllerMarketplaceOpenbay extends Controller {
 			unset($this->session->data['error']);
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('openbay');
+		$extensions = $this->model_setting_extension_admin->getInstalled('openbay');
 
 		foreach ($extensions as $key => $value) {
 			if (!file_exists(DIR_APPLICATION . 'controller/extension/openbay/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('openbay', $value);
+				$this->model_setting_extension_admin->uninstall('openbay', $value);
 				unset($extensions[$key]);
 			}
 		}
@@ -134,14 +134,14 @@ class ControllerMarketplaceOpenbay extends Controller {
 			);
 		}
 
-		$settings = $this->model_setting_setting->getSetting('feed_openbaypro');
+		$settings = $this->model_setting_setting_admin->getSetting('feed_openbaypro');
 
 		if (isset($settings['feed_openbaypro_version'])) {
 			$data['feed_openbaypro_version'] = $settings['feed_openbaypro_version'];
 		} else {
 			$data['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
 			$settings['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
-			$this->model_setting_setting->editSetting('feed_openbaypro', $settings);
+			$this->model_setting_setting_admin->editSetting('feed_openbaypro', $settings);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -154,7 +154,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 	}
 
 	public function manage() {
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 		$data = $this->load->language('marketplace/openbay');
 
 		$this->document->setTitle($this->language->get('text_manage'));
@@ -178,7 +178,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		);
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
-			$this->model_setting_setting->editSetting('feed_openbaypro', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('feed_openbaypro', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -188,7 +188,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		if (isset($this->request->post['feed_openbaypro_version'])) {
 			$data['feed_openbaypro_version'] = $this->request->post['feed_openbaypro_version'];
 		} else {
-			$settings = $this->model_setting_setting->getSetting('feed_openbaypro');
+			$settings = $this->model_setting_setting_admin->getSetting('feed_openbaypro');
 
 			if (isset($settings['feed_openbaypro_version'])) {
 				$data['feed_openbaypro_version'] = $settings['feed_openbaypro_version'];
@@ -196,7 +196,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$this->load->model('extension/openbay/version');
 				$settings['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
 				$data['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
-				$this->model_setting_setting->editSetting('feed_openbaypro', $settings);
+				$this->model_setting_setting_admin->editSetting('feed_openbaypro', $settings);
 			}
 		}
 
@@ -285,14 +285,14 @@ class ControllerMarketplaceOpenbay extends Controller {
 			case 'run_patch': // step 6 - run any db updates or other patch files
 				$this->model_extension_openbay_openbay->patch();
 
-				$this->load->model('extension/openbay/ebay');
-				$this->model_extension_openbay_ebay->patch();
+				$this->load->model('extension/openbay/ebay_admin');
+				$this->model_extension_openbay_ebay_admin->patch();
 
-				$this->load->model('extension/openbay/amazon');
-				$this->model_extension_openbay_amazon->patch();
+				$this->load->model('extension/openbay/amazon_admin');
+				$this->model_extension_openbay_amazon_admin->patch();
 
-				$this->load->model('extension/openbay/amazonus');
-				$this->model_extension_openbay_amazonus->patch();
+				$this->load->model('extension/openbay/amazonus_admin');
+				$this->model_extension_openbay_amazonus_admin->patch();
 
 				$this->load->model('extension/openbay/etsy');
 				$this->model_extension_openbay_etsy->patch();
@@ -303,7 +303,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$this->response->setOutput(json_encode($response));
 				break;
 			case 'update_version': // step 7 - update the version number
-				$this->load->model('setting/setting');
+				$this->load->model('setting/setting_admin');
 
 				$response = $this->model_extension_openbay_openbay->updateUpdateVersion($beta);
 
@@ -316,31 +316,31 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 	public function patch() {
 		$this->load->model('extension/openbay/openbay');
-		$this->load->model('extension/openbay/ebay');
-		$this->load->model('extension/openbay/amazon');
-		$this->load->model('extension/openbay/amazonus');
+		$this->load->model('extension/openbay/ebay_admin');
+		$this->load->model('extension/openbay/amazon_admin');
+		$this->load->model('extension/openbay/amazonus_admin');
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('setting/extension');
-		$this->load->model('setting/setting');
-		$this->load->model('user/user_group');
+		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/setting_admin');
+		$this->load->model('user/user_group_admin');
 		$this->load->model('extension/openbay/version');
 
 		$this->model_extension_openbay_openbay->patch();
-		$this->model_extension_openbay_ebay->patch();
-		$this->model_extension_openbay_amazon->patch();
-		$this->model_extension_openbay_amazonus->patch();
+		$this->model_extension_openbay_ebay_admin->patch();
+		$this->model_extension_openbay_amazon_admin->patch();
+		$this->model_extension_openbay_amazonus_admin->patch();
 		$this->model_extension_openbay_etsy->patch();
 
-		$openbay = $this->model_setting_setting->getSetting('feed_openbaypro');
+		$openbay = $this->model_setting_setting_admin->getSetting('feed_openbaypro');
 		$openbay['feed_openbaypro_version'] = (int)$this->model_extension_openbay_version->version();
-		$this->model_setting_setting->editSetting('feed_openbaypro', $openbay);
+		$this->model_setting_setting_admin->editSetting('feed_openbaypro', $openbay);
 
-		$installed_modules = $this->model_setting_extension->getInstalled('feed');
+		$installed_modules = $this->model_setting_extension_admin->getInstalled('feed');
 
 		if (!in_array('openbay', $installed_modules)) {
-			$this->model_setting_extension->install('feed', 'openbaypro');
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'marketplace/openbay');
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'marketplace/openbay');
+			$this->model_setting_extension_admin->install('feed', 'openbaypro');
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'marketplace/openbay');
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'marketplace/openbay');
 		}
 
 		sleep(1);
@@ -806,9 +806,9 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$data['filter_date_added'] = $filter_date_added;
 		$data['filter_channel'] = $filter_channel;
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		$data['sort'] = $sort;
 		$data['order'] = $order;
@@ -855,8 +855,8 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$data['market_options']['amazonus']['carriers'] = $this->openbay->amazonus->getCarriers();
 			}
 
-			$this->load->model('localisation/order_status');
-			$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+			$this->load->model('localisation/order_status_admin');
+			$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 			$data['status_mapped'] = [];
 
 			foreach($data['order_statuses'] as $status) {
@@ -949,16 +949,16 @@ class ControllerMarketplaceOpenbay extends Controller {
 	}
 
 	public function orderListComplete() {
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 		$this->load->model('extension/openbay/openbay');
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
 		$data = $this->load->language('extension/openbay/openbay_order');
 
 		// API login
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
-		$api_info = $this->model_user_api->getApi($this->config->get('config_api_id'));
+		$api_info = $this->model_user_api_admin->getApi($this->config->get('config_api_id'));
 
 		$api_key = '';
 		if ($api_info) {
@@ -973,7 +973,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		} else {
 			//Amazon EU
 			if ($this->config->get('openbay_amazon_status') == 1) {
-				$this->load->model('extension/openbay/amazon');
+				$this->load->model('extension/openbay/amazon_admin');
 
 				$orders = [];
 
@@ -998,7 +998,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 								'tracking' => $this->request->post['tracking'][$order_id],
 							);
 
-							$this->model_extension_openbay_amazon->updateAmazonOrderTracking($order_id, $carrier, $carrier_from_list, !empty($carrier) ? $this->request->post['tracking'][$order_id] : '');
+							$this->model_extension_openbay_amazon_admin->updateAmazonOrderTracking($order_id, $carrier, $carrier_from_list, !empty($carrier) ? $this->request->post['tracking'][$order_id] : '');
 						}
 
 						if ($this->config->get('openbay_amazon_order_status_canceled') == $this->request->post['order_status_id']) {
@@ -1017,7 +1017,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 			//Amazon US
 			if ($this->config->get('openbay_amazonus_status') == 1) {
-				$this->load->model('extension/openbay/amazonus');
+				$this->load->model('extension/openbay/amazonus_admin');
 
 				$orders = [];
 
@@ -1042,7 +1042,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 								'tracking' => $this->request->post['tracking'][$order_id],
 							);
 
-							$this->model_extension_openbay_amazonus->updateAmazonusOrderTracking($order_id, $carrier, $carrier_from_list, !empty($carrier) ? $this->request->post['tracking'][$order_id] : '');
+							$this->model_extension_openbay_amazonus_admin->updateAmazonusOrderTracking($order_id, $carrier, $carrier_from_list, !empty($carrier) ? $this->request->post['tracking'][$order_id] : '');
 						}
 
 						if ($this->config->get('openbay_amazonus_order_status_canceled') == $this->request->post['order_status_id']) {
@@ -1118,21 +1118,21 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/product');
-		$this->load->model('catalog/category');
-		$this->load->model('catalog/manufacturer');
+		$this->load->model('catalog/product_admin');
+		$this->load->model('catalog/category_admin');
+		$this->load->model('catalog/manufacturer_admin');
 		$this->load->model('extension/openbay/openbay');
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if ($this->openbay->addonLoad('openstock')) {
-			$this->load->model('extension/module/openstock');
+			$this->load->model('extension/module/openstock_admin');
 			$openstock_installed = true;
 		} else {
 			$openstock_installed = false;
 		}
 
-		$data['category_list'] = $this->model_catalog_category->getCategories(array());
-		$data['manufacturer_list'] = $this->model_catalog_manufacturer->getManufacturers(array());
+		$data['category_list'] = $this->model_catalog_category_admin->getCategories(array());
+		$data['manufacturer_list'] = $this->model_catalog_manufacturer_admin->getManufacturers(array());
 
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = $this->request->get['filter_name'];
@@ -1421,14 +1421,14 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$edit = $this->url->link('catalog/product/edit', 'user_token=' . $this->session->data['user_token'] . '&product_id=' . $result['product_id'] . $url, true);
 
 			if ($result['image'] && file_exists(DIR_IMAGE . $result['image'])) {
-				$image = $this->model_tool_image->resize($result['image'], 40, 40);
+				$image = $this->model_tool_image_admin->resize($result['image'], 40, 40);
 			} else {
-				$image = $this->model_tool_image->resize('no_image.png', 40, 40);
+				$image = $this->model_tool_image_admin->resize('no_image.png', 40, 40);
 			}
 
 			$special = false;
 
-			$product_specials = $this->model_catalog_product->getProductSpecials($result['product_id']);
+			$product_specials = $this->model_catalog_product_admin->getProductSpecials($result['product_id']);
 
 			foreach ($product_specials  as $product_special) {
 				if (($product_special['date_start'] == '0000-00-00' || $product_special['date_start'] < date('Y-m-d')) && ($product_special['date_end'] == '0000-00-00' || $product_special['date_end'] > date('Y-m-d'))) {
@@ -1449,9 +1449,9 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$markets = [];
 
 			if ($this->config->get('ebay_status') == '1') {
-				$this->load->model('extension/openbay/ebay');
+				$this->load->model('extension/openbay/ebay_admin');
 
-				$active_list = $this->model_extension_openbay_ebay->getLiveListingArray();
+				$active_list = $this->model_extension_openbay_ebay_admin->getLiveListingArray();
 
 				if (!array_key_exists($result['product_id'], $active_list)) {
 					$markets[] = array(
@@ -1471,8 +1471,8 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 
 			if ($this->config->get('openbay_amazon_status') == '1') {
-				$this->load->model('extension/openbay/amazon');
-				$amazon_status = $this->model_extension_openbay_amazon->getProductStatus($result['product_id']);
+				$this->load->model('extension/openbay/amazon_admin');
+				$amazon_status = $this->model_extension_openbay_amazon_admin->getProductStatus($result['product_id']);
 
 				if ($amazon_status == 'processing') {
 					$markets[] = array(
@@ -1506,8 +1506,8 @@ class ControllerMarketplaceOpenbay extends Controller {
 			}
 
 			if ($this->config->get('openbay_amazonus_status') == '1') {
-				$this->load->model('extension/openbay/amazonus');
-				$amazonus_status = $this->model_extension_openbay_amazonus->getProductStatus($result['product_id']);
+				$this->load->model('extension/openbay/amazonus_admin');
+				$amazonus_status = $this->model_extension_openbay_amazonus_admin->getProductStatus($result['product_id']);
 
 				if ($amazonus_status == 'processing') {
 					$markets[] = array(
@@ -1579,8 +1579,8 @@ class ControllerMarketplaceOpenbay extends Controller {
 				'selected'   => isset($this->request->post['selected']) && in_array($result['product_id'], $this->request->post['selected']),
 				'edit'       => $edit,
 				'has_option' => $openstock_installed ? $result['has_option'] : 0,
-				'vCount'     => $openstock_installed ? $this->model_setting_module_openstock->countVariation($result['product_id']) : '',
-				'vsCount'    => $openstock_installed ? $this->model_setting_module_openstock->countVariationStock($result['product_id']) : '',
+				'vCount'     => $openstock_installed ? $this->model_setting_module_openstock_admin->countVariation($result['product_id']) : '',
+				'vsCount'    => $openstock_installed ? $this->model_setting_module_openstock_admin->countVariationStock($result['product_id']) : '',
 			);
 		}
 

@@ -8,10 +8,10 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_bluepay_redirect', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_bluepay_redirect', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -101,9 +101,9 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 			$data['payment_bluepay_redirect_order_status_id'] = 2;
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_bluepay_redirect_geo_zone_id'])) {
 			$data['payment_bluepay_redirect_geo_zone_id'] = $this->request->post['payment_bluepay_redirect_geo_zone_id'];
@@ -111,9 +111,9 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 			$data['payment_bluepay_redirect_geo_zone_id'] = $this->config->get('payment_bluepay_redirect_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_bluepay_redirect_status'])) {
 			$data['payment_bluepay_redirect_status'] = $this->request->post['payment_bluepay_redirect_status'];
@@ -141,27 +141,27 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/bluepay_redirect');
+		$this->load->model('extension/payment/bluepay_redirect_admin');
 
-		$this->model_extension_payment_bluepay_redirect->install();
+		$this->model_extension_payment_bluepay_redirect_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/bluepay_redirect');
+		$this->load->model('extension/payment/bluepay_redirect_admin');
 
-		$this->model_extension_payment_bluepay_redirect->uninstall();
+		$this->model_extension_payment_bluepay_redirect_admin->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('payment_bluepay_redirect_status')) {
-			$this->load->model('extension/payment/bluepay_redirect');
+			$this->load->model('extension/payment/bluepay_redirect_admin');
 
-			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect->getOrder($this->request->get['order_id']);
+			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($bluepay_redirect_order)) {
 				$this->load->language('extension/payment/bluepay_redirect');
 
-				$bluepay_redirect_order['total_released'] = $this->model_extension_payment_bluepay_redirect->getTotalReleased($bluepay_redirect_order['bluepay_redirect_order_id']);
+				$bluepay_redirect_order['total_released'] = $this->model_extension_payment_bluepay_redirect_admin->getTotalReleased($bluepay_redirect_order['bluepay_redirect_order_id']);
 
 				$bluepay_redirect_order['total_formatted'] = $this->currency->format($bluepay_redirect_order['total'], $bluepay_redirect_order['currency_code'], false, false);
 				$bluepay_redirect_order['total_released_formatted'] = $this->currency->format($bluepay_redirect_order['total_released'], $bluepay_redirect_order['currency_code'], false, false);
@@ -181,17 +181,17 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/bluepay_redirect');
+			$this->load->model('extension/payment/bluepay_redirect_admin');
 
-			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect->getOrder($this->request->post['order_id']);
+			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect_admin->getOrder($this->request->post['order_id']);
 
-			$void_response = $this->model_extension_payment_bluepay_redirect->void($this->request->post['order_id']);
+			$void_response = $this->model_extension_payment_bluepay_redirect_admin->void($this->request->post['order_id']);
 
-			$this->model_extension_payment_bluepay_redirect->logger('Void result:\r\n' . print_r($void_response, 1));
+			$this->model_extension_payment_bluepay_redirect_admin->logger('Void result:\r\n' . print_r($void_response, 1));
 
 			if ($void_response['Result'] == 'APPROVED') {
-				$this->model_extension_payment_bluepay_redirect->addTransaction($bluepay_redirect_order['bluepay_redirect_order_id'], 'void', $bluepay_redirect_order['total']);
-				$this->model_extension_payment_bluepay_redirect->updateVoidStatus($bluepay_redirect_order['bluepay_redirect_order_id'], 1);
+				$this->model_extension_payment_bluepay_redirect_admin->addTransaction($bluepay_redirect_order['bluepay_redirect_order_id'], 'void', $bluepay_redirect_order['total']);
+				$this->model_extension_payment_bluepay_redirect_admin->updateVoidStatus($bluepay_redirect_order['bluepay_redirect_order_id'], 1);
 
 				$json['msg'] = $this->language->get('text_void_ok');
 				$json['data'] = [];
@@ -216,23 +216,23 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('extension/payment/bluepay_redirect');
+			$this->load->model('extension/payment/bluepay_redirect_admin');
 
-			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect->getOrder($this->request->post['order_id']);
+			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect_admin->getOrder($this->request->post['order_id']);
 
-			$release_response = $this->model_extension_payment_bluepay_redirect->release($this->request->post['order_id'], $this->request->post['amount']);
+			$release_response = $this->model_extension_payment_bluepay_redirect_admin->release($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_bluepay_redirect->logger('Release result:\r\n' . print_r($release_response, 1));
+			$this->model_extension_payment_bluepay_redirect_admin->logger('Release result:\r\n' . print_r($release_response, 1));
 
 			if ($release_response['Result'] == 'APPROVED') {
-				$this->model_extension_payment_bluepay_redirect->addTransaction($bluepay_redirect_order['bluepay_redirect_order_id'], 'payment', $this->request->post['amount']);
+				$this->model_extension_payment_bluepay_redirect_admin->addTransaction($bluepay_redirect_order['bluepay_redirect_order_id'], 'payment', $this->request->post['amount']);
 
-				$this->model_extension_payment_bluepay_redirect->updateTransactionId($bluepay_redirect_order['bluepay_redirect_order_id'], $release_response['RRNO']);
+				$this->model_extension_payment_bluepay_redirect_admin->updateTransactionId($bluepay_redirect_order['bluepay_redirect_order_id'], $release_response['RRNO']);
 
-				$total_released = $this->model_extension_payment_bluepay_redirect->getTotalReleased($bluepay_redirect_order['bluepay_redirect_order_id']);
+				$total_released = $this->model_extension_payment_bluepay_redirect_admin->getTotalReleased($bluepay_redirect_order['bluepay_redirect_order_id']);
 
 				if ($total_released >= $bluepay_redirect_order['total']) {
-					$this->model_extension_payment_bluepay_redirect->updateReleaseStatus($bluepay_redirect_order['bluepay_redirect_order_id'], 1);
+					$this->model_extension_payment_bluepay_redirect_admin->updateReleaseStatus($bluepay_redirect_order['bluepay_redirect_order_id'], 1);
 					$release_status = 1;
 					$json['msg'] = $this->language->get('text_release_ok_order');
 				} else {
@@ -264,22 +264,22 @@ class ControllerExtensionPaymentBluepayredirect extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('extension/payment/bluepay_redirect');
+			$this->load->model('extension/payment/bluepay_redirect_admin');
 
-			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect->getOrder($this->request->post['order_id']);
+			$bluepay_redirect_order = $this->model_extension_payment_bluepay_redirect_admin->getOrder($this->request->post['order_id']);
 
-			$rebate_response = $this->model_extension_payment_bluepay_redirect->rebate($this->request->post['order_id'], $this->request->post['amount']);
+			$rebate_response = $this->model_extension_payment_bluepay_redirect_admin->rebate($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_bluepay_redirect->logger('Rebate result:\r\n' . print_r($rebate_response, 1));
+			$this->model_extension_payment_bluepay_redirect_admin->logger('Rebate result:\r\n' . print_r($rebate_response, 1));
 
 			if ($rebate_response['Result'] == 'APPROVED') {
-				$this->model_extension_payment_bluepay_redirect->addTransaction($bluepay_redirect_order['bluepay_redirect_order_id'], 'rebate', $this->request->post['amount'] * -1);
+				$this->model_extension_payment_bluepay_redirect_admin->addTransaction($bluepay_redirect_order['bluepay_redirect_order_id'], 'rebate', $this->request->post['amount'] * -1);
 
-				$total_rebated = $this->model_extension_payment_bluepay_redirect->getTotalRebated($bluepay_redirect_order['bluepay_redirect_order_id']);
-				$total_released = $this->model_extension_payment_bluepay_redirect->getTotalReleased($bluepay_redirect_order['bluepay_redirect_order_id']);
+				$total_rebated = $this->model_extension_payment_bluepay_redirect_admin->getTotalRebated($bluepay_redirect_order['bluepay_redirect_order_id']);
+				$total_released = $this->model_extension_payment_bluepay_redirect_admin->getTotalReleased($bluepay_redirect_order['bluepay_redirect_order_id']);
 
 				if ($total_released <= 0 && $bluepay_redirect_order['release_status'] == 1) {
-					$this->model_extension_payment_bluepay_redirect->updateRebateStatus($bluepay_redirect_order['bluepay_redirect_order_id'], 1);
+					$this->model_extension_payment_bluepay_redirect_admin->updateRebateStatus($bluepay_redirect_order['bluepay_redirect_order_id'], 1);
 					$rebate_status = 1;
 					$json['msg'] = $this->language->get('text_rebate_ok_order');
 				} else {

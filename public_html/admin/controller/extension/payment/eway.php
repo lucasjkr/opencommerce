@@ -8,23 +8,23 @@ class ControllerExtensionPaymentEway extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('payment_eway', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_eway', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], true));
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -168,13 +168,13 @@ class ControllerExtensionPaymentEway extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/eway');
-		$this->model_extension_payment_eway->install();
+		$this->load->model('extension/payment/eway_admin');
+		$this->model_extension_payment_eway_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/eway');
-		$this->model_extension_payment_eway->uninstall();
+		$this->load->model('extension/payment/eway_admin');
+		$this->model_extension_payment_eway_admin->uninstall();
 	}
 
 	// Legacy 2.0.0
@@ -189,9 +189,9 @@ class ControllerExtensionPaymentEway extends Controller {
 
 	public function order() {
 		if ($this->config->get('payment_eway_status')) {
-			$this->load->model('extension/payment/eway');
+			$this->load->model('extension/payment/eway_admin');
 
-			$eway_order = $this->model_extension_payment_eway->getOrder($this->request->get['order_id']);
+			$eway_order = $this->model_extension_payment_eway_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($eway_order)) {
 				$this->load->language('extension/payment/eway');
@@ -199,12 +199,12 @@ class ControllerExtensionPaymentEway extends Controller {
 				$eway_order['total'] = $eway_order['amount'];
 				$eway_order['total_formatted'] = $this->currency->format($eway_order['amount'], $eway_order['currency_code'], 1, true);
 
-				$eway_order['total_captured'] = $this->model_extension_payment_eway->getTotalCaptured($eway_order['eway_order_id']);
+				$eway_order['total_captured'] = $this->model_extension_payment_eway_admin->getTotalCaptured($eway_order['eway_order_id']);
 				$eway_order['total_captured_formatted'] = $this->currency->format($eway_order['total_captured'], $eway_order['currency_code'], 1, true);
 
 				$eway_order['uncaptured'] = $eway_order['total'] - $eway_order['total_captured'];
 
-				$eway_order['total_refunded'] = $this->model_extension_payment_eway->getTotalRefunded($eway_order['eway_order_id']);
+				$eway_order['total_refunded'] = $this->model_extension_payment_eway_admin->getTotalRefunded($eway_order['eway_order_id']);
 				$eway_order['total_refunded_formatted'] = $this->currency->format($eway_order['total_refunded'], $eway_order['currency_code'], 1, true);
 
 				$eway_order['unrefunded'] = $eway_order['total_captured'] - $eway_order['total_refunded'];
@@ -246,8 +246,8 @@ class ControllerExtensionPaymentEway extends Controller {
 		$refund_amount = (double)$this->request->post['refund_amount'];
 
 		if ($order_id && $refund_amount > 0) {
-			$this->load->model('extension/payment/eway');
-			$result = $this->model_extension_payment_eway->refund($order_id, $refund_amount);
+			$this->load->model('extension/payment/eway_admin');
+			$result = $this->model_extension_payment_eway_admin->refund($order_id, $refund_amount);
 
 			// Check if any error returns
 			if (isset($result->Errors) || $result === false) {
@@ -263,16 +263,16 @@ class ControllerExtensionPaymentEway extends Controller {
 				}
 				$json['message'] = $this->language->get('text_refund_failed') . $reason;
 			} else {
-				$eway_order = $this->model_extension_payment_eway->getOrder($order_id);
-				$this->model_extension_payment_eway->addTransaction($eway_order['eway_order_id'], $result->Refund->TransactionID, 'refund', $result->Refund->TotalAmount / 100, $eway_order['currency_code']);
+				$eway_order = $this->model_extension_payment_eway_admin->getOrder($order_id);
+				$this->model_extension_payment_eway_admin->addTransaction($eway_order['eway_order_id'], $result->Refund->TransactionID, 'refund', $result->Refund->TotalAmount / 100, $eway_order['currency_code']);
 
-				$total_captured = $this->model_extension_payment_eway->getTotalCaptured($eway_order['eway_order_id']);
-				$total_refunded = $this->model_extension_payment_eway->getTotalRefunded($eway_order['eway_order_id']);
+				$total_captured = $this->model_extension_payment_eway_admin->getTotalCaptured($eway_order['eway_order_id']);
+				$total_refunded = $this->model_extension_payment_eway_admin->getTotalRefunded($eway_order['eway_order_id']);
 				$refund_status = 0;
 
 				if ($total_captured == $total_refunded) {
 					$refund_status = 1;
-					$this->model_extension_payment_eway->updateRefundStatus($eway_order['eway_order_id'], $refund_status);
+					$this->model_extension_payment_eway_admin->updateRefundStatus($eway_order['eway_order_id'], $refund_status);
 				}
 
 				$json['data'] = [];
@@ -301,9 +301,9 @@ class ControllerExtensionPaymentEway extends Controller {
 		$capture_amount = (double)$this->request->post['capture_amount'];
 
 		if ($order_id && $capture_amount > 0) {
-			$this->load->model('extension/payment/eway');
-			$eway_order = $this->model_extension_payment_eway->getOrder($order_id);
-			$result = $this->model_extension_payment_eway->capture($order_id, $capture_amount, $eway_order['currency_code']);
+			$this->load->model('extension/payment/eway_admin');
+			$eway_order = $this->model_extension_payment_eway_admin->getOrder($order_id);
+			$result = $this->model_extension_payment_eway_admin->capture($order_id, $capture_amount, $eway_order['currency_code']);
 
 			// Check if any error returns
 			if (isset($result->Errors) || $result === false) {
@@ -319,18 +319,18 @@ class ControllerExtensionPaymentEway extends Controller {
 				}
 				$json['message'] = $this->language->get('text_capture_failed') . $reason;
 			} else {
-				$this->model_extension_payment_eway->addTransaction($eway_order['eway_order_id'], $result->TransactionID, 'payment', $capture_amount, $eway_order['currency_code']);
+				$this->model_extension_payment_eway_admin->addTransaction($eway_order['eway_order_id'], $result->TransactionID, 'payment', $capture_amount, $eway_order['currency_code']);
 
-				$total_captured = $this->model_extension_payment_eway->getTotalCaptured($eway_order['eway_order_id']);
-				$total_refunded = $this->model_extension_payment_eway->getTotalRefunded($eway_order['eway_order_id']);
+				$total_captured = $this->model_extension_payment_eway_admin->getTotalCaptured($eway_order['eway_order_id']);
+				$total_refunded = $this->model_extension_payment_eway_admin->getTotalRefunded($eway_order['eway_order_id']);
 
 				$remaining = $eway_order['amount'] - $capture_amount;
 				if ($remaining <= 0) {
 					$remaining = 0;
 				}
 
-				$this->model_extension_payment_eway->updateCaptureStatus($eway_order['eway_order_id'], 1);
-				$this->model_extension_payment_eway->updateTransactionId($eway_order['eway_order_id'], $result->TransactionID);
+				$this->model_extension_payment_eway_admin->updateCaptureStatus($eway_order['eway_order_id'], 1);
+				$this->model_extension_payment_eway_admin->updateTransactionId($eway_order['eway_order_id'], $result->TransactionID);
 
 				$json['data'] = [];
 				$json['data']['transactionid'] = $result->TransactionID;

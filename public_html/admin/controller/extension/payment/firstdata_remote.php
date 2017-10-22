@@ -7,23 +7,23 @@ class ControllerExtensionPaymentFirstdataRemote extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_firstdata_remote', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_firstdata_remote', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true));
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -264,27 +264,25 @@ class ControllerExtensionPaymentFirstdataRemote extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/firstdata_remote');
-
-		$this->model_extension_payment_firstdata_remote->install();
+		$this->load->model('extension/payment/firstdata_remote_admin');
+		$this->model_extension_payment_firstdata_remote_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/firstdata_remote');
-
-		$this->model_extension_payment_firstdata_remote->uninstall();
+		$this->load->model('extension/payment/firstdata_remote_admin');
+		$this->model_extension_payment_firstdata_remote_admin->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('payment_firstdata_remote_status')) {
-			$this->load->model('extension/payment/firstdata_remote');
+			$this->load->model('extension/payment/firstdata_remote_admin');
 
-			$firstdata_order = $this->model_extension_payment_firstdata_remote->getOrder($this->request->get['order_id']);
+			$firstdata_order = $this->model_extension_payment_firstdata_remote_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($firstdata_order)) {
 				$this->load->language('extension/payment/firstdata_remote');
 
-				$firstdata_order['total_captured'] = $this->model_extension_payment_firstdata_remote->getTotalCaptured($firstdata_order['firstdata_remote_order_id']);
+				$firstdata_order['total_captured'] = $this->model_extension_payment_firstdata_remote_admin->getTotalCaptured($firstdata_order['firstdata_remote_order_id']);
 
 				$firstdata_order['total_formatted'] = $this->currency->format($firstdata_order['total'], $firstdata_order['currency_code'], 1, true);
 				$firstdata_order['total_captured_formatted'] = $this->currency->format($firstdata_order['total_captured'], $firstdata_order['currency_code'], 1, true);
@@ -321,23 +319,23 @@ class ControllerExtensionPaymentFirstdataRemote extends Controller {
 	}
 
 	public function void() {
-		$this->load->language('extension/payment/firstdata_remote');
+		$this->load->language('extension/payment/firstdata_remote_admin');
 
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
 			$this->load->model('extension/payment/firstdata_remote');
 
-			$firstdata_order = $this->model_extension_payment_firstdata_remote->getOrder($this->request->post['order_id']);
+			$firstdata_order = $this->model_extension_payment_firstdata_remote_admin->getOrder($this->request->post['order_id']);
 
-			$void_response = $this->model_extension_payment_firstdata_remote->void($firstdata_order['order_ref'], $firstdata_order['tdate']);
+			$void_response = $this->model_extension_payment_firstdata_remote_admin->void($firstdata_order['order_ref'], $firstdata_order['tdate']);
 
-			$this->model_extension_payment_firstdata_remote->logger('Void result:\r\n' . print_r($void_response, 1));
+			$this->model_extension_payment_firstdata_remote_admin->logger('Void result:\r\n' . print_r($void_response, 1));
 
 			if (strtoupper($void_response['transaction_result']) == 'APPROVED') {
-				$this->model_extension_payment_firstdata_remote->addTransaction($firstdata_order['firstdata_remote_order_id'], 'void', 0.00);
+				$this->model_extension_payment_firstdata_remote_admin->addTransaction($firstdata_order['firstdata_remote_order_id'], 'void', 0.00);
 
-				$this->model_extension_payment_firstdata_remote->updateVoidStatus($firstdata_order['firstdata_remote_order_id'], 1);
+				$this->model_extension_payment_firstdata_remote_admin->updateVoidStatus($firstdata_order['firstdata_remote_order_id'], 1);
 
 				$json['msg'] = $this->language->get('text_void_ok');
 				$json['data'] = [];
@@ -361,19 +359,19 @@ class ControllerExtensionPaymentFirstdataRemote extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/firstdata_remote');
+			$this->load->model('extension/payment/firstdata_remote_admin');
 
-			$firstdata_order = $this->model_extension_payment_firstdata_remote->getOrder($this->request->post['order_id']);
+			$firstdata_order = $this->model_extension_payment_firstdata_remote_admin->getOrder($this->request->post['order_id']);
 
-			$capture_response = $this->model_extension_payment_firstdata_remote->capture($firstdata_order['order_ref'], $firstdata_order['total'], $firstdata_order['currency_code']);
+			$capture_response = $this->model_extension_payment_firstdata_remote_admin->capture($firstdata_order['order_ref'], $firstdata_order['total'], $firstdata_order['currency_code']);
 
-			$this->model_extension_payment_firstdata_remote->logger('Settle result:\r\n' . print_r($capture_response, 1));
+			$this->model_extension_payment_firstdata_remote_admin->logger('Settle result:\r\n' . print_r($capture_response, 1));
 
 			if (strtoupper($capture_response['transaction_result']) == 'APPROVED') {
-				$this->model_extension_payment_firstdata_remote->addTransaction($firstdata_order['firstdata_remote_order_id'], 'payment', $firstdata_order['total']);
-				$total_captured = $this->model_extension_payment_firstdata_remote->getTotalCaptured($firstdata_order['firstdata_remote_order_id']);
+				$this->model_extension_payment_firstdata_remote_admin->addTransaction($firstdata_order['firstdata_remote_order_id'], 'payment', $firstdata_order['total']);
+				$total_captured = $this->model_extension_payment_firstdata_remote_admin->getTotalCaptured($firstdata_order['firstdata_remote_order_id']);
 
-				$this->model_extension_payment_firstdata_remote->updateCaptureStatus($firstdata_order['firstdata_remote_order_id'], 1);
+				$this->model_extension_payment_firstdata_remote_admin->updateCaptureStatus($firstdata_order['firstdata_remote_order_id'], 1);
 				$capture_status = 1;
 				$json['msg'] = $this->language->get('text_capture_ok_order');
 				$json['data'] = [];
@@ -403,22 +401,22 @@ class ControllerExtensionPaymentFirstdataRemote extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/firstdata_remote');
+			$this->load->model('extension/payment/firstdata_remote_admin');
 
-			$firstdata_order = $this->model_extension_payment_firstdata_remote->getOrder($this->request->post['order_id']);
+			$firstdata_order = $this->model_extension_payment_firstdata_remote_admin->getOrder($this->request->post['order_id']);
 
-			$refund_response = $this->model_extension_payment_firstdata_remote->refund($firstdata_order['order_ref'], $firstdata_order['total'], $firstdata_order['currency_code']);
+			$refund_response = $this->model_extension_payment_firstdata_remote_admin->refund($firstdata_order['order_ref'], $firstdata_order['total'], $firstdata_order['currency_code']);
 
-			$this->model_extension_payment_firstdata_remote->logger('Refund result:\r\n' . print_r($refund_response, 1));
+			$this->model_extension_payment_firstdata_remote_admin->logger('Refund result:\r\n' . print_r($refund_response, 1));
 
 			if (strtoupper($refund_response['transaction_result']) == 'APPROVED') {
-				$this->model_extension_payment_firstdata_remote->addTransaction($firstdata_order['firstdata_remote_order_id'], 'refund', $firstdata_order['total'] * -1);
+				$this->model_extension_payment_firstdata_remote_admin->addTransaction($firstdata_order['firstdata_remote_order_id'], 'refund', $firstdata_order['total'] * -1);
 
-				$total_refunded = $this->model_extension_payment_firstdata_remote->getTotalRefunded($firstdata_order['firstdata_remote_order_id']);
-				$total_captured = $this->model_extension_payment_firstdata_remote->getTotalCaptured($firstdata_order['firstdata_remote_order_id']);
+				$total_refunded = $this->model_extension_payment_firstdata_remote_admin->getTotalRefunded($firstdata_order['firstdata_remote_order_id']);
+				$total_captured = $this->model_extension_payment_firstdata_remote_admin->getTotalCaptured($firstdata_order['firstdata_remote_order_id']);
 
 				if ($total_captured <= 0 && $firstdata_order['capture_status'] == 1) {
-					$this->model_extension_payment_firstdata_remote->updateRefundStatus($firstdata_order['firstdata_remote_order_id'], 1);
+					$this->model_extension_payment_firstdata_remote_admin->updateRefundStatus($firstdata_order['firstdata_remote_order_id'], 1);
 					$refund_status = 1;
 					$json['msg'] = $this->language->get('text_refund_ok_order');
 				} else {

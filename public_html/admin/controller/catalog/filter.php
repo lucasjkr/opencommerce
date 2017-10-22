@@ -7,7 +7,7 @@ class ControllerCatalogFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/filter');
+		$this->load->model('catalog/filter_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCatalogFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/filter');
+		$this->load->model('catalog/filter_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_filter->addFilter($this->request->post);
+			$this->model_catalog_filter_admin->addFilter($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerCatalogFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/filter');
+		$this->load->model('catalog/filter_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_filter->editFilter($this->request->get['filter_group_id'], $this->request->post);
+			$this->model_catalog_filter_admin->editFilter($this->request->get['filter_group_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerCatalogFilter extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/filter');
+		$this->load->model('catalog/filter_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $filter_group_id) {
-				$this->model_catalog_filter->deleteFilter($filter_group_id);
+				$this->model_catalog_filter_admin->deleteFilter($filter_group_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerCatalogFilter extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$filter_total = $this->model_catalog_filter->getTotalFilterGroups();
+		$filter_total = $this->model_catalog_filter_admin->getTotalFilterGroups();
 
-		$results = $this->model_catalog_filter->getFilterGroups($filter_data);
+		$results = $this->model_catalog_filter_admin->getFilterGroups($filter_data);
 
 		foreach ($results as $result) {
 			$data['filters'][] = array(
@@ -301,19 +301,19 @@ class ControllerCatalogFilter extends Controller {
 		$data['cancel'] = $this->url->link('catalog/filter', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['filter_group_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$filter_group_info = $this->model_catalog_filter->getFilterGroup($this->request->get['filter_group_id']);
+			$filter_group_info = $this->model_catalog_filter_admin->getFilterGroup($this->request->get['filter_group_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['filter_group_description'])) {
 			$data['filter_group_description'] = $this->request->post['filter_group_description'];
 		} elseif (isset($this->request->get['filter_group_id'])) {
-			$data['filter_group_description'] = $this->model_catalog_filter->getFilterGroupDescriptions($this->request->get['filter_group_id']);
+			$data['filter_group_description'] = $this->model_catalog_filter_admin->getFilterGroupDescriptions($this->request->get['filter_group_id']);
 		} else {
 			$data['filter_group_description'] = [];
 		}
@@ -329,7 +329,7 @@ class ControllerCatalogFilter extends Controller {
 		if (isset($this->request->post['filter'])) {
 			$data['filters'] = $this->request->post['filter'];
 		} elseif (isset($this->request->get['filter_group_id'])) {
-			$data['filters'] = $this->model_catalog_filter->getFilterDescriptions($this->request->get['filter_group_id']);
+			$data['filters'] = $this->model_catalog_filter_admin->getFilterDescriptions($this->request->get['filter_group_id']);
 		} else {
 			$data['filters'] = [];
 		}
@@ -377,7 +377,7 @@ class ControllerCatalogFilter extends Controller {
 		$json = [];
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/filter');
+			$this->load->model('catalog/filter_admin');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],
@@ -385,7 +385,7 @@ class ControllerCatalogFilter extends Controller {
 				'limit'       => 5
 			);
 
-			$filters = $this->model_catalog_filter->getFilters($filter_data);
+			$filters = $this->model_catalog_filter_admin->getFilters($filter_data);
 
 			foreach ($filters as $filter) {
 				$json[] = array(

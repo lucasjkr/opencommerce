@@ -22,10 +22,10 @@ class ControllerCommonDashboard extends Controller {
 		// Dashboard Extensions
 		$dashboards = [];
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		// Get a list of installed modules
-		$extensions = $this->model_setting_extension->getInstalled('dashboard');
+		$extensions = $this->model_setting_extension_admin->getInstalled('dashboard');
 		
 		// Add all the modules which have multiple settings for each module
 		foreach ($extensions as $code) {
@@ -73,11 +73,12 @@ class ControllerCommonDashboard extends Controller {
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
 
+        // LJK - not sure if there's a need for this - we're not even looking at prices right now.
 		// Run currency update
 		if ($this->config->get('config_currency_auto')) {
-			$this->load->model('localisation/currency');
+			$this->load->model('localisation/currency_admin');
 
-			$this->model_localisation_currency->refresh();
+			$this->model_localisation_currency_admin->refresh();
 		}
 
 		$this->response->setOutput($this->load->view('common/dashboard', $data));

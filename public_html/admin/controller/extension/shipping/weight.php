@@ -7,10 +7,10 @@ class ControllerExtensionShippingWeight extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('shipping_weight', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('shipping_weight', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -44,9 +44,9 @@ class ControllerExtensionShippingWeight extends Controller {
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true);
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$geo_zones = $this->model_localisation_geo_zone->getGeoZones();
+		$geo_zones = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		foreach ($geo_zones as $geo_zone) {
 			if (isset($this->request->post['shipping_weight_' . $geo_zone['geo_zone_id'] . '_rate'])) {
@@ -70,9 +70,9 @@ class ControllerExtensionShippingWeight extends Controller {
 			$data['shipping_weight_tax_class_id'] = $this->config->get('shipping_weight_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class');
+		$this->load->model('localisation/tax_class_admin');
 
-		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$data['tax_classes'] = $this->model_localisation_tax_class_admin->getTaxClasses();
 
 		if (isset($this->request->post['shipping_weight_status'])) {
 			$data['shipping_weight_status'] = $this->request->post['shipping_weight_status'];

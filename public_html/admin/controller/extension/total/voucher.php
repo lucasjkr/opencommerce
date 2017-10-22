@@ -7,10 +7,10 @@ class ControllerExtensionTotalVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('total_voucher', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('total_voucher', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -73,15 +73,15 @@ class ControllerExtensionTotalVoucher extends Controller {
 
 	public function install() {
 		// Register the event triggers
-		$this->load->model('setting/event');
+		$this->load->model('setting/event_admin');
 
-		$this->model_setting_event->addEvent('voucher', 'catalog/model/checkout/order/addOrderHistory/after', 'extension/total/voucher/send');
+		$this->model_setting_event_admin->addEvent('voucher', 'catalog/model/checkout/order/addOrderHistory/after', 'extension/total/voucher/send');
 	}
 
 	public function uninstall() {
 		// delete the event triggers
-		$this->load->model('setting/event');
+		$this->load->model('setting/event_admin');
 
-		$this->model_setting_event->deleteEventByCode('voucher');
+		$this->model_setting_event_admin->deleteEventByCode('voucher');
 	}
 }

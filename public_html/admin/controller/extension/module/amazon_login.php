@@ -7,13 +7,13 @@ class ControllerExtensionModuleAmazonLogin extends Controller {
 
 		$this->load->language('extension/module/amazon_login');
 
-		$this->load->model('setting/setting');
-		$this->load->model('design/layout');
+		$this->load->model('setting/setting_admin');
+		$this->load->model('design/layout_admin');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('module_amazon_login', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('module_amazon_login', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -95,13 +95,13 @@ class ControllerExtensionModuleAmazonLogin extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('setting/event');
-        $this->model_setting_event->addEvent('amazon_login', 'catalog/controller/account/logout/after', 'extension/module/amazon_login/logout');
+		$this->load->model('setting/event_admin');
+        $this->model_setting_event_admin->addEvent('amazon_login', 'catalog/controller/account/logout/after', 'extension/module/amazon_login/logout');
 	}
 
 	public function uninstall() {
-		$this->load->model('setting/event');
-		$this->model_setting_event->deleteEventByCode('amazon_login');
+		$this->load->model('setting/event_admin');
+		$this->model_setting_event_admin->deleteEventByCode('amazon_login');
 	}
 
 }

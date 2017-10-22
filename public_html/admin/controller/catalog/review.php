@@ -7,7 +7,7 @@ class ControllerCatalogReview extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/review');
+		$this->load->model('catalog/review_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCatalogReview extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/review');
+		$this->load->model('catalog/review_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_review->addReview($this->request->post);
+			$this->model_catalog_review_admin->addReview($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -65,10 +65,10 @@ class ControllerCatalogReview extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/review');
+		$this->load->model('catalog/review_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_review->editReview($this->request->get['review_id'], $this->request->post);
+			$this->model_catalog_review_admin_admin->editReview($this->request->get['review_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -113,11 +113,11 @@ class ControllerCatalogReview extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/review');
+		$this->load->model('catalog/review_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $review_id) {
-				$this->model_catalog_review->deleteReview($review_id);
+				$this->model_catalog_review_admin_admin->deleteReview($review_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -259,9 +259,9 @@ class ControllerCatalogReview extends Controller {
 			'limit'             => $this->config->get('config_limit_admin')
 		);
 
-		$review_total = $this->model_catalog_review->getTotalReviews($filter_data);
+		$review_total = $this->model_catalog_review_admin->getTotalReviews($filter_data);
 
-		$results = $this->model_catalog_review->getReviews($filter_data);
+		$results = $this->model_catalog_review_admin->getReviews($filter_data);
 
 		foreach ($results as $result) {
 			$data['reviews'][] = array(
@@ -466,12 +466,12 @@ class ControllerCatalogReview extends Controller {
 		$data['cancel'] = $this->url->link('catalog/review', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['review_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$review_info = $this->model_catalog_review->getReview($this->request->get['review_id']);
+			$review_info = $this->model_catalog_review_admin->getReview($this->request->get['review_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 		
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		if (isset($this->request->post['product_id'])) {
 			$data['product_id'] = $this->request->post['product_id'];

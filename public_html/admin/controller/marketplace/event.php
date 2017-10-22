@@ -7,7 +7,7 @@ class ControllerMarketplaceEvent extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/event');
+		$this->load->model('setting/event_admin');
 
 		$this->getList();
 	}
@@ -17,11 +17,11 @@ class ControllerMarketplaceEvent extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/event');
+		$this->load->model('setting/event_admin');
 
 		if (isset($this->request->post['selected']) && $this->validate()) {
 			foreach ($this->request->post['selected'] as $event_id) {
-				$this->model_setting_event->deleteEvent($event_id);
+				$this->model_setting_event_admin->deleteEvent($event_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -102,9 +102,9 @@ class ControllerMarketplaceEvent extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$event_total = $this->model_setting_event->getTotalEvents();
+		$event_total = $this->model_setting_event_admin->getTotalEvents();
 
-		$results = $this->model_setting_event->getEvents($filter_data);
+		$results = $this->model_setting_event_admin->getEvents($filter_data);
 
 		foreach ($results as $result) {
 			$data['events'][] = array(
@@ -210,9 +210,9 @@ class ControllerMarketplaceEvent extends Controller {
 		if (!$this->user->hasPermission('modify', 'marketplace/event')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('setting/event');
+			$this->load->model('setting/event_admin');
 
-			$this->model_setting_event->editStatus($event_id, 1);
+			$this->model_setting_event_admin->editStatus($event_id, 1);
 
 			$json['success'] = $this->language->get('text_success');
 		}
@@ -235,9 +235,9 @@ class ControllerMarketplaceEvent extends Controller {
 		if (!$this->user->hasPermission('modify', 'marketplace/event')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('setting/event');
+			$this->load->model('setting/event_admin');
 
-			$this->model_setting_event->editStatus($event_id, 0);
+			$this->model_setting_event_admin->editStatus($event_id, 0);
 
 			$json['success'] = $this->language->get('text_success');
 		}

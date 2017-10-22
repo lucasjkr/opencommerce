@@ -7,7 +7,7 @@ class ControllerDesignTranslation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/translation');
+		$this->load->model('design/translation_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerDesignTranslation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/translation');
+		$this->load->model('design/translation_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_translation->addTranslation($this->request->post);
+			$this->model_design_translation_admin->addTranslation($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerDesignTranslation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/translation');
+		$this->load->model('design/translation_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_translation->editTranslation($this->request->get['translation_id'], $this->request->post);
+			$this->model_design_translation_admin->editTranslation($this->request->get['translation_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerDesignTranslation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/translation');
+		$this->load->model('design/translation_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $translation_id) {
-				$this->model_design_translation->deleteTranslation($translation_id);
+				$this->model_design_translation_admin->deleteTranslation($translation_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -155,7 +155,7 @@ class ControllerDesignTranslation extends Controller {
 			'href' => $this->url->link('design/translation', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
 		$data['add'] = $this->url->link('design/translation/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('design/translation/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
@@ -169,9 +169,9 @@ class ControllerDesignTranslation extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$translation_total = $this->model_design_translation->getTotalTranslations();
+		$translation_total = $this->model_design_translation_admin->getTotalTranslations();
 
-		$results = $this->model_design_translation->getTranslations($filter_data);
+		$results = $this->model_design_translation_admin->getTranslations($filter_data);
 
 		foreach ($results as $result) {
 			$data['translations'][] = array(
@@ -297,12 +297,12 @@ class ControllerDesignTranslation extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		if (isset($this->request->get['translation_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$translation_info = $this->model_design_translation->getTranslation($this->request->get['translation_id']);
+			$translation_info = $this->model_design_translation_admin->getTranslation($this->request->get['translation_id']);
 		}
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
-		$data['stores'] = $this->model_setting_store->getStores();
+		$data['stores'] = $this->model_setting_store_admin->getStores();
 
 		if (isset($this->request->post['store_id'])) {
 			$data['store_id'] = $this->request->post['store_id'];
@@ -312,16 +312,16 @@ class ControllerDesignTranslation extends Controller {
 			$data['store_id'] = '';
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (!empty($translation_info)) {
-			$language = $this->model_localisation_language->getLanguage($translation_info['language_id']);
+			$language = $this->model_localisation_language_admin->getLanguage($translation_info['language_id']);
 			$code = $language['code'];
 		} else {
 			$code = $this->config->get('config_language');
-			$language = $this->model_localisation_language->getLanguageByCode($code);
+			$language = $this->model_localisation_language_admin->getLanguageByCode($code);
 		}
 
 		if (isset($this->request->post['language_id'])) {
@@ -435,9 +435,9 @@ class ControllerDesignTranslation extends Controller {
 			$language_id = 0;
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$language_info = $this->model_localisation_language->getLanguage($language_id);
+		$language_info = $this->model_localisation_language_admin->getLanguage($language_id);
 
 		if (!empty($language_info)) {
 			$path = glob(DIR_CATALOG . 'language/'.$language_info['code'].'/*');
@@ -484,9 +484,9 @@ class ControllerDesignTranslation extends Controller {
 			$route = '';
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$language_info = $this->model_localisation_language->getLanguage($language_id);
+		$language_info = $this->model_localisation_language_admin->getLanguage($language_id);
 
 		$directory = DIR_CATALOG . 'language/';
 

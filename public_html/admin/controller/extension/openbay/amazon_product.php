@@ -4,9 +4,9 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		$data = $this->load->language('catalog/product');
 		$data = $this->load->language('extension/openbay/amazon_listing', $data);
 
-		$this->load->model('extension/openbay/amazon');
-		$this->load->model('catalog/product');
-		$this->load->model('tool/image');
+		$this->load->model('extension/openbay/amazon_admin');
+		$this->load->model('catalog/product_admin');
+		$this->load->model('tool/image_admin');
 
 		$this->document->addScript('view/javascript/openbay/js/openbay.js');
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -113,7 +113,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$data_array = $this->request->post;
 
-			$this->model_extension_openbay_amazon->saveProduct($product_id, $data_array);
+			$this->model_extension_openbay_amazon_admin->saveProduct($product_id, $data_array);
 
 			if ($data_array['upload_after'] === 'true') {
 				$upload_result = $this->uploadItems();
@@ -136,14 +136,14 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 			$data['success'] = '';
 		}
 
-		$saved_listing_data = $this->model_extension_openbay_amazon->getProduct($product_id, $variation);
+		$saved_listing_data = $this->model_extension_openbay_amazon_admin->getProduct($product_id, $variation);
 		if (empty($saved_listing_data)) {
 			$listing_saved = false;
 		} else {
 			$listing_saved = true;
 		}
 
-		$errors = $this->model_extension_openbay_amazon->getProductErrors($product_id);
+		$errors = $this->model_extension_openbay_amazon_admin->getProductErrors($product_id);
 		foreach($errors as $error) {
 			$error['message'] =  'Error for SKU: "' . $error['sku'] . '" - ' . $this->formatUrlsInText($error['message']);
 			$data['errors'][] = $error;
@@ -154,7 +154,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 			$data['has_listing_errors'] = false;
 		}
 
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->model_catalog_product_admin->getProduct($product_id);
 		$data['listing_name'] = $product_info['name'] . " : " . $product_info['model'];
 		$data['listing_sku'] = $product_info['sku'];
 		$data['listing_url'] = $this->url->link('catalog/product/edit', 'user_token=' . $this->session->data['user_token'] . '&product_id=' . $product_id . $url, true);
@@ -190,11 +190,11 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		$data['saved_listings_url'] = $this->url->link('extension/openbay/amazon/savedListings', 'user_token=' . $this->session->data['user_token'], true);
 		$data['main_url'] = $this->url->link('extension/openbay/amazon_product', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['user_token'] = $this->session->data['user_token'];
-		$data['no_image'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['no_image'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		if ($this->openbay->addonLoad('openstock')) {
-			$this->load->model('extension/module/openstock');
-			$data['options'] = $this->model_setting_module_openstock->getVariants($product_id);
+			$this->load->model('extension/module/openstock_admin');
+			$data['options'] = $this->model_setting_module_openstock_admin->getVariants($product_id);
 		} else {
 			$data['options'] = [];
 		}
@@ -294,8 +294,8 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		} else {
 			$this->response->redirect($this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'] . $url, true));
 		}
-		$this->load->model('extension/openbay/amazon');
-		$this->model_extension_openbay_amazon->removeAdvancedErrors($product_id);
+		$this->load->model('extension/openbay/amazon_admin');
+		$this->model_extension_openbay_amazon_admin->removeAdvancedErrors($product_id);
 		$this->session->data['success'] = 'Errors removed';
 		$this->response->redirect($this->url->link('extension/openbay/amazon_product', 'user_token=' . $this->session->data['user_token'] . '&product_id=' . $product_id . $url, true));
 	}
@@ -305,8 +305,8 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 			return;
 		}
 
-		$this->load->model('extension/openbay/amazon');
-		$this->model_extension_openbay_amazon->deleteSaved($this->request->get['product_id'], $this->request->get['var']);
+		$this->load->model('extension/openbay/amazon_admin');
+		$this->model_extension_openbay_amazon_admin->deleteSaved($this->request->get['product_id'], $this->request->get['var']);
 	}
 
 	public function uploadSaved() {
@@ -320,12 +320,12 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 
 	private function uploadItems() {
 		$this->load->language('extension/openbay/amazon_listing');
-		$this->load->model('extension/openbay/amazon');
+		$this->load->model('extension/openbay/amazon_admin');
 		$logger = new Log('amazon_product.log');
 
 		$logger->write('Uploading process started . ');
 
-		$saved_products = $this->model_extension_openbay_amazon->getSavedProductsData();
+		$saved_products = $this->model_extension_openbay_amazon_admin->getSavedProductsData();
 
 		if (empty($saved_products)) {
 			$logger->write('No saved listings found. Uploading canceled . ');
@@ -358,7 +358,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 				break;
 			}
 			$logger->write('Product upload success');
-			$this->model_extension_openbay_amazon->setProductUploaded($saved_product['product_id'], $insertion_response['insertion_id'], $saved_product['sku']);
+			$this->model_extension_openbay_amazon_admin->setProductUploaded($saved_product['product_id'], $insertion_response['insertion_id'], $saved_product['sku']);
 		}
 
 		if (!isset($result['status'])) {
@@ -371,7 +371,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 	}
 
 	public function parseTemplateAjax() {
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		$log = new Log('amazon_product.log');
 
@@ -396,7 +396,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 							if (empty($field['value'])) {
 								$template['fields'][$key]['thumb'] = '';
 							} else {
-								$template['fields'][$key]['thumb'] = $this->model_tool_image->resize(str_replace(HTTPS_CATALOG . 'image/', '', $field['value']), 100, 100);
+								$template['fields'][$key]['thumb'] = $this->model_tool_image_admin->resize(str_replace(HTTPS_CATALOG . 'image/', '', $field['value']), 100, 100);
 							}
 						}
 					}
@@ -425,13 +425,13 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 	}
 
 	private function fillDefaultValues($product_id, $fields_array, $var = '') {
-		$this->load->model('catalog/product');
-		$this->load->model('setting/setting');
-		$this->load->model('extension/openbay/amazon');
+		$this->load->model('catalog/product_admin');
+		$this->load->model('setting/setting_admin');
+		$this->load->model('extension/openbay/amazon_admin');
 
-		$openbay_settings = $this->model_setting_setting->getSetting('openbay_amazon');
+		$openbay_settings = $this->model_setting_setting_admin->getSetting('openbay_amazon');
 
-		$product_info = $this->model_catalog_product->getProduct($product_id);
+		$product_info = $this->model_catalog_product_admin->getProduct($product_id);
 		$product_info['description'] = trim(utf8_encode(strip_tags(html_entity_decode($product_info['description']), "<br>")));
 		$product_info['image'] = HTTPS_CATALOG . 'image/' . $product_info['image'];
 
@@ -451,20 +451,20 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 			'conditiontype' => $default_condition,
 		);
 
-		$this->load->model('localisation/weight_class');
-		$weight_class = $this->model_localisation_weight_class->getWeightClass($product_info['weight_class_id']);
+		$this->load->model('localisation/weight_class_admin');
+		$weight_class = $this->model_localisation_weight_class_admin->getWeightClass($product_info['weight_class_id']);
 		if (!empty($weight_class)) {
 			$defaults['shippingweightunitofmeasure'] = $weight_class['unit'];
 		}
 
-		$this->load->model('catalog/manufacturer');
-		$manufacturer = $this->model_catalog_manufacturer->getManufacturer($product_info['manufacturer_id']);
+		$this->load->model('catalog/manufacturer_admin');
+		$manufacturer = $this->model_catalog_manufacturer_admin->getManufacturer($product_info['manufacturer_id']);
 		if (!empty($manufacturer)) {
 			$defaults['manufacturer'] = $manufacturer['name'];
 			$defaults['brand'] = $manufacturer['name'];
 		}
 
-		$product_images = $this->model_catalog_product->getProductImages($product_id);
+		$product_images = $this->model_catalog_product_admin->getProductImages($product_id);
 		$image_index = 1;
 		foreach($product_images as $product_image) {
 			$defaults['pt' . $image_index] = HTTPS_CATALOG . 'image/' . $product_image['image'];
@@ -485,9 +485,9 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		}
 
 		if ($var !== '' && $this->openbay->addonLoad('openstock')) {
-			$this->load->model('tool/image');
-			$this->load->model('extension/module/openstock');
-			$option_stocks = $this->model_setting_module_openstock->getVariants($product_id);
+			$this->load->model('tool/image_admin');
+			$this->load->model('extension/module/openstock_admin');
+			$option_stocks = $this->model_setting_module_openstock_admin->getVariants($product_id);
 
 			$option = '';
 
@@ -534,14 +534,14 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 
 	private function fillSavedValues($product_id, $fields_array, $var = '') {
 
-		$this->load->model('extension/openbay/amazon');
-		$saved_listing = $this->model_extension_openbay_amazon->getProduct($product_id, $var);
+		$this->load->model('extension/openbay/amazon_admin');
+		$saved_listing = $this->model_extension_openbay_amazon_admin->getProduct($product_id, $var);
 
 		$decoded_data = (array)json_decode($saved_listing['data']);
 		$saved_fields = (array)$decoded_data['fields'];
 
 		//Show current quantity instead of last uploaded
-		$saved_fields['Quantity'] = $this->model_extension_openbay_amazon->getProductQuantity($product_id, $var);
+		$saved_fields['Quantity'] = $this->model_extension_openbay_amazon_admin->getProductQuantity($product_id, $var);
 
 		$filled_array = [];
 

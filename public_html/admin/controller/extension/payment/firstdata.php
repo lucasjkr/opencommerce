@@ -7,10 +7,10 @@ class ControllerExtensionPaymentFirstdata extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_firstdata', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_firstdata', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -19,13 +19,13 @@ class ControllerExtensionPaymentFirstdata extends Controller {
 
 		$data['notify_url'] = HTTPS_CATALOG . 'index.php?route=extension/payment/firstdata/notify';
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -192,31 +192,31 @@ class ControllerExtensionPaymentFirstdata extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/firstdata');
-		$this->model_extension_payment_firstdata->install();
+		$this->load->model('extension/payment/firstdata_admin');
+		$this->model_extension_payment_firstdata_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/firstdata');
-		$this->model_extension_payment_firstdata->uninstall();
+		$this->load->model('extension/payment/firstdata_admin');
+		$this->model_extension_payment_firstdata_admin->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('payment_firstdata_status')) {
-			$this->load->model('extension/payment/firstdata');
+			$this->load->model('extension/payment/firstdata_admin');
 
-			$firstdata_order = $this->model_extension_payment_firstdata->getOrder($this->request->get['order_id']);
+			$firstdata_order = $this->model_extension_payment_firstdata_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($firstdata_order)) {
 				$this->load->language('extension/payment/firstdata');
 
-				$firstdata_order['total_captured'] = $this->model_extension_payment_firstdata->getTotalCaptured($firstdata_order['firstdata_order_id']);
+				$firstdata_order['total_captured'] = $this->model_extension_payment_firstdata_admin->getTotalCaptured($firstdata_order['firstdata_order_id']);
 				$firstdata_order['total_formatted'] = $this->currency->format($firstdata_order['total'], $firstdata_order['currency_code'], 1, true);
 				$firstdata_order['total_captured_formatted'] = $this->currency->format($firstdata_order['total_captured'], $firstdata_order['currency_code'], 1, true);
 
 				$data['firstdata_order'] = $firstdata_order;
 				$data['merchant_id'] = $this->config->get('payment_firstdata_merchant_id');
-				$data['currency'] = $this->model_extension_payment_firstdata->mapCurrency($firstdata_order['currency_code']);
+				$data['currency'] = $this->model_extension_payment_firstdata_admin->mapCurrency($firstdata_order['currency_code']);
 				$data['amount'] = number_format($firstdata_order['total'], 2);
 
 				$data['request_timestamp'] = date("Y:m:d-H:i:s");

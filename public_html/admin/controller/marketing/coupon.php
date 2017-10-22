@@ -7,7 +7,7 @@ class ControllerMarketingCoupon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/coupon');
+		$this->load->model('marketing/coupon_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerMarketingCoupon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/coupon');
+		$this->load->model('marketing/coupon_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_marketing_coupon->addCoupon($this->request->post);
+			$this->model_marketing_coupon_admin->addCoupon($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerMarketingCoupon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/coupon');
+		$this->load->model('marketing/coupon_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_marketing_coupon->editCoupon($this->request->get['coupon_id'], $this->request->post);
+			$this->model_marketing_coupon_admin->editCoupon($this->request->get['coupon_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerMarketingCoupon extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('marketing/coupon');
+		$this->load->model('marketing/coupon_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $coupon_id) {
-				$this->model_marketing_coupon->deleteCoupon($coupon_id);
+				$this->model_marketing_coupon_admin->deleteCoupon($coupon_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerMarketingCoupon extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$coupon_total = $this->model_marketing_coupon->getTotalCoupons();
+		$coupon_total = $this->model_marketing_coupon_admin->getTotalCoupons();
 
-		$results = $this->model_marketing_coupon->getCoupons($filter_data);
+		$results = $this->model_marketing_coupon_admin->getCoupons($filter_data);
 
 		foreach ($results as $result) {
 			$data['coupons'][] = array(
@@ -329,7 +329,7 @@ class ControllerMarketingCoupon extends Controller {
 		$data['cancel'] = $this->url->link('marketing/coupon', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['coupon_id']) && (!$this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$coupon_info = $this->model_marketing_coupon->getCoupon($this->request->get['coupon_id']);
+			$coupon_info = $this->model_marketing_coupon_admin->getCoupon($this->request->get['coupon_id']);
 		}
 
 		if (isset($this->request->post['name'])) {
@@ -391,17 +391,17 @@ class ControllerMarketingCoupon extends Controller {
 		if (isset($this->request->post['coupon_product'])) {
 			$products = $this->request->post['coupon_product'];
 		} elseif (isset($this->request->get['coupon_id'])) {
-			$products = $this->model_marketing_coupon->getCouponProducts($this->request->get['coupon_id']);
+			$products = $this->model_marketing_coupon_admin->getCouponProducts($this->request->get['coupon_id']);
 		} else {
 			$products = [];
 		}
 
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		$data['coupon_product'] = [];
 
 		foreach ($products as $product_id) {
-			$product_info = $this->model_catalog_product->getProduct($product_id);
+			$product_info = $this->model_catalog_product_admin->getProduct($product_id);
 
 			if ($product_info) {
 				$data['coupon_product'][] = array(
@@ -414,17 +414,17 @@ class ControllerMarketingCoupon extends Controller {
 		if (isset($this->request->post['coupon_category'])) {
 			$categories = $this->request->post['coupon_category'];
 		} elseif (isset($this->request->get['coupon_id'])) {
-			$categories = $this->model_marketing_coupon->getCouponCategories($this->request->get['coupon_id']);
+			$categories = $this->model_marketing_coupon_admin->getCouponCategories($this->request->get['coupon_id']);
 		} else {
 			$categories = [];
 		}
 
-		$this->load->model('catalog/category');
-
 		$data['coupon_category'] = [];
 
+		$this->load->model('catalog/category_admin');
+
 		foreach ($categories as $category_id) {
-			$category_info = $this->model_catalog_category->getCategory($category_id);
+			$category_info = $this->model_catalog_category_admin->getCategory($category_id);
 
 			if ($category_info) {
 				$data['coupon_category'][] = array(
@@ -494,7 +494,7 @@ class ControllerMarketingCoupon extends Controller {
 			$this->error['code'] = $this->language->get('error_code');
 		}
 
-		$coupon_info = $this->model_marketing_coupon->getCouponByCode($this->request->post['code']);
+		$coupon_info = $this->model_marketing_coupon_admin->getCouponByCode($this->request->post['code']);
 
 		if ($coupon_info) {
 			if (!isset($this->request->get['coupon_id'])) {
@@ -530,11 +530,11 @@ class ControllerMarketingCoupon extends Controller {
 			$page = 1;
 		}
 
-		$this->load->model('marketing/coupon');
+		$this->load->model('marketing/coupon_admin');
 
 		$data['histories'] = [];
 
-		$results = $this->model_marketing_coupon->getCouponHistories($coupon_id, ($page - 1) * 10, 10);
+		$results = $this->model_marketing_coupon_admin->getCouponHistories($coupon_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
 			$data['histories'][] = array(
@@ -545,7 +545,7 @@ class ControllerMarketingCoupon extends Controller {
 			);
 		}
 
-		$history_total = $this->model_marketing_coupon->getTotalCouponHistories($coupon_id);
+		$history_total = $this->model_marketing_coupon_admin->getTotalCouponHistories($coupon_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $history_total;

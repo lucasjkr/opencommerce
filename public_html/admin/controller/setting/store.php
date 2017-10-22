@@ -7,9 +7,9 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		$this->getList();
 	}
@@ -19,14 +19,14 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$store_id = $this->model_setting_store->addStore($this->request->post);
+			$store_id = $this->model_setting_store_admin->addStore($this->request->post);
 
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_setting->editSetting('config', $this->request->post, $store_id);
+			$this->model_setting_setting_admin->editSetting('config', $this->request->post, $store_id);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -41,14 +41,14 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_setting_store->editStore($this->request->get['store_id'], $this->request->post);
+			$this->model_setting_store_admin->editStore($this->request->get['store_id'], $this->request->post);
 
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_setting->editSetting('config', $this->request->post, $this->request->get['store_id']);
+			$this->model_setting_setting_admin->editSetting('config', $this->request->post, $this->request->get['store_id']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -63,15 +63,15 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
 			foreach ($this->request->post['selected'] as $store_id) {
-				$this->model_setting_store->deleteStore($store_id);
+				$this->model_setting_store_admin->deleteStore($store_id);
 
-				$this->model_setting_setting->deleteSetting('config', $store_id);
+				$this->model_setting_setting_admin->deleteSetting('config', $store_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -113,9 +113,9 @@ class ControllerSettingStore extends Controller {
 			'edit'     => $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$store_total = $this->model_setting_store->getTotalStores();
+		$store_total = $this->model_setting_store_admin->getTotalStores();
 
-		$results = $this->model_setting_store->getStores();
+		$results = $this->model_setting_store_admin->getStores();
 
 		foreach ($results as $result) {
 			$data['stores'][] = array(
@@ -251,9 +251,9 @@ class ControllerSettingStore extends Controller {
 		$data['cancel'] = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true);
 
 		if (isset($this->request->get['store_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$store_info = $this->model_setting_setting->getSetting('config', $this->request->get['store_id']);
+			$store_info = $this->model_setting_setting_admin->getSetting('config', $this->request->get['store_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -311,9 +311,9 @@ class ControllerSettingStore extends Controller {
 		// Create a new language container so we don't pollute the current one
 		$language = new Language($this->config->get('config_language'));
 		
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
-		$extensions = $this->model_setting_extension->getInstalled('theme');
+		$extensions = $this->model_setting_extension_admin->getInstalled('theme');
 
 		foreach ($extensions as $code) {
 			$this->load->language('extension/theme/' . $code, 'extension');
@@ -332,9 +332,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_layout_id'] = '';
 		}
 
-		$this->load->model('design/layout');
+		$this->load->model('design/layout_admin');
 
-		$data['layouts'] = $this->model_design_layout->getLayouts();
+		$data['layouts'] = $this->model_design_layout_admin->getLayouts();
 
 		if (isset($this->request->post['config_name'])) {
 			$data['config_name'] = $this->request->post['config_name'];
@@ -400,17 +400,17 @@ class ControllerSettingStore extends Controller {
 			$data['config_image'] = '';
 		}
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['config_image']) && is_file(DIR_IMAGE . $this->request->post['config_image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['config_image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['config_image'], 100, 100);
 		} elseif (isset($store_info['config_image']) && is_file(DIR_IMAGE . $store_info['config_image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($store_info['config_image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($store_info['config_image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['config_open'])) {
 			$data['config_open'] = $this->request->post['config_open'];
@@ -428,9 +428,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_comment'] = '';
 		}
 
-		$this->load->model('localisation/location');
+		$this->load->model('localisation/location_admin');
 
-		$data['locations'] = $this->model_localisation_location->getLocations();
+		$data['locations'] = $this->model_localisation_location_admin->getLocations();
 
 		if (isset($this->request->post['config_location'])) {
 			$data['config_location'] = $this->request->post['config_location'];
@@ -448,9 +448,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_country_id'] = $this->config->get('config_country_id');
 		}
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
-		$data['countries'] = $this->model_localisation_country->getCountries();
+		$data['countries'] = $this->model_localisation_country_admin->getCountries();
 
 		if (isset($this->request->post['config_zone_id'])) {
 			$data['config_zone_id'] = $this->request->post['config_zone_id'];
@@ -468,9 +468,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_language'] = $this->config->get('config_language');
 		}
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['config_currency'])) {
 			$data['config_currency'] = $this->request->post['config_currency'];
@@ -480,9 +480,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_currency'] = $this->config->get('config_currency');
 		}
 
-		$this->load->model('localisation/currency');
+		$this->load->model('localisation/currency_admin');
 
-		$data['currencies'] = $this->model_localisation_currency->getCurrencies();
+		$data['currencies'] = $this->model_localisation_currency_admin->getCurrencies();
 
 		if (isset($this->request->post['config_tax'])) {
 			$data['config_tax'] = $this->request->post['config_tax'];
@@ -516,9 +516,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_customer_group_id'] = '';
 		}
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
 		if (isset($this->request->post['config_customer_group_display'])) {
 			$data['config_customer_group_display'] = $this->request->post['config_customer_group_display'];
@@ -544,9 +544,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_account_id'] = '';
 		}
 
-		$this->load->model('catalog/information');
+		$this->load->model('catalog/information_admin');
 
-		$data['informations'] = $this->model_catalog_information->getInformations();
+		$data['informations'] = $this->model_catalog_information_admin->getInformations();
 
 		if (isset($this->request->post['config_cart_weight'])) {
 			$data['config_cart_weight'] = $this->request->post['config_cart_weight'];
@@ -580,9 +580,9 @@ class ControllerSettingStore extends Controller {
 			$data['config_order_status_id'] = '';
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['config_stock_display'])) {
 			$data['config_stock_display'] = $this->request->post['config_stock_display'];
@@ -609,14 +609,14 @@ class ControllerSettingStore extends Controller {
 		}
 
 		if (isset($this->request->post['config_logo']) && is_file(DIR_IMAGE . $this->request->post['config_logo'])) {
-			$data['logo'] = $this->model_tool_image->resize($this->request->post['config_logo'], 100, 100);
+			$data['logo'] = $this->model_tool_image_admin->resize($this->request->post['config_logo'], 100, 100);
 		} elseif (isset($store_info['config_logo']) && is_file(DIR_IMAGE . $store_info['config_logo'])) {
-			$data['logo'] = $this->model_tool_image->resize($store_info['config_logo'], 100, 100);
+			$data['logo'] = $this->model_tool_image_admin->resize($store_info['config_logo'], 100, 100);
 		} else {
-			$data['logo'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['logo'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['config_icon'])) {
 			$data['config_icon'] = $this->request->post['config_icon'];
@@ -627,11 +627,11 @@ class ControllerSettingStore extends Controller {
 		}
 
 		if (isset($this->request->post['config_icon']) && is_file(DIR_IMAGE . $this->request->post['config_icon'])) {
-			$data['icon'] = $this->model_tool_image->resize($this->request->post['config_icon'], 100, 100);
+			$data['icon'] = $this->model_tool_image_admin->resize($this->request->post['config_icon'], 100, 100);
 		} elseif (isset($store_info['config_icon']) && is_file(DIR_IMAGE . $store_info['config_icon'])) {
-			$data['icon'] = $this->model_tool_image->resize($store_info['config_icon'], 100, 100);
+			$data['icon'] = $this->model_tool_image_admin->resize($store_info['config_icon'], 100, 100);
 		} else {
-			$data['icon'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['icon'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 
 		if (isset($this->request->post['config_secure'])) {
@@ -698,14 +698,14 @@ class ControllerSettingStore extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('sale/order');
+		$this->load->model('sale/order_admin');
 
 		foreach ($this->request->post['selected'] as $store_id) {
 			if (!$store_id) {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_sale_order->getTotalOrdersByStoreId($store_id);
+			$store_total = $this->model_sale_order_admin->getTotalOrdersByStoreId($store_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);

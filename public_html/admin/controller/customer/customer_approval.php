@@ -81,9 +81,9 @@ class ControllerCustomerCustomerApproval extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('customer/customer_group');
+		$this->load->model('customer/customer_group_admin');
 
-		$data['customer_groups'] = $this->model_customer_customer_group->getCustomerGroups();
+		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 		
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -143,11 +143,11 @@ class ControllerCustomerCustomerApproval extends Controller {
 			'limit'                    => $this->config->get('config_limit_admin')
 		);
 
-		$this->load->model('customer/customer_approval');	
+		$this->load->model('customer/customer_approval_admin');
 
-		$customer_approval_total = $this->model_customer_customer_approval->getTotalCustomerApprovals($filter_data);
+		$customer_approval_total = $this->model_customer_customer_approval_admin->getTotalCustomerApprovals($filter_data);
 
-		$results = $this->model_customer_customer_approval->getCustomerApprovals($filter_data);
+		$results = $this->model_customer_customer_approval_admin->getCustomerApprovals($filter_data);
 
 		foreach ($results as $result) {
 			$data['customer_approvals'][] = array(
@@ -206,11 +206,11 @@ class ControllerCustomerCustomerApproval extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer_approval')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer_approval');
+			$this->load->model('customer/customer_approval_admin');
 
             //TODO: This might not need to be an 'if', need to track down where get['type'] is being set
 			if ($this->request->get['type'] == 'customer') {
-				$this->model_customer_customer_approval->approveCustomer($this->request->get['customer_id']);
+				$this->model_customer_customer_approval_admin->approveCustomer($this->request->get['customer_id']);
 			}
 			
 			$json['success'] = $this->language->get('text_success');
@@ -228,11 +228,11 @@ class ControllerCustomerCustomerApproval extends Controller {
 		if (!$this->user->hasPermission('modify', 'customer/customer_approval')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('customer/customer_approval');
+			$this->load->model('customer/customer_approval_admin');
 
             //TODO: This might not need to be an 'if', need to track down where get['type'] is being set
 			if ($this->request->get['type'] == 'customer') {
-				$this->model_customer_customer_approval->denyCustomer($this->request->get['customer_id']);
+				$this->model_customer_customer_approval_admin->denyCustomer($this->request->get['customer_id']);
 			}
 					
 			$json['success'] = $this->language->get('text_success');

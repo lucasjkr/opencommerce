@@ -122,6 +122,7 @@ class ControllerMarketplaceInstall extends Controller {
 				}
 	
 				// A list of allowed directories to be written to
+                // LJK TODO - might need to re-evaluate this
 				$allowed = array(
 					'admin/controller/extension/',
 					'admin/language/',
@@ -185,7 +186,7 @@ class ControllerMarketplaceInstall extends Controller {
 				}
 				
 				if (!$json) {
-					$this->load->model('setting/extension');
+					$this->load->model('setting/extension_admin');
 	
 					foreach ($files as $file) {
 						$destination = str_replace('\\', '/', substr($file, strlen($directory . 'upload/')));
@@ -210,13 +211,13 @@ class ControllerMarketplaceInstall extends Controller {
 	
 						if (is_dir($file) && !is_dir($path)) {
 							if (mkdir($path, 0777)) {
-								$this->model_setting_extension->addExtensionPath($extension_install_id, $destination);
+								$this->model_setting_extension_admin->addExtensionPath($extension_install_id, $destination);
 							}
 						}
 	
 						if (is_file($file)) {
 							if (rename($file, $path)) {
-								$this->model_setting_extension->addExtensionPath($extension_install_id, $destination);
+								$this->model_setting_extension_admin->addExtensionPath($extension_install_id, $destination);
 							}
 						}
 					}
@@ -259,7 +260,7 @@ class ControllerMarketplaceInstall extends Controller {
 			$file = DIR_STORAGE . 'marketplace/' . 'tmp-' . $this->session->data['install'] . '/install.xml';
 
 			if (is_file($file)) {
-				$this->load->model('setting/modification');
+				$this->load->model('setting/modification_admin');
 				
 				// If xml file just put it straight into the DB
 				$xml = file_get_contents($file);
@@ -283,10 +284,10 @@ class ControllerMarketplaceInstall extends Controller {
 							$code = $code->nodeValue;
 	
 							// Check to see if the modification is already installed or not.
-							$modification_info = $this->model_setting_modification->getModificationByCode($code);
+							$modification_info = $this->model_setting_modification_admin->getModificationByCode($code);
 	
 							if ($modification_info) {
-								$this->model_setting_modification->deleteModification($modification_info['modification_id']);
+								$this->model_setting_modification_admin->deleteModification($modification_info['modification_id']);
 							}
 						} else {
 							$json['error'] = $this->language->get('error_code');
@@ -328,7 +329,7 @@ class ControllerMarketplaceInstall extends Controller {
 								'status'               => 1
 							);
 	
-							$this->model_setting_modification->addModification($modification_data);
+							$this->model_setting_modification_admin->addModification($modification_data);
 						}
 					} catch(Exception $exception) {
 						$json['error'] = sprintf($this->language->get('error_exception'), $exception->getCode(), $exception->getMessage(), $exception->getFile(), $exception->getLine());
@@ -428,9 +429,9 @@ class ControllerMarketplaceInstall extends Controller {
 		}
 
 		if (!$json) {
-			$this->load->model('setting/extension');
+			$this->load->model('setting/extension_admin');
 
-			$results = $this->model_setting_extension->getExtensionPathsByExtensionInstallId($extension_install_id);
+			$results = $this->model_setting_extension_admin->getExtensionPathsByExtensionInstallId($extension_install_id);
 
 			rsort($results);
 
@@ -464,16 +465,16 @@ class ControllerMarketplaceInstall extends Controller {
 					}
 				}
 
-				$this->model_setting_extension->deleteExtensionPath($result['extension_path_id']);
+				$this->model_setting_extension_admin->deleteExtensionPath($result['extension_path_id']);
 			}
 
 			// Remove the install
-			$this->model_setting_extension->deleteExtensionInstall($extension_install_id);
+			$this->model_setting_extension_admin->deleteExtensionInstall($extension_install_id);
 			
 			// Remove any xml modifications
-			$this->load->model('setting/modification');
+			$this->load->model('setting/modification_admin');
 
-			$this->model_setting_modification->deleteModificationsByExtensionInstallId($extension_install_id);
+			$this->model_setting_modification_admin->deleteModificationsByExtensionInstallId($extension_install_id);
 			
 			$json['success'] = $this->language->get('text_success');
 		}

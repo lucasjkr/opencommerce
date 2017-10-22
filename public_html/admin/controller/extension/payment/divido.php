@@ -7,11 +7,11 @@ class ControllerExtensionPaymentDivido extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
-		$this->load->model('extension/payment/divido');
+		$this->load->model('setting/setting_admin');
+		$this->load->model('extension/payment/divido_admin');
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_divido', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_divido', $this->request->post);
 			
 			$this->session->data['success'] = $this->language->get('text_success');
 			
@@ -32,9 +32,9 @@ class ControllerExtensionPaymentDivido extends Controller {
 		$data['button_save'] = $this->language->get('button_save');
 		$data['button_cancel'] = $this->language->get('button_cancel');
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
@@ -137,10 +137,10 @@ class ControllerExtensionPaymentDivido extends Controller {
 
 		$data['categories'] = [];
 
-		$this->load->model('catalog/category');
+		$this->load->model('catalog/category_admin');
 
 		foreach ($data['payment_divido_categories'] as $category_id) {
-			$category_info = $this->model_catalog_category->getCategory($category_id);
+			$category_info = $this->model_catalog_category_admin->getCategory($category_id);
 
 			if ($category_info) {
 				$data['categories'][] = array(
@@ -151,7 +151,7 @@ class ControllerExtensionPaymentDivido extends Controller {
 		}
 
 		try {
-			$data['divido_plans'] = $this->model_extension_payment_divido->getAllPlans();
+			$data['divido_plans'] = $this->model_extension_payment_divido_admin->getAllPlans();
 		} catch (Exception $e) {
 			$this->log->write($e->getMessage());
 			$data['divido_plans'] = [];
@@ -172,12 +172,12 @@ class ControllerExtensionPaymentDivido extends Controller {
 			return null;
 		}
 
-		$this->load->model('extension/payment/divido');
+		$this->load->model('extension/payment/divido_admin');
 		$this->load->language('extension/payment/divido');
 
 		$order_id = $this->request->get['order_id'];
 
-		$lookup = $this->model_extension_payment_divido->getLookupByOrderId($order_id);
+		$lookup = $this->model_extension_payment_divido_admin->getLookupByOrderId($order_id);
 		$proposal_id = null;
 		$application_id = null;
 		$deposit_amount = null;
@@ -196,13 +196,13 @@ class ControllerExtensionPaymentDivido extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/divido');
-		$this->model_extension_payment_divido->install();
+		$this->load->model('extension/payment/divido_admin');
+		$this->model_extension_payment_divido_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/divido');
-		$this->model_extension_payment_divido->uninstall();
+		$this->load->model('extension/payment/divido_admin');
+		$this->model_extension_payment_divido_admin->uninstall();
 	}
 
 	protected function validate() {
