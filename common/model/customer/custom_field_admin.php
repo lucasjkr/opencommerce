@@ -1,7 +1,7 @@
 <?php
 class ModelCustomerCustomFieldAdmin extends Model {
 	public function addCustomField($data) {
-		$this->db->query("INSERT INTO `oc_custom_field` SET type = :type, value = :value, validation = :validation, location = :location, status = :status, sort_order = :sort_order",
+		$this->db->query("INSERT INTO `oc_custom_field` SET `type` = :type, `value` = :value, `validation` = :validation, `location` = :location, `status` = :status, `sort_order` = :sort_order",
         [
             ':type' => $data['type'],
             ':value' => $data['value'],
@@ -14,7 +14,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
 		$custom_field_id = $this->db->getLastId();
 
 		foreach ($data['custom_field_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO oc_custom_field_description SET custom_field_id = :custom_field_id, language_id = :language_id, name = :name",
+			$this->db->query("INSERT INTO `oc_custom_field_description` SET `custom_field_id` = :custom_field_id, `language_id` = :language_id, `name` = :name",
                 [
                     ':custom_field_id' => $custom_field_id,
                     ':language_id' => $language_id,
@@ -25,7 +25,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
 		if (isset($data['custom_field_customer_group'])) {
 			foreach ($data['custom_field_customer_group'] as $custom_field_customer_group) {
 				if (isset($custom_field_customer_group['customer_group_id'])) {
-					$this->db->query("INSERT INTO oc_custom_field_customer_group SET custom_field_id = :custom_field_id, customer_group_id = :customer_group_id, required = :required",
+					$this->db->query("INSERT INTO `oc_custom_field_customer_group` SET `custom_field_id` = :custom_field_id, `customer_group_id` = :customer_group_id, `required` = :required",
                         [
                             ':custom_field_id' => $custom_field_id,
                             ':customer_group_id' => $custom_field_customer_group['customer_group_id'],
@@ -37,7 +37,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
 
 		if (isset($data['custom_field_value'])) {
 			foreach ($data['custom_field_value'] as $custom_field_value) {
-				$this->db->query("INSERT INTO oc_custom_field_value SET custom_field_id = :custom_field_id, sort_order = :sort_order",
+				$this->db->query("INSERT INTO `oc_custom_field_value` SET `custom_field_id` = :custom_field_id, `sort_order` = :sort_order",
                     [
                         ':custom_field_id' => $custom_field_id,
                         ':sort_order' => $custom_field_value['sort_order']
@@ -46,7 +46,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
 				$custom_field_value_id = $this->db->getLastId();
 
 				foreach ($custom_field_value['custom_field_value_description'] as $language_id => $custom_field_value_description) {
-					$this->db->query("INSERT INTO oc_custom_field_value_description SET custom_field_value_id = :custom_field_value_id, language_id = :language_id, custom_field_id = :custom_field_id, name = :name",
+					$this->db->query("INSERT INTO `oc_custom_field_value_description` SET `custom_field_value_id` = :custom_field_value_id, `language_id` = :language_id, `custom_field_id` = :custom_field_id, `name` = :name",
                         [
                             ':custom_field_value_id' => $custom_field_value_id,
                             ':language_id' => $language_id,
@@ -61,7 +61,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
 	}
 
 	public function editCustomField($custom_field_id, $data) {
-		$this->db->query("UPDATE `oc_custom_field` SET type = :type, value = :value, validation = :validation, location = :location, status = :status, sort_order = :sort_order WHERE custom_field_id = :custom_field_id",
+		$this->db->query("UPDATE `oc_custom_field` SET `type` = :type, `value` = :value, `validation` = :validation, `location` = :location, `status` = :status, `sort_order` = :sort_order WHERE `custom_field_id` = :custom_field_id",
             [
                 ':type' => $data['type'],
                 ':value' => $data['value'],
@@ -72,13 +72,13 @@ class ModelCustomerCustomFieldAdmin extends Model {
                 ':custom_field_id' => $custom_field_id
             ]);
 
-		$this->db->query("DELETE FROM oc_custom_field_description WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_description` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
 
 		foreach ($data['custom_field_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO oc_custom_field_description SET custom_field_id = :custom_field_id, language_id = :language_id, name = :name",
+			$this->db->query("INSERT INTO `oc_custom_field_description` SET `custom_field_id` = :custom_field_id, `language_id` = :language_id, `name` = :name",
                 [
                     ':custom_field_id' => $custom_field_id,
                     ':language_id' => $language_id,
@@ -86,7 +86,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
                 ]);
 		}
 
-		$this->db->query("DELETE FROM oc_custom_field_customer_group WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_customer_group` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
@@ -94,9 +94,9 @@ class ModelCustomerCustomFieldAdmin extends Model {
 		if (isset($data['custom_field_customer_group'])) {
 			foreach ($data['custom_field_customer_group'] as $custom_field_customer_group) {
 				if (isset($custom_field_customer_group['customer_group_id'])) {
-					$this->db->query("INSERT INTO oc_custom_field_customer_group SET custom_field_id = :custom_field_value_id, customer_group_id = , required = :required",
+					$this->db->query("INSERT INTO `oc_custom_field_customer_group` SET `custom_field_id` = :custom_field_id, `customer_group_id` = :customer_group_id, `required` = :required",
                        [
-                           ':custom_field_value_id' => $custom_field_value_id,
+                           ':custom_field_id' => $custom_field_id,
                            ':customer_group_id' => $custom_field_customer_group['customer_group_id'],
                            ':required' => (isset($custom_field_customer_group['required']) ? 1 : 0)
                        ] );
@@ -104,11 +104,11 @@ class ModelCustomerCustomFieldAdmin extends Model {
 			}
 		}
 
-		$this->db->query("DELETE FROM oc_custom_field_value WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_value` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
-		$this->db->query("DELETE FROM oc_custom_field_value_description WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_value_description` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
@@ -116,14 +116,14 @@ class ModelCustomerCustomFieldAdmin extends Model {
 		if (isset($data['custom_field_value'])) {
 			foreach ($data['custom_field_value'] as $custom_field_value) {
 				if ($custom_field_value['custom_field_value_id']) {
-					$this->db->query("INSERT INTO oc_custom_field_value SET custom_field_value_id = :custom_field_value_id, custom_field_id = :custom_field_id, sort_order = :sort_order",
+					$this->db->query("INSERT INTO `oc_custom_field_value` SET `custom_field_value_id` = :custom_field_value_id, `custom_field_id` = :custom_field_id, `sort_order` = :sort_order",
                         [
                             ':custom_field_value_id' => $custom_field_value['custom_field_value_id'],
                             ':custom_field_id' => $custom_field_id,
                             ':sort_order' => $custom_field_value['sort_order']
                         ]);
 				} else {
-					$this->db->query("INSERT INTO oc_custom_field_value SET custom_field_id = :custom_field_id, sort_order = :sort_order",
+					$this->db->query("INSERT INTO `oc_custom_field_value` SET `custom_field_id` = :custom_field_id, `sort_order` = :sort_order",
                         [
                             ':custom_field_id' => $custom_field_id,
                             ':sort_order' => $custom_field_value['sort_order']
@@ -133,8 +133,7 @@ class ModelCustomerCustomFieldAdmin extends Model {
 				$custom_field_value_id = $this->db->getLastId();
 
 				foreach ($custom_field_value['custom_field_value_description'] as $language_id => $custom_field_value_description) {
-					$this->db->query("INSERT INTO oc_custom_field_value_description SET custom_field_value_id = :custom_field_value_id, language_id = :language_id, 
-custom_field_id = :custom_field_id, name = :name",
+					$this->db->query("INSERT INTO `oc_custom_field_value_description` SET `custom_field_value_id` = :custom_field_value_id, `language_id` = :language_id, `custom_field_id` = :custom_field_id, `name` = :name",
                         [
                             ':custom_field_value_id' => $custom_field_value_id,
                             ':language_id' => $language_id,
@@ -147,30 +146,30 @@ custom_field_id = :custom_field_id, name = :name",
 	}
 
 	public function deleteCustomField($custom_field_id) {
-		$this->db->query("DELETE FROM `oc_custom_field` WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
-		$this->db->query("DELETE FROM `oc_custom_field_description` WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_description` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
-		$this->db->query("DELETE FROM `oc_custom_field_customer_group` WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_customer_group` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
-		$this->db->query("DELETE FROM `oc_custom_field_value` WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_value` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
-		$this->db->query("DELETE FROM `oc_custom_field_value_description` WHERE custom_field_id = :custom_field_id",
+		$this->db->query("DELETE FROM `oc_custom_field_value_description` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
 	}
 
 	public function getCustomField($custom_field_id) {
-		$query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN oc_custom_field_description cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.custom_field_id = :custom_field_id AND cfd.language_id = :language_id",
+		$query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.custom_field_id = :custom_field_id AND cfd.language_id = :language_id",
             [
                 ':custom_field_id' => $custom_field_id,
                 ':language_id' => $this->config->get('config_language_id')
@@ -181,7 +180,7 @@ custom_field_id = :custom_field_id, name = :name",
 
 	public function getCustomFields($data = array()) {
 		if (empty($data['filter_customer_group_id'])) {
-			$sql = "SELECT * FROM `oc_custom_field` cf LEFT JOIN oc_custom_field_description cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cfd.language_id = :language_id";
+			$sql = "SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cfd.language_id = :language_id";
             $args[':language_id'] = $this->config->get('config_language_id');
 		} else {
 			$sql = "SELECT * FROM oc_custom_field_customer_group cfcg LEFT JOIN `oc_custom_field` cf ON (cfcg.custom_field_id = cf.custom_field_id) LEFT JOIN oc_custom_field_description cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cfd.language_id = :language_id";
@@ -238,7 +237,7 @@ custom_field_id = :custom_field_id, name = :name",
 	public function getCustomFieldDescriptions($custom_field_id) {
 		$custom_field_data = [];
 
-		$query = $this->db->query("SELECT * FROM oc_custom_field_description WHERE custom_field_id = :custom_field_id",
+		$query = $this->db->query("SELECT * FROM `oc_custom_field_description` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
@@ -251,7 +250,7 @@ custom_field_id = :custom_field_id, name = :name",
 	}
 	
 	public function getCustomFieldValue($custom_field_value_id) {
-		$query = $this->db->query("SELECT * FROM oc_custom_field_value cfv LEFT JOIN oc_custom_field_value_description cfvd ON (cfv.custom_field_value_id = cfvd.custom_field_value_id) WHERE cfv.custom_field_value_id = :custom_field_value_id AND cfvd.language_id = :language_id",
+		$query = $this->db->query("SELECT * FROM `oc_custom_field_value` cfv LEFT JOIN oc_custom_field_value_description cfvd ON (cfv.custom_field_value_id = cfvd.custom_field_value_id) WHERE cfv.custom_field_value_id = :custom_field_value_id AND cfvd.language_id = :language_id",
             [
                 ':custom_field_value_id' => $custom_field_value_id ,
                 ':language_id' => $this->config->get('config_language_id')
@@ -280,7 +279,7 @@ custom_field_id = :custom_field_id, name = :name",
 	}
 	
 	public function getCustomFieldCustomerGroups($custom_field_id) {
-		$query = $this->db->query("SELECT * FROM `oc_custom_field_customer_group` WHERE custom_field_id = :custom_field_id",
+		$query = $this->db->query("SELECT * FROM `oc_custom_field_customer_group` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
@@ -291,7 +290,7 @@ custom_field_id = :custom_field_id, name = :name",
 	public function getCustomFieldValueDescriptions($custom_field_id) {
 		$custom_field_value_data = [];
 
-		$custom_field_value_query = $this->db->query("SELECT * FROM oc_custom_field_value WHERE custom_field_id = :custom_field_id",
+		$custom_field_value_query = $this->db->query("SELECT * FROM `oc_custom_field_value` WHERE `custom_field_id` = :custom_field_id",
             [
                 ':custom_field_id' => $custom_field_id
             ]);
@@ -299,7 +298,7 @@ custom_field_id = :custom_field_id, name = :name",
 		foreach ($custom_field_value_query->rows as $custom_field_value) {
 			$custom_field_value_description_data = [];
 
-			$custom_field_value_description_query = $this->db->query("SELECT * FROM oc_custom_field_value_description WHERE custom_field_value_id = :custom_field_value_id",
+			$custom_field_value_description_query = $this->db->query("SELECT * FROM `oc_custom_field_value_description` WHERE `custom_field_value_id` = :custom_field_value_id",
                 [
                     ':custom_field_value_id' => $custom_field_value['custom_field_value_id']
                 ]);
