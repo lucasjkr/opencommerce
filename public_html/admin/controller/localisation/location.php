@@ -7,7 +7,7 @@ class ControllerLocalisationLocation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/location');
+		$this->load->model('localisation/location_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationLocation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/location');
+		$this->load->model('localisation/location_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_location->addLocation($this->request->post);
+			$this->model_localisation_location_admin->addLocation($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -38,7 +38,7 @@ class ControllerLocalisationLocation extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('localisation/location', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('localisation/location_admin', 'user_token=' . $this->session->data['user_token'] . $url, true));
 		}
 
 		$this->getForm();
@@ -49,10 +49,10 @@ class ControllerLocalisationLocation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/location');
+		$this->load->model('localisation/location_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_location->editLocation($this->request->get['location_id'], $this->request->post);
+			$this->model_localisation_location_admin->editLocation($this->request->get['location_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationLocation extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/location');
+		$this->load->model('localisation/location_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $location_id) {
-				$this->model_localisation_location->deleteLocation($location_id);
+				$this->model_localisation_location_admin->deleteLocation($location_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationLocation extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$location_total = $this->model_localisation_location->getTotalLocations();
+		$location_total = $this->model_localisation_location_admin->getTotalLocations();
 
-		$results = $this->model_localisation_location->getLocations($filter_data);
+		$results = $this->model_localisation_location_admin->getLocations($filter_data);
 
 		foreach ($results as $result) {
 			$data['location'][] =   array(
@@ -307,12 +307,12 @@ class ControllerLocalisationLocation extends Controller {
 		$data['cancel'] = $this->url->link('localisation/location', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['location_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$location_info = $this->model_localisation_location->getLocation($this->request->get['location_id']);
+			$location_info = $this->model_localisation_location_admin->getLocation($this->request->get['location_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		if (isset($this->request->post['name'])) {
 			$data['name'] = $this->request->post['name'];
@@ -362,17 +362,17 @@ class ControllerLocalisationLocation extends Controller {
 			$data['image'] = '';
 		}
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['image'], 100, 100);
 		} elseif (!empty($location_info) && is_file(DIR_IMAGE . $location_info['image'])) {
-			$data['thumb'] = $this->model_tool_image->resize($location_info['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize($location_info['image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['open'])) {
 			$data['open'] = $this->request->post['open'];

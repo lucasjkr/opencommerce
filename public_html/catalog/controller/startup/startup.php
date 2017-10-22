@@ -39,9 +39,9 @@ class ControllerStartupStartup extends Controller {
 		// Language
 		$code = '';
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$languages = $this->model_localisation_language->getLanguages();
+		$languages = $this->model_localisation_language_admin->getLanguages();
 
 		$language_codes = array_column($languages, 'language_id', 'code');
 

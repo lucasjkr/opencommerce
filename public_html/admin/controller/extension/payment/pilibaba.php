@@ -3,21 +3,21 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 	private $error = [];
 
 	public function index() {
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
-		$this->load->model('extension/payment/pilibaba');
+		$this->load->model('extension/payment/pilibaba_admin');
 
 		$this->load->language('extension/payment/pilibaba');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_pilibaba', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_pilibaba', $this->request->post);
 
 			if ($this->request->post['payment_pilibaba_status']) {
-				$this->model_extension_payment_pilibaba->enablePiliExpress();
+				$this->model_extension_payment_pilibaba_admin->enablePiliExpress();
 			} else {
-				$this->model_extension_payment_pilibaba->disablePiliExpress();
+				$this->model_extension_payment_pilibaba_admin->disablePiliExpress();
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -143,18 +143,18 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 		} else {
 			$data['show_register'] = true;
 
-			$data['currencies'] = $this->model_extension_payment_pilibaba->getCurrencies();
+			$data['currencies'] = $this->model_extension_payment_pilibaba_admin->getCurrencies();
 
-			$data['warehouses'] = $this->model_extension_payment_pilibaba->getWarehouses();
+			$data['warehouses'] = $this->model_extension_payment_pilibaba_admin->getWarehouses();
 
-			$this->load->model('localisation/country');
+			$this->load->model('localisation/country_admin');
 
-			$data['countries'] = $this->model_localisation_country->getCountries();
+			$data['countries'] = $this->model_localisation_country_admin->getCountries();
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if ($this->config->get('config_weight_class_id') != '2') {
 			$data['error_weight'] = sprintf($this->language->get('error_weight'), $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token'], true));
@@ -179,17 +179,17 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 
 	public function install() {
 		if ($this->user->hasPermission('modify', 'marketplace/extension')) {
-			$this->load->model('extension/payment/pilibaba');
+			$this->load->model('extension/payment/pilibaba_admin');
 
-			$this->model_extension_payment_pilibaba->install();
+			$this->model_extension_payment_pilibaba_admin->install();
 		}
 	}
 
 	public function uninstall() {
 		if ($this->user->hasPermission('modify', 'marketplace/extension')) {
-			$this->load->model('extension/payment/pilibaba');
+			$this->load->model('extension/payment/pilibaba_admin');
 
-			$this->model_extension_payment_pilibaba->uninstall();
+			$this->model_extension_payment_pilibaba_admin->uninstall();
 		}
 	}
 
@@ -212,15 +212,15 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 			} else if ($this->request->post['warehouse'] == 'other' && utf8_strlen($this->request->post['country']) < 1) {
 				$json['error'] = $this->language->get('error_country');
 			} else {
-				$this->load->model('extension/payment/pilibaba');
+				$this->load->model('extension/payment/pilibaba_admin');
 
-				$response = $this->model_extension_payment_pilibaba->register($this->request->post['email_address'], $this->request->post['password'], $this->request->post['currency'], $this->request->post['warehouse'], $this->request->post['country'], $this->request->post['environment']);
+				$response = $this->model_extension_payment_pilibaba_admin->register($this->request->post['email_address'], $this->request->post['password'], $this->request->post['currency'], $this->request->post['warehouse'], $this->request->post['country'], $this->request->post['environment']);
 
 				if (isset($response['code']) && isset($response['message'])) {
 					if ($response['code'] == '0') {
-						$this->load->model('setting/setting');
+						$this->load->model('setting/setting_admin');
 
-						$this->model_setting_setting->editSetting('payment_pilibaba', array('payment_pilibaba_merchant_number' => $response['data']['merchantNo'], 'payment_pilibaba_secret_key' => $response['data']['privateKey'], 'payment_pilibaba_email_address' => $this->request->post['email_address'], 'payment_pilibaba_environment' => $this->request->post['environment']), 0);
+						$this->model_setting_setting_admin->editSetting('payment_pilibaba', array('payment_pilibaba_merchant_number' => $response['data']['merchantNo'], 'payment_pilibaba_secret_key' => $response['data']['privateKey'], 'payment_pilibaba_email_address' => $this->request->post['email_address'], 'payment_pilibaba_environment' => $this->request->post['environment']), 0);
 
 						$this->session->data['success'] = $this->language->get('text_register_success');
 
@@ -242,11 +242,11 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 
 	public function order() {
 		if ($this->config->get('payment_pilibaba_status')) {
-			$this->load->model('extension/payment/pilibaba');
+			$this->load->model('extension/payment/pilibaba_admin');
 
 			$order_id = $this->request->get['order_id'];
 
-			$pilibaba_order = $this->model_extension_payment_pilibaba->getOrder($this->request->get['order_id']);
+			$pilibaba_order = $this->model_extension_payment_pilibaba_admin->getOrder($this->request->get['order_id']);
 
 			if ($pilibaba_order) {
 				$this->load->language('extension/payment/pilibaba');
@@ -284,9 +284,9 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 		if ($this->config->get('payment_pilibaba_status')) {
 			if (isset($this->request->post['order_id']) && isset($this->request->post['tracking'])) {
 				if (utf8_strlen($this->request->post['tracking']) > 0 && utf8_strlen($this->request->post['tracking']) <= 50) {
-					$this->load->model('extension/payment/pilibaba');
+					$this->load->model('extension/payment/pilibaba_admin');
 
-					$this->model_extension_payment_pilibaba->updateTrackingNumber($this->request->post['order_id'], $this->request->post['tracking'], $this->config->get('payment_pilibaba_merchant_number'));
+					$this->model_extension_payment_pilibaba_admin->updateTrackingNumber($this->request->post['order_id'], $this->request->post['tracking'], $this->config->get('payment_pilibaba_merchant_number'));
 
 					$json['success'] = $this->language->get('text_tracking_success');
 				} else {

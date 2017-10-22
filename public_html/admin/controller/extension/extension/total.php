@@ -5,7 +5,7 @@ class ControllerExtensionExtensionTotal extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/total');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		$this->getList();
 	}
@@ -13,15 +13,15 @@ class ControllerExtensionExtensionTotal extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/total');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->install('total', $this->request->get['extension']);
+			$this->model_setting_extension_admin->install('total', $this->request->get['extension']);
 
-			$this->load->model('user/user_group');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/total/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/total/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/total/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/total/' . $this->request->get['extension']);
 
 			$this->load->controller('extension/total/' . $this->request->get['extension'] . '/install');
 
@@ -34,10 +34,10 @@ class ControllerExtensionExtensionTotal extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/total');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->uninstall('total', $this->request->get['extension']);
+			$this->model_setting_extension_admin->uninstall('total', $this->request->get['extension']);
 
 			$this->load->controller('extension/total/' . $this->request->get['extension'] . '/uninstall');
 
@@ -62,13 +62,13 @@ class ControllerExtensionExtensionTotal extends Controller {
 			$data['success'] = '';
 		}
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
-		$extensions = $this->model_setting_extension->getInstalled('total');
+		$extensions = $this->model_setting_extension_admin->getInstalled('total');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/total/' . $value . '.php') && !is_file(DIR_APPLICATION . 'controller/total/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('total', $value);
+				$this->model_setting_extension_admin->uninstall('total', $value);
 
 				unset($extensions[$key]);
 			}

@@ -7,10 +7,10 @@ class ControllerExtensionFraudIp extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('fraud_ip', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('fraud_ip', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -52,9 +52,9 @@ class ControllerExtensionFraudIp extends Controller {
 			$data['fraud_ip_order_status_id'] = $this->config->get('fraud_ip_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['fraud_ip_status'])) {
 			$data['fraud_ip_status'] = $this->request->post['fraud_ip_status'];
@@ -93,7 +93,7 @@ class ControllerExtensionFraudIp extends Controller {
 		$this->load->language('extension/fraud/ip');
 
 		$this->load->model('extension/fraud/ip');
-        $this->load->model('customer/customer');
+        $this->load->model('customer/customer_admin');
 
 		if (isset($this->request->get['page'])) {
 			$page = $this->request->get['page'];
@@ -108,7 +108,7 @@ class ControllerExtensionFraudIp extends Controller {
 		foreach ($results as $result) {
 			$data['ips'][] = array(
 				'ip'         => $result['ip'],
-				'total'      => $this->model_customer_customer->getTotalCustomersByIp($result['ip']),
+				'total'      => $this->model_customer_customer_admin->getTotalCustomersByIp($result['ip']),
 				'date_added' => date('d/m/y', strtotime($result['date_added'])),
 				'filter_ip'  => $this->url->link('customer/customer', 'user_token=' . $this->session->data['user_token'] . '&filter_ip=' . $result['ip'], true)
 			);

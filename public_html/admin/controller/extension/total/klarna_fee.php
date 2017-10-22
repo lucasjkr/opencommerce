@@ -7,7 +7,7 @@ class ControllerExtensionTotalKlarnaFee extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$status = false;
@@ -20,7 +20,7 @@ class ControllerExtensionTotalKlarnaFee extends Controller {
 				}
 			}
 
-			$this->model_setting_setting->editSetting('total_klarna_fee', array_merge($this->request->post, array('total_klarna_fee_status' => $status)));
+			$this->model_setting_setting_admin->editSetting('total_klarna_fee', array_merge($this->request->post, array('total_klarna_fee_status' => $status)));
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -92,9 +92,9 @@ class ControllerExtensionTotalKlarnaFee extends Controller {
 			$data['total_klarna_fee'] = $this->config->get('total_klarna_fee');
 		}
 
-		$this->load->model('localisation/tax_class');
+		$this->load->model('localisation/tax_class_admin');
 
-		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
+		$data['tax_classes'] = $this->model_localisation_tax_class_admin->getTaxClasses();
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

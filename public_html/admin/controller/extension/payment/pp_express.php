@@ -9,10 +9,10 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_pp_express', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_pp_express', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -150,9 +150,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$data['payment_pp_express_currency'] = $this->config->get('payment_pp_express_currency');
 		}
 
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$data['currencies'] = $this->model_extension_payment_pp_express->getCurrencies();
+		$data['currencies'] = $this->model_extension_payment_pp_express_admin->getCurrencies();
 
 		if (isset($this->request->post['payment_pp_express_recurring_cancel'])) {
 			$data['payment_pp_express_recurring_cancel'] = $this->request->post['payment_pp_express_recurring_cancel'];
@@ -178,9 +178,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$data['payment_pp_express_geo_zone_id'] = $this->config->get('payment_pp_express_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_pp_express_status'])) {
 			$data['payment_pp_express_status'] = $this->request->post['payment_pp_express_status'];
@@ -254,9 +254,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$data['payment_pp_express_voided_status_id'] = $this->config->get('payment_pp_express_voided_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_pp_express_allow_note'])) {
 			$data['payment_pp_express_allow_note'] = $this->request->post['payment_pp_express_allow_note'];
@@ -276,17 +276,17 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$data['payment_pp_express_logo'] = $this->config->get('payment_pp_express_logo');
 		}
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (isset($this->request->post['payment_pp_express_logo']) && is_file(DIR_IMAGE . $this->request->post['payment_pp_express_logo'])) {
-			$data['thumb'] = $this->model_tool_image->resize($this->request->post['payment_pp_express_logo'], 750, 90);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['payment_pp_express_logo'], 750, 90);
 		} elseif (is_file(DIR_IMAGE . $this->config->get('payment_pp_express_logo'))) {
-			$data['thumb'] = $this->model_tool_image->resize($this->config->get('payment_pp_express_logo'), 750, 90);
+			$data['thumb'] = $this->model_tool_image_admin->resize($this->config->get('payment_pp_express_logo'), 750, 90);
 		} else {
-			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 750, 90);
+			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 750, 90);
 		}
 
-		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 750, 90);
+		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 750, 90);
 
 		if (isset($this->request->get['retrieve_code']) && isset($this->request->get['merchant_id'])) {
 			$curl = curl_init($this->opencart_retrieve_url);
@@ -308,7 +308,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			curl_close($curl);
 
 			if (isset($config_response['api_user_name']) && isset($config_response['api_password']) && isset($config_response['signature'])) {
-				$pp_express_settings = $this->model_setting_setting->getSetting('payment_pp_express');
+				$pp_express_settings = $this->model_setting_setting_admin->getSetting('payment_pp_express');
 
 				if ($config_response['environment'] == 'sandbox') {
 					$pp_express_settings['payment_pp_express_sandbox_username'] = $config_response['api_user_name'];
@@ -335,13 +335,13 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				$data['retrieve_success'] = 1;
 				$data['text_retrieve'] = $this->language->get('text_retrieve');
 
-				$this->model_setting_setting->editSetting('payment_pp_express', $pp_express_settings);
+				$this->model_setting_setting_admin->editSetting('payment_pp_express', $pp_express_settings);
 			}
 		}
 
-		$this->load->model('localisation/country');
+		$this->load->model('localisation/country_admin');
 
-		$country = $this->model_localisation_country->getCountry($this->config->get('config_country_id'));
+		$country = $this->model_localisation_country_admin->getCountry($this->config->get('config_country_id'));
 
 		$post_data = array(
 			'return_url' => $this->url->link('extension/payment/pp_express', 'user_token=' . $this->session->data['user_token'], true),
@@ -436,15 +436,15 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$this->model_extension_payment_pp_express->install();
+		$this->model_extension_payment_pp_express_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$this->model_extension_payment_pp_express->uninstall();
+		$this->model_extension_payment_pp_express_admin->uninstall();
 	}
 
 	public function order() {
@@ -457,9 +457,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				$order_id = 0;
 			}
 
-			$this->load->model('extension/payment/pp_express');
+			$this->load->model('extension/payment/pp_express_admin');
 
-			$paypal_info = $this->model_extension_payment_pp_express->getPayPalOrder($order_id);
+			$paypal_info = $this->model_extension_payment_pp_express_admin->getPayPalOrder($order_id);
 
 			if ($paypal_info) {
 				$data['user_token'] = $this->session->data['user_token'];
@@ -470,13 +470,13 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 				$data['total'] = $paypal_info['total'];
 
-				$captured = number_format($this->model_extension_payment_pp_express->getCapturedTotal($paypal_info['paypal_order_id']), 2);
+				$captured = number_format($this->model_extension_payment_pp_express_admin->getCapturedTotal($paypal_info['paypal_order_id']), 2);
 
 				$data['captured'] = $captured;
 
 				$data['capture_remaining'] = number_format($paypal_info['total'] - $captured, 2);
 
-				$refunded = number_format($this->model_extension_payment_pp_express->getRefundedTotal($paypal_info['paypal_order_id']), 2);
+				$refunded = number_format($this->model_extension_payment_pp_express_admin->getRefundedTotal($paypal_info['paypal_order_id']), 2);
 
 				$data['refunded'] = $refunded;
 
@@ -496,12 +496,12 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$order_id = 0;
 		}
 
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$paypal_info = $this->model_extension_payment_pp_express->getOrder($order_id);
+		$paypal_info = $this->model_extension_payment_pp_express_admin->getOrder($order_id);
 
 		if ($paypal_info) {
-			$results = $this->model_extension_payment_pp_express->getTransactions($paypal_info['paypal_order_id']);
+			$results = $this->model_extension_payment_pp_express_admin->getTransactions($paypal_info['paypal_order_id']);
 
 			foreach ($results as $result) {
 				$data['transactions'][] = array(
@@ -531,7 +531,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 		}
 
 		if (!$json) {
-			$this->load->model('extension/payment/pp_express');
+			$this->load->model('extension/payment/pp_express_admin');
 
 			if (isset($this->request->get['order_id'])) {
 				$order_id = $this->request->get['order_id'];
@@ -539,7 +539,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				$order_id = 0;
 			}
 
-			$paypal_info = $this->model_extension_payment_pp_express->getOrder($order_id);
+			$paypal_info = $this->model_extension_payment_pp_express_admin->getOrder($order_id);
 
 			if ($paypal_info) {
 				// If this is the final amount to capture or not
@@ -558,7 +558,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					'MSGSUBID'        => uniqid(mt_rand(), true)
 				);
 
-				$response = $this->model_extension_payment_pp_express->call($request);
+				$response = $this->model_extension_payment_pp_express_admin->call($request);
 
 				if (isset($response['ACK']) && ($response['ACK'] != 'Failure') && ($response['ACK'] != 'FailureWithWarning')) {
 					$transaction_data = array(
@@ -576,10 +576,10 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 						'debug_data'            => json_encode($response)
 					);
 
-					$this->model_extension_payment_pp_express->addTransaction($transaction_data);
+					$this->model_extension_payment_pp_express_admin->addTransaction($transaction_data);
 
-					$captured = number_format($this->model_extension_payment_pp_express->getCapturedTotal($paypal_info['paypal_order_id']), 2);
-					$refunded = number_format($this->model_extension_payment_pp_express->getRefundedTotal($paypal_info['paypal_order_id']), 2);
+					$captured = number_format($this->model_extension_payment_pp_express_admin->getCapturedTotal($paypal_info['paypal_order_id']), 2);
+					$refunded = number_format($this->model_extension_payment_pp_express_admin->getRefundedTotal($paypal_info['paypal_order_id']), 2);
 
 					$json['captured'] = $captured;
 					$json['refunded'] = $refunded;
@@ -588,7 +588,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					if ($this->request->post['complete'] == 1 || $json['remaining'] == 0.00) {
 						$json['capture_status'] = $this->language->get('text_complete');
 
-						$this->model_extension_payment_pp_express->editPayPalOrderStatus($order_id, 'Complete');
+						$this->model_extension_payment_pp_express_admin->editPayPalOrderStatus($order_id, 'Complete');
 					}
 
 					$json['success'] = $this->language->get('text_success');
@@ -632,13 +632,13 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 		$data['transaction_id'] = $this->request->get['transaction_id'];
 
-		$this->load->model('extension/payment/pp_express');
-		$pp_transaction = $this->model_extension_payment_pp_express->getTransaction($this->request->get['transaction_id']);
+		$this->load->model('extension/payment/pp_express_admin');
+		$pp_transaction = $this->model_extension_payment_pp_express_admin->getTransaction($this->request->get['transaction_id']);
 
 		$data['amount_original'] = $pp_transaction['AMT'];
 		$data['currency_code'] = $pp_transaction['CURRENCYCODE'];
 
-		$refunded = number_format($this->model_extension_payment_pp_express->getRefundedTotalByParentId($this->request->get['transaction_id']), 2);
+		$refunded = number_format($this->model_extension_payment_pp_express_admin->getRefundedTotalByParentId($this->request->get['transaction_id']), 2);
 
 		if ($refunded != 0.00) {
 			$data['refund_available'] = number_format($data['amount_original'] + $refunded, 2);
@@ -672,14 +672,14 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 		 */
 		if (isset($this->request->post['transaction_id']) && isset($this->request->post['refund_full'])) {
 
-			$this->load->model('extension/payment/pp_express');
+			$this->load->model('extension/payment/pp_express_admin');
 			$this->load->language('extension/payment/pp_express_refund');
 
 			if ($this->request->post['refund_full'] == 0 && $this->request->post['amount'] == 0) {
 				$this->session->data['error'] = $this->language->get('error_partial_amt');
 			} else {
-				$order_id = $this->model_extension_payment_pp_express->getOrderId($this->request->post['transaction_id']);
-				$paypal_order = $this->model_extension_payment_pp_express->getOrder($order_id);
+				$order_id = $this->model_extension_payment_pp_express_admin->getOrderId($this->request->post['transaction_id']);
+				$paypal_order = $this->model_extension_payment_pp_express_admin->getOrder($order_id);
 
 				if ($paypal_order) {
 					$call_data = [];
@@ -688,7 +688,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$call_data['NOTE'] = urlencode($this->request->post['refund_message']);
 					$call_data['MSGSUBID'] = uniqid(mt_rand(), true);
 
-					$current_transaction = $this->model_extension_payment_pp_express->getLocalTransaction($this->request->post['transaction_id']);
+					$current_transaction = $this->model_extension_payment_pp_express_admin->getLocalTransaction($this->request->post['transaction_id']);
 
 					if ($this->request->post['refund_full'] == 1) {
 						$call_data['REFUNDTYPE'] = 'Full';
@@ -698,7 +698,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 						$call_data['CURRENCYCODE'] = $this->request->post['currency_code'];
 					}
 
-					$result = $this->model_extension_payment_pp_express->call($call_data);
+					$result = $this->model_extension_payment_pp_express_admin->call($call_data);
 
 					$transaction = array(
 						'paypal_order_id' => $paypal_order['paypal_order_id'],
@@ -717,7 +717,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 					if ($result == false) {
 						$transaction['payment_status'] = 'Failed';
-						$this->model_extension_payment_pp_express->addTransaction($transaction, $call_data);
+						$this->model_extension_payment_pp_express_admin->addTransaction($transaction, $call_data);
 						$this->response->redirect($this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $paypal_order['order_id'], true));
 					} else if ($result['ACK'] != 'Failure' && $result['ACK'] != 'FailureWithWarning') {
 
@@ -726,7 +726,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 						$transaction['pending_reason'] = $result['PENDINGREASON'];
 						$transaction['amount'] = '-' . $result['GROSSREFUNDAMT'];
 
-						$this->model_extension_payment_pp_express->addTransaction($transaction);
+						$this->model_extension_payment_pp_express_admin->addTransaction($transaction);
 
 						//edit transaction to refunded status
 						if ($result['TOTALREFUNDEDAMOUNT'] == $this->request->post['amount_original']) {
@@ -738,7 +738,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 						//redirect back to the order
 						$this->response->redirect($this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $paypal_order['order_id'], true));
 					} else {
-						$this->model_extension_payment_pp_express->log(json_encode($result));
+						$this->model_extension_payment_pp_express_admin->log(json_encode($result));
 						$this->session->data['error'] = (isset($result['L_SHORTMESSAGE0']) ? $result['L_SHORTMESSAGE0'] : 'There was an error') . (isset($result['L_LONGMESSAGE0']) ? '<br />' . $result['L_LONGMESSAGE0'] : '');
 						$this->response->redirect($this->url->link('extension/payment/pp_express/refund', 'user_token=' . $this->session->data['user_token'] . '&transaction_id=' . $this->request->post['transaction_id'], true));
 					}
@@ -767,9 +767,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$order_id = 0;
 		}
 
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$paypal_info = $this->model_extension_payment_pp_express->getOrder($order_id);
+		$paypal_info = $this->model_extension_payment_pp_express_admin->getOrder($order_id);
 
 		if ($paypal_info) {
 			$request = array(
@@ -778,7 +778,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				'MSGSUBID'        => uniqid(mt_rand(), true)
 			);
 
-			$response = $this->model_extension_payment_pp_express->call($request);
+			$response = $this->model_extension_payment_pp_express_admin->call($request);
 
 			if (isset($response['ACK']) && ($response['ACK'] != 'Failure') && ($response['ACK'] != 'FailureWithWarning')) {
 				$transaction = array(
@@ -796,9 +796,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					'debug_data'            => json_encode($response)
 				);
 
-				$this->model_extension_payment_pp_express->addTransaction($transaction);
+				$this->model_extension_payment_pp_express_admin->addTransaction($transaction);
 
-				$this->model_extension_payment_pp_express->editPayPalOrderStatus($order_id, 'Complete');
+				$this->model_extension_payment_pp_express_admin->editPayPalOrderStatus($order_id, 'Complete');
 
 				$json['capture_status'] = 'Complete';
 
@@ -904,19 +904,19 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$paypal_order_transaction_id = 0;
 		}
 
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$transaction = $this->model_extension_payment_pp_express->getFailedTransaction($paypal_order_transaction_id);
+		$transaction = $this->model_extension_payment_pp_express_admin->getFailedTransaction($paypal_order_transaction_id);
 
 		if ($transaction) {
 
 			$call_data = json_decode($transaction['call_data'], true);
 
-			$result = $this->model_extension_payment_pp_express->call($call_data);
+			$result = $this->model_extension_payment_pp_express_admin->call($call_data);
 
 			if ($result) {
 
-				$parent_transaction = $this->model_extension_payment_pp_express->getLocalTransaction($transaction['parent_id']);
+				$parent_transaction = $this->model_extension_payment_pp_express_admin->getLocalTransaction($transaction['parent_id']);
 
 				if ($parent_transaction['amount'] == abs($transaction['amount'])) {
 					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Refunded' WHERE `transaction_id` = '" . $this->db->escape($transaction['parent_id']) . "' LIMIT 1");
@@ -950,7 +950,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 				$transaction['pending_reason'] = (isset($result['PENDINGREASON']) ? $result['PENDINGREASON'] : '');
 
-				$this->model_extension_payment_pp_express->updateTransaction($transaction);
+				$this->model_extension_payment_pp_express_admin->updateTransaction($transaction);
 
 				$json['success'] = $this->language->get('success_transaction_resent');
 			} else {
@@ -988,9 +988,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			'href' => $this->url->link('extension/payment/pp_express/search', 'user_token=' . $this->session->data['user_token'], true),
 		);
 
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$data['currency_codes'] = $this->model_extension_payment_pp_express->getCurrencies();
+		$data['currency_codes'] = $this->model_extension_payment_pp_express_admin->getCurrencies();
 
 		$data['default_currency'] = $this->config->get('payment_pp_express_currency');
 
@@ -1027,9 +1027,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			'href' => $this->url->link('extension/payment/pp_express/info', 'user_token=' . $this->session->data['user_token'] . '&transaction_id=' . $this->request->get['transaction_id'], true),
 		);
 
-		$this->load->model('extension/payment/pp_express');
+		$this->load->model('extension/payment/pp_express_admin');
 
-		$data['transaction'] = $this->model_extension_payment_pp_express->getTransaction($this->request->get['transaction_id']);
+		$data['transaction'] = $this->model_extension_payment_pp_express_admin->getTransaction($this->request->get['transaction_id']);
 		$data['lines'] = $this->formatRows($data['transaction']);
 		$data['view_link'] = $this->url->link('extension/payment/pp_express/info', 'user_token=' . $this->session->data['user_token'], true);
 		$data['cancel'] = $this->url->link('extension/payment/pp_express/search', 'user_token=' . $this->session->data['user_token'], true);
@@ -1048,7 +1048,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 		 */
 		if (isset($this->request->post['date_start'])) {
 
-			$this->load->model('extension/payment/pp_express');
+			$this->load->model('extension/payment/pp_express_admin');
 
 			$call_data = [];
 			$call_data['METHOD'] = 'TransactionSearch';
@@ -1119,7 +1119,7 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				$call_data['SUFFIX'] = $this->request->post['name_suffix'];
 			}
 
-			$result = $this->model_extension_payment_pp_express->call($call_data);
+			$result = $this->model_extension_payment_pp_express_admin->call($call_data);
 
 			if ($result['ACK'] != 'Failure' && $result['ACK'] != 'FailureWithWarning' && $result['ACK'] != 'Warning') {
 				$response['error'] = false;
@@ -1143,21 +1143,21 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 		if (isset($this->request->get['merchantId'])) {
 			$this->load->language('extension/payment/pp_express');
 
-			$this->load->model('extension/payment/pp_express');
-			$this->load->model('setting/setting');
+			$this->load->model('extension/payment/pp_express_admin');
+			$this->load->model('setting/setting_admin');
 
-			$token = $this->model_extension_payment_pp_express->getTokens('live');
+			$token = $this->model_extension_payment_pp_express_admin->getTokens('live');
 
 			if (isset($token->access_token)) {
-				$user_info = $this->model_extension_payment_pp_express->getUserInfo($this->request->get['merchantId'], 'live', $token->access_token);
+				$user_info = $this->model_extension_payment_pp_express_admin->getUserInfo($this->request->get['merchantId'], 'live', $token->access_token);
 			} else {
 				$this->session->data['error_api'] = $this->language->get('error_api');
 			}
 
 			if (isset($user_info->api_user_name)) {
-				$this->model_setting_setting->editSettingValue('payment_pp_express', 'payment_pp_express_username', $user_info->api_user_name);
-				$this->model_setting_setting->editSettingValue('payment_pp_express', 'payment_pp_express_password', $user_info->api_password);
-				$this->model_setting_setting->editSettingValue('payment_pp_express', 'payment_pp_express_signature', $user_info->signature);
+				$this->model_setting_setting_admin->editSettingValue('payment_pp_express', 'payment_pp_express_username', $user_info->api_user_name);
+				$this->model_setting_setting_admin->editSettingValue('payment_pp_express', 'payment_pp_express_password', $user_info->api_password);
+				$this->model_setting_setting_admin->editSettingValue('payment_pp_express', 'payment_pp_express_signature', $user_info->signature);
 			} else {
 				$this->session->data['error_api'] = $this->language->get('error_api');
 			}
@@ -1170,21 +1170,21 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 		if (isset($this->request->get['merchantId'])) {
 			$this->load->language('extension/payment/pp_express');
 
-			$this->load->model('extension/payment/pp_express');
-			$this->load->model('setting/setting');
+			$this->load->model('extension/payment/pp_express_admin');
+			$this->load->model('setting/setting_admin');
 
-			$token = $this->model_extension_payment_pp_express->getTokens('sandbox');
+			$token = $this->model_extension_payment_pp_express_admin->getTokens('sandbox');
 
 			if (isset($token->access_token)) {
-				$user_info = $this->model_extension_payment_pp_express->getUserInfo($this->request->get['merchantId'], 'sandbox', $token->access_token);
+				$user_info = $this->model_extension_payment_pp_express_admin->getUserInfo($this->request->get['merchantId'], 'sandbox', $token->access_token);
 			} else {
 				$this->session->data['error_api'] = $this->language->get('error_api_sandbox');
 			}
 
 			if (isset($user_info->api_user_name)) {
-				$this->model_setting_setting->editSettingValue('payment_pp_express', 'payment_pp_express_sandbox_username', $user_info->api_user_name);
-				$this->model_setting_setting->editSettingValue('payment_pp_express', 'payment_pp_express_sandbox_password', $user_info->api_password);
-				$this->model_setting_setting->editSettingValue('payment_pp_express', 'payment_pp_express_sandbox_signature', $user_info->signature);
+				$this->model_setting_setting_admin->editSettingValue('payment_pp_express', 'payment_pp_express_sandbox_username', $user_info->api_user_name);
+				$this->model_setting_setting_admin->editSettingValue('payment_pp_express', 'payment_pp_express_sandbox_password', $user_info->api_password);
+				$this->model_setting_setting_admin->editSettingValue('payment_pp_express', 'payment_pp_express_sandbox_signature', $user_info->signature);
 			} else {
 				$this->session->data['error_api'] = $this->language->get('error_api_sandbox');
 			}
@@ -1210,9 +1210,9 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 	}
 
 	public function recurringButtons() {
-		$this->load->model('sale/recurring');
+		$this->load->model('sale/recurring_admin');
 
-		$recurring = $this->model_sale_recurring->getRecurring($this->request->get['order_recurring_id']);
+		$recurring = $this->model_sale_recurring_admin->getRecurring($this->request->get['order_recurring_id']);
 
 		$data['buttons'] = [];
 
@@ -1229,15 +1229,15 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 	public function connectRedirect() {
 		if ($this->user->hasPermission('modify', 'extension/extension/payment') && $this->user->hasPermission('modify', 'extension/payment/pp_express')) {
 			// Install the module before doing the redirect
-			$this->load->model('setting/extension');
+			$this->load->model('setting/extension_admin');
 
-			$this->model_setting_extension->install('payment', 'pp_express');
+			$this->model_setting_extension_admin->install('payment', 'pp_express');
 
 			$this->install();
 
-			$this->load->model('localisation/country');
+			$this->load->model('localisation/country_admin');
 
-			$country = $this->model_localisation_country->getCountry($this->config->get('config_country_id'));
+			$country = $this->model_localisation_country_admin->getCountry($this->config->get('config_country_id'));
 
 			$post_data = array(
 				'return_url' => $this->url->link('extension/payment/pp_express', 'user_token=' . $this->session->data['user_token'], true),

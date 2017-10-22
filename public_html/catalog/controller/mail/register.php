@@ -28,19 +28,23 @@ class ControllerMailRegister extends Controller {
 		$data['login'] = $this->url->link('account/login', '', true);		
 		$data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
-		$mail = new Mail($this->config->get('config_mail_engine'));
-		$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-		$mail->smtp_username = $this->config->get('config_mail_smtp_username');
-		$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-		$mail->smtp_port = $this->config->get('config_mail_smtp_port');
-		$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-
-		$mail->setTo($args[0]['email']);
-		$mail->setFrom($this->config->get('config_email'));
-		$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-		$mail->setSubject(sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')));
-		$mail->setText($this->load->view('mail/register', $data));
-		$mail->send(); 
+        // LJK TODO: This is all OC's native mail system which is crap.
+        // Also, it breaks registration since some of the stettings are gone.
+        // Therefore disabling this altogether by exiting script
+//
+//		$mail = new Mail($this->config->get('config_mail_engine'));
+//		$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+//		$mail->smtp_username = $this->config->get('config_mail_smtp_username');
+//		$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+//		$mail->smtp_port = $this->config->get('config_mail_smtp_port');
+//		$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+//
+//		$mail->setTo($args[0]['email']);
+//		$mail->setFrom($this->config->get('config_email'));
+//		$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+//		$mail->setSubject(sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8')));
+//		$mail->setText($this->load->view('mail/register', $data));
+//		$mail->send();
 	}
 	
 	public function alert(&$route, &$args, &$output) {
@@ -77,29 +81,33 @@ class ControllerMailRegister extends Controller {
 			$data['email'] = $args[0]['email'];
 			$data['telephone'] = $args[0]['telephone'];
 
-			$mail = new Mail($this->config->get('config_mail_engine'));
-			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-			$mail->smtp_username = $this->config->get('config_mail_smtp_username');
-			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-			$mail->smtp_port = $this->config->get('config_mail_smtp_port');
-			$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+            // LJK TODO:
+            // Just like above, the mail system is broken currently, so ignoring it altogether.
+            // Shouldnt' be hard to re-implment.
 
-			$mail->setTo($this->config->get('config_email'));
-			$mail->setFrom($this->config->get('config_email'));
-			$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
-			$mail->setSubject(html_entity_decode($this->language->get('text_new_customer'), ENT_QUOTES, 'UTF-8'));
-			$mail->setText($this->load->view('mail/register_alert', $data));
-			$mail->send();
-
-			// Send to additional alert emails if new account email is enabled
-			$emails = explode(',', $this->config->get('config_mail_alert_email'));
-
-			foreach ($emails as $email) {
-				if (utf8_strlen($email) > 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) {
-					$mail->setTo($email);
-					$mail->send();
-				}
-			}
+//			$mail = new Mail($this->config->get('config_mail_engine'));
+//			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
+//			$mail->smtp_username = $this->config->get('config_mail_smtp_username');
+//			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
+//			$mail->smtp_port = $this->config->get('config_mail_smtp_port');
+//			$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+//
+//			$mail->setTo($this->config->get('config_email'));
+//			$mail->setFrom($this->config->get('config_email'));
+//			$mail->setSender(html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+//			$mail->setSubject(html_entity_decode($this->language->get('text_new_customer'), ENT_QUOTES, 'UTF-8'));
+//			$mail->setText($this->load->view('mail/register_alert', $data));
+//			$mail->send();
+//
+//			// Send to additional alert emails if new account email is enabled
+//			$emails = explode(',', $this->config->get('config_mail_alert_email'));
+//
+//			foreach ($emails as $email) {
+//				if (utf8_strlen($email) > 0 && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+//					$mail->setTo($email);
+//					$mail->send();
+//				}
+//			}
 		}	
 	}
 }		

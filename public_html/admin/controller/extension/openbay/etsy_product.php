@@ -3,8 +3,8 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 	private $error;
 
 	public function create() {
-		$this->load->model('catalog/product');
-		$this->load->model('tool/image');
+		$this->load->model('catalog/product_admin');
+		$this->load->model('tool/image_admin');
 
 		$data = $this->load->language('extension/openbay/etsy_create');
 
@@ -33,21 +33,21 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			'text' => $this->language->get('heading_title'),
 		);
 
-		$product_info = $this->model_catalog_product->getProduct($this->request->get['product_id']);
+		$product_info = $this->model_catalog_product_admin->getProduct($this->request->get['product_id']);
 
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		if (!empty($product_info) && is_file(DIR_IMAGE . $product_info['image'])) {
-			$product_info['image_url'] = $this->model_tool_image->resize($product_info['image'], 800, 800);
-			$product_info['thumb'] = $this->model_tool_image->resize($product_info['image'], 100, 100);
+			$product_info['image_url'] = $this->model_tool_image_admin->resize($product_info['image'], 800, 800);
+			$product_info['thumb'] = $this->model_tool_image_admin->resize($product_info['image'], 100, 100);
 		} else {
 			$product_info['image_url'] = '';
-			$product_info['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
+			$product_info['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
 		}
 
 		// Images
 		if (isset($this->request->get['product_id'])) {
-			$product_images = $this->model_catalog_product->getProductImages($this->request->get['product_id']);
+			$product_images = $this->model_catalog_product_admin->getProductImages($this->request->get['product_id']);
 		} else {
 			$product_images = [];
 		}
@@ -62,8 +62,8 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			}
 
 			$product_info['product_images'][] = array(
-				'image_url'  => $this->model_tool_image->resize($image, 800, 800),
-				'thumb'      => $this->model_tool_image->resize($image, 100, 100),
+				'image_url'  => $this->model_tool_image_admin->resize($image, 800, 800),
+				'thumb'      => $this->model_tool_image_admin->resize($image, 100, 100),
 				'sort_order' => $product_image['sort_order']
 			);
 		}
@@ -199,7 +199,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		$data = $this->load->language('extension/openbay/etsy_edit');
 
 		$this->load->model('extension/openbay/etsy_product');
-		$this->load->model('tool/image');
+		$this->load->model('tool/image_admin');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
@@ -389,7 +389,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 	public function addLink() {
 		$this->load->language('extension/openbay/etsy_links');
 		$this->load->model('extension/openbay/etsy_product');
-		$this->load->model('catalog/product');
+		$this->load->model('catalog/product_admin');
 
 		$data = $this->request->post;
 
@@ -410,7 +410,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			die();
 		}
 
-		$product = $this->model_catalog_product->getProduct($data['product_id']);
+		$product = $this->model_catalog_product_admin->getProduct($data['product_id']);
 
 		if (!$product) {
 			echo json_encode(array('error' => $this->language->get('error_product')));

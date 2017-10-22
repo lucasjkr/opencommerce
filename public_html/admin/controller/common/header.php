@@ -29,16 +29,16 @@ class ControllerCommonHeader extends Controller {
 			$data['logout'] = $this->url->link('common/logout', 'user_token=' . $this->session->data['user_token'], true);
 			$data['profile'] = $this->url->link('common/profile', 'user_token=' . $this->session->data['user_token'], true);
 
-			$this->load->model('tool/image');
+			$this->load->model('tool/image_admin');
 
 			$data['firstname'] = '';
 			$data['lastname'] = '';
 			$data['user_group'] = '';
-			$data['image'] = $this->model_tool_image->resize('profile.png', 45, 45);
+			$data['image'] = $this->model_tool_image_admin->resize('profile.png', 45, 45);
 						
-			$this->load->model('user/user');
+			$this->load->model('user/user_admin');
 	
-			$user_info = $this->model_user_user->getUser($this->user->getId());
+			$user_info = $this->model_user_user_admin->getUser($this->user->getId());
 	
 			if ($user_info) {
 				$data['firstname'] = $user_info['firstname'];
@@ -48,7 +48,7 @@ class ControllerCommonHeader extends Controller {
 				$data['user_group'] = $user_info['user_group'];
 	
 				if (is_file(DIR_IMAGE . $user_info['image'])) {
-					$data['image'] = $this->model_tool_image->resize($user_info['image'], 45, 45);
+					$data['image'] = $this->model_tool_image_admin->resize($user_info['image'], 45, 45);
 				}
 			} 		
 			
@@ -60,9 +60,9 @@ class ControllerCommonHeader extends Controller {
 				'href' => HTTP_CATALOG
 			);
 
-			$this->load->model('setting/store');
+			$this->load->model('setting/store_admin');
 
-			$results = $this->model_setting_store->getStores();
+			$results = $this->model_setting_store_admin->getStores();
 
 			foreach ($results as $result) {
 				$data['stores'][] = array(

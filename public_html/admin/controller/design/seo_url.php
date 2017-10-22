@@ -7,7 +7,7 @@ class ControllerDesignSeoUrl extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/seo_url');
+		$this->load->model('design/seo_url_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerDesignSeoUrl extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/seo_url');
+		$this->load->model('design/seo_url_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_seo_url->addSeoUrl($this->request->post);
+			$this->model_design_seo_url_admin->addSeoUrl($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -65,10 +65,10 @@ class ControllerDesignSeoUrl extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/seo_url');
+		$this->load->model('design/seo_url_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_seo_url->editSeoUrl($this->request->get['seo_url_id'], $this->request->post);
+			$this->model_design_seo_url_admin->editSeoUrl($this->request->get['seo_url_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -113,11 +113,11 @@ class ControllerDesignSeoUrl extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/seo_url');
+		$this->load->model('design/seo_url_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $seo_url_id) {
-				$this->model_design_seo_url->deleteSeoUrl($seo_url_id);
+				$this->model_design_seo_url_admin->deleteSeoUrl($seo_url_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -259,9 +259,9 @@ class ControllerDesignSeoUrl extends Controller {
 			'limit'              => $this->config->get('config_limit_admin')
 		);
 
-		$seo_url_total = $this->model_design_seo_url->getTotalSeoUrls($filter_data);
+		$seo_url_total = $this->model_design_seo_url_admin->getTotalSeoUrls($filter_data);
 
-		$results = $this->model_design_seo_url->getSeoUrls($filter_data);
+		$results = $this->model_design_seo_url_admin->getSeoUrls($filter_data);
 
 		foreach ($results as $result) {
 			$data['seo_urls'][] = array(
@@ -373,13 +373,13 @@ class ControllerDesignSeoUrl extends Controller {
 		$data['sort'] = $sort;
 		$data['order'] = $order;
 		
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
-		$data['stores'] = $this->model_setting_store->getStores();
+		$data['stores'] = $this->model_setting_store_admin->getStores();
 		
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 		
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -460,7 +460,7 @@ class ControllerDesignSeoUrl extends Controller {
 		$data['cancel'] = $this->url->link('design/seo_url', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['seo_url_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$seo_url_info = $this->model_design_seo_url->getSeoUrl($this->request->get['seo_url_id']);
+			$seo_url_info = $this->model_design_seo_url_admin->getSeoUrl($this->request->get['seo_url_id']);
 		}
 		
 		if (isset($this->request->post['query'])) {
@@ -479,7 +479,7 @@ class ControllerDesignSeoUrl extends Controller {
 			$data['keyword'] = '';
 		}
 				
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
 		$data['stores'] = [];
 		
@@ -488,7 +488,7 @@ class ControllerDesignSeoUrl extends Controller {
 			'name'     => $this->language->get('text_default')
 		);
 		
-		$stores = $this->model_setting_store->getStores();
+		$stores = $this->model_setting_store_admin->getStores();
 
 		foreach ($stores as $store) {
 			$data['stores'][] = array(
@@ -505,9 +505,9 @@ class ControllerDesignSeoUrl extends Controller {
 			$data['store_id'] = '';
 		}			
 				
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['language_id'])) {
 			$data['language_id'] = $this->request->post['language_id'];
@@ -533,7 +533,7 @@ class ControllerDesignSeoUrl extends Controller {
 			$this->error['query'] = $this->language->get('error_query');
 		}
 		
-		$seo_urls = $this->model_design_seo_url->getSeoUrlsByKeyword($this->request->post['keyword']);
+		$seo_urls = $this->model_design_seo_url_admin->getSeoUrlsByKeyword($this->request->post['keyword']);
 
 		foreach ($seo_urls as $seo_url) {
 			if ($seo_url['store_id'] == $this->request->post['store_id'] && $seo_url['query'] != $this->request->post['query']) {

@@ -7,7 +7,7 @@ class ControllerUserApi extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerUserApi extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_api->addApi($this->request->post);
+			$this->model_user_api_admin->addApi($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerUserApi extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_user_api->editApi($this->request->get['api_id'], $this->request->post);
+			$this->model_user_api_admin->editApi($this->request->get['api_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerUserApi extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('user/api');
+		$this->load->model('user/api_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $api_id) {
-				$this->model_user_api->deleteApi($api_id);
+				$this->model_user_api_admin->deleteApi($api_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerUserApi extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$user_total = $this->model_user_api->getTotalApis();
+		$user_total = $this->model_user_api_admin->getTotalApis();
 
-		$results = $this->model_user_api->getApis($filter_data);
+		$results = $this->model_user_api_admin->getApis($filter_data);
 
 		foreach ($results as $result) {
 			$data['apis'][] = array(
@@ -308,7 +308,7 @@ class ControllerUserApi extends Controller {
 		$data['cancel'] = $this->url->link('user/api', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['api_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$api_info = $this->model_user_api->getApi($this->request->get['api_id']);
+			$api_info = $this->model_user_api_admin->getApi($this->request->get['api_id']);
 		}
 
 		if (isset($this->request->post['username'])) {
@@ -339,7 +339,7 @@ class ControllerUserApi extends Controller {
 		if (isset($this->request->post['api_ip'])) {
 			$data['api_ips'] = $this->request->post['api_ip'];
 		} elseif (isset($this->request->get['api_id'])) {
-			$data['api_ips'] = $this->model_user_api->getApiIps($this->request->get['api_id']);
+			$data['api_ips'] = $this->model_user_api_admin->getApiIps($this->request->get['api_id']);
 		} else {
 			$data['api_ips'] = [];
 		}
@@ -348,7 +348,7 @@ class ControllerUserApi extends Controller {
 		$data['api_sessions'] = [];
 		
 		if (isset($this->request->get['api_id'])) {
-			$results = $this->model_user_api->getApiSessions($this->request->get['api_id']);
+			$results = $this->model_user_api_admin->getApiSessions($this->request->get['api_id']);
 			
 			foreach ($results as $result) {
 				$data['api_sessions'][] = array(
@@ -404,9 +404,9 @@ class ControllerUserApi extends Controller {
 		if (!$this->user->hasPermission('modify', 'user/api')) {
 			$json['error'] = $this->language->get('error_permission');
 		} else {
-			$this->load->model('user/api');
+			$this->load->model('user/api_admin');
 
-			$this->model_user_api->deleteApiSession($this->request->get['api_session_id']);
+			$this->model_user_api_admin->deleteApiSession($this->request->get['api_session_id']);
 
 			$json['success'] = $this->language->get('text_success');
 		}

@@ -3,28 +3,28 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 	public function install() {
 		$this->load->language('extension/openbay/etsy');
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('setting/setting');
-		$this->load->model('setting/extension');
-		$this->load->model('user/user_group');
+		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/extension_admin');
+		$this->load->model('user/user_group_admin');
 
-		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/etsy_product');
-		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/etsy_product');
-		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/etsy_shipping');
-		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/etsy_shipping');
-		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/etsy_shop');
-		$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/etsy_shop');
+		$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/etsy_product');
+		$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/etsy_product');
+		$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/etsy_shipping');
+		$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/etsy_shipping');
+		$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/etsy_shop');
+		$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/openbay/etsy_shop');
 
 		$this->model_extension_openbay_etsy->install();
 	}
 
 	public function uninstall() {
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('setting/setting');
-		$this->load->model('setting/extension');
+		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/extension_admin');
 
 		$this->model_extension_openbay_etsy->uninstall();
-		$this->model_setting_extension->uninstall('openbay', $this->request->get['extension']);
-		$this->model_setting_setting->deleteSetting($this->request->get['extension']);
+		$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
+		$this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
 	}
 
 	public function index() {
@@ -78,14 +78,14 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 	}
 
 	public function settings() {
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
 		$data = $this->load->language('extension/openbay/etsy_settings');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting->editSetting('etsy', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('etsy', $this->request->post);
 
 			$this->openbay->etsy->resetConfig($this->request->post['etsy_token'], $this->request->post['etsy_encryption_key']);
 
@@ -192,7 +192,7 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 		}
 
 		$data['api_server'] = $this->openbay->etsy->getServer();
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 		$data['account_info'] = $this->model_extension_openbay_etsy->verifyAccount();
 		$data['link_signup'] = 'https://account.openbaypro.com/etsy/apiRegister/?endpoint=2&utm_source=opencart_install&utm_medium=settings&utm_campaign=etsy';
 

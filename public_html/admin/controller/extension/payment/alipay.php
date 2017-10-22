@@ -7,10 +7,10 @@ class ControllerExtensionPaymentAlipay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_alipay', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_alipay', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -92,9 +92,9 @@ class ControllerExtensionPaymentAlipay extends Controller {
 			$data['payment_alipay_order_status_id'] = $this->config->get('payment_alipay_order_status_id');
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_alipay_geo_zone_id'])) {
 			$data['payment_alipay_geo_zone_id'] = $this->request->post['payment_alipay_geo_zone_id'];
@@ -102,9 +102,9 @@ class ControllerExtensionPaymentAlipay extends Controller {
 			$data['payment_alipay_geo_zone_id'] = $this->config->get('payment_alipay_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_alipay_test'])) {
 			$data['payment_alipay_test'] = $this->request->post['payment_alipay_test'];

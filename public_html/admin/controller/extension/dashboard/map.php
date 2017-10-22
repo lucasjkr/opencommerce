@@ -7,10 +7,10 @@ class ControllerExtensionDashboardMap extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('dashboard_map', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('dashboard_map', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -94,9 +94,9 @@ class ControllerExtensionDashboardMap extends Controller {
 	public function map() {
 		$json = [];
 
-		$this->load->model('extension/dashboard/map');
+		$this->load->model('extension/dashboard/map_admin');
 
-		$results = $this->model_extension_dashboard_map->getTotalOrdersByCountry();
+		$results = $this->model_extension_dashboard_map_admin->getTotalOrdersByCountry();
 
 		foreach ($results as $result) {
 			$json[strtolower($result['iso_code_2'])] = array(

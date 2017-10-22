@@ -27,18 +27,18 @@ class ControllerCommonReset extends Controller {
 			$code = '';
 		}
 
-		$this->load->model('user/user');
+		$this->load->model('user/user_admin');
 
-		$user_info = $this->model_user_user->getUserByEmail($email);
+		$user_info = $this->model_user_user_admin->getUserByEmail($email);
 
 		if (!$user_info || !$user_info['code'] || $user_info['code'] !== $code) {
 			$this->session->data['error'] = $this->language->get('error_code');
 
-			$this->model_user_user->editCode($email, '');
+			$this->model_user_user_admin->editCode($email, '');
 
-			$this->load->model('setting/setting');
+			$this->load->model('setting/setting_admin');
 
-			$this->model_setting_setting->editSettingValue('config', 'config_password', '0');
+			$this->model_setting_setting_admin->editSettingValue('config', 'config_password', '0');
 
 			$this->response->redirect($this->url->link('common/login', '', true));
 		}
@@ -46,7 +46,7 @@ class ControllerCommonReset extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_user_user->editPassword($user_info['user_id'], $this->request->post['password']);
+			$this->model_user_user_admin->editPassword($user_info['user_id'], $this->request->post['password']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 

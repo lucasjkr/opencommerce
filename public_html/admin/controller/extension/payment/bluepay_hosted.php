@@ -7,10 +7,10 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting');
+		$this->load->model('setting/setting_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting->editSetting('payment_bluepay_hosted', $this->request->post);
+			$this->model_setting_setting_admin->editSetting('payment_bluepay_hosted', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -118,9 +118,9 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 			$data['payment_bluepay_hosted_order_status_id'] = 2;
 		}
 
-		$this->load->model('localisation/order_status');
+		$this->load->model('localisation/order_status_admin');
 
-		$data['order_statuses'] = $this->model_localisation_order_status->getOrderStatuses();
+		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if (isset($this->request->post['payment_bluepay_hosted_geo_zone_id'])) {
 			$data['payment_bluepay_hosted_geo_zone_id'] = $this->request->post['payment_bluepay_hosted_geo_zone_id'];
@@ -128,9 +128,9 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 			$data['payment_bluepay_hosted_geo_zone_id'] = $this->config->get('payment_bluepay_hosted_geo_zone_id');
 		}
 
-		$this->load->model('localisation/geo_zone');
+		$this->load->model('localisation/geo_zone_admin');
 
-		$data['geo_zones'] = $this->model_localisation_geo_zone->getGeoZones();
+		$data['geo_zones'] = $this->model_localisation_geo_zone_admin->getGeoZones();
 
 		if (isset($this->request->post['payment_bluepay_hosted_status'])) {
 			$data['payment_bluepay_hosted_status'] = $this->request->post['payment_bluepay_hosted_status'];
@@ -158,27 +158,27 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('extension/payment/bluepay_hosted');
+		$this->load->model('extension/payment/bluepay_hosted_admin');
 
-		$this->model_extension_payment_bluepay_hosted->install();
+		$this->model_extension_payment_bluepay_hosted_admin->install();
 	}
 
 	public function uninstall() {
-		$this->load->model('extension/payment/bluepay_hosted');
+		$this->load->model('extension/payment/bluepay_hosted_admin');
 
-		$this->model_extension_payment_bluepay_hosted->uninstall();
+		$this->model_extension_payment_bluepay_hosted_admin->uninstall();
 	}
 
 	public function order() {
 		if ($this->config->get('payment_bluepay_hosted_status')) {
-			$this->load->model('extension/payment/bluepay_hosted');
+			$this->load->model('extension/payment/bluepay_hosted_admin');
 
-			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted->getOrder($this->request->get['order_id']);
+			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted_admin->getOrder($this->request->get['order_id']);
 
 			if (!empty($bluepay_hosted_order)) {
 				$this->load->language('extension/payment/bluepay_hosted');
 
-				$bluepay_hosted_order['total_released'] = $this->model_extension_payment_bluepay_hosted->getTotalReleased($bluepay_hosted_order['bluepay_hosted_order_id']);
+				$bluepay_hosted_order['total_released'] = $this->model_extension_payment_bluepay_hosted_admin->getTotalReleased($bluepay_hosted_order['bluepay_hosted_order_id']);
 
 				$bluepay_hosted_order['total_formatted'] = $this->currency->format($bluepay_hosted_order['total'], $bluepay_hosted_order['currency_code'], false, false);
 				$bluepay_hosted_order['total_released_formatted'] = $this->currency->format($bluepay_hosted_order['total_released'], $bluepay_hosted_order['currency_code'], false, false);
@@ -198,17 +198,17 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '') {
-			$this->load->model('extension/payment/bluepay_hosted');
+			$this->load->model('extension/payment/bluepay_hosted_admin');
 
-			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted->getOrder($this->request->post['order_id']);
+			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted_admin->getOrder($this->request->post['order_id']);
 
-			$void_response = $this->model_extension_payment_bluepay_hosted->void($this->request->post['order_id']);
+			$void_response = $this->model_extension_payment_bluepay_hosted_admin->void($this->request->post['order_id']);
 
-			$this->model_extension_payment_bluepay_hosted->logger('Void result:\r\n' . print_r($void_response, 1));
+			$this->model_extension_payment_bluepay_hosted_admin->logger('Void result:\r\n' . print_r($void_response, 1));
 
 			if ($void_response['Result'] == 'APPROVED') {
-				$this->model_extension_payment_bluepay_hosted->addTransaction($bluepay_hosted_order['bluepay_hosted_order_id'], 'void', $bluepay_hosted_order['total']);
-				$this->model_extension_payment_bluepay_hosted->updateVoidStatus($bluepay_hosted_order['bluepay_hosted_order_id'], 1);
+				$this->model_extension_payment_bluepay_hosted_admin->addTransaction($bluepay_hosted_order['bluepay_hosted_order_id'], 'void', $bluepay_hosted_order['total']);
+				$this->model_extension_payment_bluepay_hosted_admin->updateVoidStatus($bluepay_hosted_order['bluepay_hosted_order_id'], 1);
 
 				$json['msg'] = $this->language->get('text_void_ok');
 				$json['data'] = [];
@@ -233,23 +233,23 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && $this->request->post['order_id'] != '' && isset($this->request->post['amount']) && $this->request->post['amount'] > 0) {
-			$this->load->model('extension/payment/bluepay_hosted');
+			$this->load->model('extension/payment/bluepay_hosted_admin');
 
-			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted->getOrder($this->request->post['order_id']);
+			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted_admin->getOrder($this->request->post['order_id']);
 
-			$release_response = $this->model_extension_payment_bluepay_hosted->release($this->request->post['order_id'], $this->request->post['amount']);
+			$release_response = $this->model_extension_payment_bluepay_hosted_admin->release($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_bluepay_hosted->logger('Release result:\r\n' . print_r($release_response, 1));
+			$this->model_extension_payment_bluepay_hosted_admin->logger('Release result:\r\n' . print_r($release_response, 1));
 
 			if ($release_response['Result'] == 'APPROVED') {
-				$this->model_extension_payment_bluepay_hosted->addTransaction($bluepay_hosted_order['bluepay_hosted_order_id'], 'payment', $this->request->post['amount']);
+				$this->model_extension_payment_bluepay_hosted_admin->addTransaction($bluepay_hosted_order['bluepay_hosted_order_id'], 'payment', $this->request->post['amount']);
 
-				$this->model_extension_payment_bluepay_hosted->updateTransactionId($bluepay_hosted_order['bluepay_hosted_order_id'], $release_response['RRNO']);
+				$this->model_extension_payment_bluepay_hosted_admin->updateTransactionId($bluepay_hosted_order['bluepay_hosted_order_id'], $release_response['RRNO']);
 
-				$total_released = $this->model_extension_payment_bluepay_hosted->getTotalReleased($bluepay_hosted_order['bluepay_hosted_order_id']);
+				$total_released = $this->model_extension_payment_bluepay_hosted_admin->getTotalReleased($bluepay_hosted_order['bluepay_hosted_order_id']);
 
 				if ($total_released >= $bluepay_hosted_order['total']) {
-					$this->model_extension_payment_bluepay_hosted->updateReleaseStatus($bluepay_hosted_order['bluepay_hosted_order_id'], 1);
+					$this->model_extension_payment_bluepay_hosted_admin->updateReleaseStatus($bluepay_hosted_order['bluepay_hosted_order_id'], 1);
 					$release_status = 1;
 					$json['msg'] = $this->language->get('text_release_ok_order');
 				} else {
@@ -281,22 +281,22 @@ class ControllerExtensionPaymentBluePayHosted extends Controller {
 		$json = [];
 
 		if (isset($this->request->post['order_id']) && !empty($this->request->post['order_id'])) {
-			$this->load->model('extension/payment/bluepay_hosted');
+			$this->load->model('extension/payment/bluepay_hosted_admin');
 
-			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted->getOrder($this->request->post['order_id']);
+			$bluepay_hosted_order = $this->model_extension_payment_bluepay_hosted_admin->getOrder($this->request->post['order_id']);
 
-			$rebate_response = $this->model_extension_payment_bluepay_hosted->rebate($this->request->post['order_id'], $this->request->post['amount']);
+			$rebate_response = $this->model_extension_payment_bluepay_hosted_admin->rebate($this->request->post['order_id'], $this->request->post['amount']);
 
-			$this->model_extension_payment_bluepay_hosted->logger('Rebate result:\r\n' . print_r($rebate_response, 1));
+			$this->model_extension_payment_bluepay_hosted_admin->logger('Rebate result:\r\n' . print_r($rebate_response, 1));
 
 			if ($rebate_response['Result'] == 'APPROVED') {
-				$this->model_extension_payment_bluepay_hosted->addTransaction($bluepay_hosted_order['bluepay_hosted_order_id'], 'rebate', $this->request->post['amount'] * -1);
+				$this->model_extension_payment_bluepay_hosted_admin->addTransaction($bluepay_hosted_order['bluepay_hosted_order_id'], 'rebate', $this->request->post['amount'] * -1);
 
-				$total_rebated = $this->model_extension_payment_bluepay_hosted->getTotalRebated($bluepay_hosted_order['bluepay_hosted_order_id']);
-				$total_released = $this->model_extension_payment_bluepay_hosted->getTotalReleased($bluepay_hosted_order['bluepay_hosted_order_id']);
+				$total_rebated = $this->model_extension_payment_bluepay_hosted_admin->getTotalRebated($bluepay_hosted_order['bluepay_hosted_order_id']);
+				$total_released = $this->model_extension_payment_bluepay_hosted_admin->getTotalReleased($bluepay_hosted_order['bluepay_hosted_order_id']);
 
 				if ($total_released <= 0 && $bluepay_hosted_order['release_status'] == 1) {
-					$this->model_extension_payment_bluepay_hosted->updateRebateStatus($bluepay_hosted_order['bluepay_hosted_order_id'], 1);
+					$this->model_extension_payment_bluepay_hosted_admin->updateRebateStatus($bluepay_hosted_order['bluepay_hosted_order_id'], 1);
 					$rebate_status = 1;
 					$json['msg'] = $this->language->get('text_rebate_ok_order');
 				} else {

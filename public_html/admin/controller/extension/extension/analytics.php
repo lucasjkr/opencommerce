@@ -5,7 +5,7 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/analytics');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		$this->getList();
 	}
@@ -13,19 +13,19 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/analytics');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->install('analytics', $this->request->get['extension']);
+			$this->model_setting_extension_admin->install('analytics', $this->request->get['extension']);
 
-			$this->load->model('user/user_group');
+			$this->load->model('user/user_group_admin');
 
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'extension/analytics/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'extension/analytics/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/analytics/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/analytics/' . $this->request->get['extension']);
 			
 			// Compatibility
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'access', 'analytics/' . $this->request->get['extension']);
-			$this->model_user_user_group->addPermission($this->user->getGroupId(), 'modify', 'analytics/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'analytics/' . $this->request->get['extension']);
+			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'analytics/' . $this->request->get['extension']);
 
 			// Call install method if it exsits
 			$this->load->controller('extension/analytics/' . $this->request->get['extension'] . '/install');
@@ -39,10 +39,10 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/analytics');
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
 		if ($this->validate()) {
-			$this->model_setting_extension->uninstall('analytics', $this->request->get['extension']);
+			$this->model_setting_extension_admin->uninstall('analytics', $this->request->get['extension']);
 
 			// Call uninstall method if it exsits
 			$this->load->controller('extension/analytics/' . $this->request->get['extension'] . '/uninstall');
@@ -68,20 +68,20 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 			$data['success'] = '';
 		}
 
-		$extensions = $this->model_setting_extension->getInstalled('analytics');
+		$extensions = $this->model_setting_extension_admin->getInstalled('analytics');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/analytics/' . $value . '.php') && !is_file(DIR_APPLICATION . 'controller/analytics/' . $value . '.php')) {
-				$this->model_setting_extension->uninstall('analytics', $value);
+				$this->model_setting_extension_admin->uninstall('analytics', $value);
 
 				unset($extensions[$key]);
 			}
 		}
 		
-		$this->load->model('setting/store');
-		$this->load->model('setting/setting');
+		$this->load->model('setting/store_admin');
+		$this->load->model('setting/setting_admin');
 
-		$stores = $this->model_setting_store->getStores();
+		$stores = $this->model_setting_store_admin->getStores();
 		
 		$data['extensions'] = [];
 
@@ -107,7 +107,7 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 					$store_data[] = array(
 						'name'   => $store['name'],
 						'edit'   => $this->url->link('extension/analytics/' . $extension, 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store['store_id'], true),
-						'status' => $this->model_setting_setting->getSettingValue('analytics_' . $extension . '_status', $store['store_id']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
+						'status' => $this->model_setting_setting_admin->getSettingValue('analytics_' . $extension . '_status', $store['store_id']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
 					);
 				}
 

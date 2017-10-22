@@ -7,7 +7,7 @@ class ControllerDesignLayout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		
-		$this->load->model('design/layout');
+		$this->load->model('design/layout_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerDesignLayout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/layout');
+		$this->load->model('design/layout_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_layout->addLayout($this->request->post);
+			$this->model_design_layout_admin->addLayout($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerDesignLayout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/layout');
+		$this->load->model('design/layout_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_design_layout->editLayout($this->request->get['layout_id'], $this->request->post);
+			$this->model_design_layout_admin->editLayout($this->request->get['layout_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerDesignLayout extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('design/layout');
+		$this->load->model('design/layout_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $layout_id) {
-				$this->model_design_layout->deleteLayout($layout_id);
+				$this->model_design_layout_admin->deleteLayout($layout_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerDesignLayout extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$layout_total = $this->model_design_layout->getTotalLayouts();
+		$layout_total = $this->model_design_layout_admin->getTotalLayouts();
 
-		$results = $this->model_design_layout->getLayouts($filter_data);
+		$results = $this->model_design_layout_admin->getLayouts($filter_data);
 
 		foreach ($results as $result) {
 			$data['layouts'][] = array(
@@ -295,7 +295,7 @@ class ControllerDesignLayout extends Controller {
 		$data['user_token'] = $this->session->data['user_token'];
 
 		if (isset($this->request->get['layout_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$layout_info = $this->model_design_layout->getLayout($this->request->get['layout_id']);
+			$layout_info = $this->model_design_layout_admin->getLayout($this->request->get['layout_id']);
 		}
 
 		if (isset($this->request->post['name'])) {
@@ -306,26 +306,26 @@ class ControllerDesignLayout extends Controller {
 			$data['name'] = '';
 		}
 
-		$this->load->model('setting/store');
+		$this->load->model('setting/store_admin');
 
-		$data['stores'] = $this->model_setting_store->getStores();
+		$data['stores'] = $this->model_setting_store_admin->getStores();
 
 		if (isset($this->request->post['layout_route'])) {
 			$data['layout_routes'] = $this->request->post['layout_route'];
 		} elseif (isset($this->request->get['layout_id'])) {
-			$data['layout_routes'] = $this->model_design_layout->getLayoutRoutes($this->request->get['layout_id']);
+			$data['layout_routes'] = $this->model_design_layout_admin->getLayoutRoutes($this->request->get['layout_id']);
 		} else {
 			$data['layout_routes'] = [];
 		}
 
-		$this->load->model('setting/extension');
+		$this->load->model('setting/extension_admin');
 
-		$this->load->model('setting/module');
+		$this->load->model('setting/module_admin');
 
 		$data['extensions'] = [];
 		
 		// Get a list of installed modules
-		$extensions = $this->model_setting_extension->getInstalled('module');
+		$extensions = $this->model_setting_extension_admin->getInstalled('module');
 
 		// Add all the modules which have multiple settings for each module
 		foreach ($extensions as $code) {
@@ -333,7 +333,7 @@ class ControllerDesignLayout extends Controller {
 
 			$module_data = [];
 
-			$modules = $this->model_setting_module->getModulesByCode($code);
+			$modules = $this->model_setting_module_admin->getModulesByCode($code);
 
 			foreach ($modules as $module) {
 				$module_data[] = array(
@@ -355,7 +355,7 @@ class ControllerDesignLayout extends Controller {
 		if (isset($this->request->post['layout_module'])) {
 			$layout_modules = $this->request->post['layout_module'];
 		} elseif (isset($this->request->get['layout_id'])) {
-			$layout_modules = $this->model_design_layout->getLayoutModules($this->request->get['layout_id']);
+			$layout_modules = $this->model_design_layout_admin->getLayoutModules($this->request->get['layout_id']);
 		} else {
 			$layout_modules = [];
 		}
@@ -377,7 +377,7 @@ class ControllerDesignLayout extends Controller {
 					'sort_order' => $layout_module['sort_order']
 				);
 			} else {
-				$module_info = $this->model_setting_module->getModule($part[1]);
+				$module_info = $this->model_setting_module_admin->getModule($part[1]);
 				
 				if ($module_info) {
 					$data['layout_modules'][] = array(
@@ -415,35 +415,35 @@ class ControllerDesignLayout extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store');
-		$this->load->model('catalog/product');
-		$this->load->model('catalog/category');
-		$this->load->model('catalog/information');
+		$this->load->model('setting/store_admin');
+		$this->load->model('catalog/product_admin');
+		$this->load->model('catalog/category_admin_admin');
+		$this->load->model('catalog/information_admin');
 
 		foreach ($this->request->post['selected'] as $layout_id) {
 			if ($this->config->get('config_layout_id') == $layout_id) {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByLayoutId($layout_id);
+			$store_total = $this->model_setting_store_admin->getTotalStoresByLayoutId($layout_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
 			}
 
-			$product_total = $this->model_catalog_product->getTotalProductsByLayoutId($layout_id);
+			$product_total = $this->model_catalog_product_admin->getTotalProductsByLayoutId($layout_id);
 
 			if ($product_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_product'), $product_total);
 			}
 
-			$category_total = $this->model_catalog_category->getTotalCategoriesByLayoutId($layout_id);
+			$category_total = $this->model_catalog_category_admin->getTotalCategoriesByLayoutId($layout_id);
 
 			if ($category_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_category'), $category_total);
 			}
 
-			$information_total = $this->model_catalog_information->getTotalInformationsByLayoutId($layout_id);
+			$information_total = $this->model_catalog_information_admin->getTotalInformationsByLayoutId($layout_id);
 
 			if ($information_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_information'), $information_total);

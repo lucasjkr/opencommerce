@@ -7,7 +7,7 @@ class ControllerLocalisationReturnAction extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/return_action');
+		$this->load->model('localisation/return_action_admin');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationReturnAction extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/return_action');
+		$this->load->model('localisation/return_action_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_return_action->addReturnAction($this->request->post);
+			$this->model_localisation_return_action_admin->addReturnAction($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationReturnAction extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/return_action');
+		$this->load->model('localisation/return_action_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_return_action->editReturnAction($this->request->get['return_action_id'], $this->request->post);
+			$this->model_localisation_return_action_admin->editReturnAction($this->request->get['return_action_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationReturnAction extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/return_action');
+		$this->load->model('localisation/return_action_admin');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $return_action_id) {
-				$this->model_localisation_return_action->deleteReturnAction($return_action_id);
+				$this->model_localisation_return_action_admin->deleteReturnAction($return_action_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationReturnAction extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$return_action_total = $this->model_localisation_return_action->getTotalReturnActions();
+		$return_action_total = $this->model_localisation_return_action_admin->getTotalReturnActions();
 
-		$results = $this->model_localisation_return_action->getReturnActions($filter_data);
+		$results = $this->model_localisation_return_action_admin->getReturnActions($filter_data);
 
 		foreach ($results as $result) {
 			$data['return_actions'][] = array(
@@ -292,14 +292,14 @@ class ControllerLocalisationReturnAction extends Controller {
 
 		$data['cancel'] = $this->url->link('localisation/return_action', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$this->load->model('localisation/language');
+		$this->load->model('localisation/language_admin');
 
-		$data['languages'] = $this->model_localisation_language->getLanguages();
+		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->post['return_action'])) {
 			$data['return_action'] = $this->request->post['return_action'];
 		} elseif (isset($this->request->get['return_action_id'])) {
-			$data['return_action'] = $this->model_localisation_return_action->getReturnActionDescriptions($this->request->get['return_action_id']);
+			$data['return_action'] = $this->model_localisation_return_action_admin->getReturnActionDescriptions($this->request->get['return_action_id']);
 		} else {
 			$data['return_action'] = [];
 		}
@@ -330,10 +330,10 @@ class ControllerLocalisationReturnAction extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('sale/return');
+		$this->load->model('sale/return_admin');
 
 		foreach ($this->request->post['selected'] as $return_action_id) {
-			$return_total = $this->model_sale_return->getTotalReturnsByReturnActionId($return_action_id);
+			$return_total = $this->model_sale_return_admin->getTotalReturnsByReturnActionId($return_action_id);
 
 			if ($return_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_return'), $return_total);
