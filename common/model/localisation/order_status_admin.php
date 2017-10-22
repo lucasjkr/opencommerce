@@ -63,7 +63,7 @@ class ModelLocalisationOrderStatusAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getOrderStatuses($data = array()) {
+	public function getOrderStatuses($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_order_status WHERE language_id = :language_id ORDER BY name";
             $args[':language_id'] = $this->config->get('config_language_id');

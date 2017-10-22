@@ -62,7 +62,7 @@ class ModelLocalisationReturnStatusAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getReturnStatuses($data = array()) {
+	public function getReturnStatuses($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_return_status WHERE language_id = :language_id ORDER BY name";
             $args[':language_id'] = $this->config->get('config_language_id');

@@ -75,7 +75,7 @@ class ModelExtensionPaymentPPExpressAdmin extends Model {
 		$this->db->query("UPDATE `oc_paypal_order` SET `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
 	}
 
-	public function addTransaction($transaction_data, $request_data = array()) {
+	public function addTransaction($transaction_data, $request_data = []) {
 		if ($request_data) {
 			$serialized_data = json_encode($request_data);
 
@@ -344,7 +344,7 @@ class ModelExtensionPaymentPPExpressAdmin extends Model {
 		return $this->cleanReturn($curl_response);
 	}
 
-	private function curl($endpoint, $additional_opts = array()) {
+	private function curl($endpoint, $additional_opts = []) {
 		$default_opts = array(
 			CURLOPT_PORT => 443,
 			CURLOPT_HEADER => 0,

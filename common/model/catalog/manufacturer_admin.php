@@ -131,7 +131,7 @@ class ModelCatalogManufacturerAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getManufacturers($data = array()) {
+	public function getManufacturers($data = []) {
 		$sql = "SELECT * FROM oc_manufacturer";
 
 		if (!empty($data['filter_name'])) {
@@ -139,10 +139,10 @@ class ModelCatalogManufacturerAdmin extends Model {
             $args[':name'] = $data['filter_name'] . '%';
 		}
 
-		$sort_data = array(
+		$sort_data = [
 			'name',
 			'sort_order'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];

@@ -14,7 +14,7 @@ class Twig_Node_Expression_Array extends Twig_Node_Expression
 
     public function __construct(array $elements, $lineno)
     {
-        parent::__construct($elements, array(), $lineno);
+        parent::__construct($elements, [], $lineno);
 
         $this->index = -1;
         foreach ($this->getKeyValuePairs() as $pair) {

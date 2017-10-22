@@ -116,7 +116,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
      *
      * @internal
      */
-    public function displayParentBlock($name, array $context, array $blocks = array())
+    public function displayParentBlock($name, array $context, array $blocks = [])
     {
         $name = (string) $name;
 
@@ -142,7 +142,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
      *
      * @internal
      */
-    public function displayBlock($name, array $context, array $blocks = array(), $useBlocks = true)
+    public function displayBlock($name, array $context, array $blocks = [], $useBlocks = true)
     {
         $name = (string) $name;
 
@@ -200,7 +200,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
      *
      * @internal
      */
-    public function renderParentBlock($name, array $context, array $blocks = array())
+    public function renderParentBlock($name, array $context, array $blocks = [])
     {
         ob_start();
         $this->displayParentBlock($name, $context, $blocks);
@@ -223,7 +223,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
      *
      * @internal
      */
-    public function renderBlock($name, array $context, array $blocks = array(), $useBlocks = true)
+    public function renderBlock($name, array $context, array $blocks = [], $useBlocks = true)
     {
         ob_start();
         $this->displayBlock($name, $context, $blocks, $useBlocks);
@@ -350,7 +350,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
     /**
      * {@inheritdoc}
      */
-    public function display(array $context, array $blocks = array())
+    public function display(array $context, array $blocks = [])
     {
         $this->displayWithErrorHandling($this->env->mergeGlobals($context), array_merge($this->blocks, $blocks));
     }
@@ -381,7 +381,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
         return ob_get_clean();
     }
 
-    protected function displayWithErrorHandling(array $context, array $blocks = array())
+    protected function displayWithErrorHandling(array $context, array $blocks = [])
     {
         try {
             $this->doDisplay($context, $blocks);
@@ -409,7 +409,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
      * @param array $context An array of parameters to pass to the template
      * @param array $blocks  An array of blocks to pass to the template
      */
-    abstract protected function doDisplay(array $context, array $blocks = array());
+    abstract protected function doDisplay(array $context, array $blocks = []);
 
     /**
      * Returns a variable from the context.
@@ -459,7 +459,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
      *
      * @throws Twig_Error_Runtime if the attribute does not exist and Twig is running in strict mode and $isDefinedTest is false
      */
-    protected function getAttribute($object, $item, array $arguments = array(), $type = self::ANY_CALL, $isDefinedTest = false, $ignoreStrictCheck = false)
+    protected function getAttribute($object, $item, array $arguments = [], $type = self::ANY_CALL, $isDefinedTest = false, $ignoreStrictCheck = false)
     {
         // array
         if (self::METHOD_CALL !== $type) {

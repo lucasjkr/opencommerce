@@ -36,7 +36,7 @@ final class Amazon {
         $this->encryption_iv = $encryption_iv;
     }
 
-	public function call($method, $data = array(), $use_json = true) {
+	public function call($method, $data = [], $use_json = true) {
         if (!empty($data)) {
             if ($use_json) {
                 $string = json_encode($data);
@@ -84,7 +84,7 @@ final class Amazon {
 		return $response;
 	}
 
-	public function callNoResponse($method, $data = array(), $use_json = true) {
+	public function callNoResponse($method, $data = [], $use_json = true) {
         if (!empty($data)) {
             if ($use_json) {
                 $string = json_encode($data);
@@ -133,7 +133,7 @@ final class Amazon {
 		return $this->url;
 	}
 
-	public function productUpdateListen($product_id, $data = array()) {
+	public function productUpdateListen($product_id, $data = []) {
 		$logger = new \Log('amazon_stocks.log');
 		$logger->write('productUpdateListen(), product ID: ' . $product_id);
 
@@ -184,7 +184,7 @@ final class Amazon {
 		$log->write('Called bulkUpdateOrders method');
 
 		$request = array(
-			'orders' => array(),
+			'orders' => [],
 		);
 
 		foreach ($orders as $order) {
@@ -289,7 +289,7 @@ final class Amazon {
 		if(isset($result)) {
 			return (array)json_decode($result);
 		} else {
-			return array();
+			return [];
 		}
 	}
 
@@ -298,7 +298,7 @@ final class Amazon {
 		if(isset($result)) {
 			return (array)json_decode($result);
 		} else {
-			return array();
+			return [];
 		}
 	}
 
@@ -307,7 +307,7 @@ final class Amazon {
 		if(isset($result)) {
 			return (array)json_decode($result);
 		} else {
-			return array();
+			return [];
 		}
 	}
 
@@ -316,7 +316,7 @@ final class Amazon {
 		if(isset($result)) {
 			return (array)json_decode($result);
 		} else {
-			return array();
+			return [];
 		}
 	}
 

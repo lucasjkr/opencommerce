@@ -1,6 +1,6 @@
 <?php
 class ModelExtensionReportSaleAdmin extends Model {
-	public function getTotalSales($data = array()) {
+	public function getTotalSales($data = []) {
 		$sql = "SELECT SUM(total) AS total FROM `oc_order` WHERE order_status_id > '0'";
         $args = [];
 
@@ -144,7 +144,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 		return $order_data;
 	}
 
-	public function getOrders($data = array()) {
+	public function getOrders($data = []) {
 		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, COUNT(*) AS `orders`, SUM((SELECT SUM(op.quantity) FROM `oc_order_product` op WHERE op.order_id = o.order_id GROUP BY op.order_id)) AS products, SUM((SELECT SUM(ot.value) FROM `oc_order_total` ot WHERE ot.order_id = o.order_id AND ot.code = 'tax' GROUP BY ot.order_id)) AS tax, SUM(o.total) AS `total` FROM `oc_order` o";
         $args = [];
 
@@ -206,7 +206,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalOrders($data = array()) {
+	public function getTotalOrders($data = []) {
 		if (!empty($data['filter_group'])) {
 			$group = $data['filter_group'];
 		} else {
@@ -248,7 +248,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 		return $query->row['total'];
 	}
 
-	public function getTaxes($data = array()) {
+	public function getTaxes($data = []) {
 		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, ot.title, SUM(ot.value) AS total, COUNT(o.order_id) AS `orders` FROM `oc_order` o LEFT JOIN `oc_order_total` ot ON (ot.order_id = o.order_id) WHERE ot.code = 'tax'";
 
 		if (!empty($data['filter_order_status_id'])) {
@@ -304,7 +304,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalTaxes($data = array()) {
+	public function getTotalTaxes($data = []) {
 		if (!empty($data['filter_group'])) {
 			$group = $data['filter_group'];
 		} else {
@@ -348,7 +348,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 		return $query->row['total'];
 	}
 
-	public function getShipping($data = array()) {
+	public function getShipping($data = []) {
 		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, ot.title, SUM(ot.value) AS total, COUNT(o.order_id) AS `orders` FROM `oc_order` o LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = 'shipping'";
 
 		if (!empty($data['filter_order_status_id'])) {
@@ -404,7 +404,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalShipping($data = array()) {
+	public function getTotalShipping($data = []) {
 		if (!empty($data['filter_group'])) {
 			$group = $data['filter_group'];
 		} else {

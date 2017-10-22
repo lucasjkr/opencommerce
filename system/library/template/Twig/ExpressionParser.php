@@ -227,7 +227,7 @@ class Twig_ExpressionParser
         $stream = $this->parser->getStream();
         $stream->expect(Twig_Token::PUNCTUATION_TYPE, '[', 'An array element was expected');
 
-        $node = new Twig_Node_Expression_Array(array(), $stream->getCurrent()->getLine());
+        $node = new Twig_Node_Expression_Array([], $stream->getCurrent()->getLine());
         $first = true;
         while (!$stream->test(Twig_Token::PUNCTUATION_TYPE, ']')) {
             if (!$first) {
@@ -252,7 +252,7 @@ class Twig_ExpressionParser
         $stream = $this->parser->getStream();
         $stream->expect(Twig_Token::PUNCTUATION_TYPE, '{', 'A hash element was expected');
 
-        $node = new Twig_Node_Expression_Array(array(), $stream->getCurrent()->getLine());
+        $node = new Twig_Node_Expression_Array([], $stream->getCurrent()->getLine());
         $first = true;
         while (!$stream->test(Twig_Token::PUNCTUATION_TYPE, '}')) {
             if (!$first) {
@@ -336,7 +336,7 @@ class Twig_ExpressionParser
                 return new Twig_Node_Expression_GetAttr($args->getNode(0), $args->getNode(1), count($args) > 2 ? $args->getNode(2) : null, Twig_Template::ANY_CALL, $line);
             default:
                 if (null !== $alias = $this->parser->getImportedSymbol('function', $name)) {
-                    $arguments = new Twig_Node_Expression_Array(array(), $line);
+                    $arguments = new Twig_Node_Expression_Array([], $line);
                     foreach ($this->parseArguments() as $n) {
                         $arguments->addElement($n);
                     }
@@ -359,7 +359,7 @@ class Twig_ExpressionParser
         $stream = $this->parser->getStream();
         $token = $stream->next();
         $lineno = $token->getLine();
-        $arguments = new Twig_Node_Expression_Array(array(), $lineno);
+        $arguments = new Twig_Node_Expression_Array([], $lineno);
         $type = Twig_Template::ANY_CALL;
         if ($token->getValue() == '.') {
             $token = $stream->next();

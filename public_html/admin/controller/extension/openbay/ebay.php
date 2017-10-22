@@ -1518,7 +1518,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$data['cancel'] = $this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'], true);
 				$data['image_directory'] = DIR_IMAGE;
 
-				$active_list = $this->model_extension_openbay_ebay_admin->getLiveListingArray();
+				$active_list = $this->model_extension_openbay_ebay_admin->getLiveListing[];
 
 				$products = [];
 

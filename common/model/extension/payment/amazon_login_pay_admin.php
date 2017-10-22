@@ -261,7 +261,7 @@ class ModelExtensionPaymentAmazonLoginPayAdmin extends Model {
 		}
 	}
 
-	public function offAmazon($Action, $parameter_data, $post_data = array()) {
+	public function offAmazon($Action, $parameter_data, $post_data = []) {
 		if(!empty($post_data)){
 			$merchant_id = $post_data['payment_amazon_login_pay_merchant_id'];
 			$access_key = $post_data['payment_amazon_login_pay_access_key'];

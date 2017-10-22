@@ -14,7 +14,7 @@ class ModelExtensionDashboardMapAdmin extends Model {
 
 			return $query->rows;
 		} else {
-			return array();
+			return [];
 		}
 	}
 }

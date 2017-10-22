@@ -25,7 +25,7 @@ abstract class Twig_Function implements Twig_FunctionInterface, Twig_FunctionCal
     protected $options;
     protected $arguments = [];
 
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = array_merge(array(
             'needs_environment' => false,
@@ -64,7 +64,7 @@ abstract class Twig_Function implements Twig_FunctionInterface, Twig_FunctionCal
             return call_user_func($this->options['is_safe_callback'], $functionArgs);
         }
 
-        return array();
+        return [];
     }
 
     public function getCallable()

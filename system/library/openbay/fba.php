@@ -72,7 +72,7 @@ final class fba {
 		$this->api_account_id = $api_account_id;
 	}
 
-	public function call($uri, $data = array(), $request_type = 'GET') {
+	public function call($uri, $data = [], $request_type = 'GET') {
 		$this->log("Request: " . $request_type . " : " . $this->url . $uri);
 
 		$headers = [];
@@ -139,7 +139,7 @@ final class fba {
 
 			$response = array(
 				'error' => false,
-				'error_messages' => array(),
+				'error_messages' => [],
 				'body' => (isset($result_parsed['result']) ? $result_parsed['result'] : ''),
 				'response_http' => $http_code
 			);

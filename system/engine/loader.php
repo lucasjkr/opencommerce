@@ -30,7 +30,7 @@ final class Loader {
 	 *
 	 * @return	mixed
  	*/	
-	public function controller($route, $data = array()) {
+	public function controller($route, $data = []) {
 		// Sanitize the call
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 		
@@ -99,7 +99,7 @@ final class Loader {
 	 *
 	 * @return	string
  	*/
-	public function view($route, $data = array()) {
+	public function view($route, $data = []) {
 		// Sanitize the call
 		$route = preg_replace('/[^a-zA-Z0-9_\/]/', '', (string)$route);
 		

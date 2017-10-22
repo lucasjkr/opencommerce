@@ -21,7 +21,7 @@ class Twig_SimpleFunction
     protected $options;
     protected $arguments = [];
 
-    public function __construct($name, $callable, array $options = array())
+    public function __construct($name, $callable, array $options = [])
     {
         $this->name = $name;
         $this->callable = $callable;
@@ -82,7 +82,7 @@ class Twig_SimpleFunction
             return call_user_func($this->options['is_safe_callback'], $functionArgs);
         }
 
-        return array();
+        return [];
     }
 
     public function isVariadic()

@@ -487,7 +487,7 @@ class ModelLocalisationLanguageAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getLanguages($data = array()) {
+	public function getLanguages($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_language";
 

@@ -8,7 +8,7 @@ class ModelCustomerCustomerAdmin extends Model {
                 ':lastname' => $data['lastname'],
                 ':email' => $data['email'],
                 ':telephone' => $data['telephone'],
-                ':custom_field' => isset($data['custom_field']) ? json_encode($data['custom_field']) : json_encode(array()),
+                ':custom_field' => isset($data['custom_field']) ? json_encode($data['custom_field']) : json_encode([]),
                 ':newsletter' => $data['newsletter'],
                 ':password' => password_hash($data['password'], PASSWORD_DEFAULT),
                 ':status' => $data['status'],
@@ -31,7 +31,7 @@ class ModelCustomerCustomerAdmin extends Model {
                         ':postcode' => $address['postcode'],
                         ':country_id' => $address['country_id'],
                         ':zone_id' => $address['zone_id'],
-                        ':custom_field' => isset($address['custom_field']) ? json_encode($address['custom_field']) : json_encode(array())
+                        ':custom_field' => isset($address['custom_field']) ? json_encode($address['custom_field']) : json_encode([])
                     ]);
 
                 // LJK TODO: storing address_id in customers didn't seem correct, but now that I see that its the default address, it seems OK
@@ -59,7 +59,7 @@ class ModelCustomerCustomerAdmin extends Model {
                 ':lastname' => $data['lastname'],
                 ':email' => $data['email'],
                 ':telephone' => $data['telephone'],
-                ':custom_field' => isset($data['custom_field']) ? json_encode($data['custom_field']) : json_encode(array()),
+                ':custom_field' => isset($data['custom_field']) ? json_encode($data['custom_field']) : json_encode([]),
                 ':newsletter' => $data['newsletter'],
                 ':status' => $data['status'],
                 ':safe' => $data['safe'],
@@ -94,7 +94,7 @@ class ModelCustomerCustomerAdmin extends Model {
                         ':postcode' => $address['postcode'],
                         ':country_id' => $address['country_id'],
                         ':zone_id' => $address['zone_id'],
-                        ':custom_field' => isset($address['custom_field']) ? json_encode($address['custom_field']) : json_encode(array())
+                        ':custom_field' => isset($address['custom_field']) ? json_encode($address['custom_field']) : json_encode([])
                     ]);
 				if (isset($address['default'])) {
 					$address_id = $this->db->getLastId();
@@ -162,7 +162,7 @@ class ModelCustomerCustomerAdmin extends Model {
 		return $query->row;
 	}
 	
-	public function getCustomers($data = array()) {
+	public function getCustomers($data = []) {
 		$sql = "SELECT *, CONCAT(c.firstname, ' ', c.lastname) AS name, cgd.name AS customer_group FROM oc_customer c LEFT JOIN oc_customer_group_description cgd ON (c.customer_group_id = cgd.customer_group_id) WHERE cgd.language_id = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');
@@ -202,14 +202,14 @@ class ModelCustomerCustomerAdmin extends Model {
             $args[':date_added'] = $data['filter_date_added'];
 		}
 
-		$sort_data = array(
+		$sort_data = [
 			'name',
 			'c.email',
 			'customer_group',
 			'c.status',
 			'c.ip',
 			'c.date_added'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -277,7 +277,7 @@ class ModelCustomerCustomerAdmin extends Model {
 				$zone_code = '';
 			}
 
-			return array(
+			return [
 				'address_id'     => $address_query->row['address_id'],
 				'customer_id'    => $address_query->row['customer_id'],
 				'firstname'      => $address_query->row['firstname'],
@@ -296,7 +296,7 @@ class ModelCustomerCustomerAdmin extends Model {
 				'iso_code_3'     => $iso_code_3,
 				'address_format' => $address_format,
 				'custom_field'   => json_decode($address_query->row['custom_field'], true)
-			);
+            ];
 		}
 	}
 
@@ -319,7 +319,7 @@ class ModelCustomerCustomerAdmin extends Model {
 		return $address_data;
 	}
 
-	public function getTotalCustomers($data = array()) {
+	public function getTotalCustomers($data = []) {
 	    $args = [];
 		$sql = "SELECT COUNT(*) AS total FROM oc_customer";
 

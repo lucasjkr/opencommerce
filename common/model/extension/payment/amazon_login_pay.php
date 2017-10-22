@@ -382,7 +382,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 		return $details_xml;
 	}
 
-	public function offAmazon($Action, $parameter_data = array()) {
+	public function offAmazon($Action, $parameter_data = []) {
 		if ($this->config->get('payment_amazon_login_pay_test') == 'sandbox') {
 			if ($this->config->get('payment_amazon_login_pay_payment_region') == 'USD') {
 				$url = 'https://mws.amazonservices.com/OffAmazonPayments_Sandbox/2013-01-01/';
@@ -544,7 +544,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 
 	public function getMethod($address, $total) {
 		// Not shown in the payment method list
-		return array();
+		return [];
 	}
 
 	public function logger($data) {

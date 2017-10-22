@@ -10,15 +10,15 @@ class ModelCatalogManufacturer extends Model {
 		return $query->row;
 	}
 
-	public function getManufacturers($data = array()) {
+	public function getManufacturers($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_manufacturer m LEFT JOIN oc_manufacturer_to_store m2s ON (m.manufacturer_id = m2s.manufacturer_id) WHERE m2s.store_id = :store_id";
             $args[':store_id'] = $this->config->get('config_store_id');
 
-			$sort_data = array(
+			$sort_data = [
 				'name',
 				'sort_order'
-			);
+			];
 
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];

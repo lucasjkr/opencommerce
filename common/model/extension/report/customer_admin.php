@@ -100,7 +100,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
 		return $customer_data;
 	}
 
-	public function getOrders($data = array()) {
+	public function getOrders($data = []) {
 		$sql = "SELECT t.customer_id, t.customer, t.email, t.customer_group, t.status, COUNT(DISTINCT t.order_id) AS orders, SUM(t.products) AS products, SUM(t.total) AS total FROM (" . $sql . ") AS t GROUP BY t.customer_id ORDER BY total DESC";
 
 		if (isset($data['start']) || isset($data['limit'])) {
@@ -120,7 +120,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalOrders($data = array()) {
+	public function getTotalOrders($data = []) {
 		$sql = "SELECT COUNT(DISTINCT o.customer_id) AS total FROM `oc_order` o LEFT JOIN `oc_customer` c ON (o.customer_id = c.customer_id) WHERE o.customer_id > '0'";
         $args = [];
 
@@ -151,7 +151,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
 		return $query->row['total'];
 	}
 
-	public function getCustomerActivities($data = array()) {
+	public function getCustomerActivities($data = []) {
 		$sql = "SELECT ca.customer_activity_id, ca.customer_id, ca.key, ca.data, ca.ip, ca.date_added FROM oc_customer_activity ca LEFT JOIN oc_customer c ON (ca.customer_id = c.customer_id)";
 
 		$implode = [];
@@ -200,7 +200,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalCustomerActivities($data = array()) {
+	public function getTotalCustomerActivities($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_activity` ca LEFT JOIN oc_customer c ON (ca.customer_id = c.customer_id)";
 
 		$implode = [];
@@ -235,7 +235,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
 		return $query->row['total'];
 	}
 
-	public function getCustomerSearches($data = array()) {
+	public function getCustomerSearches($data = []) {
 		$sql = "SELECT cs.customer_id, cs.keyword, cs.category_id, cs.products, cs.ip, cs.date_added, CONCAT(c.firstname, ' ', c.lastname) AS customer FROM oc_customer_search cs LEFT JOIN oc_customer c ON (cs.customer_id = c.customer_id)";
 
 		$implode = [];
@@ -289,7 +289,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
 		return $query->rows;
 	}
 
-	public function getTotalCustomerSearches($data = array()) {
+	public function getTotalCustomerSearches($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_search` cs LEFT JOIN oc_customer c ON (cs.customer_id = c.customer_id)";
 
 		$implode = [];

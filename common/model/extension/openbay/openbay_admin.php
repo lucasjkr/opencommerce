@@ -365,7 +365,7 @@ class ModelExtensionOpenBayOpenbayAdmin extends Model {
 		return $error;
 	}
 
-	private function call($call, array $post = null, array $options = array(), $content_type = 'json') {
+	private function call($call, array $post = null, array $options = [], $content_type = 'json') {
 		$data = array(
 			'language' => $this->config->get('openbay_language'),
 			'server' => 1,
@@ -427,7 +427,7 @@ class ModelExtensionOpenBayOpenbayAdmin extends Model {
 		}
 	}
 
-	public function getTotalProducts($data = array()) {
+	public function getTotalProducts($data = []) {
 		$sql = "SELECT COUNT(DISTINCT p.product_id) AS total FROM oc_product p LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id)";
 
 		if (!empty($data['filter_category'])) {
@@ -534,7 +534,7 @@ class ModelExtensionOpenBayOpenbayAdmin extends Model {
 		return $query->row['total'];
 	}
 
-	public function getProducts($data = array()) {
+	public function getProducts($data = []) {
 		$sql = "SELECT p.*, pd.* FROM oc_product p LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id)";
 
 		if (!empty($data['filter_category'])) {

@@ -40,7 +40,7 @@ class ModelUserUserGroupAdmin extends Model {
 		return $user_group;
 	}
 
-	public function getUserGroups($data = array()) {
+	public function getUserGroups($data = []) {
 		$sql = "SELECT * FROM `oc_user_group`";
 
 		$sql .= " ORDER BY name";

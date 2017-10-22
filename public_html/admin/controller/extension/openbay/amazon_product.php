@@ -342,7 +342,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 			$category_data = array('category' => (string)$saved_product['category']);
 			$fields_data = array('fields' => (array)$product_data_decoded['fields']);
 
-			$mp_array = !empty($saved_product['marketplaces']) ? (array)unserialize($saved_product['marketplaces']) : array();
+			$mp_array = !empty($saved_product['marketplaces']) ? (array)unserialize($saved_product['marketplaces']) : [];
 			$marketplaces_data = array('marketplaces' => $mp_array);
 
 			$product_data = array_merge($category_data, $fields_data, $response_data, $marketplaces_data);

@@ -38,7 +38,7 @@ class ModelExtensionPaymentSquareupAdmin extends Model {
         return $this->db->query($sql)->row['total'];
     }
     
-    public function updateTransaction($squareup_transaction_id, $type, $refunds = array()) {
+    public function updateTransaction($squareup_transaction_id, $type, $refunds = []) {
         $this->db->query("UPDATE `oc_squareup_transaction` SET transaction_type='" . $this->db->escape($type) . "', is_refunded='" . (int)!empty($refunds) . "', refunds='" . $this->db->escape(json_encode($refunds)) . "' WHERE squareup_transaction_id='" . (int)$squareup_transaction_id . "'");
     }
 

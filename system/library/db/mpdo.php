@@ -39,7 +39,7 @@ final class mPDO {
 				}
 
 				$result = new \stdClass();
-				$result->row = (isset($data[0])) ? $data[0] : array();
+				$result->row = (isset($data[0])) ? $data[0] : [];
 				$result->rows = $data;
 				$result->num_rows = $this->statement->rowCount();
 			}
@@ -48,7 +48,7 @@ final class mPDO {
 		}
 	}
 
-	public function query($sql, $params = array()) {
+	public function query($sql, $params = []) {
 		$this->statement = $this->connection->prepare($sql);
 		
 		$result = false;
@@ -62,7 +62,7 @@ final class mPDO {
 				}
 
 				$result = new \stdClass();
-				$result->row = (isset($data[0]) ? $data[0] : array());
+				$result->row = (isset($data[0]) ? $data[0] : []);
 				$result->rows = $data;
 				$result->num_rows = $this->statement->rowCount();
 			}

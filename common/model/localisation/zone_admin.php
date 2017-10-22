@@ -26,7 +26,7 @@ class ModelLocalisationZoneAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getZones($data = array()) {
+	public function getZones($data = []) {
 		$sql = "SELECT *, z.name, c.name AS country FROM oc_zone z LEFT JOIN oc_country c ON (z.country_id = c.country_id)";
 
 		$sort_data = array(

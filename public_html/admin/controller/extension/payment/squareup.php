@@ -457,7 +457,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
         }
 
         $result = array(
-            'transactions' => array(),
+            'transactions' => [],
             'pagination' => ''
         );
 
@@ -1039,7 +1039,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
         if (isset($this->session->data['payment_squareup_alerts'])) {
             return $this->session->data['payment_squareup_alerts'];
         } else {
-            return array();
+            return [];
         }
     }
 

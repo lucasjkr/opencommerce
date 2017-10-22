@@ -157,7 +157,7 @@ class ModelSaleRecurringAdmin extends Model {
 		return $result;
 	}
 	
-	public function getTotalRecurrings($data = array()) {
+	public function getTotalRecurrings($data = []) {
 		$sql = "SELECT COUNT(*) AS `total` FROM `oc_order_recurring` `or` LEFT JOIN `oc_order` o ON (`or`.order_id = `o`.order_id)";
 		
 		$implode = [];

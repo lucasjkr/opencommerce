@@ -61,7 +61,7 @@ class ModelCatalogDownloadAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getDownloads($data = array()) {
+	public function getDownloads($data = []) {
 		$sql = "SELECT * FROM oc_download d LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE dd.language_id = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');
@@ -71,10 +71,10 @@ class ModelCatalogDownloadAdmin extends Model {
             $args[':filter_name'] = $data['filter_name'] . '%';
 		}
 
-		$sort_data = array(
+		$sort_data = [
 			'dd.name',
 			'd.date_added'
-		);
+        ];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];

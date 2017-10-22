@@ -77,7 +77,7 @@ class ModelLocalisationTaxClassAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getTaxClasses($data = array()) {
+	public function getTaxClasses($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_tax_class ORDER BY title";
 

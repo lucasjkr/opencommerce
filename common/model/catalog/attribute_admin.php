@@ -66,7 +66,7 @@ class ModelCatalogAttributeAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getAttributes($data = array()) {
+	public function getAttributes($data = []) {
         $sql = "SELECT *, (SELECT agd.name FROM oc_attribute_group_description agd WHERE agd.attribute_group_id = a.attribute_group_id AND agd.language_id = :language_id ) AS attribute_group FROM oc_attribute a LEFT JOIN oc_attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE ad.language_id = :language_id ";
 		$args[':language_id'] = $this->config->get('config_language_id');
 
@@ -84,11 +84,11 @@ class ModelCatalogAttributeAdmin extends Model {
             $data['filter_attribute_group_id'] = '';
         }
 
-		$sort_data = array(
+		$sort_data = [
 			'ad.name',
 			'attribute_group',
 			'a.sort_order'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -128,7 +128,7 @@ class ModelCatalogAttributeAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$attribute_data[$result['language_id']] = array('name' => $result['name']);
+			$attribute_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $attribute_data;

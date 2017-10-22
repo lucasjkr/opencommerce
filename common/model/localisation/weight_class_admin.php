@@ -33,7 +33,7 @@ class ModelLocalisationWeightClassAdmin extends Model {
 		$this->cache->delete('weight_class');
 	}
 
-	public function getWeightClasses($data = array()) {
+	public function getWeightClasses($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_weight_class wc LEFT JOIN oc_weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'";
 

@@ -13,20 +13,20 @@ class ModelExtensionPaymentDivido extends Model {
 		$this->load->model('localisation/currency');
 
 		if (!$this->isEnabled()) {
-			return array();
+			return [];
 		}
 
 		if ($this->session->data['currency'] != 'GBP') {
-			return array();
+			return [];
 		}
 
 		if ($payment_address['iso_code_2'] != 'GB') {
-			return array();
+			return [];
 		}
 
 		$cart_threshold = $this->config->get('payment_divido_cart_threshold');
 		if ($cart_threshold > $total) {
-			return array();
+			return [];
 		}
 
 		$plans = $this->getCartPlans($this->cart);
@@ -41,7 +41,7 @@ class ModelExtensionPaymentDivido extends Model {
 		}
 
 		if (!$has_plan) {
-			return array();
+			return [];
 		}
 
 		$title = $this->language->get('text_checkout_title');
@@ -124,7 +124,7 @@ class ModelExtensionPaymentDivido extends Model {
 
 		$selected_plans = $this->config->get('payment_divido_plans_selected');
 		if (!$selected_plans) {
-			return array();
+			return [];
 		}
 
 		$plans = [];

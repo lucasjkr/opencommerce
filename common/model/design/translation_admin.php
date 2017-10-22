@@ -38,16 +38,16 @@ class ModelDesignTranslationAdmin extends Model {
 		return $query->row;
 	}
 	
-	public function getTranslations($data = array()) {
+	public function getTranslations($data = []) {
 		$sql = "SELECT *, (SELECT s.name FROM `oc_store` s WHERE s.store_id = t.store_id) AS store, (SELECT l.name FROM `oc_language` l WHERE l.language_id = t.language_id) AS language FROM `oc_translation` t";
 		
-		$sort_data = array(
+		$sort_data = [
 			'store',
 			'language',
 			'route',
 			'key',
 			'value'
-		);
+        ];
 		
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY `" . $data['sort'] . "`";

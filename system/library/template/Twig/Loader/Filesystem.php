@@ -28,7 +28,7 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
      *
      * @param string|array $paths A path or an array of paths where to look for templates
      */
-    public function __construct($paths = array())
+    public function __construct($paths = [])
     {
         if ($paths) {
             $this->setPaths($paths);
@@ -44,7 +44,7 @@ class Twig_Loader_Filesystem implements Twig_LoaderInterface, Twig_ExistsLoaderI
      */
     public function getPaths($namespace = self::MAIN_NAMESPACE)
     {
-        return isset($this->paths[$namespace]) ? $this->paths[$namespace] : array();
+        return isset($this->paths[$namespace]) ? $this->paths[$namespace] : [];
     }
 
     /**

@@ -47,7 +47,7 @@ class ModelExtensionModulePPLogin extends Model {
 		return $curl;
 	}
 
-	private function curl($endpoint, $additional_opts = array()) {
+	private function curl($endpoint, $additional_opts = []) {
 		$default_opts = array(
 			CURLOPT_PORT           => 443,
 			CURLOPT_HEADER         => 0,

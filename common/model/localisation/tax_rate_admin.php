@@ -37,7 +37,7 @@ class ModelLocalisationTaxRateAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getTaxRates($data = array()) {
+	public function getTaxRates($data = []) {
 		$sql = "SELECT tr.tax_rate_id, tr.name AS name, tr.rate, tr.type, gz.name AS geo_zone, tr.date_added, tr.date_modified FROM oc_tax_rate tr LEFT JOIN oc_geo_zone gz ON (tr.geo_zone_id = gz.geo_zone_id)";
 
 		$sort_data = array(

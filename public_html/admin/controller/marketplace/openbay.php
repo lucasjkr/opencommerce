@@ -1131,8 +1131,8 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$openstock_installed = false;
 		}
 
-		$data['category_list'] = $this->model_catalog_category_admin->getCategories(array());
-		$data['manufacturer_list'] = $this->model_catalog_manufacturer_admin->getManufacturers(array());
+		$data['category_list'] = $this->model_catalog_category_admin->getCategories([]);
+		$data['manufacturer_list'] = $this->model_catalog_manufacturer_admin->getManufacturers([]);
 
 		if (isset($this->request->get['filter_name'])) {
 			$filter_name = $this->request->get['filter_name'];
@@ -1451,7 +1451,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 			if ($this->config->get('ebay_status') == '1') {
 				$this->load->model('extension/openbay/ebay_admin');
 
-				$active_list = $this->model_extension_openbay_ebay_admin->getLiveListingArray();
+				$active_list = $this->model_extension_openbay_ebay_admin->getLiveListing[];
 
 				if (!array_key_exists($result['product_id'], $active_list)) {
 					$markets[] = array(
@@ -1817,19 +1817,19 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$openbay_menu[] = array(
 				'name'	   => $this->language->get('text_openbay_dashboard'),
 				'href'     => $this->url->link('marketplace/openbay', 'user_token=' . $this->session->data['user_token'], true),
-				'children' => array()
+				'children' => []
 			);
 
 			$openbay_menu[] = array(
 				'name'	   => $this->language->get('text_openbay_orders'),
 				'href'     => $this->url->link('marketplace/openbay/orderlist', 'user_token=' . $this->session->data['user_token'], true),
-				'children' => array()
+				'children' => []
 			);
 
 			$openbay_menu[] = array(
 				'name'	   => $this->language->get('text_openbay_items'),
 				'href'     => $this->url->link('marketplace/openbay/items', 'user_token=' . $this->session->data['user_token'], true),
-				'children' => array()
+				'children' => []
 			);
 
 			// eBay sub menu
@@ -1839,25 +1839,25 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$ebay[] = array(
 					'name'     => $this->language->get('text_openbay_dashboard'),
 					'href'     => $this->url->link('extension/openbay/ebay', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$ebay[] = array(
 					'name'	   => $this->language->get('text_openbay_settings'),
 					'href'     => $this->url->link('extension/openbay/ebay/settings', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$ebay[] = array(
 					'name'	   => $this->language->get('text_openbay_links'),
 					'href'     => $this->url->link('extension/openbay/ebay/viewitemlinks', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$ebay[] = array(
 					'name'	   => $this->language->get('text_openbay_order_import'),
 					'href'     => $this->url->link('extension/openbay/ebay/vieworderimport', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 			}
 
@@ -1876,19 +1876,19 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$amazon_eu[] = array(
 					'name'     => $this->language->get('text_openbay_dashboard'),
 					'href'     => $this->url->link('extension/openbay/amazon', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$amazon_eu[] = array(
 					'name'	   => $this->language->get('text_openbay_settings'),
 					'href'     => $this->url->link('extension/openbay/amazon/settings', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$amazon_eu[] = array(
 					'name'	   => $this->language->get('text_openbay_links'),
 					'href'     => $this->url->link('extension/openbay/amazon/itemlinks', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 			}
 
@@ -1907,19 +1907,19 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$amazon_us[] = array(
 					'name'     => $this->language->get('text_openbay_dashboard'),
 					'href'     => $this->url->link('extension/openbay/amazonus', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$amazon_us[] = array(
 					'name'	   => $this->language->get('text_openbay_settings'),
 					'href'     => $this->url->link('extension/openbay/amazonus/settings', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$amazon_us[] = array(
 					'name'	   => $this->language->get('text_openbay_links'),
 					'href'     => $this->url->link('extension/openbay/amazonus/itemlinks', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 			}
 
@@ -1938,20 +1938,20 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$etsy[] = array(
 					'name'     => $this->language->get('text_openbay_dashboard'),
 					'href'     => $this->url->link('extension/openbay/etsy', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$etsy[] = array(
 					'name'	   => $this->language->get('text_openbay_settings'),
 					'href'     => $this->url->link('extension/openbay/etsy/settings', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				if ($this->user->hasPermission('access', 'extension/openbay/etsy_product')) {
 					$etsy[] = array(
 						'name'	   => $this->language->get('text_openbay_links'),
 						'href'     => $this->url->link('extension/openbay/etsy_product/links', 'user_token=' . $this->session->data['user_token'], true),
-						'children' => array()
+						'children' => []
 					);
 				}
 			}
@@ -1971,25 +1971,25 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$fba[] = array(
 					'name'     => $this->language->get('text_openbay_dashboard'),
 					'href'     => $this->url->link('extension/openbay/fba', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$fba[] = array(
 					'name'	   => $this->language->get('text_openbay_settings'),
 					'href'     => $this->url->link('extension/openbay/fba/settings', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$fba[] = array(
 					'name'	   => $this->language->get('text_openbay_fulfillmentlist'),
 					'href'     => $this->url->link('extension/openbay/fba/fulfillmentlist', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 
 				$fba[] = array(
 					'name'	   => $this->language->get('text_openbay_orderlist'),
 					'href'     => $this->url->link('extension/openbay/fba/orderlist', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => array()
+					'children' => []
 				);
 			}
 

@@ -40,7 +40,7 @@ class ModelUserApiAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getApis($data = array()) {
+	public function getApis($data = []) {
 		$sql = "SELECT * FROM `oc_api`";
 
 		$sort_data = array(

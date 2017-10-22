@@ -62,7 +62,7 @@ class ModelLocalisationReturnReasonAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getReturnReasons($data = array()) {
+	public function getReturnReasons($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_return_reason WHERE language_id = :language_id ORDER BY name";
             $args[':language_id'] = $this->config->get('config_language_id');

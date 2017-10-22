@@ -21,7 +21,7 @@ class Twig_SimpleFilter
     protected $options;
     protected $arguments = [];
 
-    public function __construct($name, $callable, array $options = array())
+    public function __construct($name, $callable, array $options = [])
     {
         $this->name = $name;
         $this->callable = $callable;

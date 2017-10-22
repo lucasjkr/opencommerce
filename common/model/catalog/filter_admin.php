@@ -134,15 +134,15 @@ class ModelCatalogFilterAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getFilterGroups($data = array()) {
+	public function getFilterGroups($data = []) {
 		$sql = "SELECT * FROM `oc_filter_group` fg LEFT JOIN `oc_filter_group_description` fgd ON (fg.filter_group_id = fgd.filter_group_id) WHERE fgd.language_id = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');
 
-		$sort_data = array(
+		$sort_data = [
 			'fgd.name',
 			'fg.sort_order'
-		);
+        ];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -248,11 +248,11 @@ class ModelCatalogFilterAdmin extends Model {
 				$filter_description_data[$filter_description['language_id']] = array('name' => $filter_description['name']);
 			}
 
-			$filter_data[] = array(
+			$filter_data[] = [
 				'filter_id'          => $filter['filter_id'],
 				'filter_description' => $filter_description_data,
 				'sort_order'         => $filter['sort_order']
-			);
+            ];
 		}
 
 		return $filter_data;

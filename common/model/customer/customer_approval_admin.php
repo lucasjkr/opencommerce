@@ -1,6 +1,6 @@
 <?php
 class ModelCustomerCustomerApprovalAdmin extends Model {
-	public function getCustomerApprovals($data = array()) {
+	public function getCustomerApprovals($data = []) {
 		$sql = "SELECT *, CONCAT(c.`firstname`, ' ', c.`lastname`) AS name, cgd.`name` AS customer_group, ca.`type` FROM `oc_customer_approval` ca LEFT JOIN `oc_customer` c ON (ca.`customer_id` = c.`customer_id`) LEFT JOIN `oc_customer_group_description` cgd ON (c.`customer_group_id` = cgd.`customer_group_id`) WHERE cgd.`language_id` = :language_id";
 
         $args[':language_id'] = $this->config->get('config_language_id');
@@ -58,7 +58,7 @@ class ModelCustomerCustomerApprovalAdmin extends Model {
 		return $query->row;
 	}
 	
-	public function getTotalCustomerApprovals($data = array()) {
+	public function getTotalCustomerApprovals($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_approval` ca LEFT JOIN `oc_customer` c ON (ca.`customer_id` = c.`customer_id`)";
 
 		$implode = [];

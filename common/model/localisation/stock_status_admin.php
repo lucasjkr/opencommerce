@@ -62,7 +62,7 @@ class ModelLocalisationStockStatusAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getStockStatuses($data = array()) {
+	public function getStockStatuses($data = []) {
 		if ($data) {
 			$sql = "SELECT * FROM oc_stock_status WHERE language_id = :language_id ORDER BY name";
             $args[':language_id'] = $this->config->get('config_language_id');

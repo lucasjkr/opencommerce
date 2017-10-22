@@ -48,7 +48,7 @@ final class Etsy {
 		$this->setEncryptionKey($encryption_key);
 	}
 
-	public function call($uri, $method, $data = array()) {
+	public function call($uri, $method, $data = []) {
 		if($this->config->get('etsy_status') == 1) {
 			$headers = array ();
 			$headers[] = 'X-Auth-Token: ' . $this->token;
@@ -274,7 +274,7 @@ final class Etsy {
 		}
 	}
 
-	public function productUpdateListen($product_id, $data = array()) {
+	public function productUpdateListen($product_id, $data = []) {
 		$this->log("productUpdateListen() - " . $product_id . ", Data: " . json_encode($data));
 
 		$links = $this->getLinks($product_id, 1);

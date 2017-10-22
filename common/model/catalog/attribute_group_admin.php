@@ -62,13 +62,13 @@ class ModelCatalogAttributeGroupAdmin extends Model {
 		return $query->row;
 	}
 
-	public function getAttributeGroups($data = array()) {
+	public function getAttributeGroups($data = []) {
 		$sql = "SELECT * FROM oc_attribute_group ag LEFT JOIN oc_attribute_group_description agd ON (ag.attribute_group_id = agd.attribute_group_id) WHERE agd.language_id = :language_id";
 
-		$sort_data = array(
+		$sort_data = [
 			'agd.name',
 			'ag.sort_order'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];

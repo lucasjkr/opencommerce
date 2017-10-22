@@ -55,18 +55,18 @@ class ModelCatalogCategory extends Model {
                     ]);
 
 				foreach ($filter_query->rows as $filter) {
-					$filter_data[] = array(
+					$filter_data[] = [
 						'filter_id' => $filter['filter_id'],
 						'name'      => $filter['name']
-					);
+                    ];
 				}
 
 				if ($filter_data) {
-					$filter_group_data[] = array(
+					$filter_group_data[] = [
 						'filter_group_id' => $filter_group['filter_group_id'],
 						'name'            => $filter_group['name'],
 						'filter'          => $filter_data
-					);
+					];
 				}
 			}
 		}

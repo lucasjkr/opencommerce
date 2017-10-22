@@ -167,7 +167,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
         }
 
         if ($isVariadic) {
-            $arbitraryArguments = new Twig_Node_Expression_Array(array(), -1);
+            $arbitraryArguments = new Twig_Node_Expression_Array([], -1);
             foreach ($parameters as $key => $value) {
                 if (is_int($key)) {
                     $arbitraryArguments->addElement($value);
@@ -236,7 +236,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
         }
         if ($isVariadic) {
             $argument = end($parameters);
-            if ($argument && $argument->isArray() && $argument->isDefaultValueAvailable() && array() === $argument->getDefaultValue()) {
+            if ($argument && $argument->is[] && $argument->isDefaultValueAvailable() && [] === $argument->getDefaultValue()) {
                 array_pop($parameters);
             } else {
                 $callableName = $r->name;
@@ -244,7 +244,7 @@ abstract class Twig_Node_Expression_Call extends Twig_Node_Expression
                     $callableName = $r->getDeclaringClass()->name.'::'.$callableName;
                 }
 
-                throw new LogicException(sprintf('The last parameter of "%s" for %s "%s" must be an array with default value, eg. "array $arg = array()".', $callableName, $this->getAttribute('type'), $this->getAttribute('name')));
+                throw new LogicException(sprintf('The last parameter of "%s" for %s "%s" must be an array with default value, eg. "array $arg = []".', $callableName, $this->getAttribute('type'), $this->getAttribute('name')));
             }
         }
 
