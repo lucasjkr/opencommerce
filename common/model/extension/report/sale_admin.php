@@ -103,7 +103,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 
 		$query = $this->db->query("SELECT COUNT(*) AS total, date_added FROM `oc_order` WHERE order_status_id IN(" . implode(",", $implode) . ") AND DATE(date_added) >= :date_added GROUP BY DATE(date_added)",
             [
-                ':date_added' => date('Y') . '-' . date('m') . '-1';
+                ':date_added' => date('Y') . '-' . date('m') . '-1'
             ]);
 
 		foreach ($query->rows as $result) {
