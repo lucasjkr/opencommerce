@@ -400,17 +400,17 @@ class ControllerSettingStore extends Controller {
 			$data['config_image'] = '';
 		}
 
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		if (isset($this->request->post['config_image']) && is_file(DIR_IMAGE . $this->request->post['config_image'])) {
-			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['config_image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize($this->request->post['config_image'], 100, 100);
 		} elseif (isset($store_info['config_image']) && is_file(DIR_IMAGE . $store_info['config_image'])) {
-			$data['thumb'] = $this->model_tool_image_admin->resize($store_info['config_image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize($store_info['config_image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['config_open'])) {
 			$data['config_open'] = $this->request->post['config_open'];
@@ -609,14 +609,14 @@ class ControllerSettingStore extends Controller {
 		}
 
 		if (isset($this->request->post['config_logo']) && is_file(DIR_IMAGE . $this->request->post['config_logo'])) {
-			$data['logo'] = $this->model_tool_image_admin->resize($this->request->post['config_logo'], 100, 100);
+			$data['logo'] = $this->model_tool_image->resize($this->request->post['config_logo'], 100, 100);
 		} elseif (isset($store_info['config_logo']) && is_file(DIR_IMAGE . $store_info['config_logo'])) {
-			$data['logo'] = $this->model_tool_image_admin->resize($store_info['config_logo'], 100, 100);
+			$data['logo'] = $this->model_tool_image->resize($store_info['config_logo'], 100, 100);
 		} else {
-			$data['logo'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+			$data['logo'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['config_icon'])) {
 			$data['config_icon'] = $this->request->post['config_icon'];
@@ -627,11 +627,11 @@ class ControllerSettingStore extends Controller {
 		}
 
 		if (isset($this->request->post['config_icon']) && is_file(DIR_IMAGE . $this->request->post['config_icon'])) {
-			$data['icon'] = $this->model_tool_image_admin->resize($this->request->post['config_icon'], 100, 100);
+			$data['icon'] = $this->model_tool_image->resize($this->request->post['config_icon'], 100, 100);
 		} elseif (isset($store_info['config_icon']) && is_file(DIR_IMAGE . $store_info['config_icon'])) {
-			$data['icon'] = $this->model_tool_image_admin->resize($store_info['config_icon'], 100, 100);
+			$data['icon'] = $this->model_tool_image->resize($store_info['config_icon'], 100, 100);
 		} else {
-			$data['icon'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+			$data['icon'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 
 		if (isset($this->request->post['config_secure'])) {

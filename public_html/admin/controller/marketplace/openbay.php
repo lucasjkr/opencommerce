@@ -1122,7 +1122,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$this->load->model('catalog/category_admin');
 		$this->load->model('catalog/manufacturer_admin');
 		$this->load->model('extension/openbay/openbay');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		if ($this->openbay->addonLoad('openstock')) {
 			$this->load->model('extension/module/openstock_admin');
@@ -1421,9 +1421,9 @@ class ControllerMarketplaceOpenbay extends Controller {
 			$edit = $this->url->link('catalog/product/edit', 'user_token=' . $this->session->data['user_token'] . '&product_id=' . $result['product_id'] . $url, true);
 
 			if ($result['image'] && file_exists(DIR_IMAGE . $result['image'])) {
-				$image = $this->model_tool_image_admin->resize($result['image'], 40, 40);
+				$image = $this->model_tool_image->resize($result['image'], 40, 40);
 			} else {
-				$image = $this->model_tool_image_admin->resize('no_image.png', 40, 40);
+				$image = $this->model_tool_image->resize('no_image.png', 40, 40);
 			}
 
 			$special = false;

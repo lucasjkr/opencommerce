@@ -386,7 +386,7 @@ class ModelExtensionOpenBayAmazonAdmin extends Model {
 
 		if ($this->openbay->addonLoad('openstock')) {
 			$this->load->model('extension/module/openstock_admin');
-			$this->load->model('tool/image_admin');
+			$this->load->model('tool/image');
 
 			foreach ($product_links as $key => $product_link) {
 				$variants = $this->model_setting_module_openstock->getVariants($product_link['product_id']);
@@ -419,7 +419,7 @@ class ModelExtensionOpenBayAmazonAdmin extends Model {
 			$result = [];
 			$this->load->model('extension/module/openstock_admin');
 			// LJK this image tool might not be needed
-            $this->load->model('tool/image_admin');
+            $this->load->model('tool/image');
 			foreach($rows as $row) {
 				if ($row['has_option'] == 1) {
 					$stock_opts = $this->model_setting_module_openstock->getVariants($row['product_id']);

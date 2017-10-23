@@ -1079,7 +1079,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$data = $this->load->language('extension/openbay/ebay_edit');
 
 				$this->load->model('catalog/product_admin');
-				$this->load->model('tool/image_admin');
+				$this->load->model('tool/image');
 				$this->load->model('catalog/manufacturer_admin');
 				$this->load->model('extension/openbay/ebay_admin');
 				$this->load->model('extension/openbay/ebay_product_admin');
@@ -1129,7 +1129,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 	public function editLoad() {
 		$this->load->model('catalog/product_admin');
 		$this->load->model('extension/openbay/ebay_product_admin');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		$item_id = $this->openbay->ebay->getEbayItemId($this->request->get['product_id']);
 
@@ -1261,7 +1261,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$data = $this->load->language('extension/openbay/ebay_new');
 
 				$this->load->model('catalog/product_admin');
-				$this->load->model('tool/image_admin');
+				$this->load->model('tool/image');
 				$this->load->model('catalog/manufacturer_admin');
 				$this->load->model('extension/openbay/ebay_admin');
 				$this->load->model('extension/openbay/ebay_template_admin');
@@ -1403,7 +1403,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 					$product_info['product_images'][] = array(
 						'image' => $product_info['image'],
-						'preview' => $this->model_tool_image_admin->resize($product_info['image'], 100, 100),
+						'preview' => $this->model_tool_image->resize($product_info['image'], 100, 100),
 						'full' => HTTPS_CATALOG . 'image/' . $product_info['image'],
 						'width' => $img_info[0],
 						'height' => $img_info[1],
@@ -1416,7 +1416,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 						$product_info['product_images'][] = array(
 							'image' => $product_image['image'],
-							'preview' => $this->model_tool_image_admin->resize($product_image['image'], 100, 100),
+							'preview' => $this->model_tool_image->resize($product_image['image'], 100, 100),
 							'full' => HTTPS_CATALOG . 'image/' . $product_image['image'],
 							'width' => $img_info[0],
 							'height' => $img_info[1],
@@ -1464,7 +1464,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 					$data['error_warning'] = $this->language->get('error_no_stock');
 				}
 
-				$data['no_image'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+				$data['no_image'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 				$weight_parts = explode('.', $product_info['weight']);
 				$product_info['weight_major'] = (int)$weight_parts[0];
@@ -1489,7 +1489,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$data = $this->load->language('extension/openbay/ebay_newbulk');
 
 				$this->load->model('catalog/product_admin');
-				$this->load->model('tool/image_admin');
+				$this->load->model('tool/image');
 				$this->load->model('catalog/manufacturer_admin');
 				$this->load->model('extension/openbay/ebay_admin');
 				$this->load->model('extension/openbay/ebay_profile_admin');
@@ -1538,9 +1538,9 @@ class ControllerExtensionOpenbayEbay extends Controller {
 						} else {
 							if ($prod['quantity'] > 0) {
 								if ($prod['image'] && file_exists(DIR_IMAGE . $prod['image'])) {
-									$prod['image'] = $this->model_tool_image_admin->resize($prod['image'], 80, 80);
+									$prod['image'] = $this->model_tool_image->resize($prod['image'], 80, 80);
 								} else {
-									$prod['image'] = $this->model_tool_image_admin->resize('no_image.png', 80, 80);
+									$prod['image'] = $this->model_tool_image->resize('no_image.png', 80, 80);
 								}
 
 								$products[] = $prod;
@@ -1709,7 +1709,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 					if (!empty($data['img_tpl'])) {
 						$tmp_gallery_array = [];
 						$tmp_thumbnail_array = [];
-						$this->load->model('tool/image_admin');
+						$this->load->model('tool/image');
 
 						foreach ($data['img_tpl'] as $k => $v) {
 							$tmp_gallery_array[$k] = $this->model_extension_openbay_openbay->storeImage($v, $data['gallery_width'], $data['gallery_height'], 'ebay');
@@ -1764,7 +1764,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->load->model('extension/openbay/ebay_admin');
 		$this->load->model('extension/openbay/ebay_template_admin');
 		$this->load->model('catalog/product_admin');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 		$this->load->model('catalog/filter_admin');
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
@@ -2026,7 +2026,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 			if (!empty($data['img_tpl'])) {
 				$tmp_gallery_array = [];
 				$tmp_thumbnail_array = [];
-				$this->load->model('tool/image_admin');
+				$this->load->model('tool/image');
 
 				foreach ($data['img_tpl'] as $k => $v) {
 					$tmp_gallery_array[$k] = $this->model_extension_openbay_openbay->storeImage($v, $data['gallery_width'], $data['gallery_height'], 'ebay');
@@ -2076,7 +2076,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 		$this->load->model('extension/openbay/ebay_admin');
 		$this->load->model('extension/openbay/ebay_template_admin');
 		$this->load->model('catalog/product_admin');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 		$this->load->model('catalog/filter_admin');
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {

@@ -6,7 +6,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 
 		$this->load->model('extension/openbay/amazon_admin');
 		$this->load->model('catalog/product_admin');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		$this->document->addScript('view/javascript/openbay/js/openbay.js');
 		$this->document->setTitle($this->language->get('heading_title'));
@@ -190,7 +190,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		$data['saved_listings_url'] = $this->url->link('extension/openbay/amazon/savedListings', 'user_token=' . $this->session->data['user_token'], true);
 		$data['main_url'] = $this->url->link('extension/openbay/amazon_product', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['user_token'] = $this->session->data['user_token'];
-		$data['no_image'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+		$data['no_image'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 		if ($this->openbay->addonLoad('openstock')) {
 			$this->load->model('extension/module/openstock_admin');
@@ -371,7 +371,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 	}
 
 	public function parseTemplateAjax() {
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		$log = new Log('amazon_product.log');
 
@@ -396,7 +396,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 							if (empty($field['value'])) {
 								$template['fields'][$key]['thumb'] = '';
 							} else {
-								$template['fields'][$key]['thumb'] = $this->model_tool_image_admin->resize(str_replace(HTTPS_CATALOG . 'image/', '', $field['value']), 100, 100);
+								$template['fields'][$key]['thumb'] = $this->model_tool_image->resize(str_replace(HTTPS_CATALOG . 'image/', '', $field['value']), 100, 100);
 							}
 						}
 					}
@@ -485,7 +485,7 @@ class ControllerExtensionOpenbayAmazonProduct extends Controller {
 		}
 
 		if ($var !== '' && $this->openbay->addonLoad('openstock')) {
-			$this->load->model('tool/image_admin');
+			$this->load->model('tool/image');
 			$this->load->model('extension/module/openstock_admin');
 			$option_stocks = $this->model_setting_module_openstock_admin->getVariants($product_id);
 

@@ -4,7 +4,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 
 	public function create() {
 		$this->load->model('catalog/product_admin');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		$data = $this->load->language('extension/openbay/etsy_create');
 
@@ -35,14 +35,14 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 
 		$product_info = $this->model_catalog_product_admin->getProduct($this->request->get['product_id']);
 
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		if (!empty($product_info) && is_file(DIR_IMAGE . $product_info['image'])) {
-			$product_info['image_url'] = $this->model_tool_image_admin->resize($product_info['image'], 800, 800);
-			$product_info['thumb'] = $this->model_tool_image_admin->resize($product_info['image'], 100, 100);
+			$product_info['image_url'] = $this->model_tool_image->resize($product_info['image'], 800, 800);
+			$product_info['thumb'] = $this->model_tool_image->resize($product_info['image'], 100, 100);
 		} else {
 			$product_info['image_url'] = '';
-			$product_info['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+			$product_info['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 
 		// Images
@@ -62,8 +62,8 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 			}
 
 			$product_info['product_images'][] = array(
-				'image_url'  => $this->model_tool_image_admin->resize($image, 800, 800),
-				'thumb'      => $this->model_tool_image_admin->resize($image, 100, 100),
+				'image_url'  => $this->model_tool_image->resize($image, 800, 800),
+				'thumb'      => $this->model_tool_image->resize($image, 100, 100),
 				'sort_order' => $product_image['sort_order']
 			);
 		}
@@ -199,7 +199,7 @@ class ControllerExtensionOpenbayEtsyProduct extends Controller {
 		$data = $this->load->language('extension/openbay/etsy_edit');
 
 		$this->load->model('extension/openbay/etsy_product');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
