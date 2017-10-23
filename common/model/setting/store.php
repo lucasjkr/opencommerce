@@ -83,6 +83,7 @@ class ModelSettingStore extends Model {
         return $query->row['total'];
     }
 
+    // All of these should be get store by key:
     public function getTotalStoresByLayoutId($layout_id) {
         $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value  AND store_id != :store_id",
             [
@@ -95,45 +96,85 @@ class ModelSettingStore extends Model {
     }
 
     public function getTotalStoresByLanguage($language) {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_language' AND `value` = '" . $this->db->escape($language) . "' AND store_id != '0'");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_language',
+                ':value' => $language,
+                ':store_id' => 0
+            ]);
 
         return $query->row['total'];
     }
 
     public function getTotalStoresByCurrency($currency) {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_currency' AND `value` = '" . $this->db->escape($currency) . "' AND store_id != '0'");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_currency',
+                ':value' => $currency,
+                ':store_id' => 0
+            ]);
 
         return $query->row['total'];
     }
 
     public function getTotalStoresByCountryId($country_id) {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_country_id' AND `value` = '" . (int)$country_id . "' AND store_id != '0'");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_country_id',
+                ':value' => $country_id,
+                ':store_id' => 0
+            ]);
 
         return $query->row['total'];
     }
 
     public function getTotalStoresByZoneId($zone_id) {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_zone_id' AND `value` = '" . (int)$zone_id . "' AND store_id != '0'");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_zone_id',
+                ':value' => $zone_id,
+                ':store_id' => 0
+            ]);
 
         return $query->row['total'];
     }
 
     public function getTotalStoresByCustomerGroupId($customer_group_id) {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_customer_group_id' AND `value` = '" . (int)$customer_group_id . "' AND store_id != '0'");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_customer_group_id',
+                ':value' => $customer_group_id,
+                ':store_id' => 0
+            ]);
 
         return $query->row['total'];
     }
 
     public function getTotalStoresByInformationId($information_id) {
-        $account_query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_account_id' AND `value` = '" . (int)$information_id . "' AND store_id != '0'");
+        $account_query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_account_d',
+                ':value' => $information_id,
+                ':store_id' => 0
+            ]);
 
-        $checkout_query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_checkout_id' AND `value` = '" . (int)$information_id . "' AND store_id != '0'");
+        $checkout_query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_checkout_id',
+                ':value' => $information_id,
+                ':store_id' => 0
+            ]);
 
         return ($account_query->row['total'] + $checkout_query->row['total']);
     }
 
     public function getTotalStoresByOrderStatusId($order_status_id) {
-        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = 'config_order_status_id' AND `value` = '" . (int)$order_status_id . "' AND store_id != '0'");
+        $query = $this->db->query("SELECT COUNT(*) AS total FROM oc_setting WHERE `key` = :key AND `value` = :value AND store_id != :store_id",
+            [
+                ':key' => 'config_order_status_id',
+                ':value' => $order_status_id,
+                ':store_id' => 0
+            ]);
 
         return $query->row['total'];
     }
