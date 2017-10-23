@@ -296,7 +296,15 @@ class ModelCatalogProductAdmin extends Model {
 
 
 		foreach ($data['product_description'] as $language_id => $value) {
-			$this->db->query("INSERT INTO `oc_product_description` SET `product_id` = :product_id, language_id = :language , `name` = :name, description = :description, tag = :tag, meta_title = :meta_title, meta_description = :meta_description, meta_keyword = :meta_keyword",
+			$this->db->query("INSERT INTO `oc_product_description` SET 
+`product_id` = :product_id, 
+`language_id` = :language_id, 
+`name` = :name, 
+`description` = :description, 
+`tag` = :tag, 
+`meta_title` = :meta_title, 
+`meta_description` = :meta_description, 
+`meta_keyword` = :meta_keyword",
                 [
                     ':product_id' => $product_id,
                     ':language_id' => $language_id,
@@ -558,7 +566,7 @@ class ModelCatalogProductAdmin extends Model {
 		}
 
 		// SEO URL
-		$this->db->query("DELETE FROM oc_seo_url WHERE query = :product_id",
+		$this->db->query("DELETE FROM oc_seo_url WHERE query = :query",
             [
                 ':query' => 'product_id=' . $product_id
             ]);
