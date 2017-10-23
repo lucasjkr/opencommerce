@@ -436,17 +436,17 @@ class ControllerCatalogCategory extends Controller {
 			$data['image'] = '';
 		}
 
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
 		} elseif (!empty($category_info) && is_file(DIR_IMAGE . $category_info['image'])) {
-			$data['thumb'] = $this->model_tool_image_admin->resize($category_info['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize($category_info['image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 
-		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 		if (isset($this->request->post['top'])) {
 			$data['top'] = $this->request->post['top'];

@@ -29,12 +29,12 @@ class ControllerCommonHeader extends Controller {
 			$data['logout'] = $this->url->link('common/logout', 'user_token=' . $this->session->data['user_token'], true);
 			$data['profile'] = $this->url->link('common/profile', 'user_token=' . $this->session->data['user_token'], true);
 
-			$this->load->model('tool/image_admin');
+			$this->load->model('tool/image');
 
 			$data['firstname'] = '';
 			$data['lastname'] = '';
 			$data['user_group'] = '';
-			$data['image'] = $this->model_tool_image_admin->resize('profile.png', 45, 45);
+			$data['image'] = $this->model_tool_image->resize('profile.png', 45, 45);
 						
 			$this->load->model('user/user_admin');
 	
@@ -48,7 +48,7 @@ class ControllerCommonHeader extends Controller {
 				$data['user_group'] = $user_info['user_group'];
 	
 				if (is_file(DIR_IMAGE . $user_info['image'])) {
-					$data['image'] = $this->model_tool_image_admin->resize($user_info['image'], 45, 45);
+					$data['image'] = $this->model_tool_image->resize($user_info['image'], 45, 45);
 				}
 			} 		
 			

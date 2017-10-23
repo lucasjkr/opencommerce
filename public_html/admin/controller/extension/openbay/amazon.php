@@ -501,7 +501,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		if ($this->openbay->addonLoad('openstock') && isset($this->request->get['product_id'])) {
 			$this->load->model('extension/module/openstock_admin');
-			$this->load->model('tool/image_admin');
+			$this->load->model('tool/image');
 			$variants = $this->model_setting_module_openstock_admin->getVariants($this->request->get['product_id']);
 		}
 
@@ -534,7 +534,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 			if ($var != '' && $this->openbay->addonLoad('openstock')) {
 				$logger->write('Using openStock');
-				$this->load->model('tool/image_admin');
+				$this->load->model('tool/image');
 				$this->load->model('extension/module/openstock_admin');
 				$option_stocks = $this->model_setting_module_openstock_admin->getVariants($product_id);
 
@@ -727,7 +727,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 	public function bulkListProducts() {
 		$this->load->model('extension/openbay/amazon_admin');
 		$this->load->model('catalog/product_admin');
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		$data = $this->load->language('extension/openbay/amazon_bulk_listing');
 
@@ -819,9 +819,9 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 				$product = $this->model_catalog_product_admin->getProduct($result['product_id']);
 
 				if ($product['image'] && file_exists(DIR_IMAGE . $product['image'])) {
-					$image = $this->model_tool_image_admin->resize($product['image'], 40, 40);
+					$image = $this->model_tool_image->resize($product['image'], 40, 40);
 				} else {
-					$image = $this->model_tool_image_admin->resize('no_image.png', 40, 40);
+					$image = $this->model_tool_image->resize('no_image.png', 40, 40);
 				}
 
 				if ($result['status'] == 'searching') {

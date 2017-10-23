@@ -136,17 +136,17 @@ class ControllerCommonProfile extends Controller {
 			$data['image'] = '';
 		}
 
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		if (isset($this->request->post['image']) && is_file(DIR_IMAGE . $this->request->post['image'])) {
-			$data['thumb'] = $this->model_tool_image_admin->resize($this->request->post['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize($this->request->post['image'], 100, 100);
 		} elseif (!empty($user_info) && $user_info['image'] && is_file(DIR_IMAGE . $user_info['image'])) {
-			$data['thumb'] = $this->model_tool_image_admin->resize($user_info['image'], 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize($user_info['image'], 100, 100);
 		} else {
-			$data['thumb'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+			$data['thumb'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 		}
 		
-		$data['placeholder'] = $this->model_tool_image_admin->resize('no_image.png', 100, 100);
+		$data['placeholder'] = $this->model_tool_image->resize('no_image.png', 100, 100);
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

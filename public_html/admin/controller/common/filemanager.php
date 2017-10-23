@@ -30,7 +30,7 @@ class ControllerCommonFileManager extends Controller {
 
 		$data['images'] = [];
 
-		$this->load->model('tool/image_admin');
+		$this->load->model('tool/image');
 
 		if (substr(str_replace('\\', '/', realpath($directory . '/' . $filter_name)), 0, strlen(DIR_IMAGE . 'catalog')) == str_replace('\\', '/', DIR_IMAGE . 'catalog')) {
 			// Get directories
@@ -80,7 +80,7 @@ class ControllerCommonFileManager extends Controller {
 				);
 			} elseif (is_file($image)) {
 				$data['images'][] = array(
-					'thumb' => $this->model_tool_image_admin->resize(utf8_substr($image, utf8_strlen(DIR_IMAGE)), 100, 100),
+					'thumb' => $this->model_tool_image->resize(utf8_substr($image, utf8_strlen(DIR_IMAGE)), 100, 100),
 					'name'  => implode(' ', $name),
 					'type'  => 'image',
 					'path'  => utf8_substr($image, utf8_strlen(DIR_IMAGE)),

@@ -170,7 +170,7 @@ function check_requirements() {
 
 // TODO: LJK check that this actually gets triggered if PDO isn't installed
     if (!defined('PDO::ATTR_DRIVER_NAME')) {
-        echo 'PDO unavailable';
+        $error = 'PDO unavailable';
     }
 
 // TODO: Check for PDO/MySQL driver
