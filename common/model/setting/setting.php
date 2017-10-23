@@ -60,7 +60,7 @@ class ModelSettingSetting extends Model {
 	}
 	
 	public function getSettingValue($key, $store_id = 0) {
-		$query = $this->db->query("SELECT value FROM oc_setting WHERE store_id = :store_id AND `key` = $key",
+		$query = $this->db->query("SELECT value FROM oc_setting WHERE store_id = :store_id AND `key` = :key",
             [
                 ':store_id' => $store_id,
                 ':key' => $key,
