@@ -346,9 +346,9 @@ class ControllerCustomerCustomer extends Controller {
 		$data['add'] = $this->url->link('customer/customer/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
 		$data['delete'] = $this->url->link('customer/customer/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
-		$stores = $this->model_setting_store_admin->getStores();
+		$stores = $this->model_setting_store->getStores();
 		
 		$data['customers'] = [];
 
@@ -977,9 +977,9 @@ class ControllerCustomerCustomer extends Controller {
             // LJK TODO - this might be unnecessary
 			$this->load->model('setting/setting_admin');
 
-			$this->load->model('setting/store_admin');
+			$this->load->model('setting/store');
 
-			$store_info = $this->model_setting_store_admin->getStore($store_id);
+			$store_info = $this->model_setting_store->getStore($store_id);
 
 			if ($store_info) {
 				$this->response->redirect(($this->model_setting_setting_admin->getSettingValue('config_secure', $store_id) ? $store_info['ssl'] : $store_info['url']) . 'index.php?route=account/login/token&email=' . urlencode($customer_info['email']). '&login_token=' . $token);
@@ -1166,14 +1166,14 @@ class ControllerCustomerCustomer extends Controller {
 		}
 
 		$this->load->model('customer/customer_admin');
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		$data['ips'] = [];
 
 		$results = $this->model_customer_customer_admin->getIps($customer_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$store_info = $this->model_setting_store_admin->getStore($result['store_id']);
+			$store_info = $this->model_setting_store->getStore($result['store_id']);
 
 			if ($store_info) {
 				$store = $store_info['name'];

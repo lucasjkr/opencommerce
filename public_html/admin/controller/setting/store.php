@@ -7,7 +7,7 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		$this->load->model('setting/setting_admin');
 
@@ -19,10 +19,10 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$store_id = $this->model_setting_store_admin->addStore($this->request->post);
+			$store_id = $this->model_setting_store->addStore($this->request->post);
 
 			$this->load->model('setting/setting_admin');
 
@@ -41,10 +41,10 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_setting_store_admin->editStore($this->request->get['store_id'], $this->request->post);
+			$this->model_setting_store->editStore($this->request->get['store_id'], $this->request->post);
 
 			$this->load->model('setting/setting_admin');
 
@@ -63,13 +63,13 @@ class ControllerSettingStore extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			$this->load->model('setting/setting_admin');
 
 			foreach ($this->request->post['selected'] as $store_id) {
-				$this->model_setting_store_admin->deleteStore($store_id);
+				$this->model_setting_store->deleteStore($store_id);
 
 				$this->model_setting_setting_admin->deleteSetting('config', $store_id);
 			}
@@ -113,9 +113,9 @@ class ControllerSettingStore extends Controller {
 			'edit'     => $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$store_total = $this->model_setting_store_admin->getTotalStores();
+		$store_total = $this->model_setting_store->getTotalStores();
 
-		$results = $this->model_setting_store_admin->getStores();
+		$results = $this->model_setting_store->getStores();
 
 		foreach ($results as $result) {
 			$data['stores'][] = array(

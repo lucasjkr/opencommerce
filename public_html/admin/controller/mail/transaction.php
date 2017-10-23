@@ -32,9 +32,9 @@ class ControllerMailTransaction extends Controller {
 		if ($customer_info) {
 			$this->load->language('mail/transaction');
 
-			$this->load->model('setting/store_admin');
+			$this->load->model('setting/store');
 
-			$store_info = $this->model_setting_store_admin->getStore($customer_info['store_id']);
+			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
 
 			if ($store_info) {
 				$store_name = $store_info['name'];

@@ -360,7 +360,7 @@ class ControllerLocalisationZone extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('customer/customer_admin');
 		$this->load->model('localisation/geo_zone_admin');
 
@@ -369,7 +369,7 @@ class ControllerLocalisationZone extends Controller {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store_admin->getTotalStoresByZoneId($zone_id);
+			$store_total = $this->model_setting_store->getTotalStoresByZoneId($zone_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);

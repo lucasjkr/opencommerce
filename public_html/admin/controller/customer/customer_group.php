@@ -352,7 +352,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('customer/customer_admin');
 
 		foreach ($this->request->post['selected'] as $customer_group_id) {
@@ -360,7 +360,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store_admin->getTotalStoresByCustomerGroupId($customer_group_id);
+			$store_total = $this->model_setting_store->getTotalStoresByCustomerGroupId($customer_group_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
