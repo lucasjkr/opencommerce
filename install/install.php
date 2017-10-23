@@ -234,11 +234,17 @@ function setup_db($data)
         $db->query("INSERT INTO `oc_user` SET user_id = '1', user_group_id = '1', password = '" . password_hash($data['password'], PASSWORD_DEFAULT) . "', firstname = 'John', lastname = 'Doe', email = '" . $db->escape($data['email']) . "', status = '1'");
 
         $db->query("DELETE FROM `oc_setting` WHERE `key` = 'config_email'");
-        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = ?",
-            [ $data['email'] ]);
+        $db->query("INSERT INTO `oc_setting` SET `code` = 'config', `key` = 'config_email', value = :email",
+            [
+                ':email' => $data['email']
+            ]);
 
         $db->query("UPDATE `oc_product` SET `viewed` = '0'");
-
+        $db->query("UPDATE `oc_setting` SET value = :value WHERE `key` = :key",
+            [
+                ':key' => 'config_invoice_prefix',
+                ':value' => 'INV-' . date('Y') . '-00'
+            ]);
     }
 }
 
