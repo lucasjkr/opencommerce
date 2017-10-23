@@ -193,7 +193,7 @@ class ModelCatalogOptionAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$option_data[$result['language_id']] = array['name' => $result['name']];
+			$option_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $option_data;

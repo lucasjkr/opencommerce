@@ -58,7 +58,7 @@ class ModelAccountRecurring extends Model {
 		$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = :order_recurring_id, `type` = :type",
             [
                 ':order_recurring_id' => $order_recurring_id,
-                ':type' = $type
+                ':type' => $type
             ]);
 	}	
 	
