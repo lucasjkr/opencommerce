@@ -673,9 +673,9 @@ class ControllerSaleOrder extends Controller {
 
 		$data['voucher_min'] = $this->config->get('config_voucher_min');
 
-		$this->load->model('sale/voucher_theme_admin');
+		$this->load->model('sale/voucher_theme');
 
-		$data['voucher_themes'] = $this->model_sale_voucher_theme_admin->getVoucherThemes();
+		$data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
 
 		// API login
 		$data['catalog'] = HTTP_ROOT;
