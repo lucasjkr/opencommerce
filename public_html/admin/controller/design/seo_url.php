@@ -373,9 +373,9 @@ class ControllerDesignSeoUrl extends Controller {
 		$data['sort'] = $sort;
 		$data['order'] = $order;
 		
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
-		$data['stores'] = $this->model_setting_store_admin->getStores();
+		$data['stores'] = $this->model_setting_store->getStores();
 		
 		$this->load->model('localisation/language_admin');
 
@@ -479,7 +479,7 @@ class ControllerDesignSeoUrl extends Controller {
 			$data['keyword'] = '';
 		}
 				
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		$data['stores'] = [];
 		
@@ -488,7 +488,7 @@ class ControllerDesignSeoUrl extends Controller {
 			'name'     => $this->language->get('text_default')
 		);
 		
-		$stores = $this->model_setting_store_admin->getStores();
+		$stores = $this->model_setting_store->getStores();
 
 		foreach ($stores as $store) {
 			$data['stores'][] = array(

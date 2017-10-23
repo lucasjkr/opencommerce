@@ -6,9 +6,9 @@ class ControllerMailCustomer extends Controller {
 		$customer_info = $this->model_customer_customer_admin->getCustomer($args[0]);
 
 		if ($customer_info) {
-			$this->load->model('setting/store_admin');
+			$this->load->model('setting/store');
 	
-			$store_info = $this->model_setting_store_admin->getStore($customer_info['store_id']);
+			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
 	
 			if ($store_info) {
 				$store_name = html_entity_decode($store_info['name'], ENT_QUOTES, 'UTF-8');
@@ -62,9 +62,9 @@ class ControllerMailCustomer extends Controller {
 		$customer_info = $this->model_customer_customer_admin->getCustomer($args[0]);
 
 		if ($customer_info) {
-			$this->load->model('setting/store_admin');
+			$this->load->model('setting/store');
 
-			$store_info = $this->model_setting_store_admin->getStore($customer_info['store_id']);
+			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
 
 			if ($store_info) {
 				$store_name = html_entity_decode($store_info['name'], ENT_QUOTES, 'UTF-8');

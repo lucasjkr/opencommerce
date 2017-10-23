@@ -312,7 +312,7 @@ class ControllerLocalisationLocation extends Controller {
 
 		$data['user_token'] = $this->session->data['user_token'];
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		if (isset($this->request->post['name'])) {
 			$data['name'] = $this->request->post['name'];

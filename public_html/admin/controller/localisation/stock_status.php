@@ -330,7 +330,7 @@ class ControllerLocalisationStockStatus extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('catalog/product_admin');
 
 		foreach ($this->request->post['selected'] as $stock_status_id) {

@@ -404,7 +404,7 @@ class ControllerLocalisationLanguage extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('sale/order_admin');
 
 		foreach ($this->request->post['selected'] as $language_id) {
@@ -419,7 +419,7 @@ class ControllerLocalisationLanguage extends Controller {
 					$this->error['warning'] = $this->language->get('error_admin');
 				}
 
-				$store_total = $this->model_setting_store_admin->getTotalStoresByLanguage($language_info['code']);
+				$store_total = $this->model_setting_store->getTotalStoresByLanguage($language_info['code']);
 
 				if ($store_total) {
 					$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);

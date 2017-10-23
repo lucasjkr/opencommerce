@@ -21,9 +21,9 @@ class ControllerDesignTheme extends Controller {
 
 		$data['stores'] = [];
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
-		$results = $this->model_setting_store_admin->getStores();
+		$results = $this->model_setting_store->getStores();
 		
 		foreach ($results as $result) {
 			$data['stores'][] = array(
@@ -51,14 +51,14 @@ class ControllerDesignTheme extends Controller {
 		$data['histories'] = [];
 
 		$this->load->model('design/theme_admin');
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		$history_total = $this->model_design_theme_admin->getTotalThemes();
 
 		$results = $this->model_design_theme_admin->getThemes(($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$store_info = $this->model_setting_store_admin->getStore($result['store_id']);
+			$store_info = $this->model_setting_store->getStore($result['store_id']);
 
 			if ($store_info) {
 				$store = $store_info['name'];

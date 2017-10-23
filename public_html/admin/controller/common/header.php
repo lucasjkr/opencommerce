@@ -60,9 +60,9 @@ class ControllerCommonHeader extends Controller {
 				'href' => HTTP_CATALOG
 			);
 
-			$this->load->model('setting/store_admin');
+			$this->load->model('setting/store');
 
-			$results = $this->model_setting_store_admin->getStores();
+			$results = $this->model_setting_store->getStores();
 
 			foreach ($results as $result) {
 				$data['stores'][] = array(

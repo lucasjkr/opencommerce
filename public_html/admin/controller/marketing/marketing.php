@@ -515,12 +515,12 @@ class ControllerMarketingMarketing extends Controller {
 
 		$this->load->model('marketing/marketing_admin');
 		$this->load->model('customer/customer_admin');
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		$results = $this->model_marketing_marketing_admin->getReports($marketing_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
-			$store_info = $this->model_setting_store_admin->getStore($result['store_id']);
+			$store_info = $this->model_setting_store->getStore($result['store_id']);
 
 			if ($store_info) {
 				$store = $store_info['name'];

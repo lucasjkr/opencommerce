@@ -402,7 +402,7 @@ class ControllerCatalogCategory extends Controller {
 			}
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
 		$data['stores'] = [];
 		
@@ -411,7 +411,7 @@ class ControllerCatalogCategory extends Controller {
 			'name'     => $this->language->get('text_default')
 		);
 		
-		$stores = $this->model_setting_store_admin->getStores();
+		$stores = $this->model_setting_store->getStores();
 
 		foreach ($stores as $store) {
 			$data['stores'][] = array(

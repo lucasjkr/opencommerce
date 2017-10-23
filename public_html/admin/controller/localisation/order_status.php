@@ -330,7 +330,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('sale/order_admin');
 
 		foreach ($this->request->post['selected'] as $order_status_id) {
@@ -342,7 +342,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 				$this->error['warning'] = $this->language->get('error_download');
 			}
 
-			$store_total = $this->model_setting_store_admin->getTotalStoresByOrderStatusId($order_status_id);
+			$store_total = $this->model_setting_store->getTotalStoresByOrderStatusId($order_status_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);

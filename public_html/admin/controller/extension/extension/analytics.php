@@ -78,10 +78,10 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 			}
 		}
 		
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('setting/setting_admin');
 
-		$stores = $this->model_setting_store_admin->getStores();
+		$stores = $this->model_setting_store->getStores();
 		
 		$data['extensions'] = [];
 

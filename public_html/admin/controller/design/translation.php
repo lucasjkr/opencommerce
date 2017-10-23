@@ -300,9 +300,9 @@ class ControllerDesignTranslation extends Controller {
 			$translation_info = $this->model_design_translation_admin->getTranslation($this->request->get['translation_id']);
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
-		$data['stores'] = $this->model_setting_store_admin->getStores();
+		$data['stores'] = $this->model_setting_store->getStores();
 
 		if (isset($this->request->post['store_id'])) {
 			$data['store_id'] = $this->request->post['store_id'];

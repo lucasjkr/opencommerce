@@ -306,9 +306,9 @@ class ControllerDesignLayout extends Controller {
 			$data['name'] = '';
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 
-		$data['stores'] = $this->model_setting_store_admin->getStores();
+		$data['stores'] = $this->model_setting_store->getStores();
 
 		if (isset($this->request->post['layout_route'])) {
 			$data['layout_routes'] = $this->request->post['layout_route'];
@@ -415,7 +415,7 @@ class ControllerDesignLayout extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('setting/store_admin');
+		$this->load->model('setting/store');
 		$this->load->model('catalog/product_admin');
 		$this->load->model('catalog/category_admin_admin');
 		$this->load->model('catalog/information_admin');
@@ -425,7 +425,7 @@ class ControllerDesignLayout extends Controller {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store_admin->getTotalStoresByLayoutId($layout_id);
+			$store_total = $this->model_setting_store->getTotalStoresByLayoutId($layout_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
