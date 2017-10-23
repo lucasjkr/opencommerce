@@ -37,9 +37,9 @@ class ControllerMarketplaceInstaller extends Controller {
 					
 		$data['histories'] = [];
 		
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 		
-		$results = $this->model_setting_extension_admin->getExtensionInstalls(($page - 1) * 10, 10);
+		$results = $this->model_setting_extension->getExtensionInstalls(($page - 1) * 10, 10);
 		
 		foreach ($results as $result) {
 			$data['histories'][] = array(
@@ -49,7 +49,7 @@ class ControllerMarketplaceInstaller extends Controller {
 			);
 		}
 		
-		$history_total = $this->model_setting_extension_admin->getTotalExtensionInstalls();
+		$history_total = $this->model_setting_extension->getTotalExtensionInstalls();
 
 		$pagination = new Pagination();
 		$pagination->total = $history_total;
@@ -154,9 +154,9 @@ class ControllerMarketplaceInstaller extends Controller {
 			move_uploaded_file($this->request->files['file']['tmp_name'], $file);
 
 			if (is_file($file)) {
-				$this->load->model('setting/extension_admin');
+				$this->load->model('setting/extension');
 				
-				$extension_install_id = $this->model_setting_extension_admin->addExtensionInstall($this->request->files['file']['name']);
+				$extension_install_id = $this->model_setting_extension->addExtensionInstall($this->request->files['file']['name']);
 				
 				$json['text'] = $this->language->get('text_install');
 

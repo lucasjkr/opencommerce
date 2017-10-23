@@ -983,9 +983,9 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 	public function connectRedirect() {
 		if ($this->user->hasPermission('modify', 'extension/extension/payment')) {
 			// Install the module before doing the redirect
-			$this->load->model('setting/extension_admin');
+			$this->load->model('setting/extension');
 
-			$this->model_setting_extension_admin->install('payment', 'pp_braintree');
+			$this->model_setting_extension->install('payment', 'pp_braintree');
 
 			$this->install();
 

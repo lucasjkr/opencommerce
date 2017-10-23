@@ -69,10 +69,10 @@ class ControllerExtensionModulePPBraintreeButton extends Controller {
 		if (!$this->user->hasPermission('modify', 'extension/extension/module')) {
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'], true));
 		} else {
-			$this->load->model('setting/extension_admin');
+			$this->load->model('setting/extension');
 			$this->load->model('user/user_group_admin');
 
-			$this->model_setting_extension_admin->install('module', 'pp_braintree_button');
+			$this->model_setting_extension->install('module', 'pp_braintree_button');
 
 			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/module/pp_braintree_button');
 			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'extension/module/pp_braintree_button');

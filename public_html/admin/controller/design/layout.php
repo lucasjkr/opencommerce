@@ -318,14 +318,14 @@ class ControllerDesignLayout extends Controller {
 			$data['layout_routes'] = [];
 		}
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		$this->load->model('setting/module');
 
 		$data['extensions'] = [];
 		
 		// Get a list of installed modules
-		$extensions = $this->model_setting_extension_admin->getInstalled('module');
+		$extensions = $this->model_setting_extension->getInstalled('module');
 
 		// Add all the modules which have multiple settings for each module
 		foreach ($extensions as $code) {

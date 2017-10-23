@@ -59,9 +59,9 @@ class ControllerToolUpgrade extends Controller {
 
 		$request_data['extension'] = [];
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
-		$results = $this->model_setting_extension_admin->getExtensionInstalls(0, 1000);
+		$results = $this->model_setting_extension->getExtensionInstalls(0, 1000);
 
 		foreach ($results as $result) {
 			if ($result['extension_id']) {

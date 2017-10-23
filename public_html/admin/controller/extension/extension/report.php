@@ -5,7 +5,7 @@ class ControllerExtensionExtensionReport extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/report');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		$this->getList();
 	}
@@ -13,10 +13,10 @@ class ControllerExtensionExtensionReport extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/report');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		if ($this->validate()) {
-			$this->model_setting_extension_admin->install('report', $this->request->get['extension']);
+			$this->model_setting_extension->install('report', $this->request->get['extension']);
 
 			$this->load->model('user/user_group_admin');
 
@@ -34,10 +34,10 @@ class ControllerExtensionExtensionReport extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/report');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		if ($this->validate()) {
-			$this->model_setting_extension_admin->uninstall('report', $this->request->get['extension']);
+			$this->model_setting_extension->uninstall('report', $this->request->get['extension']);
 
 			$this->load->controller('extension/report/' . $this->request->get['extension'] . '/uninstall');
 
@@ -62,13 +62,13 @@ class ControllerExtensionExtensionReport extends Controller {
 			$data['success'] = '';
 		}
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
-		$extensions = $this->model_setting_extension_admin->getInstalled('report');
+		$extensions = $this->model_setting_extension->getInstalled('report');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/report/' . $value . '.php') && !is_file(DIR_APPLICATION . 'controller/report/' . $value . '.php')) {
-				$this->model_setting_extension_admin->uninstall('report', $value);
+				$this->model_setting_extension->uninstall('report', $value);
 
 				unset($extensions[$key]);
 			}
