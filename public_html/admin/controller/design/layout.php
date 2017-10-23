@@ -425,7 +425,7 @@ class ControllerDesignLayout extends Controller {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByLayoutId($layout_id);
+			$store_total = $this->model_setting_store->getTotalStoresBy('config_layout_id', $layout_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);

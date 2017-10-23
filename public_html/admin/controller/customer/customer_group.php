@@ -360,7 +360,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 				$this->error['warning'] = $this->language->get('error_default');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByCustomerGroupId($customer_group_id);
+			$store_total = $this->model_setting_store->getTotalStoresBy('config_customer_group_id', $customer_group_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
