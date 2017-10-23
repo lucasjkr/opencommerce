@@ -342,7 +342,7 @@ class ControllerLocalisationOrderStatus extends Controller {
 				$this->error['warning'] = $this->language->get('error_download');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByOrderStatusId($order_status_id);
+			$store_total = $this->model_setting_store->getTotalStoresBy('config_order_status_id', $order_status_id);
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);

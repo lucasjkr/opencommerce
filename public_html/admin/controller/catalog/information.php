@@ -478,7 +478,9 @@ class ControllerCatalogInformation extends Controller {
 				$this->error['warning'] = $this->language->get('error_return');
 			}
 
-			$store_total = $this->model_setting_store->getTotalStoresByInformationId($information_id);
+            $accounts_total = $this->model_setting_store->getTotalStoresBy('config_account_id', $information_id);
+            $checkouts_total = $this->model_setting_store->getTotalStoresBy('config_checkout_id', $information_id);
+			$store_total = $accounts_total + $checkouts_total;
 
 			if ($store_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_store'), $store_total);
