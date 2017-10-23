@@ -5,12 +5,12 @@ class ControllerExtensionModulePPLogin extends Controller {
 	public function index() {
 		$this->load->language('extension/module/pp_login');
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting_admin->editSetting('module_pp_login', $this->request->post);
+			$this->model_setting_setting->editSetting('module_pp_login', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 

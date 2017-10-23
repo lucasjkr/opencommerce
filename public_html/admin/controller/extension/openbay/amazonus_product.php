@@ -402,10 +402,10 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 
 	private function fillDefaultValues($product_id, $fields_array, $var = '') {
 		$this->load->model('catalog/product_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('extension/openbay/amazonus_admin');
 
-		$openbay_settings = $this->model_setting_setting_admin->getSetting('openbay_amazonus');
+		$openbay_settings = $this->model_setting_setting->getSetting('openbay_amazonus');
 
 		$product_info = $this->model_catalog_product_admin->getProduct($product_id);
 		$product_info['description'] = trim(utf8_encode(strip_tags(html_entity_decode($product_info['description']), "<br>")));

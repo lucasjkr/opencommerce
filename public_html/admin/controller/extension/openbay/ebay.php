@@ -3,7 +3,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 	public function install() {
 		$this->load->language('extension/openbay/ebay');
 		$this->load->model('extension/openbay/ebay_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('setting/extension_admin');
 		$this->load->model('user/user_group_admin');
 
@@ -17,12 +17,12 @@ class ControllerExtensionOpenbayEbay extends Controller {
 
 	public function uninstall() {
 		$this->load->model('extension/openbay/ebay_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('setting/extension_admin');
 
 		$this->model_extension_openbay_ebay_admin->uninstall();
 		$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
-		$this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
+		$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 	}
 
 	public function index() {
@@ -80,13 +80,13 @@ class ControllerExtensionOpenbayEbay extends Controller {
 	public function settings() {
 		$data = $this->load->language('extension/openbay/ebay_settings');
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('extension/openbay/ebay_admin');
 		$this->load->model('localisation/currency_admin');
 		$this->load->model('localisation/order_status_admin');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting_admin->editSetting('ebay', $this->request->post);
+			$this->model_setting_setting->editSetting('ebay', $this->request->post);
 			$this->session->data['success'] = $this->language->get('text_success');
 			$this->response->redirect($this->url->link('extension/openbay/ebay', 'user_token=' . $this->session->data['user_token'], true));
 		}

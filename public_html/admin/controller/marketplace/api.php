@@ -26,9 +26,9 @@ class ControllerMarketplaceApi extends Controller {
 		}		
 
 		if (!$json) {
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 			
-			$this->model_setting_setting_admin->editSetting('opencart', $this->request->post);
+			$this->model_setting_setting->editSetting('opencart', $this->request->post);
 			
 			$json['success'] = $this->language->get('text_success');
 		}

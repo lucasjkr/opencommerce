@@ -49,11 +49,11 @@ class ControllerMarketplaceOpenbay extends Controller {
 			require_once(DIR_APPLICATION . 'controller/extension/openbay/' . $this->request->get['extension'] . '.php');
 
 			$this->load->model('setting/extension_admin');
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
 			$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
 
-			$this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
+			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
 			$class = 'ControllerExtensionOpenbay' . str_replace('_', '', $this->request->get['extension']);
 			$class = new $class($this->registry);
@@ -69,7 +69,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 	public function index() {
 		$this->load->model('extension/openbay/openbay');
 		$this->load->model('setting/extension_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('extension/openbay/version');
 		$data = $this->load->language('marketplace/openbay');
 
@@ -134,14 +134,14 @@ class ControllerMarketplaceOpenbay extends Controller {
 			);
 		}
 
-		$settings = $this->model_setting_setting_admin->getSetting('feed_openbaypro');
+		$settings = $this->model_setting_setting->getSetting('feed_openbaypro');
 
 		if (isset($settings['feed_openbaypro_version'])) {
 			$data['feed_openbaypro_version'] = $settings['feed_openbaypro_version'];
 		} else {
 			$data['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
 			$settings['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
-			$this->model_setting_setting_admin->editSetting('feed_openbaypro', $settings);
+			$this->model_setting_setting->editSetting('feed_openbaypro', $settings);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -154,7 +154,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 	}
 
 	public function manage() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$data = $this->load->language('marketplace/openbay');
 
 		$this->document->setTitle($this->language->get('text_manage'));
@@ -178,7 +178,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		);
 
 		if ($this->request->server['REQUEST_METHOD'] == 'POST') {
-			$this->model_setting_setting_admin->editSetting('feed_openbaypro', $this->request->post);
+			$this->model_setting_setting->editSetting('feed_openbaypro', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -188,7 +188,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		if (isset($this->request->post['feed_openbaypro_version'])) {
 			$data['feed_openbaypro_version'] = $this->request->post['feed_openbaypro_version'];
 		} else {
-			$settings = $this->model_setting_setting_admin->getSetting('feed_openbaypro');
+			$settings = $this->model_setting_setting->getSetting('feed_openbaypro');
 
 			if (isset($settings['feed_openbaypro_version'])) {
 				$data['feed_openbaypro_version'] = $settings['feed_openbaypro_version'];
@@ -196,7 +196,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$this->load->model('extension/openbay/version');
 				$settings['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
 				$data['feed_openbaypro_version'] = $this->model_extension_openbay_version->version();
-				$this->model_setting_setting_admin->editSetting('feed_openbaypro', $settings);
+				$this->model_setting_setting->editSetting('feed_openbaypro', $settings);
 			}
 		}
 
@@ -303,7 +303,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 				$this->response->setOutput(json_encode($response));
 				break;
 			case 'update_version': // step 7 - update the version number
-				$this->load->model('setting/setting_admin');
+				$this->load->model('setting/setting');
 
 				$response = $this->model_extension_openbay_openbay->updateUpdateVersion($beta);
 
@@ -321,7 +321,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$this->load->model('extension/openbay/amazonus_admin');
 		$this->load->model('extension/openbay/etsy');
 		$this->load->model('setting/extension_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('user/user_group_admin');
 		$this->load->model('extension/openbay/version');
 
@@ -331,9 +331,9 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$this->model_extension_openbay_amazonus_admin->patch();
 		$this->model_extension_openbay_etsy->patch();
 
-		$openbay = $this->model_setting_setting_admin->getSetting('feed_openbaypro');
+		$openbay = $this->model_setting_setting->getSetting('feed_openbaypro');
 		$openbay['feed_openbaypro_version'] = (int)$this->model_extension_openbay_version->version();
-		$this->model_setting_setting_admin->editSetting('feed_openbaypro', $openbay);
+		$this->model_setting_setting->editSetting('feed_openbaypro', $openbay);
 
 		$installed_modules = $this->model_setting_extension_admin->getInstalled('feed');
 

@@ -3,7 +3,7 @@ class ControllerExtensionPaymentSecureTradingPp extends Controller {
 	private $error = [];
 
 	public function index() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('localisation/geo_zone_admin');
 		$this->load->model('localisation/order_status_admin');
 		$this->load->language('extension/payment/securetrading_pp');
@@ -11,7 +11,7 @@ class ControllerExtensionPaymentSecureTradingPp extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$this->request->post['payment_securetrading_pp_site_reference'] = trim($this->request->post['payment_securetrading_pp_site_reference']);
 
-			$this->model_setting_setting_admin->editSetting('payment_securetrading_pp', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_securetrading_pp', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 

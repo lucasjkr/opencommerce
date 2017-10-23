@@ -101,13 +101,13 @@ class ControllerDesignTheme extends Controller {
 			$store_id = 0;
 		}
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
-		$theme = $this->model_setting_setting_admin->getSettingValue('config_theme', $store_id);
+		$theme = $this->model_setting_setting->getSettingValue('config_theme', $store_id);
 
 		// This is only here for compatibility with old themes.
 		if ($theme == 'theme_default') {
-			$theme = $this->model_setting_setting_admin->getSettingValue('theme_default_directory', $store_id);
+			$theme = $this->model_setting_setting->getSettingValue('theme_default_directory', $store_id);
 		}
 
 		if (isset($this->request->get['path'])) {
@@ -167,13 +167,13 @@ class ControllerDesignTheme extends Controller {
 			$store_id = 0;
 		}
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
-		$theme = $this->model_setting_setting_admin->getSettingValue('config_theme', $store_id);
+		$theme = $this->model_setting_setting->getSettingValue('config_theme', $store_id);
 
 		// This is only here for compatibility with old themes.
 		if ($theme == 'theme_default') {
-			$theme = $this->model_setting_setting_admin->getSettingValue('theme_default_directory', $store_id);
+			$theme = $this->model_setting_setting->getSettingValue('theme_default_directory', $store_id);
 		}
 
 		if (isset($this->request->get['path'])) {
@@ -208,13 +208,13 @@ class ControllerDesignTheme extends Controller {
 			$store_id = 0;
 		}
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
-		$theme = $this->model_setting_setting_admin->getSettingValue('config_theme', $store_id);
+		$theme = $this->model_setting_setting->getSettingValue('config_theme', $store_id);
 
 		// This is only here for compatibility with old themes.
 		if ($theme == 'theme_default') {
-			$theme = $this->model_setting_setting_admin->getSettingValue('theme_default_directory', $store_id);
+			$theme = $this->model_setting_setting->getSettingValue('theme_default_directory', $store_id);
 		}
 
 		if (isset($this->request->get['path'])) {
@@ -257,13 +257,13 @@ class ControllerDesignTheme extends Controller {
 			$store_id = 0;
 		}
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
-		$theme = $this->model_setting_setting_admin->getSettingValue('config_theme', $store_id);
+		$theme = $this->model_setting_setting->getSettingValue('config_theme', $store_id);
 		
 		// This is only here for compatibility with old themes.
 		if ($theme == 'theme_default') {
-			$theme = $this->model_setting_setting_admin->getSettingValue('theme_default_directory', $store_id);
+			$theme = $this->model_setting_setting->getSettingValue('theme_default_directory', $store_id);
 		}
 
 		if (isset($this->request->get['path'])) {

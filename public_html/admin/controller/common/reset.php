@@ -36,9 +36,9 @@ class ControllerCommonReset extends Controller {
 
 			$this->model_user_user_admin->editCode($email, '');
 
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
-			$this->model_setting_setting_admin->editSettingValue('config', 'config_password', '0');
+			$this->model_setting_setting->editSettingValue('config', 'config_password', '0');
 
 			$this->response->redirect($this->url->link('common/login', '', true));
 		}

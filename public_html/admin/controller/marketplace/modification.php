@@ -62,9 +62,9 @@ class ControllerMarketplaceModification extends Controller {
 			// Just before files are deleted, if config settings say maintenance mode is off then turn it on
 			$maintenance = $this->config->get('config_maintenance');
 
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
-			$this->model_setting_setting_admin->editSettingValue('config', 'config_maintenance', true);
+			$this->model_setting_setting->editSettingValue('config', 'config_maintenance', true);
 
 			//Log
 			$log = [];
@@ -419,7 +419,7 @@ class ControllerMarketplaceModification extends Controller {
 			}
 
 			// Maintance mode back to original settings
-			$this->model_setting_setting_admin->editSettingValue('config', 'config_maintenance', $maintenance);
+			$this->model_setting_setting->editSettingValue('config', 'config_maintenance', $maintenance);
 
 			// Do not return success message if refresh() was called with $data
 			$this->session->data['success'] = $this->language->get('text_success');

@@ -1335,7 +1335,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->load->model('sale/order_admin');
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$data['orders'] = [];
 
@@ -1351,7 +1351,7 @@ class ControllerSaleOrder extends Controller {
 			$order_info = $this->model_sale_order_admin->getOrder($order_id);
 
 			if ($order_info) {
-				$store_info = $this->model_setting_setting_admin->getSetting('config', $order_info['store_id']);
+				$store_info = $this->model_setting_setting->getSetting('config', $order_info['store_id']);
 
 				if ($store_info) {
 					$store_address = $store_info['config_address'];
@@ -1542,7 +1542,7 @@ class ControllerSaleOrder extends Controller {
 
 		$this->load->model('catalog/product_admin');
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$data['orders'] = [];
 
@@ -1559,7 +1559,7 @@ class ControllerSaleOrder extends Controller {
 
 			// Make sure there is a shipping method
 			if ($order_info && $order_info['shipping_code']) {
-				$store_info = $this->model_setting_setting_admin->getSetting('config', $order_info['store_id']);
+				$store_info = $this->model_setting_setting->getSetting('config', $order_info['store_id']);
 
 				if ($store_info) {
 					$store_address = $store_info['config_address'];

@@ -8,7 +8,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			$status = false;
@@ -26,7 +26,7 @@ class ControllerExtensionPaymentKlarnaAccount extends Controller {
 				'klarna_account_status'   => $status
 			);
 
-			$this->model_setting_setting_admin->editSetting('payment_klarna_account', array_merge($this->request->post, $klarna_data));
+			$this->model_setting_setting->editSetting('payment_klarna_account', array_merge($this->request->post, $klarna_data));
 
 			$this->session->data['success'] = $this->language->get('text_success');
 

@@ -3,7 +3,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 	private $error = [];
 
 	public function index() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$this->load->model('extension/payment/pilibaba_admin');
 
@@ -12,7 +12,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting_admin->editSetting('payment_pilibaba', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_pilibaba', $this->request->post);
 
 			if ($this->request->post['payment_pilibaba_status']) {
 				$this->model_extension_payment_pilibaba_admin->enablePiliExpress();
@@ -218,9 +218,9 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 
 				if (isset($response['code']) && isset($response['message'])) {
 					if ($response['code'] == '0') {
-						$this->load->model('setting/setting_admin');
+						$this->load->model('setting/setting');
 
-						$this->model_setting_setting_admin->editSetting('payment_pilibaba', array('payment_pilibaba_merchant_number' => $response['data']['merchantNo'], 'payment_pilibaba_secret_key' => $response['data']['privateKey'], 'payment_pilibaba_email_address' => $this->request->post['email_address'], 'payment_pilibaba_environment' => $this->request->post['environment']), 0);
+						$this->model_setting_setting->editSetting('payment_pilibaba', array('payment_pilibaba_merchant_number' => $response['data']['merchantNo'], 'payment_pilibaba_secret_key' => $response['data']['privateKey'], 'payment_pilibaba_email_address' => $this->request->post['email_address'], 'payment_pilibaba_environment' => $this->request->post['environment']), 0);
 
 						$this->session->data['success'] = $this->language->get('text_register_success');
 
