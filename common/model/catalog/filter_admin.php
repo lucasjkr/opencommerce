@@ -182,7 +182,7 @@ class ModelCatalogFilterAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$filter_group_data[$result['language_id']] = array('name' => $result['name']);
+			$filter_group_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $filter_group_data;
@@ -245,7 +245,7 @@ class ModelCatalogFilterAdmin extends Model {
                 ]);
 
 			foreach ($filter_description_query->rows as $filter_description) {
-				$filter_description_data[$filter_description['language_id']] = array('name' => $filter_description['name']);
+				$filter_description_data[$filter_description['language_id']] = ['name' => $filter_description['name']];
 			}
 
 			$filter_data[] = [

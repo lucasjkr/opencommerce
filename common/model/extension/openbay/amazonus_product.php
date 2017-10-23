@@ -34,12 +34,12 @@ class ModelExtensionOpenBayAmazonusProduct extends Model {
 		$sku_rows = $this->db->query("SELECT `sku` FROM `oc_amazonus_product` WHERE `insertion_id` = '" . $this->db->escape($insertion_id) . "'")->rows;
 
 		foreach ($sku_rows as $sku_row) {
-			$data = array(
+			$data = [
 				'sku' => $sku_row['sku'],
 				'error_code' => '0',
 				'message' => $message,
 				'insertion_id' => $insertion_id
-			);
+            ];
 			$this->insertError($data);
 		}
 	}

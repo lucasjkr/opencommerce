@@ -3,10 +3,10 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 	private $tabs = [];
 
 	public function search($search_string, $marketplace) {
-		$search_params = array(
+		$search_params = [
 			'search_string' => $search_string,
 			'marketplace' => $marketplace,
-		);
+        ];
 
 		$results = json_decode($this->openbay->amazon->call('productv3/search', $search_params), 1);
 
@@ -40,13 +40,13 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 						break;
 				}
 
-				$products[] = array(
+				$products[] = [
 					'name' => $result['name'],
 					'asin' => $result['asin'],
 					'image' => $result['image'],
 					'price' => $price,
 					'link' => $link,
-				);
+                ];
 			}
 		}
 
@@ -54,10 +54,10 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 	}
 
 	public function getProductByAsin($asin, $market) {
-		$data = array(
+		$data = [
 			'asin' => $asin,
 			'marketplace' => $market,
-		);
+        ];
 
 		$results = json_decode($this->openbay->amazon->call('productv3/getProduct', $data), 1);
 
@@ -65,11 +65,11 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 	}
 
 	public function getBestPrice($asin, $condition, $marketplace) {
-		$search_params = array(
+		$search_params = [
 			'asin' => $asin,
 			'condition' => $condition,
 			'marketplace' => $marketplace,
-		);
+        ];
 
 		$best_price = '';
 
@@ -85,16 +85,16 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 	}
 
 	public function simpleListing($data) {
-		$request = array(
+		$request = [
 			'asin' => $data['asin'],
 			'sku' => $data['sku'],
 			'quantity' => $data['quantity'],
 			'price' => $data['price'],
-			'sale' => array(
+			'sale' => [
 				'price' => $data['sale_price'],
 				'from' => $data['sale_from'],
 				'to' => $data['sale_to'],
-			),
+			],
 			'condition' => $data['condition'],
 			'condition_note' => $data['condition_note'],
 			'start_selling' => $data['start_selling'],
@@ -102,16 +102,16 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 			'marketplace' => $data['marketplace'],
 			'response_url' => HTTPS_CATALOG . 'index.php?route=extension/openbay/amazon/listing',
 			'product_id' => $data['product_id'],
-		);
+		];
 
 		$response = $this->openbay->amazon->call('productv3/simpleListing', $request);
 		$response = json_decode($response);
 
 		if (empty($response)) {
-			return array(
+			return [
 				'status' => 0,
 				'message' => 'Problem connecting OpenBay: API'
-			);
+            ];
 		}
 
 		$response = (array)$response;
@@ -139,14 +139,19 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 			foreach ($products as $product) {
 				$this->db->query("
 					REPLACE INTO oc_amazon_product_search (product_id, `status`, marketplace)
-					VALUES (" . (int)$product['product_id'] . ", 'searching', '" . $this->db->escape($product['marketplace']) . "')");
+					VALUES (:product_id, :status, :marketplace)",
+                    [
+                        ':product_id' => $product['product_id'],
+                        ':status' => 'searching',
+                        ':marketplace' => $product['marketplace']
+                    ]);
 			}
 		}
 
-		$request_data = array(
+		$request_data = [
 			'search' => $search_data,
 			'response_url' => HTTPS_CATALOG . 'index.php?route=extension/openbay/amazon/search'
-		);
+		];
 
 		$this->openbay->amazon->call('productv3/bulkSearch', $request_data);
 	}
@@ -170,13 +175,14 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 		$this->load->model('catalog/product');
 		$request = [];
 
-		$marketplace_mapping = array(
+        // LJK TODO: This doesn't appear to be used?
+		$marketplace_mapping = [
 			'uk' => 'A1F83G8C2ARO7P',
 			'de' => 'A1PA6795UKMFR9',
 			'fr' => 'A13V1IB3VIYZZH',
 			'it' => 'APJ6JRA9NG5V4',
 			'es' => 'A1RKKUPIHCS9HS',
-		);
+		];
 
 		foreach($data['products'] as $product_id => $asin) {
 			$product = $this->model_catalog_product->getProduct($product_id);
@@ -188,7 +194,7 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 					$price += $price * ($this->config->get('openbay_amazon_listing_tax_added') / 100);
 				}
 
-				$request[] = array(
+				$request[] = [
 					'asin' => $asin,
 					'sku' => $product['sku'],
 					'quantity' => $product['quantity'],
@@ -201,7 +207,7 @@ class ModelExtensionOpenBayAmazonListingAdmin extends Model {
 					'marketplace' => $data['marketplace'],
 					'response_url' => HTTPS_CATALOG . 'index.php?route=extension/openbay/amazon/listing',
 					'product_id' => $product['product_id'],
-				);
+				];
 			}
 		}
 

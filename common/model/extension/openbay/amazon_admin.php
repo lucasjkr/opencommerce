@@ -165,7 +165,7 @@ class ModelExtensionOpenBayAmazonAdmin extends Model {
 
 		$marketplaces = isset($data_array['marketplace_ids']) ? serialize($data_array['marketplace_ids']) : serialize([]);
 
-		$data_encoded = json_encode(array('fields' => $data_array['fields']));
+		$data_encoded = json_encode(['fields' => $data_array['fields']]);
 
 		$this->db->query("
 			REPLACE INTO `oc_amazon_product`
@@ -584,13 +584,13 @@ class ModelExtensionOpenBayAmazonAdmin extends Model {
 		$rows = $this->db->query($sql)->rows;
 
 		foreach ($rows as $row) {
-			$results[] = array(
+			$results[] = [
 				'product_id' => $row['product_id'],
 				'marketplace' => $row['marketplace'],
 				'status' => $row['status'],
 				'matches' => $row['matches'],
 				'data' => json_decode($row['data'], 1),
-			);
+            ];
 		}
 
 		return $results;
@@ -704,7 +704,7 @@ class ModelExtensionOpenBayAmazonAdmin extends Model {
 				}
 			}
 
-			$products[] = array(
+			$products[] = [
 				'product_id' => $row['product_id'],
 				'name' => $row['name'],
 				'sku' => $row['sku'],
@@ -715,7 +715,7 @@ class ModelExtensionOpenBayAmazonAdmin extends Model {
 				'amazon_price' => number_format($row['amazon_price'], 2, '.', ''),
 				'asin' => $row['asin'],
 				'combination' => implode(' > ', $combinations),
-			);
+            ];
 		}
 
 		return $products;

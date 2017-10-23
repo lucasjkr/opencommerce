@@ -108,7 +108,7 @@ class ModelCatalogAttributeGroupAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$attribute_group_data[$result['language_id']] = array('name' => $result['name']);
+			$attribute_group_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $attribute_group_data;

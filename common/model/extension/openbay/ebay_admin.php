@@ -287,7 +287,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 		$data = [];
 		if ($qry->num_rows) {
 			foreach ($qry->rows as $row) {
-				$data[$row['ebay_item_id']] = array(
+				$data[$row['ebay_item_id']] = [
 					'product_id'    => $row['product_id'],
 					'sku'           => $row['sku'],
 					'model'         => $row['model'],
@@ -296,7 +296,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 					'link_edit'     => $this->url->link('catalog/product/edit', 'user_token=' . $this->session->data['user_token'] . '&product_id=' . $row['product_id'], true),
 					'link_ebay'     => $this->config->get('ebay_itm_link') . $row['ebay_item_id'],
 					'reserve'       => (int)$row['reserve'],
-				);
+                ];
 
 				$data[$row['ebay_item_id']]['options'] = 0;
 
@@ -318,7 +318,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 
 	public function loadLinkedStatus($item_ids) {
 		$this->openbay->ebay->log('loadLinkedStatus() - Get item status from ebay for multiple IDs');
-		return $this->openbay->ebay->call('item/getItemsById/', array('item_ids' => $item_ids));
+		return $this->openbay->ebay->call('item/getItemsById/', ['item_ids' => $item_ids]);
 	}
 
 	public function loadUnlinked($limit = 200, $page = 1, $filter = []) {
@@ -357,22 +357,22 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 			}
 		}
 
-		return array(
+		return [
 			'items' => $unlinked,
 			'break' => $stop_flag,
 			'next_page' => $response['page']+1,
 			'max_page' => $response['max_page']
-		);
+        ];
 	}
 
 	public function loadItemLinks() {
-		$local      = $this->openbay->ebay->getLiveListing[];
+		$local      = $this->openbay->ebay->getLiveListing();
 		$response   = $this->openbay->ebay->getEbayActiveListings();
 
-		$data = array(
+		$data = [
 			'unlinked'  => [],
 			'linked'    => []
-		);
+        ];
 
 		if (!empty($response)) {
 			foreach ($response as $key => $value) {
@@ -397,7 +397,10 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 			$this->openbay->ebay->productUpdateListen($data['pid'], $this->model_catalog_product->getProduct($data['pid']));
 		} else {
 			$this->openbay->ebay->log('Qty on eBay is the same as our stock, no update needed');
-			return array('msg' => 'ok', 'error' => false);
+			return [
+			    'msg' => 'ok',
+                'error' => false
+                ];
 		}
 	}
 
@@ -470,11 +473,11 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 	}
 
 	public function getSuggestedCategories($qry) {
-		$response = array(
-			'data' => $this->openbay->ebay->call('listing/getSuggestedCategories/', array('qry' => $qry)),
+		$response = [
+			'data' => $this->openbay->ebay->call('listing/getSuggestedCategories/', [ 'qry' => $qry ]),
 			'error' => $this->openbay->ebay->lasterror,
 			'msg' => $this->openbay->ebay->lastmsg
-		);
+		];
 
 		return $response;
 	}
@@ -508,14 +511,14 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 	}
 
 	public function getEbayCategorySpecifics($category_id) {
-		$response['data']   = $this->openbay->ebay->call('listing/getEbayCategorySpecifics/', array('id' => $category_id));
+		$response['data']   = $this->openbay->ebay->call('listing/getEbayCategorySpecifics/', [ 'id' => $category_id ]);
 		$response['error']  = $this->openbay->ebay->lasterror;
 		$response['msg']    = $this->openbay->ebay->lastmsg;
 		return $response;
 	}
 
 	public function getCategoryFeatures($category_id) {
-		$response['data']   = $this->openbay->ebay->call('listing/getCategoryFeatures/', array('id' => $category_id));
+		$response['data']   = $this->openbay->ebay->call('listing/getCategoryFeatures/', [ 'id' => $category_id ]);
 		$response['error']  = $this->openbay->ebay->lasterror;
 		$response['msg']    = $this->openbay->ebay->lastmsg;
 		return $response;
@@ -656,12 +659,12 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 			$variant = 0;
 		}
 
-		return array(
+		return [
 			'qty'           => $res->row['quantity'],
 			'subtract'      => (int)$res->row['subtract'],
 			'allocated'     => $this->openbay->ebay->getAllocatedStock($id),
 			'variant'       => $variant
-		);
+		];
 	}
 
 	public function getUsage() {
@@ -694,7 +697,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 
 		$data = $this->openbay->ebay->call('account/validate/', $this->request->post, [], 'json', 1);
 
-		$return = array('error' => $this->openbay->ebay->lasterror, 'msg' => $this->openbay->ebay->lastmsg);
+		$return = [ 'error' => $this->openbay->ebay->lasterror, 'msg' => $this->openbay->ebay->lastmsg ];
 
 		if ($this->openbay->ebay->lasterror != true) {
             $return['data'] = $data;
@@ -784,7 +787,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 				$variant_option_values = $this->model_setting_module_openstock->getVariant($opt['product_option_variant_id']);
 
 				foreach ($variant_option_values as $variant_option_value) {
-					$variant_data['opt'][$k]['specifics'][] = array('name' => $variant_option_value['option_name'], 'value' => $variant_option_value['option_value_name']);
+					$variant_data['opt'][$k]['specifics'][] = [ 'name' => $variant_option_value['option_name'], 'value' => $variant_option_value['option_value_name'] ];
 				}
 			}
 
@@ -813,18 +816,18 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 			$product_attribute_query = $this->db->query("SELECT a.attribute_id, ad.name, pa.text FROM oc_product_attribute pa LEFT JOIN oc_attribute a ON (pa.attribute_id = a.attribute_id) LEFT JOIN oc_attribute_description ad ON (a.attribute_id = ad.attribute_id) WHERE pa.product_id = '" . (int)$product_id . "' AND a.attribute_group_id = '" . (int)$product_attribute_group['attribute_group_id'] . "' AND ad.language_id = '" . (int)$this->config->get('config_language_id') . "' AND pa.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY a.sort_order, ad.name");
 
 			foreach ($product_attribute_query->rows as $product_attribute) {
-				$product_attribute_data[] = array(
+				$product_attribute_data[] = [
 					'attribute_id' => $product_attribute['attribute_id'],
 					'name'         => $product_attribute['name'],
 					'text'         => $product_attribute['text']
-				);
+                ];
 			}
 
-			$product_attribute_group_data[] = array(
+			$product_attribute_group_data[] = [
 				'attribute_group_id' => $product_attribute_group['attribute_group_id'],
 				'name'               => $product_attribute_group['name'],
 				'attribute'          => $product_attribute_data
-			);
+            ];
 		}
 
 		return $product_attribute_group_data;

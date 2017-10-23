@@ -79,7 +79,10 @@ class ModelExtensionOpenBayAmazonOrder extends Model {
 	}
 
 	public function getCountryName($country_code) {
-		$row = $this->db->query("SELECT `name` FROM `oc_country` WHERE LOWER(`iso_code_2`) = '" . $this->db->escape(strtolower($country_code)) . "'")->row;
+		$row = $this->db->query("SELECT `name` FROM `oc_country` WHERE LOWER(`iso_code_2`) = :iso_code_2",
+            [
+                ':iso_code_2' => $country_code
+            ])->row;
 
 		if (isset($row['name']) && !empty($row['name'])) {
 			return $row['name'];
@@ -187,13 +190,13 @@ class ModelExtensionOpenBayAmazonOrder extends Model {
 			")->row;
 
 			if (!empty($option_details_row)) {
-				$options[] = array(
+				$options[] = [
 					'product_option_id' => (int)$option_details_row['product_option_id'],
 					'product_option_value_id' => (int)$option_details_row['product_option_value_id'],
 					'name' => $option_details_row['name'],
 					'value' => $option_details_row['value'],
 					'type' => $option_details_row['type']
-				);
+                ];
 			}
 		}
 
