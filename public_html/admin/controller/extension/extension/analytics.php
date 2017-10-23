@@ -79,7 +79,7 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 		}
 		
 		$this->load->model('setting/store');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$stores = $this->model_setting_store->getStores();
 		
@@ -107,7 +107,7 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 					$store_data[] = array(
 						'name'   => $store['name'],
 						'edit'   => $this->url->link('extension/analytics/' . $extension, 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $store['store_id'], true),
-						'status' => $this->model_setting_setting_admin->getSettingValue('analytics_' . $extension . '_status', $store['store_id']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
+						'status' => $this->model_setting_setting->getSettingValue('analytics_' . $extension . '_status', $store['store_id']) ? $this->language->get('text_enabled') : $this->language->get('text_disabled')
 					);
 				}
 

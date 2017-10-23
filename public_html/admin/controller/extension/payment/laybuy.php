@@ -3,7 +3,7 @@ class ControllerExtensionPaymentLaybuy extends Controller {
 	private $error = [];
 
 	public function index() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$this->load->model('extension/payment/laybuy_admin');
 
@@ -14,7 +14,7 @@ class ControllerExtensionPaymentLaybuy extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			unset($this->request->post['laybuy_cron_url'], $this->request->post['laybuy_cron_time']);
 
-			$this->model_setting_setting_admin->editSetting('payment_laybuy', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_laybuy', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 

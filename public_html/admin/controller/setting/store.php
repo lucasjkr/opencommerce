@@ -9,7 +9,7 @@ class ControllerSettingStore extends Controller {
 
 		$this->load->model('setting/store');
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$this->getList();
 	}
@@ -24,9 +24,9 @@ class ControllerSettingStore extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$store_id = $this->model_setting_store->addStore($this->request->post);
 
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
-			$this->model_setting_setting_admin->editSetting('config', $this->request->post, $store_id);
+			$this->model_setting_setting->editSetting('config', $this->request->post, $store_id);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -46,9 +46,9 @@ class ControllerSettingStore extends Controller {
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
 			$this->model_setting_store->editStore($this->request->get['store_id'], $this->request->post);
 
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
-			$this->model_setting_setting_admin->editSetting('config', $this->request->post, $this->request->get['store_id']);
+			$this->model_setting_setting->editSetting('config', $this->request->post, $this->request->get['store_id']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -66,12 +66,12 @@ class ControllerSettingStore extends Controller {
 		$this->load->model('setting/store');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
 			foreach ($this->request->post['selected'] as $store_id) {
 				$this->model_setting_store->deleteStore($store_id);
 
-				$this->model_setting_setting_admin->deleteSetting('config', $store_id);
+				$this->model_setting_setting->deleteSetting('config', $store_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -251,9 +251,9 @@ class ControllerSettingStore extends Controller {
 		$data['cancel'] = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true);
 
 		if (isset($this->request->get['store_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$this->load->model('setting/setting_admin');
+			$this->load->model('setting/setting');
 
-			$store_info = $this->model_setting_setting_admin->getSetting('config', $this->request->get['store_id']);
+			$store_info = $this->model_setting_setting->getSetting('config', $this->request->get['store_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];

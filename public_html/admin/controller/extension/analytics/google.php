@@ -7,10 +7,10 @@ class ControllerExtensionAnalyticsGoogle extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting_admin->editSetting('analytics_google', $this->request->post, $this->request->get['store_id']);
+			$this->model_setting_setting->editSetting('analytics_google', $this->request->post, $this->request->get['store_id']);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -55,13 +55,13 @@ class ControllerExtensionAnalyticsGoogle extends Controller {
 		if (isset($this->request->post['analytics_google_code'])) {
 			$data['analytics_google_code'] = $this->request->post['analytics_google_code'];
 		} else {
-			$data['analytics_google_code'] = $this->model_setting_setting_admin->getSettingValue('analytics_google_code', $this->request->get['store_id']);
+			$data['analytics_google_code'] = $this->model_setting_setting->getSettingValue('analytics_google_code', $this->request->get['store_id']);
 		}
 		
 		if (isset($this->request->post['analytics_google_status'])) {
 			$data['analytics_google_status'] = $this->request->post['analytics_google_status'];
 		} else {
-			$data['analytics_google_status'] = $this->model_setting_setting_admin->getSettingValue('analytics_google_status', $this->request->get['store_id']);
+			$data['analytics_google_status'] = $this->model_setting_setting->getSettingValue('analytics_google_status', $this->request->get['store_id']);
 		}
 		
 		$data['header'] = $this->load->controller('common/header');

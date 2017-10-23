@@ -5,10 +5,10 @@ class ControllerExtensionReportCustomerTransaction extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting_admin->editSetting('report_customer_transaction', $this->request->post);
+			$this->model_setting_setting->editSetting('report_customer_transaction', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 

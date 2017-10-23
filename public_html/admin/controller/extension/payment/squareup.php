@@ -7,13 +7,13 @@ class ControllerExtensionPaymentSquareup extends Controller {
         $this->load->language('extension/payment/squareup');
 
         $this->load->model('extension/payment/squareup_admin');
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
 
         $this->load->library('squareup');
 
         $server = HTTP_ADMIN;
 
-        $previous_setting = $this->model_setting_setting_admin->getSetting('payment_squareup');
+        $previous_setting = $this->model_setting_setting->getSetting('payment_squareup');
 
         try {
             if ($this->config->get('payment_squareup_access_token')) {
@@ -39,7 +39,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
                 $previous_setting['payment_squareup_sandbox_location_id'] = $first_location_id;
             }
 
-            $this->model_setting_setting_admin->editSetting('payment_squareup', $previous_setting);
+            $this->model_setting_setting->editSetting('payment_squareup', $previous_setting);
         } catch (\Squareup\Exception $e) {
             $this->pushAlert(array(
                 'type' => 'danger',
@@ -55,7 +55,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
         }        
 
         if ($this->request->server['REQUEST_METHOD'] == 'POST' && $this->validate()) {
-            $this->model_setting_setting_admin->editSetting('payment_squareup', array_merge($previous_setting, $this->request->post));
+            $this->model_setting_setting->editSetting('payment_squareup', array_merge($previous_setting, $this->request->post));
 
             $this->session->data['success'] = $this->language->get('text_success');
 
@@ -527,7 +527,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
             $this->response->redirect($this->url->link('extension/payment/squareup', 'user_token=' . $this->session->data['user_token'], true));
         }
 
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
 
         $this->load->library('squareup');
 
@@ -542,12 +542,12 @@ class ControllerExtensionPaymentSquareup extends Controller {
                     'text' => $this->language->get('error_refresh_access_token') 
                 ));
             } else {
-                $settings = $this->model_setting_setting_admin->getSetting('payment_squareup');
+                $settings = $this->model_setting_setting->getSetting('payment_squareup');
 
                 $settings['payment_squareup_access_token'] = $response['access_token']; 
                 $settings['payment_squareup_access_token_expires'] = $response['expires_at'];
 
-                $this->model_setting_setting_admin->editSetting('payment_squareup', $settings);
+                $this->model_setting_setting->editSetting('payment_squareup', $settings);
 
                 $this->pushAlert(array(
                     'type' => 'success',
@@ -579,7 +579,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
             $this->response->redirect($this->url->link('extension/payment/squareup', 'user_token=' . $this->session->data['user_token'], true));
         }
 
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
 
         $this->load->library('squareup');
 
@@ -624,7 +624,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
         try {
             $token = $this->squareup->exchangeCodeForAccessToken($this->request->get['code']);
             
-            $previous_setting = $this->model_setting_setting_admin->getSetting('payment_squareup');
+            $previous_setting = $this->model_setting_setting->getSetting('payment_squareup');
 
             $previous_setting['payment_squareup_locations'] = $this->squareup->fetchLocations($token['access_token'], $first_location_id);
 
@@ -653,7 +653,7 @@ class ControllerExtensionPaymentSquareup extends Controller {
             $previous_setting['payment_squareup_access_token'] = $token['access_token'];
             $previous_setting['payment_squareup_access_token_expires'] = $token['expires_at'];
 
-            $this->model_setting_setting_admin->editSetting('payment_squareup', $previous_setting);
+            $this->model_setting_setting->editSetting('payment_squareup', $previous_setting);
 
             unset($this->session->data['payment_squareup_oauth_state']);
             unset($this->session->data['payment_squareup_oauth_redirect']);

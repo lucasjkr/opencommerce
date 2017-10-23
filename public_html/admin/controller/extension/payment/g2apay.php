@@ -9,10 +9,10 @@ class ControllerExtensionPaymentG2APay extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
-			$this->model_setting_setting_admin->editSetting('payment_g2apay', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_g2apay', $this->request->post);
 
 			$this->session->data['complete'] = $this->language->get('text_complete');
 

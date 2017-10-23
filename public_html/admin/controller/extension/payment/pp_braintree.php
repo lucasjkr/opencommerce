@@ -10,7 +10,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			foreach ($this->request->post['payment_pp_braintree_account'] as $currency => $account) {
@@ -19,7 +19,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 				}
 			}
 
-			$this->model_setting_setting_admin->editSetting('payment_pp_braintree', $this->request->post);
+			$this->model_setting_setting->editSetting('payment_pp_braintree', $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -403,7 +403,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 			curl_close($curl);
 
 			if (isset($config_response['merchant_id']) && isset($config_response['access_token']) && isset($config_response['refresh_token'])) {
-				$braintree_settings = $this->model_setting_setting_admin->getSetting('payment_pp_braintree');
+				$braintree_settings = $this->model_setting_setting->getSetting('payment_pp_braintree');
 				$braintree_settings['payment_pp_braintree_merchant_id'] = $config_response['merchant_id'];
 				$braintree_settings['payment_pp_braintree_access_token'] = $config_response['access_token'];
 				$braintree_settings['payment_pp_braintree_refresh_token'] = $config_response['refresh_token'];
@@ -411,7 +411,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 				$braintree_settings['payment_pp_braintree_public_key'] = '';
 				$braintree_settings['payment_pp_braintree_private_key'] = '';
 
-				$this->model_setting_setting_admin->editSetting('payment_pp_braintree', $braintree_settings);
+				$this->model_setting_setting->editSetting('payment_pp_braintree', $braintree_settings);
 
 				$data['payment_pp_braintree_merchant_id'] = $config_response['merchant_id'];
 				$data['payment_pp_braintree_access_token'] = $config_response['access_token'];
@@ -500,7 +500,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 	}
 
 	public function install() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 
 		$defaults = [];
 
@@ -544,7 +544,7 @@ class ControllerExtensionPaymentPPBraintree extends Controller {
 		$defaults['payment_pp_braintree_card_check_vault'] = 1;
 		$defaults['payment_pp_braintree_paypal_check_vault'] = 0;
 
-		$this->model_setting_setting_admin->editSetting('payment_pp_braintree', $defaults);
+		$this->model_setting_setting->editSetting('payment_pp_braintree', $defaults);
 	}
 
 	public function order() {

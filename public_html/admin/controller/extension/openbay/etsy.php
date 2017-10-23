@@ -3,7 +3,7 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 	public function install() {
 		$this->load->language('extension/openbay/etsy');
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('setting/extension_admin');
 		$this->load->model('user/user_group_admin');
 
@@ -19,12 +19,12 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 
 	public function uninstall() {
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('setting/extension_admin');
 
 		$this->model_extension_openbay_etsy->uninstall();
 		$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
-		$this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
+		$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 	}
 
 	public function index() {
@@ -78,14 +78,14 @@ class ControllerExtensionOpenbayEtsy extends Controller {
 	}
 
 	public function settings() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('extension/openbay/etsy');
 		$this->load->model('localisation/order_status_admin');
 
 		$data = $this->load->language('extension/openbay/etsy_settings');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-			$this->model_setting_setting_admin->editSetting('etsy', $this->request->post);
+			$this->model_setting_setting->editSetting('etsy', $this->request->post);
 
 			$this->openbay->etsy->resetConfig($this->request->post['etsy_token'], $this->request->post['etsy_encryption_key']);
 

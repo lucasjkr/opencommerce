@@ -2,7 +2,7 @@
 class ControllerExtensionOpenbayFba extends Controller {
     public function install() {
         $this->load->model('extension/openbay/fba');
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
         $this->load->model('setting/extension_admin');
         $this->load->model('user/user_group_admin');
 
@@ -14,16 +14,16 @@ class ControllerExtensionOpenbayFba extends Controller {
 
     public function uninstall() {
         $this->load->model('extension/openbay/fba');
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
         $this->load->model('setting/extension_admin');
 
         $this->model_extension_openbay_fba->uninstall();
         $this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
-        $this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
+        $this->model_setting_setting->deleteSetting($this->request->get['extension']);
     }
 
     public function index() {
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
         $this->load->model('localisation/order_status_admin');
         $this->load->model('extension/openbay/fba');
 
@@ -74,12 +74,12 @@ class ControllerExtensionOpenbayFba extends Controller {
         $this->document->setTitle($this->language->get('heading_title'));
         $this->document->addScript('view/javascript/openbay/js/faq.js');
 
-        $this->load->model('setting/setting_admin');
+        $this->load->model('setting/setting');
         $this->load->model('extension/openbay/fba');
         $this->load->model('localisation/order_status_admin');
 
         if (($this->request->server['REQUEST_METHOD'] == 'POST') && ($this->validate())) {
-            $this->model_setting_setting_admin->editSetting('openbay_fba', $this->request->post);
+            $this->model_setting_setting->editSetting('openbay_fba', $this->request->post);
             $this->session->data['success'] = $this->language->get('text_success');
             $this->response->redirect($this->url->link('extension/openbay/fba', 'user_token=' . $this->session->data['user_token'], true));
         }

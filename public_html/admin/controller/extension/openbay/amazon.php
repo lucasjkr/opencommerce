@@ -2,7 +2,7 @@
 class ControllerExtensionOpenbayAmazon extends Controller {
 	public function install() {
 		$this->load->model('extension/openbay/amazon_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('setting/extension_admin');
 		$this->load->model('user/user_group_admin');
 
@@ -16,16 +16,16 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 	public function uninstall() {
 		$this->load->model('extension/openbay/amazon_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('setting/extension_admin');
 
 		$this->model_extension_openbay_amazon_admin->uninstall();
 		$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
-		$this->model_setting_setting_admin->deleteSetting($this->request->get['extension']);
+		$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 	}
 
 	public function index() {
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('localisation/order_status_admin');
 		$this->load->model('extension/openbay/amazon_admin');
 
@@ -243,7 +243,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 		$this->document->addScript('view/javascript/openbay/js/faq.js');
 
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->model('localisation/order_status_admin');
 		$this->load->model('extension/openbay/amazon_admin');
 
@@ -251,7 +251,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 		$data['customer_groups'] = $this->model_customer_customer_group_admin->getCustomerGroups();
 
-		$settings = $this->model_setting_setting_admin->getSetting('openbay_amazon');
+		$settings = $this->model_setting_setting->getSetting('openbay_amazon');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
 			if (!isset($this->request->post['openbay_amazon_orders_marketplace_ids'])) {
@@ -259,7 +259,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 			}
 
 			$settings = array_merge($settings, $this->request->post);
-			$this->model_setting_setting_admin->editSetting('openbay_amazon', $settings);
+			$this->model_setting_setting->editSetting('openbay_amazon', $settings);
 
 			$this->config->set('openbay_amazon_token', $this->request->post['openbay_amazon_token']);
 			$this->config->set('openbay_amazon_encryption_key', $this->request->post['openbay_amazon_encryption_key']);
@@ -937,12 +937,12 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		$data['cancel_report_link'] = '';
 
         if (isset($this->request->get['cancel_report']) && $this->request->get['cancel_report'] == 1) {
-            $this->load->model('setting/setting_admin');
+            $this->load->model('setting/setting');
 
-            $settings = $this->model_setting_setting_admin->getSetting('openbay_amazon');
+            $settings = $this->model_setting_setting->getSetting('openbay_amazon');
             $settings['openbay_amazon_processing_listing_reports'] = '';
 
-            $this->model_setting_setting_admin->editSetting('openbay_amazon', $settings);
+            $this->model_setting_setting->editSetting('openbay_amazon', $settings);
 
             $this->response->redirect($this->url->link('extension/openbay/amazon/bulklinking', 'marketplace=' . $marketplace_code . '&token=' . $this->session->data['token'], true));
         } else {
@@ -1035,7 +1035,7 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 
 	public function loadListingReport() {
 		$this->load->model('extension/openbay/amazon_admin');
-		$this->load->model('setting/setting_admin');
+		$this->load->model('setting/setting');
 		$this->load->language('extension/openbay/amazon_bulk_linking');
 
 		$marketplace = $this->request->get['marketplace'];
@@ -1056,10 +1056,10 @@ class ControllerExtensionOpenbayAmazon extends Controller {
 		if ($json['status']) {
 			$json['message'] = $this->language->get('text_report_requested');
 
-			$settings = $this->model_setting_setting_admin->getSetting('openbay_amazon');
+			$settings = $this->model_setting_setting->getSetting('openbay_amazon');
 			$settings['openbay_amazon_processing_listing_reports'][] = $marketplace;
 
-			$this->model_setting_setting_admin->editSetting('openbay_amazon', $settings);
+			$this->model_setting_setting->editSetting('openbay_amazon', $settings);
 		} else {
 			$json['message'] = $this->language->get('text_report_request_failed');
 		}
