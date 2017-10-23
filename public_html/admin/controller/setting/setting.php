@@ -202,9 +202,9 @@ class ControllerSettingSetting extends Controller {
 
 		$data['themes'] = [];
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
-		$extensions = $this->model_setting_extension_admin->getInstalled('theme');
+		$extensions = $this->model_setting_extension->getInstalled('theme');
 
 		foreach ($extensions as $code) {
 			$this->load->language('extension/theme/' . $code, 'extension');
@@ -635,12 +635,12 @@ class ControllerSettingSetting extends Controller {
 			$data['config_captcha'] = $this->config->get('config_captcha');
 		}
 		
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		$data['captchas'] = [];
 
 		// Get a list of installed captchas
-		$extensions = $this->model_setting_extension_admin->getInstalled('captcha');
+		$extensions = $this->model_setting_extension->getInstalled('captcha');
 
 		foreach ($extensions as $code) {
 			$this->load->language('extension/captcha/' . $code, 'extension');

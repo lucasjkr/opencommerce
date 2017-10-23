@@ -5,7 +5,7 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 	public function index() {
 		$this->load->language('extension/extension/analytics');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		$this->getList();
 	}
@@ -13,10 +13,10 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 	public function install() {
 		$this->load->language('extension/extension/analytics');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		if ($this->validate()) {
-			$this->model_setting_extension_admin->install('analytics', $this->request->get['extension']);
+			$this->model_setting_extension->install('analytics', $this->request->get['extension']);
 
 			$this->load->model('user/user_group_admin');
 
@@ -39,10 +39,10 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 	public function uninstall() {
 		$this->load->language('extension/extension/analytics');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		if ($this->validate()) {
-			$this->model_setting_extension_admin->uninstall('analytics', $this->request->get['extension']);
+			$this->model_setting_extension->uninstall('analytics', $this->request->get['extension']);
 
 			// Call uninstall method if it exsits
 			$this->load->controller('extension/analytics/' . $this->request->get['extension'] . '/uninstall');
@@ -68,11 +68,11 @@ class ControllerExtensionExtensionAnalytics extends Controller {
 			$data['success'] = '';
 		}
 
-		$extensions = $this->model_setting_extension_admin->getInstalled('analytics');
+		$extensions = $this->model_setting_extension->getInstalled('analytics');
 
 		foreach ($extensions as $key => $value) {
 			if (!is_file(DIR_APPLICATION . 'controller/extension/analytics/' . $value . '.php') && !is_file(DIR_APPLICATION . 'controller/analytics/' . $value . '.php')) {
-				$this->model_setting_extension_admin->uninstall('analytics', $value);
+				$this->model_setting_extension->uninstall('analytics', $value);
 
 				unset($extensions[$key]);
 			}

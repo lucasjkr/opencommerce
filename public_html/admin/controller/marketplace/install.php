@@ -186,7 +186,7 @@ class ControllerMarketplaceInstall extends Controller {
 				}
 				
 				if (!$json) {
-					$this->load->model('setting/extension_admin');
+					$this->load->model('setting/extension');
 	
 					foreach ($files as $file) {
 						$destination = str_replace('\\', '/', substr($file, strlen($directory . 'upload/')));
@@ -211,13 +211,13 @@ class ControllerMarketplaceInstall extends Controller {
 	
 						if (is_dir($file) && !is_dir($path)) {
 							if (mkdir($path, 0777)) {
-								$this->model_setting_extension_admin->addExtensionPath($extension_install_id, $destination);
+								$this->model_setting_extension->addExtensionPath($extension_install_id, $destination);
 							}
 						}
 	
 						if (is_file($file)) {
 							if (rename($file, $path)) {
-								$this->model_setting_extension_admin->addExtensionPath($extension_install_id, $destination);
+								$this->model_setting_extension->addExtensionPath($extension_install_id, $destination);
 							}
 						}
 					}
@@ -429,9 +429,9 @@ class ControllerMarketplaceInstall extends Controller {
 		}
 
 		if (!$json) {
-			$this->load->model('setting/extension_admin');
+			$this->load->model('setting/extension');
 
-			$results = $this->model_setting_extension_admin->getExtensionPathsByExtensionInstallId($extension_install_id);
+			$results = $this->model_setting_extension->getExtensionPathsByExtensionInstallId($extension_install_id);
 
 			rsort($results);
 
@@ -465,11 +465,11 @@ class ControllerMarketplaceInstall extends Controller {
 					}
 				}
 
-				$this->model_setting_extension_admin->deleteExtensionPath($result['extension_path_id']);
+				$this->model_setting_extension->deleteExtensionPath($result['extension_path_id']);
 			}
 
 			// Remove the install
-			$this->model_setting_extension_admin->deleteExtensionInstall($extension_install_id);
+			$this->model_setting_extension->deleteExtensionInstall($extension_install_id);
 			
 			// Remove any xml modifications
 			$this->load->model('setting/modification_admin');

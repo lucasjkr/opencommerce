@@ -3,7 +3,7 @@ class ControllerExtensionOpenbayFba extends Controller {
     public function install() {
         $this->load->model('extension/openbay/fba');
         $this->load->model('setting/setting');
-        $this->load->model('setting/extension_admin');
+        $this->load->model('setting/extension');
         $this->load->model('user/user_group_admin');
 
         $this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'extension/openbay/fba');
@@ -15,10 +15,10 @@ class ControllerExtensionOpenbayFba extends Controller {
     public function uninstall() {
         $this->load->model('extension/openbay/fba');
         $this->load->model('setting/setting');
-        $this->load->model('setting/extension_admin');
+        $this->load->model('setting/extension');
 
         $this->model_extension_openbay_fba->uninstall();
-        $this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
+        $this->model_setting_extension->uninstall('openbay', $this->request->get['extension']);
         $this->model_setting_setting->deleteSetting($this->request->get['extension']);
     }
 

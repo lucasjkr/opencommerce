@@ -5,14 +5,14 @@ class ControllerMarketplaceOpenbay extends Controller {
 	public function install() {
 		$this->load->language('marketplace/openbay');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		if (!$this->user->hasPermission('modify', 'marketplace/openbay')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
 
 			$this->response->redirect($this->url->link('marketplace/openbay', 'user_token=' . $this->session->data['user_token'], true));
 		} else {
-			$this->model_setting_extension_admin->install('openbay', $this->request->get['extension']);
+			$this->model_setting_extension->install('openbay', $this->request->get['extension']);
 
 			$this->session->data['success'] = $this->language->get('text_install_success');
 
@@ -37,7 +37,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 	public function uninstall() {
 		$this->load->language('marketplace/openbay');
 
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 
 		if (!$this->user->hasPermission('modify', 'marketplace/openbay')) {
 			$this->session->data['error'] = $this->language->get('error_permission');
@@ -48,10 +48,10 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 			require_once(DIR_APPLICATION . 'controller/extension/openbay/' . $this->request->get['extension'] . '.php');
 
-			$this->load->model('setting/extension_admin');
+			$this->load->model('setting/extension');
 			$this->load->model('setting/setting');
 
-			$this->model_setting_extension_admin->uninstall('openbay', $this->request->get['extension']);
+			$this->model_setting_extension->uninstall('openbay', $this->request->get['extension']);
 
 			$this->model_setting_setting->deleteSetting($this->request->get['extension']);
 
@@ -68,7 +68,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 
 	public function index() {
 		$this->load->model('extension/openbay/openbay');
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 		$this->load->model('setting/setting');
 		$this->load->model('extension/openbay/version');
 		$data = $this->load->language('marketplace/openbay');
@@ -105,11 +105,11 @@ class ControllerMarketplaceOpenbay extends Controller {
 			unset($this->session->data['error']);
 		}
 
-		$extensions = $this->model_setting_extension_admin->getInstalled('openbay');
+		$extensions = $this->model_setting_extension->getInstalled('openbay');
 
 		foreach ($extensions as $key => $value) {
 			if (!file_exists(DIR_APPLICATION . 'controller/extension/openbay/' . $value . '.php')) {
-				$this->model_setting_extension_admin->uninstall('openbay', $value);
+				$this->model_setting_extension->uninstall('openbay', $value);
 				unset($extensions[$key]);
 			}
 		}
@@ -320,7 +320,7 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$this->load->model('extension/openbay/amazon_admin');
 		$this->load->model('extension/openbay/amazonus_admin');
 		$this->load->model('extension/openbay/etsy');
-		$this->load->model('setting/extension_admin');
+		$this->load->model('setting/extension');
 		$this->load->model('setting/setting');
 		$this->load->model('user/user_group_admin');
 		$this->load->model('extension/openbay/version');
@@ -335,10 +335,10 @@ class ControllerMarketplaceOpenbay extends Controller {
 		$openbay['feed_openbaypro_version'] = (int)$this->model_extension_openbay_version->version();
 		$this->model_setting_setting->editSetting('feed_openbaypro', $openbay);
 
-		$installed_modules = $this->model_setting_extension_admin->getInstalled('feed');
+		$installed_modules = $this->model_setting_extension->getInstalled('feed');
 
 		if (!in_array('openbay', $installed_modules)) {
-			$this->model_setting_extension_admin->install('feed', 'openbaypro');
+			$this->model_setting_extension->install('feed', 'openbaypro');
 			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'access', 'marketplace/openbay');
 			$this->model_user_user_group_admin->addPermission($this->user->getGroupId(), 'modify', 'marketplace/openbay');
 		}
