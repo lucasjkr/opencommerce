@@ -70,7 +70,7 @@ class ModelCustomerCustomerApprovalAdmin extends Model {
 
 		if (!empty($data['filter_email'])) {
 			$implode[] = "c.`email` LIKE :email";
-            $args[':email'] = $data['filter_email'] . '%'
+            $args[':email'] = $data['filter_email'] . '%';
 		}
 
 		if (!empty($data['filter_customer_group_id'])) {
