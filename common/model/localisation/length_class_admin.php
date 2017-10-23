@@ -105,7 +105,7 @@ class ModelLocalisationLengthClassAdmin extends Model {
 			if (!$length_class_data) {
 				$query = $this->db->query("SELECT * FROM oc_length_class lc LEFT JOIN oc_length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = :language_id",
                     [
-                        ':language_id' => $this->config->get('config_language_id');
+                        ':language_id' => $this->config->get('config_language_id')
                     ]);
 
 				$length_class_data = $query->rows;
