@@ -71,14 +71,14 @@ class ModelSettingCron extends Model {
     public function getCrons($data = []) {
         $sql = "SELECT * FROM `oc_cron`";
 
-        $sort_data = array(
+        $sort_data = [
             'code',
             'cycle',
             'action',
             'status',
             'date_added',
             'date_modified'
-        );
+        ];
 
         if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
             $sql .= " ORDER BY `" . $data['sort'] . "`";

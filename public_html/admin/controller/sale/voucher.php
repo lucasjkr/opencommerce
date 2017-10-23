@@ -7,7 +7,7 @@ class ControllerSaleVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher_admin');
+		$this->load->model('sale/voucher');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerSaleVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher_admin');
+		$this->load->model('sale/voucher');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_voucher_admin->addVoucher($this->request->post);
+			$this->model_sale_voucher->addVoucher($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerSaleVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher_admin');
+		$this->load->model('sale/voucher');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_sale_voucher_admin->editVoucher($this->request->get['voucher_id'], $this->request->post);
+			$this->model_sale_voucher->editVoucher($this->request->get['voucher_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerSaleVoucher extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('sale/voucher_admin');
+		$this->load->model('sale/voucher');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $voucher_id) {
-				$this->model_sale_voucher_admin->deleteVoucher($voucher_id);
+				$this->model_sale_voucher->deleteVoucher($voucher_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerSaleVoucher extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$voucher_total = $this->model_sale_voucher_admin->getTotalVouchers();
+		$voucher_total = $this->model_sale_voucher->getTotalVouchers();
 
-		$results = $this->model_sale_voucher_admin->getVouchers($filter_data);
+		$results = $this->model_sale_voucher->getVouchers($filter_data);
 
 		foreach ($results as $result) {
 			if ($result['order_id']) {	
@@ -350,7 +350,7 @@ class ControllerSaleVoucher extends Controller {
 		$data['cancel'] = $this->url->link('sale/voucher', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['voucher_id']) && (!$this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$voucher_info = $this->model_sale_voucher_admin->getVoucher($this->request->get['voucher_id']);
+			$voucher_info = $this->model_sale_voucher->getVoucher($this->request->get['voucher_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -395,9 +395,9 @@ class ControllerSaleVoucher extends Controller {
 			$data['to_email'] = '';
 		}
 
-		$this->load->model('sale/voucher_theme_admin');
+		$this->load->model('sale/voucher_theme');
 
-		$data['voucher_themes'] = $this->model_sale_voucher_theme_admin->getVoucherThemes();
+		$data['voucher_themes'] = $this->model_sale_voucher_theme->getVoucherThemes();
 
 		if (isset($this->request->post['voucher_theme_id'])) {
 			$data['voucher_theme_id'] = $this->request->post['voucher_theme_id'];
@@ -447,7 +447,7 @@ class ControllerSaleVoucher extends Controller {
 			$this->error['code'] = $this->language->get('error_code');
 		}
 
-		$voucher_info = $this->model_sale_voucher_admin->getVoucherByCode($this->request->post['code']);
+		$voucher_info = $this->model_sale_voucher->getVoucherByCode($this->request->post['code']);
 
 		if ($voucher_info) {
 			if (!isset($this->request->get['voucher_id'])) {
@@ -503,7 +503,7 @@ class ControllerSaleVoucher extends Controller {
 	public function history() {
 		$this->load->language('sale/voucher');
 
-		$this->load->model('sale/voucher_admin');
+		$this->load->model('sale/voucher');
 
 		$data['text_no_results'] = $this->language->get('text_no_results');
 
@@ -520,7 +520,7 @@ class ControllerSaleVoucher extends Controller {
 
 		$data['histories'] = [];
 
-		$results = $this->model_sale_voucher_admin->getVoucherHistories($this->request->get['voucher_id'], ($page - 1) * 10, 10);
+		$results = $this->model_sale_voucher->getVoucherHistories($this->request->get['voucher_id'], ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
 			$data['histories'][] = array(
@@ -531,7 +531,7 @@ class ControllerSaleVoucher extends Controller {
 			);
 		}
 
-		$history_total = $this->model_sale_voucher_admin->getTotalVoucherHistories($this->request->get['voucher_id']);
+		$history_total = $this->model_sale_voucher->getTotalVoucherHistories($this->request->get['voucher_id']);
 
 		$pagination = new Pagination();
 		$pagination->total = $history_total;
@@ -556,7 +556,7 @@ class ControllerSaleVoucher extends Controller {
 		}
 
 		if (!$json) {
-			$this->load->model('sale/voucher_admin');
+			$this->load->model('sale/voucher');
 
 			$vouchers = [];
 
@@ -568,7 +568,7 @@ class ControllerSaleVoucher extends Controller {
 
 			if ($vouchers) {
 				foreach ($vouchers as $voucher_id) {
-					$voucher_info = $this->model_sale_voucher_admin->getVoucher($voucher_id);
+					$voucher_info = $this->model_sale_voucher->getVoucher($voucher_id);
 			
 					if ($voucher_info) {
 						if ($voucher_info['order_id']) {
@@ -598,9 +598,9 @@ class ControllerSaleVoucher extends Controller {
 							$data['text_redeem'] = sprintf($language->get('text_redeem'), $voucher_info['code']);
 							$data['text_footer'] = $language->get('text_footer');
 			
-							$this->load->model('sale/voucher_theme_admin');
+							$this->load->model('sale/voucher_theme');
 			
-							$voucher_theme_info = $this->model_sale_voucher_theme_admin->getVoucherTheme($voucher_info['voucher_theme_id']);
+							$voucher_theme_info = $this->model_sale_voucher_theme->getVoucherTheme($voucher_info['voucher_theme_id']);
 			
 							if ($voucher_theme_info && is_file(DIR_IMAGE . $voucher_theme_info['image'])) {
 								$data['image'] = HTTP_CATALOG . 'image/' . $voucher_theme_info['image'];
@@ -636,9 +636,9 @@ class ControllerSaleVoucher extends Controller {
 							$data['text_redeem'] = sprintf($this->language->get('text_redeem'), $voucher_info['code']);
 							$data['text_footer'] = $this->language->get('text_footer');
 			
-							$this->load->model('sale/voucher_theme_admin');
+							$this->load->model('sale/voucher_theme');
 			
-							$voucher_theme_info = $this->model_sale_voucher_theme_admin->getVoucherTheme($voucher_info['voucher_theme_id']);
+							$voucher_theme_info = $this->model_sale_voucher_theme->getVoucherTheme($voucher_info['voucher_theme_id']);
 			
 							if ($voucher_theme_info && is_file(DIR_IMAGE . $voucher_theme_info['image'])) {
 								$data['image'] = HTTP_CATALOG . 'image/' . $voucher_theme_info['image'];
