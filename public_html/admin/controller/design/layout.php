@@ -320,7 +320,7 @@ class ControllerDesignLayout extends Controller {
 
 		$this->load->model('setting/extension_admin');
 
-		$this->load->model('setting/module_admin');
+		$this->load->model('setting/module');
 
 		$data['extensions'] = [];
 		
@@ -333,7 +333,7 @@ class ControllerDesignLayout extends Controller {
 
 			$module_data = [];
 
-			$modules = $this->model_setting_module_admin->getModulesByCode($code);
+			$modules = $this->model_setting_module->getModulesByCode($code);
 
 			foreach ($modules as $module) {
 				$module_data[] = array(
@@ -377,7 +377,7 @@ class ControllerDesignLayout extends Controller {
 					'sort_order' => $layout_module['sort_order']
 				);
 			} else {
-				$module_info = $this->model_setting_module_admin->getModule($part[1]);
+				$module_info = $this->model_setting_module->getModule($part[1]);
 				
 				if ($module_info) {
 					$data['layout_modules'][] = array(
