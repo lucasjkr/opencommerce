@@ -114,7 +114,7 @@ class ModelCatalogDownloadAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$download_description_data[$result['language_id']] = array('name' => $result['name']);
+			$download_description_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $download_description_data;

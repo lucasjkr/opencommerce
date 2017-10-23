@@ -166,7 +166,7 @@ class ModelAccountAddress extends Model {
 				$zone_code = '';
 			}
 
-			$address_data[$result['address_id']] = array(
+			$address_data[$result['address_id']] = [
 				'address_id'     => $result['address_id'],
 				'firstname'      => $result['firstname'],
 				'lastname'       => $result['lastname'],
@@ -184,8 +184,7 @@ class ModelAccountAddress extends Model {
 				'iso_code_3'     => $iso_code_3,
 				'address_format' => $address_format,
 				'custom_field'   => json_decode($result['custom_field'], true)
-
-			);
+			];
 		}
 
 		return $address_data;

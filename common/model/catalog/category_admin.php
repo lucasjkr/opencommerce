@@ -469,13 +469,13 @@ class ModelCatalogCategoryAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$category_description_data[$result['language_id']] = array(
+			$category_description_data[$result['language_id']] = [
 				'name'             => $result['name'],
 				'meta_title'       => $result['meta_title'],
 				'meta_description' => $result['meta_description'],
 				'meta_keyword'     => $result['meta_keyword'],
 				'description'      => $result['description']
-			);
+			];
 		}
 
 		return $category_description_data;

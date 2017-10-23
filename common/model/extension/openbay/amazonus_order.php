@@ -188,13 +188,13 @@ class ModelExtensionOpenBayAmazonusOrder extends Model {
 			")->row;
 
 			if (!empty($option_details_row)) {
-				$options[] = array(
+				$options[] = [
 					'product_option_id' => (int)$option_details_row['product_option_id'],
 					'product_option_value_id' => (int)$option_details_row['product_option_value_id'],
 					'name' => $option_details_row['name'],
 					'value' => $option_details_row['value'],
 					'type' => $option_details_row['type']
-				);
+				];
 			}
 		}
 

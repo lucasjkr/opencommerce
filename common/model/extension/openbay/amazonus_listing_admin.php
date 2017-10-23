@@ -4,9 +4,9 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 
 	public function search($search_string) {
 
-		$search_params = array(
+		$search_params = [
 			'search_string' => $search_string,
-		);
+        ];
 
 		$results = json_decode($this->openbay->amazonus->call('productv3/search', $search_params), 1);
 
@@ -22,13 +22,13 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 
 				$link = 'http://www.amazon.com/gp/product/' . $result['asin'] . '/';
 
-				$products[] = array(
+				$products[] = [
 					'name' => $result['name'],
 					'asin' => $result['asin'],
 					'image' => $result['image'],
 					'price' => $price,
 					'link' => $link,
-				);
+                ];
 			}
 		}
 
@@ -36,9 +36,9 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 	}
 
 	public function getProductByAsin($asin) {
-		$data = array(
+		$data = [
 			'asin' => $asin,
-		);
+        ];
 
 		$results = json_decode($this->openbay->amazonus->call('productv3/getProduct', $data), 1);
 
@@ -46,10 +46,10 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 	}
 
 	public function getBestPrice($asin, $condition) {
-		$search_params = array(
+		$search_params = [
 			'asin' => $asin,
 			'condition' => $condition,
-		);
+        ];
 
 		$best_price = '';
 
@@ -65,31 +65,31 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 	}
 
 	public function simpleListing($data) {
-		$request = array(
+		$request = [
 			'asin' => $data['asin'],
 			'sku' => $data['sku'],
 			'quantity' => $data['quantity'],
 			'price' => $data['price'],
-			'sale' => array(
+			'sale' => [
 				'price' => $data['sale_price'],
 				'from' => $data['sale_from'],
 				'to' => $data['sale_to'],
-			),
+            ],
 			'condition' => $data['condition'],
 			'condition_note' => $data['condition_note'],
 			'start_selling' => $data['start_selling'],
 			'restock_date' => $data['restock_date'],
 			'response_url' => HTTPS_CATALOG . 'index.php?route=extension/openbay/amazonus/listing',
 			'product_id' => $data['product_id'],
-		);
+        ];
 
 		$response = $this->openbay->amazonus->call('productv3/simpleListing', $request);
 		$response = json_decode($response);
 		if (empty($response)) {
-			return array(
+			return [
 				'status' => 0,
 				'message' => 'Problem connecting OpenBay: API'
-			);
+			];
 		}
 		$response = (array)$response;
 
@@ -139,7 +139,7 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 					$price += $price * ($this->config->get('openbay_amazonus_listing_tax_added') / 100);
 				}
 
-				$request[] = array(
+				$request[] = [
 					'asin' => $asin,
 					'sku' => $product['sku'],
 					'quantity' => $product['quantity'],
@@ -151,7 +151,7 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 					'restock_date' => '',
 					'response_url' => HTTPS_CATALOG . 'index.php?route=extension/openbay/amazonus/listing',
 					'product_id' => $product['product_id'],
-				);
+                ];
 			}
 		}
 
@@ -187,11 +187,12 @@ class ModelExtensionOpenBayAmazonusListingAdmin extends Model {
 			}
 		}
 
-		$request_data = array(
+		$request_data = [
 			'search' => $search_data,
 			'response_url' => HTTPS_CATALOG . 'index.php?route=extension/openbay/amazonus/search'
-		);
+        ];
 
+        // LJK TODO: I don't think this needs to be put into a variable
 		$response = $this->openbay->amazonus->call('productv3/bulkSearch', $request_data);
 	}
 }
