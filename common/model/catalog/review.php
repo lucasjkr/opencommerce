@@ -1,7 +1,14 @@
 <?php
 class ModelCatalogReview extends Model {
 	public function addReview($product_id, $data) {
-		$this->db->query("INSERT INTO oc_review SET author = '" . $this->db->escape((string)$data['name']) . "', customer_id = '" . (int)$this->customer->getId() . "', product_id = '" . (int)$product_id . "', text = '" . $this->db->escape((string)$data['text']) . "', rating = '" . (int)$data['rating'] . "'");
+		$this->db->query("INSERT INTO oc_review SET author = :name, customer_id = :customer_id, product_id = :product_id, text = :text, rating = :rating",
+            [
+                ':name' => $data['name'],
+                ':customer_id' => $this->customer->getId(),
+                ':product_id' => $product_id,
+                ':text' => $data['text'],
+                ':rating' => $data['rating']
+            ]);
 
 		$review_id = $this->db->getLastId();
 
@@ -55,13 +62,25 @@ class ModelCatalogReview extends Model {
 			$limit = 20;
 		}
 
-		$query = $this->db->query("SELECT r.review_id, r.author, r.rating, r.text, p.product_id, pd.name, p.price, p.image, r.date_added FROM oc_review r LEFT JOIN oc_product p ON (r.product_id = p.product_id) LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1' AND r.status = '1' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY r.date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
+		$query = $this->db->query("SELECT r.review_id, r.author, r.rating, r.text, p.product_id, pd.name, p.price, p.image, r.date_added FROM oc_review r LEFT JOIN oc_product p ON (r.product_id = p.product_id) LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = :product_id AND p.date_available <= NOW() AND p.status = :status_1 AND r.status = :status_2 AND pd.language_id = :language_id ORDER BY r.date_added DESC LIMIT " . (int)$start . "," . (int)$limit,
+            [
+                ':language_id' => $this->config->get('config_language_id'),
+                ':product_id' => $product_id,
+                ':status_1' => 1,
+                ':status_2' => 1,
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getTotalReviewsByProductId($product_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_review r LEFT JOIN oc_product p ON (r.product_id = p.product_id) LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = '" . (int)$product_id . "' AND p.date_available <= NOW() AND p.status = '1' AND r.status = '1' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_review r LEFT JOIN oc_product p ON (r.product_id = p.product_id) LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE p.product_id = :product_id AND p.date_available <= NOW() AND p.status = :status_1 AND r.status = :status_2 AND pd.language_id = :langauge_id",
+            [
+                ':langauge_id' => $this->config->get('config_language_id'),
+                ':product_id' => $product_id,
+                ':status_1' => 1,
+                ':status_2' => 1,
+            ]);
 
 		return $query->row['total'];
 	}
