@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogDownloadAdmin extends Model {
+class ModelCatalogDownload extends Model {
 	public function addDownload($data) {
 		$this->db->query("INSERT INTO `oc_download` SET `filename` = :filename, `mask` = :mask",
             [

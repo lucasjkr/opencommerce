@@ -1,5 +1,5 @@
 <?php
-class ModelCatalogAttributeGroupAdmin extends Model {
+class ModelCatalogAttributeGroup extends Model {
 	public function addAttributeGroup($data) {
 		$this->db->query("INSERT INTO oc_attribute_group SET sort_order = :sort_order",
             [

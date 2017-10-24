@@ -876,7 +876,7 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Attributes
-		$this->load->model('catalog/attribute_admin');
+		$this->load->model('catalog/attribute');
 
 		if (isset($this->request->post['product_attribute'])) {
 			$product_attributes = $this->request->post['product_attribute'];
@@ -889,7 +889,7 @@ class ControllerCatalogProduct extends Controller {
 		$data['product_attributes'] = [];
 
 		foreach ($product_attributes as $product_attribute) {
-			$attribute_info = $this->model_catalog_attribute_admin->getAttribute($product_attribute['attribute_id']);
+			$attribute_info = $this->model_catalog_attribute->getAttribute($product_attribute['attribute_id']);
 
 			if ($attribute_info) {
 				$data['product_attributes'][] = array(
@@ -1046,7 +1046,7 @@ class ControllerCatalogProduct extends Controller {
 		}
 
 		// Downloads
-		$this->load->model('catalog/download_admin');
+		$this->load->model('catalog/download');
 
 		if (isset($this->request->post['product_download'])) {
 			$product_downloads = $this->request->post['product_download'];
@@ -1059,7 +1059,7 @@ class ControllerCatalogProduct extends Controller {
 		$data['product_downloads'] = [];
 
 		foreach ($product_downloads as $download_id) {
-			$download_info = $this->model_catalog_download_admin->getDownload($download_id);
+			$download_info = $this->model_catalog_download->getDownload($download_id);
 
 			if ($download_info) {
 				$data['product_downloads'][] = array(

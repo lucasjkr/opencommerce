@@ -7,7 +7,7 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/download_admin');
+		$this->load->model('catalog/download');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/download_admin');
+		$this->load->model('catalog/download');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_download_admin->addDownload($this->request->post);
+			$this->model_catalog_download->addDownload($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/download_admin');
+		$this->load->model('catalog/download');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_catalog_download_admin->editDownload($this->request->get['download_id'], $this->request->post);
+			$this->model_catalog_download->editDownload($this->request->get['download_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerCatalogDownload extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('catalog/download_admin');
+		$this->load->model('catalog/download');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $download_id) {
-				$this->model_catalog_download_admin->deleteDownload($download_id);
+				$this->model_catalog_download->deleteDownload($download_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerCatalogDownload extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$download_total = $this->model_catalog_download_admin->getTotalDownloads();
+		$download_total = $this->model_catalog_download->getTotalDownloads();
 
-		$results = $this->model_catalog_download_admin->getDownloads($filter_data);
+		$results = $this->model_catalog_download->getDownloads($filter_data);
 
 		foreach ($results as $result) {
 			$data['downloads'][] = array(
@@ -313,7 +313,7 @@ class ControllerCatalogDownload extends Controller {
 		$data['languages'] = $this->model_localisation_language_admin->getLanguages();
 
 		if (isset($this->request->get['download_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$download_info = $this->model_catalog_download_admin->getDownload($this->request->get['download_id']);
+			$download_info = $this->model_catalog_download->getDownload($this->request->get['download_id']);
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -327,7 +327,7 @@ class ControllerCatalogDownload extends Controller {
 		if (isset($this->request->post['download_description'])) {
 			$data['download_description'] = $this->request->post['download_description'];
 		} elseif (isset($this->request->get['download_id'])) {
-			$data['download_description'] = $this->model_catalog_download_admin->getDownloadDescriptions($this->request->get['download_id']);
+			$data['download_description'] = $this->model_catalog_download->getDownloadDescriptions($this->request->get['download_id']);
 		} else {
 			$data['download_description'] = [];
 		}
@@ -416,11 +416,11 @@ class ControllerCatalogDownload extends Controller {
 
 		$data['reports'] = [];
 
-		$this->load->model('catalog/download_admin');
+		$this->load->model('catalog/download');
 		$this->load->model('customer/customer_admin');
 		$this->load->model('setting/store');
 
-		$results = $this->model_catalog_download_admin->getReports($download_id, ($page - 1) * 10, 10);
+		$results = $this->model_catalog_download->getReports($download_id, ($page - 1) * 10, 10);
 
 		foreach ($results as $result) {
 			$store_info = $this->model_setting_store->getStore($result['store_id']);
@@ -443,7 +443,7 @@ class ControllerCatalogDownload extends Controller {
 			);
 		}
 
-		$report_total = $this->model_catalog_download_admin->getTotalReports($download_id);
+		$report_total = $this->model_catalog_download->getTotalReports($download_id);
 
 		$pagination = new Pagination();
 		$pagination->total = $report_total;
@@ -543,7 +543,7 @@ class ControllerCatalogDownload extends Controller {
 		$json = [];
 
 		if (isset($this->request->get['filter_name'])) {
-			$this->load->model('catalog/download_admin');
+			$this->load->model('catalog/download');
 
 			$filter_data = array(
 				'filter_name' => $this->request->get['filter_name'],
@@ -551,7 +551,7 @@ class ControllerCatalogDownload extends Controller {
 				'limit'       => 5
 			);
 
-			$results = $this->model_catalog_download_admin->getDownloads($filter_data);
+			$results = $this->model_catalog_download->getDownloads($filter_data);
 
 			foreach ($results as $result) {
 				$json[] = array(
