@@ -20,31 +20,31 @@ $_['session_autostart'] = true;
 $_['template_cache']    = true;
 
 // Actions
-$_['action_pre_action'] = array(
+$_['action_pre_action'] = [
 	'startup/startup',
 	'startup/error',
 	'startup/event',
 	'startup/sass',
 	'startup/login',
 	'startup/permission'
-);
+];
 
 // Actions
 $_['action_default'] = 'common/dashboard';
 
 // Action Events
-$_['action_event'] = array(
-	'controller/*/before' => array(
+$_['action_event'] = [
+	'controller/*/before' => [
 		'event/language/before'
-	),
-	'controller/*/after' => array(
+	],
+	'controller/*/after' => [
 		'event/language/after'
-	),
-	'view/*/before' => array(
+	],
+	'view/*/before' => [
 		999  => 'event/language',
 		1000 => 'event/theme'
-	),
-	'view/*/before' => array(
+	],
+	'view/*/before' => [
 		'event/language'
-	)
-);
+	]
+];

@@ -249,42 +249,42 @@ class ModelExtensionOpenBayEtsyOrder extends Model {
 
 		$totals = [];
 
-		$totals[0] = array(
+		$totals[0] = [
 			'code'          => 'sub_total',
 			'title'         => $this->language->get('text_total_sub'),
 			'value'         => number_format($order->price_total, 4, '.', ''),
 			'sort_order'    => '1'
-		);
+		];
 
-		$totals[1] = array(
+		$totals[1] = [
 			'code'          => 'shipping',
 			'title'         => $this->language->get('text_total_shipping'),
 			'value'         => number_format($order->price_shipping, 4, '.', ''),
 			'sort_order'    => '3'
-		);
+		];
 
 		if ($order->amount_discount != 0.00) {
-			$totals[2] = array(
+			$totals[2] = [
 				'code'          => 'coupon',
 				'title'         => $this->language->get('text_total_discount'),
 				'value'         => number_format($order->amount_discount, 4, '.', ''),
 				'sort_order'    => '4'
-			);
+            ];
 		}
 
-		$totals[3] = array(
+		$totals[3] = [
 			'code'          => 'tax',
 			'title'         => $this->language->get('text_total_tax'),
 			'value'         => number_format($order->price_tax, 3, '.', ''),
 			'sort_order'    => '5'
-		);
+        ];
 
-		$totals[4] = array(
+		$totals[4] = [
 			'code'          => 'total',
 			'title'         => $this->language->get('text_total'),
 			'value'         => $order->amount_total,
 			'sort_order'    => '6'
-		);
+        ];
 
 		foreach ($totals as $total) {
 			$this->db->query("INSERT INTO `oc_order_total` SET `order_id` = '" . (int)$order_id . "', `code` = '" . $this->db->escape($total['code']) . "', `title` = '" . $this->db->escape($total['title']) . "', `value` = '" . (double)$total['value'] . "', `sort_order` = '" . (int)$total['sort_order'] . "'");
