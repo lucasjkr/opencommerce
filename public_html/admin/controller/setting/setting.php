@@ -373,9 +373,9 @@ class ControllerSettingSetting extends Controller {
 			$data['config_weight_class_id'] = $this->config->get('config_weight_class_id');
 		}
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
-		$data['weight_classes'] = $this->model_localisation_weight_class_admin->getWeightClasses();
+		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
 		if (isset($this->request->post['config_limit_admin'])) {
 			$data['config_limit_admin'] = $this->request->post['config_limit_admin'];

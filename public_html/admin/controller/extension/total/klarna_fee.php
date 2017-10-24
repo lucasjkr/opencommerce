@@ -92,9 +92,9 @@ class ControllerExtensionTotalKlarnaFee extends Controller {
 			$data['total_klarna_fee'] = $this->config->get('total_klarna_fee');
 		}
 
-		$this->load->model('localisation/tax_class_admin');
+		$this->load->model('localisation/tax_class');
 
-		$data['tax_classes'] = $this->model_localisation_tax_class_admin->getTaxClasses();
+		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');

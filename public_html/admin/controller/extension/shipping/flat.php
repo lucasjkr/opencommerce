@@ -56,9 +56,9 @@ class ControllerExtensionShippingFlat extends Controller {
 			$data['shipping_flat_tax_class_id'] = $this->config->get('shipping_flat_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class_admin');
+		$this->load->model('localisation/tax_class');
 
-		$data['tax_classes'] = $this->model_localisation_tax_class_admin->getTaxClasses();
+		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['shipping_flat_geo_zone_id'])) {
 			$data['shipping_flat_geo_zone_id'] = $this->request->post['shipping_flat_geo_zone_id'];

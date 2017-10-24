@@ -428,8 +428,8 @@ class ControllerExtensionOpenbayAmazonusProduct extends Controller{
 			'conditiontype' => $default_condition,
 		);
 
-		$this->load->model('localisation/weight_class_admin');
-		$weight_class = $this->model_localisation_weight_class_admin->getWeightClass($product_info['weight_class_id']);
+		$this->load->model('localisation/weight_class');
+		$weight_class = $this->model_localisation_weight_class->getWeightClass($product_info['weight_class_id']);
 		if (!empty($weight_class)) {
 			$defaults['shippingweightunitofmeasure'] = $weight_class['unit'];
 		}

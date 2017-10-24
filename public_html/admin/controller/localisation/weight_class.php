@@ -7,7 +7,7 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
 		$this->getList();
 	}
@@ -17,10 +17,10 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_weight_class_admin->addWeightClass($this->request->post);
+			$this->model_localisation_weight_class->addWeightClass($this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -49,10 +49,10 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validateForm()) {
-			$this->model_localisation_weight_class_admin->editWeightClass($this->request->get['weight_class_id'], $this->request->post);
+			$this->model_localisation_weight_class->editWeightClass($this->request->get['weight_class_id'], $this->request->post);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
@@ -81,11 +81,11 @@ class ControllerLocalisationWeightClass extends Controller {
 
 		$this->document->setTitle($this->language->get('heading_title'));
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
 		if (isset($this->request->post['selected']) && $this->validateDelete()) {
 			foreach ($this->request->post['selected'] as $weight_class_id) {
-				$this->model_localisation_weight_class_admin->deleteWeightClass($weight_class_id);
+				$this->model_localisation_weight_class->deleteWeightClass($weight_class_id);
 			}
 
 			$this->session->data['success'] = $this->language->get('text_success');
@@ -167,9 +167,9 @@ class ControllerLocalisationWeightClass extends Controller {
 			'limit' => $this->config->get('config_limit_admin')
 		);
 
-		$weight_class_total = $this->model_localisation_weight_class_admin->getTotalWeightClasses();
+		$weight_class_total = $this->model_localisation_weight_class->getTotalWeightClasses();
 
-		$results = $this->model_localisation_weight_class_admin->getWeightClasses($filter_data);
+		$results = $this->model_localisation_weight_class->getWeightClasses($filter_data);
 
 		foreach ($results as $result) {
 			$data['weight_classes'][] = array(
@@ -303,7 +303,7 @@ class ControllerLocalisationWeightClass extends Controller {
 		$data['cancel'] = $this->url->link('localisation/weight_class', 'user_token=' . $this->session->data['user_token'] . $url, true);
 
 		if (isset($this->request->get['weight_class_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
-			$weight_class_info = $this->model_localisation_weight_class_admin->getWeightClass($this->request->get['weight_class_id']);
+			$weight_class_info = $this->model_localisation_weight_class->getWeightClass($this->request->get['weight_class_id']);
 		}
 
 		$this->load->model('localisation/language_admin');
@@ -313,7 +313,7 @@ class ControllerLocalisationWeightClass extends Controller {
 		if (isset($this->request->post['weight_class_description'])) {
 			$data['weight_class_description'] = $this->request->post['weight_class_description'];
 		} elseif (isset($this->request->get['weight_class_id'])) {
-			$data['weight_class_description'] = $this->model_localisation_weight_class_admin->getWeightClassDescriptions($this->request->get['weight_class_id']);
+			$data['weight_class_description'] = $this->model_localisation_weight_class->getWeightClassDescriptions($this->request->get['weight_class_id']);
 		} else {
 			$data['weight_class_description'] = [];
 		}

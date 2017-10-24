@@ -1,5 +1,5 @@
 <?php
-class ModelMarketingCouponAdmin extends Model {
+class ModelMarketingCoupon extends Model {
 	public function addCoupon($data) {
 		$this->db->query("INSERT INTO oc_coupon SET name = :name, code = :code, discount = :discount, type = :type, total = :total, logged = :logged, shipping = :shipping, date_start = :date_start, date_end = :date_end, uses_total = :uses_total, uses_customer = :uses_customer, status = :status",
             [

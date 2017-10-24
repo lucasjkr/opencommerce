@@ -1,7 +1,13 @@
 <?php
 class ModelLocalisationZoneAdmin extends Model {
 	public function addZone($data) {
-		$this->db->query("INSERT INTO oc_zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape((string)$data['name']) . "', code = '" . $this->db->escape((string)$data['code']) . "', country_id = '" . (int)$data['country_id'] . "'");
+		$this->db->query("INSERT INTO oc_zone SET status = :status, name = :name, code = :code, country_id = :country_id",
+            [
+                ':status' => $data['status'],
+                ':name' => $data['name'],
+                ':code' => $data['code'],
+                ':country_id' => $data['country_id']
+            ]);
 
 		$this->cache->delete('zone');
 		
@@ -9,19 +15,32 @@ class ModelLocalisationZoneAdmin extends Model {
 	}
 
 	public function editZone($zone_id, $data) {
-		$this->db->query("UPDATE oc_zone SET status = '" . (int)$data['status'] . "', name = '" . $this->db->escape((string)$data['name']) . "', code = '" . $this->db->escape((string)$data['code']) . "', country_id = '" . (int)$data['country_id'] . "' WHERE zone_id = '" . (int)$zone_id . "'");
+		$this->db->query("UPDATE oc_zone SET status = :status, name = :name, code = :code, country_id = :country_id WHERE zone_id = :zone_id",
+            [
+                ':status' => $data['status'],
+                ':name' => $data['name'],
+                ':code' => $data['code'],
+                ':country_id' => $data['country_id'],
+                ':zone_id' => $zone_id
+            ]);
 
 		$this->cache->delete('zone');
 	}
 
 	public function deleteZone($zone_id) {
-		$this->db->query("DELETE FROM oc_zone WHERE zone_id = '" . (int)$zone_id . "'");
+		$this->db->query("DELETE FROM oc_zone WHERE zone_id = :zone_id",
+            [
+                ':zone_id' => $zone_id
+            ]);
 
 		$this->cache->delete('zone');
 	}
 
 	public function getZone($zone_id) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_zone WHERE zone_id = '" . (int)$zone_id . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_zone WHERE zone_id = :zone_id",
+            [
+                ':zone_id' => $zone_id
+            ]);
 
 		return $query->row;
 	}
@@ -29,11 +48,11 @@ class ModelLocalisationZoneAdmin extends Model {
 	public function getZones($data = []) {
 		$sql = "SELECT *, z.name, c.name AS country FROM oc_zone z LEFT JOIN oc_country c ON (z.country_id = c.country_id)";
 
-		$sort_data = array(
+		$sort_data = [
 			'c.name',
 			'z.name',
 			'z.code'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -68,7 +87,10 @@ class ModelLocalisationZoneAdmin extends Model {
 		$zone_data = $this->cache->get('zone.' . (int)$country_id);
 
 		if (!$zone_data) {
-			$query = $this->db->query("SELECT * FROM oc_zone WHERE country_id = '" . (int)$country_id . "' AND status = '1' ORDER BY name");
+			$query = $this->db->query("SELECT * FROM oc_zone WHERE country_id = :country_id AND status = '1' ORDER BY name",
+                [
+                    ':country_id' => $country_id
+                ]);
 
 			$zone_data = $query->rows;
 
@@ -85,7 +107,10 @@ class ModelLocalisationZoneAdmin extends Model {
 	}
 
 	public function getTotalZonesByCountryId($country_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone WHERE country_id = '" . (int)$country_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_zone WHERE country_id = :country_id",
+            [
+                ':country_id' => $country_id
+            ]);
 
 		return $query->row['total'];
 	}

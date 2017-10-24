@@ -74,9 +74,9 @@ class ControllerExtensionShippingAusPost extends Controller {
 			$data['shipping_auspost_weight_class_id'] = $this->config->get('shipping_auspost_weight_class_id');
 		}
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
-		$data['weight_classes'] = $this->model_localisation_weight_class_admin->getWeightClasses();
+		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
 		if (isset($this->request->post['shipping_auspost_tax_class_id'])) {
 			$data['shipping_auspost_tax_class_id'] = $this->request->post['shipping_auspost_tax_class_id'];
@@ -84,9 +84,9 @@ class ControllerExtensionShippingAusPost extends Controller {
 			$data['shipping_auspost_tax_class_id'] = $this->config->get('shipping_auspost_tax_class_id');
 		}
 
-		$this->load->model('localisation/tax_class_admin');
+		$this->load->model('localisation/tax_class');
 
-		$data['tax_classes'] = $this->model_localisation_tax_class_admin->getTaxClasses();
+		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['shipping_auspost_geo_zone_id'])) {
 			$data['shipping_auspost_geo_zone_id'] = $this->request->post['shipping_auspost_geo_zone_id'];
