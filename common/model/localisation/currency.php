@@ -1,7 +1,10 @@
 <?php
 class ModelLocalisationCurrency extends Model {
 	public function getCurrencyByCode($currency) {
-		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE code = '" . $this->db->escape($currency) . "'");
+		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE code = :code",
+            [
+                ':code' => $currency
+            ]);
 
 		return $query->row;
 	}
@@ -15,7 +18,7 @@ class ModelLocalisationCurrency extends Model {
 			$query = $this->db->query("SELECT * FROM oc_currency ORDER BY title ASC");
 
 			foreach ($query->rows as $result) {
-				$currency_data[$result['code']] = array(
+				$currency_data[$result['code']] = [
 					'currency_id'   => $result['currency_id'],
 					'title'         => $result['title'],
 					'code'          => $result['code'],
@@ -25,7 +28,7 @@ class ModelLocalisationCurrency extends Model {
 					'value'         => $result['value'],
 					'status'        => $result['status'],
 					'date_modified' => $result['date_modified']
-				);
+				];
 			}
 
 			$this->cache->set('currency', $currency_data);

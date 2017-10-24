@@ -116,7 +116,7 @@ class ModelLocalisationOrderStatusAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$order_status_data[$result['language_id']] = array('name' => $result['name']);
+			$order_status_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $order_status_data;

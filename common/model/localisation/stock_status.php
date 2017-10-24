@@ -115,7 +115,7 @@ class ModelLocalisationStockStatus extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$stock_status_data[$result['language_id']] = array('name' => $result['name']);
+			$stock_status_data[$result['language_id']] = [ 'name' => $result['name'] ];
 		}
 
 		return $stock_status_data;

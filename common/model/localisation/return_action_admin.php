@@ -3,7 +3,6 @@ class ModelLocalisationReturnActionAdmin extends Model {
 	public function addReturnAction($data) {
 		foreach ($data['return_action'] as $language_id => $value) {
 			if (isset($return_action_id)) {
-			    // LJK TODO - this first action doesn't look like it could ever get triggered
 				$this->db->query("INSERT INTO `oc_return_action` SET `return_action_id` = :return_action_id, `language_id` = :language_id, `name` = :name",
                     [
                         ':return_action_id' => $return_action_id,
@@ -116,7 +115,7 @@ class ModelLocalisationReturnActionAdmin extends Model {
             ]);
 
 		foreach ($query->rows as $result) {
-			$return_action_data[$result['language_id']] = array('name' => $result['name']);
+			$return_action_data[$result['language_id']] = ['name' => $result['name']];
 		}
 
 		return $return_action_data;

@@ -53,11 +53,11 @@ class ModelLocalisationCountryAdmin extends Model {
 		if ($data) {
 			$sql = "SELECT * FROM oc_country";
 
-			$sort_data = array(
+			$sort_data = [
 				'name',
 				'iso_code_2',
 				'iso_code_3'
-			);
+			];
 
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];
