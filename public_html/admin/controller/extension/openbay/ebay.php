@@ -425,7 +425,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 	public function getEbayCategorySpecifics() {
 		$this->load->model('extension/openbay/ebay_admin');
 		$this->load->model('catalog/product_admin');
-		$this->load->model('catalog/attribute_admin');
+		$this->load->model('catalog/attribute');
 
 		$response = $this->model_extension_openbay_ebay_admin->getEbayCategorySpecifics($this->request->get['category_id']);
 
@@ -464,7 +464,7 @@ class ControllerExtensionOpenbayEbay extends Controller {
 				$product_attributes = $this->model_catalog_product_admin->getProductAttributes($this->request->get['product_id']);
 
 				foreach ($product_attributes as $product_attribute) {
-					$attribute_info = $this->model_catalog_attribute_admin->getAttribute($product_attribute['attribute_id']);
+					$attribute_info = $this->model_catalog_attribute->getAttribute($product_attribute['attribute_id']);
 
 					if ($attribute_info) {
 						// search the ebay attribute results for a match
