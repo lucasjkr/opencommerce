@@ -3,7 +3,13 @@ class ModelExtensionShippingECShip extends Model {
 	function getQuote($address) {
 		$this->load->language('extension/shipping/ec_ship');
 
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('shipping_ec_ship_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+        $query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id_1 OR zone_id = :zone_id_2)",
+            [
+                ':geo_zone_id' => $this->config->get('shipping_ec_ship_geo_zone_id'),
+                ':country_id' => $address['country_id'],
+                ':zone_id_1' => $address['zone_id'],
+                ':zone_id_2' => 0,
+            ]);
 
 		if (!$this->config->get('shipping_ec_ship_geo_zone_id')) {
 			$status = true;
@@ -14,7 +20,7 @@ class ModelExtensionShippingECShip extends Model {
 		}
 
 		//convert iso_code_3 to ec-ship country code
-		$country_codes = array(
+		$country_codes = [
 			'AFG'                            => 'AFA',
 			'ALB'                            => 'ALA',
 			'DZA'                            => 'DZA',
@@ -231,11 +237,11 @@ class ModelExtensionShippingECShip extends Model {
 			'YEM '                           => 'YEA',
 			'ZMB'                            => 'ZMA',
 			'ZWE'                            => 'ZWA',
-			'AUS'                  => array(
+			'AUS'                  => [
 				'WA'                         => 'AUA',
 				'OTHERS'                     => 'AUB',
-			),
-			'CHN'                  => array(
+			],
+			'CHN'                  => [
 				'BE'                         => 'CNA',
 				'FU'                         => 'CNB',
 				'GU'                         => 'CNC',
@@ -245,20 +251,20 @@ class ModelExtensionShippingECShip extends Model {
 				'OTHERS'                     => 'CNG',
 				'TI'                         => 'CNH',
 				'FU'                         => 'CNJ',
-			),
-			'MYS'                  => array(
+			],
+			'MYS'                  => [
 				'OTHERS'                     => 'MYA',
 				'MY-12'                      => 'MYB',
 				'MY-13'                      => 'MYC',
-			),
-			'USA'                  => array(
+			],
+			'USA'                  => [
 				'HI'                         => 'USA',
 				'NY'                         => 'USB',
 				'OTHERS'                     => 'USC',
-			)
- 		);
+			]
+ 		];
 
-		$service = array(
+		$service = [
 			'ARM' => $this->config->get('shipping_ec_ship_air_registered_mail'),
 			'APL' => $this->config->get('shipping_ec_ship_air_parcel'),
 			'AEP' => $this->config->get('shipping_ec_ship_e_express_service_to_us'),
@@ -271,106 +277,106 @@ class ModelExtensionShippingECShip extends Model {
 			'SMP' => $this->config->get('shipping_ec_ship_smart_post'),
 			'LCP' => $this->config->get('shipping_ec_ship_local_courier_post'),
 			'LPL' => $this->config->get('shipping_ec_ship_local_parcel')
-		);
+        ];
 
 		//Countries available service
-		$shipCode = array(
-			'AUS' => array(
+		$shipCode = [
+			'AUS' => [
 				'AE2' => $this->language->get('text_e_express_service_two'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'NZL' => array(
+			'NZL' => [
 				'AE2' => $this->language->get('text_e_express_service_two'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'KOR' => array(
+			'KOR' => [
 				'AE2' => $this->language->get('text_e_express_service_two'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'SGP' => array(
+			'SGP' => [
 				'AE2' => $this->language->get('text_e_express_service_two'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'VNM' => array(
+			'VNM' => [
 				'AE2' => $this->language->get('text_e_express_service_two'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'DEU' => array(
+			'DEU' => [
 				'AE1' => $this->language->get('text_e_express_service_one'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'FRA' => array(
+			'FRA' => [
 				'AE1' => $this->language->get('text_e_express_service_one'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'NOR' => array(
+			'NOR' => [
 				'AE1' => $this->language->get('text_e_express_service_one'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+			],
 
-			'RUS' => array(
+			'RUS' => [
 				'AER' => $this->language->get('text_e_express_service_to_russia'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+			],
 
-			'GBR' => array(
+			'GBR' => [
 				'AEG' => $this->language->get('text_e_express_service_to_united_kingdom'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'CAN' => array(
+			'CAN' => [
 				'AEC' => $this->language->get('text_e_express_service_to_canada'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+            ],
 
-			'USA' => array(
+			'USA' => [
 				'AEP' => $this->language->get('text_e_express_service_to_us'),
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			),
+			],
 
-			'HKG' => array(
+			'HKG' => [
 				'SMP' => $this->language->get('text_smart_post'),
 				'LCP' => $this->language->get('text_local_courier_post'),
 				'LPL' => $this->language->get('text_local_parcel')
-			),
+            ],
 
-			'OTHERS' => array(
+			'OTHERS' => [
 				'ARM' => $this->language->get('text_air_registered_mail'),
 				'APL' => $this->language->get('text_air_parcel'),
 				'EMS' => $this->language->get('text_speed_post')
-			)
-		);
+			]
+		];
 
 		$method_data = [];
 		$error = '';
@@ -381,20 +387,20 @@ class ModelExtensionShippingECShip extends Model {
 
 			$weight = ($weight < 0.1 ? 0.1 : $weight);
 
-			$address_from = array(
+			$address_from = [
 				'country'      => "HKG",
 				'contact_name' => $this->config->get('config_owner'),
 				'phone'        => $this->config->get('config_telephone'),
 				'email'        => $this->config->get('config_email'),
 				'company_name' => $this->config->get('config_name')
-			);
+			];
 
-			$address_to = array(
+			$address_to = [
 				'country'	   => '',
 				'contact_name' => $address['firstname'] . ' ' . $address['lastname'],
 				'company_name' => $address['company'],
 				'code'         => ''
-			);
+			];
 
 			foreach ($shipCode as $key => $value) {
 				if ($address['iso_code_3'] == $key) {
@@ -475,19 +481,19 @@ class ModelExtensionShippingECShip extends Model {
 
 			$objClient->__setSoapHeaders(array($objSoapVarWSSEHeader));
 
-			$request = array(
+			$request = [
 				'ecshipUsername'     => $this->config->get('shipping_ec_ship_username'),
 				'integratorUsername' => $this->config->get('shipping_ec_ship_api_username'),
 				'countryCode'        => $address_to['country'],
 			    'shipCode' 			 => '',
 			    'weight'			 => $weight
-			);
+            ];
 
 			$objResponseArray = [];
 
 			foreach ($address_to['code'] as $key => $value) {
 				$api01Req = new api01Req($request['ecshipUsername'], $request['integratorUsername'], $request['countryCode'], $key, $request['weight']);
-				$params = array("api01Req" => $api01Req);
+				$params = [ "api01Req" => $api01Req ];
 				$objResponse = $objClient->__soapCall("getTotalPostage", array($params));
 				$objResponse = json_decode(json_encode($objResponse), true);
 				$objResponse['getTotalPostageReturn']['serviceName'] = $value;
@@ -500,24 +506,24 @@ class ModelExtensionShippingECShip extends Model {
 
 				foreach ($objResponseArray as $key => $value) {
 					if ($value['getTotalPostageReturn']['status'] == 0) {
-						$quote_data[$key] = array(
+						$quote_data[$key] = [
 							'code'         => 'ec_ship.' . $key,
 							'title'        => $value['getTotalPostageReturn']['serviceName'],
 							'cost'         => $value['getTotalPostageReturn']['totalPostage'],
 							'tax_class_id' => $this->config->get('shipping_ec_ship_tax_class_id'),
 							'text'         => $this->currency->format($this->tax->calculate($this->currency->convert($value['getTotalPostageReturn']['totalPostage'], 'HKD', $this->session->data['currency']), $this->config->get('shipping_ec_ship_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'], 1.0000000)
-						);
+						];
 					}
 				}
 			}
 			if ($quote_data || $error) {
-				$method_data = array(
+				$method_data = [
 					'code'       => 'ec_ship',
 					'title'      => $this->language->get('text_title'),
 					'quote'      => $quote_data,
 					'sort_order' => $this->config->get('shipping_ec_ship_sort_order'),
 					'error'      => $error
-				);
+                ];
 			}
 		}
 		return $method_data;

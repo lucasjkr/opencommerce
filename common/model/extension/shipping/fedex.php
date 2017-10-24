@@ -3,7 +3,13 @@ class ModelExtensionShippingFedex extends Model {
 	function getQuote($address) {
 		$this->load->language('extension/shipping/fedex');
 
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('shipping_fedex_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+        $query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id_1 OR zone_id = :zone_id_2)",
+            [
+                ':geo_zone_id' => $this->config->get('shipping_fedex_geo_zone_id'),
+                ':country_id' => $address['country_id'],
+                ':zone_id_1' => $address['zone_id'],
+                ':zone_id_2' => 0,
+            ]);
 
 		if (!$this->config->get('shipping_fedex_geo_zone_id')) {
 			$status = true;
@@ -87,7 +93,7 @@ class ModelExtensionShippingFedex extends Model {
 			$xml .= '					</ns1:Contact>';
 			$xml .= '					<ns1:Address>';
 
-			if (in_array($country_info['iso_code_2'], array('US', 'CA'))) {
+			if (in_array($country_info['iso_code_2'], [ 'US', 'CA' ] )) {
 				$xml .= '						<ns1:StateOrProvinceCode>' . ($zone_info ? $zone_info['code'] : '') . '</ns1:StateOrProvinceCode>';
 			} else {
 				$xml .= '						<ns1:StateOrProvinceCode></ns1:StateOrProvinceCode>';
@@ -108,7 +114,7 @@ class ModelExtensionShippingFedex extends Model {
 			$xml .= '						<ns1:StreetLines>' . $address['address_1'] . '</ns1:StreetLines>';
 			$xml .= '						<ns1:City>' . $address['city'] . '</ns1:City>';
 
-			if (in_array($address['iso_code_2'], array('US', 'CA'))) {
+			if (in_array($address['iso_code_2'], [ 'US', 'CA' ] )) {
 				$xml .= '						<ns1:StateOrProvinceCode>' . $address['zone_code'] . '</ns1:StateOrProvinceCode>';
 			} else {
 				$xml .= '						<ns1:StateOrProvinceCode></ns1:StateOrProvinceCode>';
@@ -203,13 +209,13 @@ class ModelExtensionShippingFedex extends Model {
 
 						$currency = $total_net_charge->getElementsByTagName('Currency')->item(0)->nodeValue;
 
-						$quote_data[$code] = array(
+						$quote_data[$code] = [
 							'code'         => 'fedex.' . $code,
 							'title'        => $title,
 							'cost'         => $this->currency->convert($cost, $currency, $this->config->get('config_currency')),
 							'tax_class_id' => $this->config->get('shipping_fedex_tax_class_id'),
 							'text'         => $this->currency->format($this->tax->calculate($this->currency->convert($cost, $currency, $this->session->data['currency']), $this->config->get('shipping_fedex_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'], 1.0000000)
-						);
+						];
 					}
 				}
 			}
@@ -224,13 +230,13 @@ class ModelExtensionShippingFedex extends Model {
 				$title .= ' (' . $this->language->get('text_weight') . ' ' . $this->weight->format($weight, $this->config->get('shipping_fedex_weight_class_id')) . ')';
 			}
 
-			$method_data = array(
+			$method_data = [
 				'code'       => 'fedex',
 				'title'      => $title,
 				'quote'      => $quote_data,
 				'sort_order' => $this->config->get('shipping_fedex_sort_order'),
 				'error'      => $error
-			);
+            ];
 		}
 
 		return $method_data;
