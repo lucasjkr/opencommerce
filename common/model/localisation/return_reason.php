@@ -2,7 +2,8 @@
 class ModelLocalisationReturnReason extends Model {
 	public function getReturnReasons($data = []) {
 		if ($data) {
-			$sql = "SELECT * FROM oc_return_reason WHERE language_id = '" . (int)$this->config->get('config_language_id') . "'";
+			$sql = "SELECT * FROM oc_return_reason WHERE language_id = :language_id";
+            $args[':language_id'] = $this->config->get('config_language_id');
 
 			$sql .= " ORDER BY name";
 
@@ -31,7 +32,10 @@ class ModelLocalisationReturnReason extends Model {
 			$return_reason_data = $this->cache->get('return_reason.' . (int)$this->config->get('config_language_id'));
 
 			if (!$return_reason_data) {
-				$query = $this->db->query("SELECT return_reason_id, name FROM oc_return_reason WHERE language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY name");
+				$query = $this->db->query("SELECT return_reason_id, name FROM oc_return_reason WHERE language_id = :language_id ORDER BY name",
+                    [
+                        ':language_id' => $this->config->get('config_language_id')
+                    ]);
 
 				$return_reason_data = $query->rows;
 

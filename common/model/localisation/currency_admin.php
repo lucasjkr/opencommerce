@@ -70,12 +70,12 @@ class ModelLocalisationCurrencyAdmin extends Model {
 		if ($data) {
 			$sql = "SELECT * FROM oc_currency";
 
-			$sort_data = array(
+			$sort_data = [
 				'title',
 				'code',
 				'value',
 				'date_modified'
-			);
+            ];
 
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];
@@ -113,7 +113,7 @@ class ModelLocalisationCurrencyAdmin extends Model {
 				$query = $this->db->query("SELECT * FROM oc_currency ORDER BY title ASC");
 
 				foreach ($query->rows as $result) {
-					$currency_data[$result['code']] = array(
+					$currency_data[$result['code']] = [
 						'currency_id'   => $result['currency_id'],
 						'title'         => $result['title'],
 						'code'          => $result['code'],
@@ -123,7 +123,7 @@ class ModelLocalisationCurrencyAdmin extends Model {
 						'value'         => $result['value'],
 						'status'        => $result['status'],
 						'date_modified' => $result['date_modified']
-					);
+                    ];
 				}
 
 				$this->cache->set('currency', $currency_data);

@@ -491,11 +491,11 @@ class ModelLocalisationLanguageAdmin extends Model {
 		if ($data) {
 			$sql = "SELECT * FROM oc_language";
 
-			$sort_data = array(
+			$sort_data = [
 				'name',
 				'code',
 				'sort_order'
-			);
+            ];
 
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];
@@ -533,7 +533,7 @@ class ModelLocalisationLanguageAdmin extends Model {
 				$query = $this->db->query("SELECT * FROM oc_language ORDER BY sort_order, name");
 
 				foreach ($query->rows as $result) {
-					$language_data[$result['code']] = array(
+					$language_data[$result['code']] = [
 						'language_id' => $result['language_id'],
 						'name'        => $result['name'],
 						'code'        => $result['code'],
@@ -542,7 +542,7 @@ class ModelLocalisationLanguageAdmin extends Model {
 						'directory'   => $result['directory'],
 						'sort_order'  => $result['sort_order'],
 						'status'      => $result['status']
-					);
+                    ];
 				}
 
 				$this->cache->set('admin.language', $language_data);

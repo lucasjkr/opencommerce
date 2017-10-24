@@ -66,11 +66,11 @@ class ModelLocalisationLengthClassAdmin extends Model {
 			$sql = "SELECT * FROM oc_length_class lc LEFT JOIN oc_length_class_description lcd ON (lc.length_class_id = lcd.length_class_id) WHERE lcd.language_id = :language_id";
             $args[':language_id'] = $this->config->get('config_language_id');
 
-			$sort_data = array(
+			$sort_data = [
 				'title',
 				'unit',
 				'value'
-			);
+			];
 
 			if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 				$sql .= " ORDER BY " . $data['sort'];
