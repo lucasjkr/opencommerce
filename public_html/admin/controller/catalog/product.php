@@ -727,9 +727,9 @@ class ControllerCatalogProduct extends Controller {
 			$data['sort_order'] = 1;
 		}
 
-		$this->load->model('localisation/stock_status_admin');
+		$this->load->model('localisation/stock_status');
 
-		$data['stock_statuses'] = $this->model_localisation_stock_status_admin->getStockStatuses();
+		$data['stock_statuses'] = $this->model_localisation_stock_status->getStockStatuses();
 
 		if (isset($this->request->post['stock_status_id'])) {
 			$data['stock_status_id'] = $this->request->post['stock_status_id'];
