@@ -3,7 +3,13 @@ class ModelExtensionShippingUps extends Model {
 	function getQuote($address) {
 		$this->load->language('extension/shipping/ups');
 
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('shipping_ups_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id_1 OR zone_id = :zone_id_2",
+            [
+                ':geo_zone_id' => $this->config->get('shipping_ups_geo_zone_id'),
+                ':country_id'=> $address['country_id'],
+                ':zone_id_1' => $address['zone_id'],
+                ':zone_id_2' => 0
+            ]);
 
 		if (!$this->config->get('shipping_ups_geo_zone_id')) {
 			$status = true;
@@ -33,9 +39,9 @@ class ModelExtensionShippingUps extends Model {
 
 			$length_code = strtoupper($this->length->getUnit($this->config->get('shipping_ups_length_class_id')));
 
-			$service_code = array(
+			$service_code = [
 				// US Origin
-				'US' => array(
+				'US' => [
 					'01' => $this->language->get('text_us_origin_01'),
 					'02' => $this->language->get('text_us_origin_02'),
 					'03' => $this->language->get('text_us_origin_03'),
@@ -48,9 +54,9 @@ class ModelExtensionShippingUps extends Model {
 					'54' => $this->language->get('text_us_origin_54'),
 					'59' => $this->language->get('text_us_origin_59'),
 					'65' => $this->language->get('text_us_origin_65')
-				),
+				],
 				// Canada Origin
-				'CA' => array(
+				'CA' => [
 					'01' => $this->language->get('text_ca_origin_01'),
 					'02' => $this->language->get('text_ca_origin_02'),
 					'07' => $this->language->get('text_ca_origin_07'),
@@ -61,9 +67,9 @@ class ModelExtensionShippingUps extends Model {
 					'14' => $this->language->get('text_ca_origin_14'),
 					'54' => $this->language->get('text_ca_origin_54'),
 					'65' => $this->language->get('text_ca_origin_65')
-				),
+				],
 				// European Union Origin
-				'EU' => array(
+				'EU' => [
 					'07' => $this->language->get('text_eu_origin_07'),
 					'08' => $this->language->get('text_eu_origin_08'),
 					'11' => $this->language->get('text_eu_origin_11'),
@@ -75,9 +81,9 @@ class ModelExtensionShippingUps extends Model {
 					'84' => $this->language->get('text_eu_origin_84'),
 					'85' => $this->language->get('text_eu_origin_85'),
 					'86' => $this->language->get('text_eu_origin_86')
-				),
+				],
 				// Puerto Rico Origin
-				'PR' => array(
+				'PR' => [
 					'01' => $this->language->get('text_pr_origin_01'),
 					'02' => $this->language->get('text_pr_origin_02'),
 					'03' => $this->language->get('text_pr_origin_03'),
@@ -86,24 +92,24 @@ class ModelExtensionShippingUps extends Model {
 					'14' => $this->language->get('text_pr_origin_14'),
 					'54' => $this->language->get('text_pr_origin_54'),
 					'65' => $this->language->get('text_pr_origin_65')
-				),
+				],
 				// Mexico Origin
-				'MX' => array(
+				'MX' => [
 					'07' => $this->language->get('text_mx_origin_07'),
 					'08' => $this->language->get('text_mx_origin_08'),
 					'54' => $this->language->get('text_mx_origin_54'),
 					'65' => $this->language->get('text_mx_origin_65')
-				),
+				],
 				// All other origins
-				'other' => array(
+				'other' => [
 					// service code 7 seems to be gone after January 2, 2007
 					'07' => $this->language->get('text_other_origin_07'),
 					'08' => $this->language->get('text_other_origin_08'),
 					'11' => $this->language->get('text_other_origin_11'),
 					'54' => $this->language->get('text_other_origin_54'),
 					'65' => $this->language->get('text_other_origin_65')
-				)
-			);
+				]
+			];
 
 			$xml  = '<?xml version="1.0"?>';
 			$xml .= '<AccessRequest xml:lang="en-US">';
@@ -203,6 +209,7 @@ class ModelExtensionShippingUps extends Model {
 				$url = 'https://wwwcie.ups.com/ups.app/xml/Rate';
 			}
 
+			// LJK TODO: Guzzle goes here
 			$curl = curl_init($url);
 
 			curl_setopt($curl, CURLOPT_HEADER, 0);
@@ -265,13 +272,13 @@ class ModelExtensionShippingUps extends Model {
 						}
 
 						if ($this->config->get('ups_' . strtolower($this->config->get('shipping_ups_origin')) . '_' . $code)) {
-							$quote_data[$code] = array(
+							$quote_data[$code] = [
 								'code'         => 'ups.' . $code,
 								'title'        => $service_code[$this->config->get('shipping_ups_origin')][$code],
 								'cost'         => $this->currency->convert($cost, $currency, $this->config->get('config_currency')),
 								'tax_class_id' => $this->config->get('shipping_ups_tax_class_id'),
 								'text'         => $this->currency->format($this->tax->calculate($this->currency->convert($cost, $currency, $this->session->data['currency']), $this->config->get('shipping_ups_tax_class_id'), $this->config->get('config_tax')), $this->session->data['currency'], 1.0000000)
-							);
+							];
 						}
 					}
 				}
@@ -284,13 +291,13 @@ class ModelExtensionShippingUps extends Model {
 			}
 
 			if ($quote_data || $error) {
-				$method_data = array(
+				$method_data = [
 					'code'       => 'ups',
 					'title'      => $title,
 					'quote'      => $quote_data,
 					'sort_order' => $this->config->get('shipping_ups_sort_order'),
 					'error'      => $error
-				);
+                ];
 			}
 		}
 
