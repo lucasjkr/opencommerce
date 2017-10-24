@@ -1,5 +1,5 @@
 <?php
-class ModelLocalisationTaxClassAdmin extends Model {
+class ModelLocalisationTaxClass extends Model {
 	public function addTaxClass($data) {
 	    // LJK TODO: for consistency, title should be renamed to name
 		$this->db->query("INSERT INTO oc_tax_class SET title = :title, description = :description",

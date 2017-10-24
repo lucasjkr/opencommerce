@@ -362,10 +362,10 @@ class ControllerLocalisationGeoZone extends Controller {
 			$this->error['warning'] = $this->language->get('error_permission');
 		}
 
-		$this->load->model('localisation/tax_rate_admin');
+		$this->load->model('localisation/tax_rate');
 
 		foreach ($this->request->post['selected'] as $geo_zone_id) {
-			$tax_rate_total = $this->model_localisation_tax_rate_admin->getTotalTaxRatesByGeoZoneId($geo_zone_id);
+			$tax_rate_total = $this->model_localisation_tax_rate->getTotalTaxRatesByGeoZoneId($geo_zone_id);
 
 			if ($tax_rate_total) {
 				$this->error['warning'] = sprintf($this->language->get('error_tax_rate'), $tax_rate_total);

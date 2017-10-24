@@ -675,9 +675,9 @@ class ControllerCatalogProduct extends Controller {
 			$data['product_recurrings'] = [];
 		}
 
-		$this->load->model('localisation/tax_class_admin');
+		$this->load->model('localisation/tax_class');
 
-		$data['tax_classes'] = $this->model_localisation_tax_class_admin->getTaxClasses();
+		$data['tax_classes'] = $this->model_localisation_tax_class->getTaxClasses();
 
 		if (isset($this->request->post['tax_class_id'])) {
 			$data['tax_class_id'] = $this->request->post['tax_class_id'];
@@ -755,9 +755,9 @@ class ControllerCatalogProduct extends Controller {
 			$data['weight'] = '';
 		}
 
-		$this->load->model('localisation/weight_class_admin');
+		$this->load->model('localisation/weight_class');
 
-		$data['weight_classes'] = $this->model_localisation_weight_class_admin->getWeightClasses();
+		$data['weight_classes'] = $this->model_localisation_weight_class->getWeightClasses();
 
 		if (isset($this->request->post['weight_class_id'])) {
 			$data['weight_class_id'] = $this->request->post['weight_class_id'];
