@@ -273,10 +273,10 @@ class ModelSaleOrderAdmin extends Model {
 	
 	public function getTotalOrders($data = []) {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_order`";
+        $args = [];
 
 		if (!empty($data['filter_order_status'])) {
 			$implode = [];
-            $args = [];
 
 			$order_statuses = explode(',', $data['filter_order_status']);
 
