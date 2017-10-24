@@ -1,10 +1,17 @@
 <?php
 class ModelSaleOrderAdmin extends Model {
 	public function getOrder($order_id) {
-		$order_query = $this->db->query("SELECT *, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM oc_customer c WHERE c.customer_id = o.customer_id) AS customer, (SELECT os.name FROM oc_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status FROM `oc_order` o WHERE o.order_id = '" . (int)$order_id . "'");
+		$order_query = $this->db->query("SELECT *, (SELECT CONCAT(c.firstname, ' ', c.lastname) FROM oc_customer c WHERE c.customer_id = o.customer_id) AS customer, (SELECT os.name FROM oc_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = :language_id) AS order_status FROM `oc_order` o WHERE o.order_id = :order_id",
+            [
+                ':language_id' => $this->config->get('config_language_id'),
+                ':order_id' => $order_id
+            ]);
 
 		if ($order_query->num_rows) {
-			$country_query = $this->db->query("SELECT * FROM `oc_country` WHERE country_id = '" . (int)$order_query->row['payment_country_id'] . "'");
+			$country_query = $this->db->query("SELECT * FROM `oc_country` WHERE country_id = :country_id",
+                [
+                    ':country_id' => $order_query->row['payment_country_id']
+                ]);
 
 			if ($country_query->num_rows) {
 				$payment_iso_code_2 = $country_query->row['iso_code_2'];
@@ -14,7 +21,10 @@ class ModelSaleOrderAdmin extends Model {
 				$payment_iso_code_3 = '';
 			}
 
-			$zone_query = $this->db->query("SELECT * FROM `oc_zone` WHERE zone_id = '" . (int)$order_query->row['payment_zone_id'] . "'");
+			$zone_query = $this->db->query("SELECT * FROM `oc_zone` WHERE zone_id = :zone_id",
+                [
+                    ':zone_id' => $order_query->row['payment_zone_id']
+                ]);
 
 			if ($zone_query->num_rows) {
 				$payment_zone_code = $zone_query->row['code'];
@@ -22,7 +32,10 @@ class ModelSaleOrderAdmin extends Model {
 				$payment_zone_code = '';
 			}
 
-			$country_query = $this->db->query("SELECT * FROM `oc_country` WHERE country_id = '" . (int)$order_query->row['shipping_country_id'] . "'");
+			$country_query = $this->db->query("SELECT * FROM `oc_country` WHERE country_id = :country_id",
+                [
+                    ':country_id' => $order_query->row['shipping_country_id']
+                ]);
 
 			if ($country_query->num_rows) {
 				$shipping_iso_code_2 = $country_query->row['iso_code_2'];
@@ -32,7 +45,10 @@ class ModelSaleOrderAdmin extends Model {
 				$shipping_iso_code_3 = '';
 			}
 
-			$zone_query = $this->db->query("SELECT * FROM `oc_zone` WHERE zone_id = '" . (int)$order_query->row['shipping_zone_id'] . "'");
+			$zone_query = $this->db->query("SELECT * FROM `oc_zone` WHERE zone_id = :zone_id",
+                [
+                    ':zone_id' => $order_query->row['shipping_zone_id']
+                ]);
 
 			if ($zone_query->num_rows) {
 				$shipping_zone_code = $zone_query->row['code'];
@@ -50,7 +66,7 @@ class ModelSaleOrderAdmin extends Model {
 				$language_code = $this->config->get('config_language');
 			}
 
-			return array(
+			return [
 				'order_id'                => $order_query->row['order_id'],
 				'invoice_no'              => $order_query->row['invoice_no'],
 				'invoice_prefix'          => $order_query->row['invoice_prefix'],
@@ -117,14 +133,15 @@ class ModelSaleOrderAdmin extends Model {
 				'accept_language'         => $order_query->row['accept_language'],
 				'date_added'              => $order_query->row['date_added'],
 				'date_modified'           => $order_query->row['date_modified']
-			);
+			];
 		} else {
 			return;
 		}
 	}
 
 	public function getOrders($data = []) {
-		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM oc_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = '" . (int)$this->config->get('config_language_id') . "') AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `oc_order` o";
+		$sql = "SELECT o.order_id, CONCAT(o.firstname, ' ', o.lastname) AS customer, (SELECT os.name FROM oc_order_status os WHERE os.order_status_id = o.order_status_id AND os.language_id = :language_id) AS order_status, o.shipping_code, o.total, o.currency_code, o.currency_value, o.date_added, o.date_modified FROM `oc_order` o";
+        $args[':language_id'] = $this->config->get('config_language_id');
 
 		if (!empty($data['filter_order_status'])) {
 			$implode = [];
@@ -139,39 +156,45 @@ class ModelSaleOrderAdmin extends Model {
 				$sql .= " WHERE (" . implode(" OR ", $implode) . ")";
 			}
 		} elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
-			$sql .= " WHERE o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " WHERE o.order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
 			$sql .= " WHERE o.order_status_id > '0'";
 		}
 
 		if (!empty($data['filter_order_id'])) {
-			$sql .= " AND o.order_id = '" . (int)$data['filter_order_id'] . "'";
+			$sql .= " AND o.order_id = :order_id";
+            $args[':order_id'] = $data['filter_order_id'];
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE '%" . $this->db->escape((string)$data['filter_customer']) . "%'";
+			$sql .= " AND CONCAT(o.firstname, ' ', o.lastname) LIKE :name";
+            $args[':name'] = '%' . $data['filter_customer'] . '%';
 		}
 
 		if (!empty($data['filter_date_added'])) {
-			$sql .= " AND DATE(o.date_added) = DATE('" . $this->db->escape((string)$data['filter_date_added']) . "')";
+			$sql .= " AND DATE(o.date_added) = DATE(:date_added)";
+            $args[':date_added'] = $data['filter_date_added'];
 		}
 
 		if (!empty($data['filter_date_modified'])) {
-			$sql .= " AND DATE(o.date_modified) = DATE('" . $this->db->escape((string)$data['filter_date_modified']) . "')";
+			$sql .= " AND DATE(o.date_modified) = DATE(:date_modified)";
+            $args[':date_modified'] = $data['filter_date_modified'];
 		}
 
 		if (!empty($data['filter_total'])) {
-			$sql .= " AND o.total = '" . (float)$data['filter_total'] . "'";
+			$sql .= " AND o.total = :total";
+            $args[':total'] = $data['filter_total'];
 		}
 
-		$sort_data = array(
+		$sort_data = [
 			'o.order_id',
 			'customer',
 			'order_status',
 			'o.date_added',
 			'o.date_modified',
 			'o.total'
-		);
+		];
 
 		if (isset($data['sort']) && in_array($data['sort'], $sort_data)) {
 			$sql .= " ORDER BY " . $data['sort'];
@@ -197,37 +220,53 @@ class ModelSaleOrderAdmin extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
 
 	public function getOrderProducts($order_id) {
-		$query = $this->db->query("SELECT * FROM oc_order_product WHERE order_id = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_order_product WHERE order_id = :order_id",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getOrderOptions($order_id, $order_product_id) {
-		$query = $this->db->query("SELECT * FROM oc_order_option WHERE order_id = '" . (int)$order_id . "' AND order_product_id = '" . (int)$order_product_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_order_option WHERE order_id = :order_id AND order_product_id = :order_product_id",
+            [
+                ':order_id' => $order_id,
+                ':order_product_id' => $order_product_id
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getOrderVouchers($order_id) {
-		$query = $this->db->query("SELECT * FROM oc_order_voucher WHERE order_id = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT * FROM oc_order_voucher WHERE order_id = :order_id",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getOrderVoucherByVoucherId($voucher_id) {
-		$query = $this->db->query("SELECT * FROM `oc_order_voucher` WHERE voucher_id = '" . (int)$voucher_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_order_voucher` WHERE voucher_id = :voucher_id",
+            [
+                ':voucher_id' => $voucher_id
+            ]);
 
 		return $query->row;
 	}
 
 	public function getOrderTotals($order_id) {
-		$query = $this->db->query("SELECT * FROM oc_order_total WHERE order_id = '" . (int)$order_id . "' ORDER BY sort_order");
+		$query = $this->db->query("SELECT * FROM oc_order_total WHERE order_id = :order_id ORDER BY sort_order",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->rows;
 	}
@@ -237,6 +276,7 @@ class ModelSaleOrderAdmin extends Model {
 
 		if (!empty($data['filter_order_status'])) {
 			$implode = [];
+            $args = [];
 
 			$order_statuses = explode(',', $data['filter_order_status']);
 
@@ -248,44 +288,56 @@ class ModelSaleOrderAdmin extends Model {
 				$sql .= " WHERE (" . implode(" OR ", $implode) . ")";
 			}
 		} elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
-			$sql .= " WHERE order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " WHERE order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
 			$sql .= " WHERE order_status_id > '0'";
 		}
 
 		if (!empty($data['filter_order_id'])) {
-			$sql .= " AND order_id = '" . (int)$data['filter_order_id'] . "'";
+			$sql .= " AND order_id = :order_id";
+            $args[':order_id'] = $data['filter_order_id'];
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(firstname, ' ', lastname) LIKE '%" . $this->db->escape((string)$data['filter_customer']) . "%'";
+			$sql .= " AND CONCAT(firstname, ' ', lastname) LIKE :customer";
+            $args[':customer'] = '%' . $data['filter_customer'] . '%';
 		}
 
 		if (!empty($data['filter_date_added'])) {
-			$sql .= " AND DATE(date_added) = DATE('" . $this->db->escape((string)$data['filter_date_added']) . "')";
+			$sql .= " AND DATE(date_added) = DATE(:date_added)";
+            $args[':date_added'] = $data['filter_date_added'];
 		}
 
 		if (!empty($data['filter_date_modified'])) {
-			$sql .= " AND DATE(date_modified) = DATE('" . $this->db->escape((string)$data['filter_date_modified']) . "')";
+			$sql .= " AND DATE(date_modified) = DATE(:date_modified)";
+            $args[':date_modified'] = $data['filter_date_modified'];
 		}
 
 		if (!empty($data['filter_total'])) {
-			$sql .= " AND total = '" . (float)$data['filter_total'] . "'";
+			$sql .= " AND total = :total";
+            $args[':total'] = $data['filter_total'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalOrdersByStoreId($store_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE store_id = '" . (int)$store_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE store_id = :store_id",
+            [
+                ':store_id' => $store_id
+            ]);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalOrdersByOrderStatusId($order_status_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE order_status_id = '" . (int)$order_status_id . "' AND order_status_id > '0'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE order_status_id = :order_status_id AND order_status_id > '0'",
+            [
+                ':order_status_id' => $order_status_id
+            ]);
 
 		return $query->row['total'];
 	}
@@ -327,13 +379,19 @@ class ModelSaleOrderAdmin extends Model {
 	}
 
 	public function getTotalOrdersByLanguageId($language_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE language_id = '" . (int)$language_id . "' AND order_status_id > '0'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE language_id = :language_id AND order_status_id > '0'",
+            [
+                ':language_id' => $language_id
+            ]);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalOrdersByCurrencyId($currency_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE currency_id = '" . (int)$currency_id . "' AND order_status_id > '0'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_order` WHERE currency_id = :currency_id AND order_status_id > '0'",
+            [
+                ':currency_id' => $currency_id
+            ]);
 
 		return $query->row['total'];
 	}
@@ -343,6 +401,7 @@ class ModelSaleOrderAdmin extends Model {
 
 		if (!empty($data['filter_order_status'])) {
 			$implode = [];
+            $args = [];
 
 			$order_statuses = explode(',', $data['filter_order_status']);
 
@@ -354,32 +413,38 @@ class ModelSaleOrderAdmin extends Model {
 				$sql .= " WHERE (" . implode(" OR ", $implode) . ")";
 			}
 		} elseif (isset($data['filter_order_status_id']) && $data['filter_order_status_id'] !== '') {
-			$sql .= " WHERE order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " WHERE order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
 			$sql .= " WHERE order_status_id > '0'";
 		}
 
 		if (!empty($data['filter_order_id'])) {
-			$sql .= " AND order_id = '" . (int)$data['filter_order_id'] . "'";
+			$sql .= " AND order_id = :order_id";
+            $args[':order_id'] = $data['filter_order_id'];
 		}
 
 		if (!empty($data['filter_customer'])) {
-			$sql .= " AND CONCAT(firstname, ' ', o.lastname) LIKE '%" . $this->db->escape((string)$data['filter_customer']) . "%'";
+			$sql .= " AND CONCAT(firstname, ' ', o.lastname) LIKE :customer";
+            $args[':customer'] = '%' . $data['filter_customer'] . '%';
 		}
 
 		if (!empty($data['filter_date_added'])) {
-			$sql .= " AND DATE(date_added) = DATE('" . $this->db->escape((string)$data['filter_date_added']) . "')";
+			$sql .= " AND DATE(date_added) = DATE(:date_added)";
+            $args[':date_added'] = $data['filter_date_added'];
 		}
 
 		if (!empty($data['filter_date_modified'])) {
-			$sql .= " AND DATE(date_modified) = DATE('" . $this->db->escape((string)$data['filter_date_modified']) . "')";
+			$sql .= " AND DATE(date_modified) = DATE(:date_modified)";
+            $args[':date_modified'] = $data['filter_date_modified'];
 		}
 
 		if (!empty($data['filter_total'])) {
-			$sql .= " AND total = '" . (float)$data['filter_total'] . "'";
+			$sql .= " AND total = :total";
+            $args[':total'] = $data['filter_total'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
@@ -388,7 +453,10 @@ class ModelSaleOrderAdmin extends Model {
 		$order_info = $this->getOrder($order_id);
 
 		if ($order_info && !$order_info['invoice_no']) {
-			$query = $this->db->query("SELECT MAX(invoice_no) AS invoice_no FROM `oc_order` WHERE invoice_prefix = '" . $this->db->escape($order_info['invoice_prefix']) . "'");
+			$query = $this->db->query("SELECT MAX(invoice_no) AS invoice_no FROM `oc_order` WHERE invoice_prefix = :invoice_prefix",
+                [
+                    ':invoice_prefix' => $order_info['invoice_prefix']
+                ]);
 
 			if ($query->row['invoice_no']) {
 				$invoice_no = $query->row['invoice_no'] + 1;
@@ -396,7 +464,12 @@ class ModelSaleOrderAdmin extends Model {
 				$invoice_no = 1;
 			}
 
-			$this->db->query("UPDATE `oc_order` SET invoice_no = '" . (int)$invoice_no . "', invoice_prefix = '" . $this->db->escape($order_info['invoice_prefix']) . "' WHERE order_id = '" . (int)$order_id . "'");
+			$this->db->query("UPDATE `oc_order` SET invoice_no = :invoice_no, invoice_prefix = :invoice_prefix WHERE order_id = :order_id",
+                [
+                    ':invoice_no' => $invoice_no,
+                    ':invoice_prefix' => $order_info['invoice_prefix'],
+                    ':order_id' => $order_id
+                ]);
 
 			return $order_info['invoice_prefix'] . $invoice_no;
 		}
@@ -411,19 +484,29 @@ class ModelSaleOrderAdmin extends Model {
 			$limit = 10;
 		}
 
-		$query = $this->db->query("SELECT oh.date_added, os.name AS status, oh.comment, oh.notify FROM oc_order_history oh LEFT JOIN oc_order_status os ON oh.order_status_id = os.order_status_id WHERE oh.order_id = '" . (int)$order_id . "' AND os.language_id = '" . (int)$this->config->get('config_language_id') . "' ORDER BY oh.date_added DESC LIMIT " . (int)$start . "," . (int)$limit);
+		$query = $this->db->query("SELECT oh.date_added, os.name AS status, oh.comment, oh.notify FROM oc_order_history oh LEFT JOIN oc_order_status os ON oh.order_status_id = os.order_status_id WHERE oh.order_id = :order_id AND os.language_id = :language_id ORDER BY oh.date_added DESC LIMIT " . (int)$start . "," . (int)$limit,
+            [
+                ':order_id' => $order_id,
+                ':language_id' => $this->config->get('config_language_id')
+            ]);
 
 		return $query->rows;
 	}
 
 	public function getTotalOrderHistories($order_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_order_history WHERE order_id = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_order_history WHERE order_id = :order_id",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->row['total'];
 	}
 
 	public function getTotalOrderHistoriesByOrderStatusId($order_status_id) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_order_history WHERE order_status_id = '" . (int)$order_status_id . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_order_history WHERE order_status_id = :order_status_id",
+            [
+                ':order_status_id' => $order_status_id
+            ]);
 
 		return $query->row['total'];
 	}
