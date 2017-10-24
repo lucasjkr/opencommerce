@@ -60,6 +60,7 @@ class ModelExtensionReportMarketingAdmin extends Model {
 	}
 
 	public function getTotalMarketing($data = []) {
+	    // LJK TODO: Why is $data in the function? It's not used!
 		$query = $this->db->query("SELECT COUNT(*) AS total FROM `oc_marketing`");
 
 		return $query->row['total'];

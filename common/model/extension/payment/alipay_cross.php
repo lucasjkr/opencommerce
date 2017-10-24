@@ -7,7 +7,13 @@ class ModelExtensionPaymentAlipayCross extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/alipay_cross');
 
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_alipay_cross_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id OR zone_id = '0')",
+            [
+                ':geo_zone_id' => $this->config->get('payment_alipay_cross_geo_zone_id'),
+                ':country_id' => $address['country_id'],
+                ':zone_id_1' => $address['zone_id'],
+                ':zone_id_2' => 0
+            ]);
 
 		if ($this->config->get('payment_alipay_cross_total') > 0 && $this->config->get('payment_alipay_cross_total') > $total) {
 			$status = false;
@@ -22,12 +28,12 @@ class ModelExtensionPaymentAlipayCross extends Model {
 		$method_data = [];
 
 		if ($status) {
-			$method_data = array(
+			$method_data = [
 				'code'       => 'alipay_cross',
 				'title'      => $this->language->get('text_title'),
 				'terms'      => '',
 				'sort_order' => $this->config->get('payment_alipay_cross_sort_order')
-			);
+            ];
 		}
 
 		return $method_data;
@@ -142,6 +148,7 @@ class ModelExtensionPaymentAlipayCross extends Model {
 	}
 
 	function getHttpResponseGET($url,$cacert_url) {
+	    // LJK TODO: Guzzle
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_HEADER, 0 );
 		curl_setopt($curl,CURLOPT_RETURNTRANSFER, 1);

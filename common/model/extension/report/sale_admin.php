@@ -229,40 +229,51 @@ class ModelExtensionReportSaleAdmin extends Model {
 				break;
 		}
 
+		$args = [];
+
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " WHERE order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " WHERE order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
-			$sql .= " WHERE order_status_id > '0'";
+			$sql .= " WHERE order_status_id > :order_status_id";
+            $args[':order_status_id'] = 0;
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
 
 	public function getTaxes($data = []) {
 		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, ot.title, SUM(ot.value) AS total, COUNT(o.order_id) AS `orders` FROM `oc_order` o LEFT JOIN `oc_order_total` ot ON (ot.order_id = o.order_id) WHERE ot.code = 'tax'";
+        $args = [];
 
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " AND o.order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
-			$sql .= " AND o.order_status_id > '0'";
+			$sql .= " AND o.order_status_id > :order_status_id";
+            $args[':order_status_id'] = 0;
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
 		if (!empty($data['filter_group'])) {
@@ -299,7 +310,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -310,6 +321,8 @@ class ModelExtensionReportSaleAdmin extends Model {
 		} else {
 			$group = 'week';
 		}
+
+        $args = [];
 
 		switch($group) {
 			case 'day';
@@ -327,42 +340,52 @@ class ModelExtensionReportSaleAdmin extends Model {
 				break;
 		}
 
-		$sql .= " LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = 'tax'";
+		$sql .= " LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = :code";
+        $args[':code'] = 'tax';
 
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " AND o.order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'];
 		} else {
-			$sql .= " AND o.order_status_id > '0'";
+			$sql .= " AND o.order_status_id > :order_status_id";
+            $args[':order_status_id'] = 0;
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= :date_added";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
 
 	public function getShipping($data = []) {
-		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, ot.title, SUM(ot.value) AS total, COUNT(o.order_id) AS `orders` FROM `oc_order` o LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = 'shipping'";
+		$sql = "SELECT MIN(o.date_added) AS date_start, MAX(o.date_added) AS date_end, ot.title, SUM(ot.value) AS total, COUNT(o.order_id) AS `orders` FROM `oc_order` o LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = :code";
+        $args[':code'] = 'shipping';
 
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND o.order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " AND o.order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'] ;
 		} else {
-			$sql .= " AND o.order_status_id > '0'";
+			$sql .= " AND o.order_status_id > :order_status_id";
+            $arg[':order_status_id'] = 0;
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
 		if (!empty($data['filter_group'])) {
@@ -399,7 +422,7 @@ class ModelExtensionReportSaleAdmin extends Model {
 			$sql .= " LIMIT " . (int)$data['start'] . "," . (int)$data['limit'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->rows;
 	}
@@ -427,23 +450,28 @@ class ModelExtensionReportSaleAdmin extends Model {
 				break;
 		}
 
-		$sql .= " LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = 'shipping'";
+		$sql .= " LEFT JOIN `oc_order_total` ot ON (o.order_id = ot.order_id) WHERE ot.code = :code";
+        $args[':code'] = 'shipping';
 
 		if (!empty($data['filter_order_status_id'])) {
-			$sql .= " AND order_status_id = '" . (int)$data['filter_order_status_id'] . "'";
+			$sql .= " AND order_status_id = :order_status_id";
+            $args[':order_status_id'] = $data['filter_order_status_id'] ;
 		} else {
-			$sql .= " AND order_status_id > '0'";
+			$sql .= " AND order_status_id > :order_status_id";
+            $args[':order_status_id'] = 0;
 		}
 
 		if (!empty($data['filter_date_start'])) {
-			$sql .= " AND DATE(o.date_added) >= '" . $this->db->escape((string)$data['filter_date_start']) . "'";
+			$sql .= " AND DATE(o.date_added) >= :date_start";
+            $args[':date_start'] = $data['filter_date_start'];
 		}
 
 		if (!empty($data['filter_date_end'])) {
-			$sql .= " AND DATE(o.date_added) <= '" . $this->db->escape((string)$data['filter_date_end']) . "'";
+			$sql .= " AND DATE(o.date_added) <= :date_end";
+            $args[':date_end'] = $data['filter_date_end'];
 		}
 
-		$query = $this->db->query($sql);
+		$query = $this->db->query($sql, $args);
 
 		return $query->row['total'];
 	}
