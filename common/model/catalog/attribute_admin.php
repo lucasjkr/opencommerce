@@ -25,8 +25,8 @@ class ModelCatalogAttributeAdmin extends Model {
 	public function editAttribute($attribute_id, $data) {
 		$this->db->query("UPDATE oc_attribute SET attribute_group_id = :attribute_group_id, sort_order = :sort_order WHERE attribute_id = :attribute_id",
             [
-                ':attribute_id' => $attribute_id,
-                ':language_id' => $language_id,
+                ':attribute_group_id' => $data['attribute_group_id'],
+                ':sort_order' => $data['sort_order'],
                 ':attribute_id' => $attribute_id,
             ]);
 
