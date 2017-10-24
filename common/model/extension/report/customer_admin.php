@@ -353,7 +353,7 @@ class ModelExtensionReportCustomerAdmin extends Model {
             $sql .= " WHERE " . implode(" AND ", $implode);
         }
 
-        $query = $this->db->query($sql);
+        $query = $this->db->query($sql, $args);
 
         return $query->row['total'];
     }
