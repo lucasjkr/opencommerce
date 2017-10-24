@@ -679,7 +679,7 @@ class ModelExtensionOpenBayEbayAdmin extends Model{
 		return $this->openbay->ebay->call('plan/myPlan/');
 	}
 
-	public function getLiveListing[] {
+	public function getLiveListing() {
 		$qry = $this->db->query("SELECT `product_id`, `ebay_item_id` FROM `oc_ebay_listing` WHERE `status` = 1");
 
 		$data = [];
