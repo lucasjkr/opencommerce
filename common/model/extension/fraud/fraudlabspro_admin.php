@@ -56,27 +56,57 @@ class ModelExtensionFraudFraudLabsProAdmin extends Model {
               ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		");
 
-		$this->db->query("INSERT INTO `oc_order_status` (`language_id`, `name`) VALUES (1, 'Fraud');");
-		$status_fraud_id = $this->db->getLastId();
+		$this->db->query("INSERT INTO `oc_order_status` SET `language_id` =:language_id, `name` =:name);",
+            [
+                ':language_id' => 1,
+                ':name' => 'Fraud'
+            ]);
 
-		$this->db->query("INSERT INTO `oc_order_status` (`language_id`, `name`) VALUES (1, 'Fraud Review');");
-		
+        $this->db->query("INSERT INTO `oc_order_status` SET `language_id` =:language_id, `name` =:name);",
+            [
+                ':language_id' => 1,
+                ':name' => 'Fraud Review'
+            ]);
+
 		$status_fraud_review_id = $this->db->getLastId();
 
-		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_review_status_id', :value, '0');",
+
+		$this->db->query("INSERT INTO `oc_setting` SET `code` = :code, `key` = :key, `value` = :value, `serialized` = :serialized",
             [
-                ':value' => $status_fraud_review_id
+                ':code' => 'fraudlabspro',
+                ':key' => 'fraud_fraudlabspro_review_status_id',
+                ':value:' => $status_fraud_review_id,
+                ':serialized' => 0,
             ]);
-		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_approve_status_id', '2', '0');");
-		$this->db->query("INSERT INTO `oc_setting` (`code`, `key`, `value`, `serialized`) VALUES ('fraudlabspro', 'fraud_fraudlabspro_reject_status_id', '8', '0');");
+        $this->db->query("INSERT INTO `oc_setting` SET `code` = :code, `key` = :key, `value` = :value, `serialized` = :serialized",
+            [
+                ':code' => 'fraudlabspro',
+                ':key' => 'fraud_fraudlabspro_approve_status_id',
+                ':value:' => 2,
+                ':serialized' => 0,
+            ]);
+
+        $this->db->query("INSERT INTO `oc_setting` SET `code` = :code, `key` = :key, `value` = :value, `serialized` = :serialized",
+            [
+                ':code' => 'fraudlabspro',
+                ':key' => 'fraud_fraudlabspro_reject_status_id',
+                ':value:' => 8,
+                ':serialized' => 0,
+            ]);
 
 		$this->cache->delete('order_status.' . (int)$this->config->get('config_language_id'));
 	}
 
 	public function uninstall() {
 		//$this->db->query("DROP TABLE IF EXISTS `oc_fraudlabspro`");
-		$this->db->query("DELETE FROM `oc_order_status` WHERE `name` = 'Fraud'");
-		$this->db->query("DELETE FROM `oc_order_status` WHERE `name` = 'Fraud Review'");
+		$this->db->query("DELETE FROM `oc_order_status` WHERE `name` = :name",
+            [
+                ':name' => 'Fraud'
+            ]);
+		$this->db->query("DELETE FROM `oc_order_status` WHERE `name` = :name",
+            [
+                ':name' => 'Fraud Review'
+            ]);
 	}
 
 	public function getOrder($order_id) {
@@ -100,7 +130,7 @@ class ModelExtensionFraudFraudLabsProAdmin extends Model {
 		} else {
 			$url = HTTPS_CATALOG;
 		}
-
+        // LJK TODO: Why do we need to do this as a CURL request to the stores API, when we could just add it in the database?
 		if (isset($this->session->data['cookie'])) {
 			$curl = curl_init();
 

@@ -66,7 +66,10 @@ class ModelExtensionFraudMaxMindAdmin extends Model {
 	}
 	
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `oc_maxmind` WHERE order_id = '" . (int)$order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_maxmind` WHERE order_id = :order_id",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->row;
 	}	
