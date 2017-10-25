@@ -18,7 +18,11 @@ final class DB {
 	}
 	
 	public function read($session_id) {
-		$query = $this->db->query("SELECT `data` FROM `oc_session` WHERE session_id = '" . $this->db->escape($session_id) . "' AND expire > " . (int)time());
+		$query = $this->db->query("SELECT `data` FROM `oc_session` WHERE session_id = :session_id AND expire > :expire",
+            [
+                ':session_id' => $session_id,
+                ':expire' => time()
+            ]);
 		
 		if ($query->num_rows) {
 			return json_decode($query->row['data'], true);
@@ -29,20 +33,30 @@ final class DB {
 	
 	public function write($session_id, $data) {
 		if ($session_id) {
-			$this->db->query("REPLACE INTO `oc_session` SET session_id = '" . $this->db->escape($session_id) . "', `data` = '" . $this->db->escape(json_encode($data)) . "', expire = '" . $this->db->escape(date('Y-m-d H:i:s', time() + $this->expire)) . "'");
+			$this->db->query("REPLACE INTO `oc_session` SET session_id = :session_id, `data` = :data, expire = :expire",
+                [
+                    ':session_id' => $session_id,
+                    ':data' => $data,
+                    ':expire' => date('Y-m-d H:i:s', time() + $this->expire)
+                ]);
 		}
-		
 		return true;
 	}
 	
 	public function destroy($session_id) {
-		$this->db->query("DELETE FROM `oc_session` WHERE session_id = '" . $this->db->escape($session_id) . "'");
+		$this->db->query("DELETE FROM `oc_session` WHERE session_id = :session_id",
+            [
+                ':session_id' => $session_id
+            ]);
 		
 		return true;
 	}
 	
 	public function gc($expire) {
-		$this->db->query("DELETE FROM `oc_session` WHERE expire < " . ((int)time() + $expire));
+		$this->db->query("DELETE FROM `oc_session` WHERE expire < :expire",
+        [
+            ':expire' => time() + $expire
+        ]);
 		
 		return true;
 	}
