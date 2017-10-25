@@ -258,7 +258,7 @@ final class Ebay {
 		 */
 	}
 
-	public function getLiveListing[] {
+	public function getLiveListing() {
 	/*
 	 * Returns the list of linked items with eBay from the database
 	 * @return array ([product id] = ebay item id)
@@ -277,9 +277,9 @@ final class Ebay {
 		return $data;
 	}
 
-	public function getEndedListing[] {
+	public function getEndedListing() {
 		$this->log('getEndedListing[]');
-		$active = $this->getLiveListing[];
+		$active = $this->getLiveListing();
 
 		$qry = $this->db->query("SELECT e.* FROM (SELECT `product_id`, MAX(`ebay_listing_id`) as `ebay_listing_id` FROM `oc_ebay_listing` WHERE `status` = 0 GROUP BY `product_id`) `a` INNER JOIN `oc_ebay_listing` `e` ON (`e`.`ebay_listing_id` = `a`.`ebay_listing_id`)");
 
