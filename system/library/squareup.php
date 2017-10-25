@@ -222,13 +222,13 @@ class Squareup {
             'method' => 'POST',
             'endpoint' => self::ENDPOINT_TOKEN,
             'no_version' => true,
-            'parameters' => array(
+            'parameters' => [
                 'client_id' => $this->config->get('payment_squareup_client_id'),
                 'client_secret' => $this->config->get('payment_squareup_client_secret'),
                 'redirect_uri' => $this->session->data['payment_squareup_oauth_redirect'],
                 'code' => $code
             ]
-        );
+        ];
 
         return $this->api($request_data);
     }
@@ -246,10 +246,10 @@ class Squareup {
             'no_version' => true,
             'auth_type' => 'Client',
             'token' => $this->config->get('payment_squareup_client_secret'),
-            'parameters' => array(
+            'parameters' => [
                 'access_token' => $this->config->get('payment_squareup_access_token')
             ]
-        );
+        ];
 
         return $this->api($request_data);
     }
