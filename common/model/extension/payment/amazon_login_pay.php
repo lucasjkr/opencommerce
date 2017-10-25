@@ -1,19 +1,36 @@
 <?php
 class ModelExtensionPaymentAmazonLoginPay extends Model {
 	public function getCountry($iso2) {
-		return $this->db->query("SELECT `country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format` FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape(strtoupper($iso2)) . "' AND `status` = 1 LIMIT 1")->row;
+		return $this->db->query("SELECT `country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format` FROM `oc_country` WHERE `iso_code_2` = :iso_code_2 AND `status` = 1 LIMIT 1",
+            [
+                // LJK - should this be mb_convert_case?
+                ':iso_code_2' => strtoupper($iso2)
+            ])->row;
 	}
 
 	public function getZone($name, $country_id) {
-		return $this->db->query("SELECT `zone_id`, `code` FROM `oc_zone` WHERE (LOWER(`name`) LIKE '" . $this->db->escape(strtolower($name)) . "' OR `code` LIKE '" . $this->db->escape(strtolower($name)) . "') AND `country_id` = " . (int)$country_id . " LIMIT 1")->row;
+		return $this->db->query("SELECT `zone_id`, `code` FROM `oc_zone` WHERE (LOWER(`name`) LIKE :name OR `code` LIKE :code) AND `country_id` => country_id LIMIT 1",
+            [
+                ':name' => strtolower($name),
+                ':code' => strtolower($name),
+                ':country_id' => $country_id
+            ])->row;
 	}
 
 	public function addTaxesForTotals($order_id, $totals) {
 		foreach ($totals as $total) {
-			$this->db->query("INSERT INTO `oc_amazon_login_pay_order_total_tax` (`order_total_id`, `code`, `tax`) SELECT `order_total_id`, `code`, " . (float)$total['lpa_tax'] . " FROM `oc_order_total` WHERE `order_id` = " . (int)$order_id . " AND `code` = '" . $this->db->escape($total['code']) . "' AND `title` = '" . $this->db->escape($total['title']) . "'");
+		    // LJK TODO this appears wrong?
+			$this->db->query("INSERT INTO `oc_amazon_login_pay_order_total_tax` (`order_total_id`, `code`, `tax`) SELECT `order_total_id`, `code`, :tax FROM `oc_order_total` WHERE `order_id` = :order_id AND `code` = :code AND `title` = :title",
+                [
+                    ':tax' => $total['lpa_tax'],
+                    ':order_id' => $order_id,
+                    ':code' => $total['code'],
+                    ':title' => $total['title']
+                ]);
 		}
 	}
 
+	// LJK todo: Why is this here? Why doesn't the controller call the existing model that adds customers?
 	public function addCustomer($data) {
 		$customer_group_id = $this->config->get('config_customer_group_id');
 
@@ -21,7 +38,24 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 
-		$this->db->query("INSERT INTO oc_customer SET customer_group_id = '" . (int)$customer_group_id . "', store_id = '" . (int)$this->config->get('config_store_id') . "', firstname = '" . $this->db->escape((string)$data['firstname']) . "', lastname = '" . $this->db->escape((string)$data['lastname']) . "', email = '" . $this->db->escape((string)$data['email']) . "', telephone = '" . $this->db->escape((string)$data['telephone']) . "', fax = '" . $this->db->escape((string)$data['fax']) . "', custom_field = '" . $this->db->escape(isset($data['custom_field']['account']) ? json_encode($data['custom_field']['account']) : '') . "', salt = '" . $this->db->escape($salt = token(9)) . "', password = '" . $this->db->escape(sha1($salt . sha1($salt . sha1($data['password'])))) . "', newsletter = '" . (isset($data['newsletter']) ? (int)$data['newsletter'] : 0) . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "', status = '1', approved = '" . (int)!$customer_group_info['approval'] . "'");
+		$this->db->query("INSERT INTO oc_customer SET customer_group_id = :customer_group_id, store_id = :store_id, 
+firstname = :firstname, lastname = :lastname, email = :email, telephone = :telephone, fax = :fax, custom_field = :custom_field, 
+password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved = :approved",
+            [
+                ':customer_group_ip' => $customer_group_id,
+                ':store_id' => $this->config->get('config_store_id'),
+                ':firstname' => $data['firstname'],
+                ':lastname' => $data['lastname'],
+                ':email' => $data['email'],
+                ':telephone' => $data['telephone'],
+                ':fax' => $data['fax'],
+                ':custom_field' => isset($data['custom_field']['account']) ? json_encode($data['custom_field']['account']) : '',
+                ':password' => password_hash($data['password'], PASSWORD_DEFAULT),
+                ':newsletter' => isset($data['newsletter']) ? (int)$data['newsletter'] : 0,
+                ':ip' => $this->request->server['REMOTE_ADDR'],
+                ':status' => 1,
+                ':approved' => !$customer_group_info['approval']
+            ]);
 
 		$customer_id = $this->db->getLastId();
 
