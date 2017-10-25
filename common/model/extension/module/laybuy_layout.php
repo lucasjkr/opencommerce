@@ -15,7 +15,10 @@ class ModelExtensionModuleLaybuyLayout extends Model {
 	}
 
 	public function getTransactionByOrderId($order_id) {
-		$query = $this->db->query("SELECT * FROM `oc_laybuy_transaction` WHERE `order_id` = '" . (int)$order_id . "' ORDER BY `laybuy_ref_no` DESC LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_laybuy_transaction` WHERE `order_id` = :order_id ORDER BY `laybuy_ref_no` DESC LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->row;
 	}

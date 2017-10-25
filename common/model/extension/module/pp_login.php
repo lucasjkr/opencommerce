@@ -18,6 +18,8 @@ class ModelExtensionModulePPLogin extends Model {
 			CURLOPT_POSTFIELDS => $request
         ];
 
+        // LJK - 1- replace with Guzzle
+        // 2 - At the very least, a universal CURL method like the one in this class would be useful
 		$curl = $this->curl($endpoint, $additional_opts);
 
 		$this->log('cURL Response: ' . print_r($curl, 1), 1);
