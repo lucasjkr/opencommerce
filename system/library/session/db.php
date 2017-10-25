@@ -32,14 +32,14 @@ final class DB {
 	}
 	
 	public function write($session_id, $data) {
-		if ($session_id) {
-			$this->db->query("REPLACE INTO `oc_session` SET session_id = :session_id, `data` = :data, expire = :expire",
+        if ($session_id) {
+            $this->db->query("REPLACE INTO `oc_session` SET session_id = :session_id, `data` = :data, expire = :expire",
                 [
                     ':session_id' => $session_id,
-                    ':data' => $data,
+                    ':data' => json_encode($data),
                     ':expire' => date('Y-m-d H:i:s', time() + $this->expire)
                 ]);
-		}
+        }
 		return true;
 	}
 	
