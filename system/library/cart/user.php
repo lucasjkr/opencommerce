@@ -16,9 +16,10 @@ class User {
 		$this->session = $registry->get('session');
 
 		if (isset($this->session->data['user_id'])) {
-			$user_query = $this->db->query("SELECT * FROM oc_user WHERE user_id = :user_id AND status = '1'",
+			$user_query = $this->db->query("SELECT * FROM oc_user WHERE user_id = :user_id AND status = :status",
                 [
-                    ':user_id' => $this->session->data['user_id']
+                    ':user_id' => $this->session->data['user_id'],
+                    ':status' => 1
                 ]);
 
 			if ($user_query->num_rows) {
@@ -45,9 +46,10 @@ class User {
 	}
 
 	public function login($email, $password) {
-		$user_query = $this->db->query("SELECT * FROM oc_user WHERE email = :email AND status = '1'",
+		$user_query = $this->db->query("SELECT * FROM oc_user WHERE email = :email AND status = :status",
             [
-                ':email' => $email
+                ':email' => $email,
+                ':status' => 1
             ]);
 
         if ($user_query->num_rows) {

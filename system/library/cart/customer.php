@@ -17,7 +17,11 @@ class Customer {
 		$this->session = $registry->get('session');
 
 		if (isset($this->session->data['customer_id'])) {
-			$customer_query = $this->db->query("SELECT * FROM oc_customer WHERE customer_id = '" . (int)$this->session->data['customer_id'] . "' AND status = '1'");
+			$customer_query = $this->db->query("SELECT * FROM oc_customer WHERE customer_id = :customer_id AND status = :status",
+                [
+                    ':customer_id' => $this->session->data['customer_id'],
+                    ':status' => 1
+                ]);
 
 			if ($customer_query->num_rows) {
 				$this->customer_id = $customer_query->row['customer_id'];
@@ -29,7 +33,12 @@ class Customer {
 				$this->newsletter = $customer_query->row['newsletter'];
 				$this->address_id = $customer_query->row['address_id'];
 
-				$this->db->query("UPDATE oc_customer SET language_id = '" . (int)$this->config->get('config_language_id') . "', ip = '" . $this->db->escape($this->request->server['REMOTE_ADDR']) . "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+				$this->db->query("UPDATE oc_customer SET language_id = :language_id, ip = :ip WHERE customer_id = :customer_id",
+                    [
+                        ':language_id' => $this->config->get('config_language_id'),
+                        ':ip' => $this->request->server['REMOTE_ADDR'],
+                        ':customer_id' => $this->customer_id
+                    ]);
 			} else {
 				$this->logout();
 			}
@@ -37,7 +46,11 @@ class Customer {
 	}
 
     public function login($email, $password, $override = false) {
-        $customer_query = $this->db->query("SELECT * FROM oc_customer WHERE LOWER(email) = '" . $this->db->escape(utf8_strtolower($email)) . "' AND status = '1'");
+        $customer_query = $this->db->query("SELECT * FROM oc_customer WHERE LOWER(email) = :email AND status = :status",
+            [
+                ':email' => utf8_strtolower($email),
+                ':status' => 1
+            ]);
         if ($customer_query->num_rows) {
             if (password_verify($password, $customer_query->row['password'])) {
                 $this->session->data['customer_id'] = $customer_query->row['custome r_id'];
@@ -53,7 +66,11 @@ class Customer {
 
                 // Check password strength, rehash if necessary
                 if (password_needs_rehash($customer_query->row['password'], PASSWORD_DEFAULT)) {
-                    $this->db->query("UPDATE oc_customer SET password = '" . password_hash($password, PASSWORD_DEFAULT). "' WHERE customer_id = '" . (int)$this->customer_id . "'");
+                    $this->db->query("UPDATE oc_customer SET password = :password WHERE customer_id = :customer_id",
+                        [
+                            ':password' => password_hash($password, PASSWORD_DEFAULT),
+                            ':customer_id' => $this->customer_id
+                        ]);
                 }
 
                 return true;
@@ -113,7 +130,10 @@ class Customer {
 	}
 
 	public function getBalance() {
-		$query = $this->db->query("SELECT SUM(amount) AS total FROM `oc_customer_transaction` WHERE `customer_id` = '" . (int)$this->customer_id . "'");
+		$query = $this->db->query("SELECT SUM(amount) AS total FROM `oc_customer_transaction` WHERE `customer_id` = :customer_id",
+            [
+                ':customer_id' => $this->customer_id
+            ]);
 
 		return $query->row['total'];
 	}

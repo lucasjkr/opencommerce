@@ -16,13 +16,27 @@ class Cart {
 
 		if ($this->customer->getId()) {
 			// We want to change the session ID on all the old items in the customers cart
-			$this->db->query("UPDATE `oc_cart` SET session_id = '" . $this->db->escape($this->session->getId()) . "' WHERE api_id = '0' AND customer_id = '" . (int)$this->customer->getId() . "'");
+			$this->db->query("UPDATE `oc_cart` SET session_id = :session_id WHERE api_id = :api_id AND customer_id = :customer_id",
+                [
+                    ':session_id' => $this->session->getId(),
+                    ':api_id' => 0,
+                    ':customer_id' => $this->customer->getId()
+                ]);
 
 			// Once the customer is logged in we want to update the customers cart
-			$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = '0' AND customer_id = '0' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+            // LJK TODO: Are we going to select anyone if customer_id is set to 0?
+			$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
+                [
+                    ':api_id' => 0,
+                    ':customer_id' => 0,
+                    ':session_id' => $this->session->getId(),
+                ]);
 
 			foreach ($cart_query->rows as $cart) {
-				$this->db->query("DELETE FROM `oc_cart` WHERE cart_id = '" . (int)$cart['cart_id'] . "'");
+				$this->db->query("DELETE FROM `oc_cart` WHERE cart_id = :cart_id",
+                    [
+                        ':cart_id' => $cart['cart_id']
+                    ]);
 
 				// The advantage of using $this->add is that it will check if the products already exist and increaser the quantity if necessary.
 				$this->add($cart['product_id'], $cart['quantity'], json_decode($cart['option']), $cart['recurring_id']);
@@ -33,12 +47,24 @@ class Cart {
 	public function getProducts() {
 		$product_data = [];
 
-		$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+		$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
+            [
+                // LJK TODO - should this be in parenthesis?
+                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                ':customer_id' => $this->customer->getId(),
+                ':session_id' => $this->session->getId()
+            ]);
 
 		foreach ($cart_query->rows as $cart) {
 			$stock = true;
 
-			$product_query = $this->db->query("SELECT * FROM `oc_product_to_store` p2s LEFT JOIN `oc_product` p ON (p2s.product_id = p.product_id) LEFT JOIN `oc_product_description` pd ON (p.product_id = pd.product_id) WHERE p2s.store_id = '" . (int)$this->config->get('config_store_id') . "' AND p2s.product_id = '" . (int)$cart['product_id'] . "' AND pd.language_id = '" . (int)$this->config->get('config_language_id') . "' AND p.date_available <= NOW() AND p.status = '1'");
+			$product_query = $this->db->query("SELECT * FROM `oc_product_to_store` p2s LEFT JOIN `oc_product` p ON (p2s.product_id = p.product_id) LEFT JOIN `oc_product_description` pd ON (p.product_id = pd.product_id) WHERE p2s.store_id = :store_id AND p2s.product_id = :product_id AND pd.language_id = :language_id AND p.date_available <= NOW() AND p.status = :status",
+                [
+                    ':store_id' => $this->config->get('config_store_id'),
+                    ':product_id' => $cart['product_id'],
+                    ':language_id' => (int)$this->config->get('config_language_id'),
+                    ':status' => 1
+                ]);
 
 			if ($product_query->num_rows && ($cart['quantity'] > 0)) {
 				$option_price = 0;
@@ -47,11 +73,23 @@ class Cart {
 				$option_data = [];
 
 				foreach (json_decode($cart['option']) as $product_option_id => $value) {
-					$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM oc_product_option po LEFT JOIN `oc_option` o ON (po.option_id = o.option_id) LEFT JOIN oc_option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = '" . (int)$product_option_id . "' AND po.product_id = '" . (int)$cart['product_id'] . "' AND od.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+					$option_query = $this->db->query("SELECT po.product_option_id, po.option_id, od.name, o.type FROM oc_product_option po LEFT JOIN `oc_option` o ON (po.option_id = o.option_id) LEFT JOIN oc_option_description od ON (o.option_id = od.option_id) WHERE po.product_option_id = :product_option_id AND po.product_id = :product_id AND od.language_id = :language_id",
+                        [
+                            ':product_option_id' => $product_option_id,
+                            ':product_id' => $cart['product_id'],
+                            ':language_id' => $this->config->get('config_language_id')
+                        ]);
 
 					if ($option_query->num_rows) {
 						if ($option_query->row['type'] == 'select' || $option_query->row['type'] == 'radio') {
-							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix FROM oc_product_option_value pov LEFT JOIN oc_option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$value . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix FROM oc_product_option_value pov 
+LEFT JOIN oc_option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) 
+WHERE pov.product_option_value_id =  :product_option_value_id AND pov.product_option_id = :product_option_id AND ovd.language_id = :language_id",
+                                [
+                                    ':product_option_value_id' => $value,
+                                    ':product_option_id' => $product_option_id,
+                                    ':langauge_id' => $this->config->get('config_language_id'),
+                                ]);
 
 							if ($option_value_query->num_rows) {
 								if ($option_value_query->row['price_prefix'] == '+') {
@@ -70,7 +108,7 @@ class Cart {
 									$stock = false;
 								}
 
-								$option_data[] = array(
+								$option_data[] = [
 									'product_option_id'       => $product_option_id,
 									'product_option_value_id' => $value,
 									'option_id'               => $option_query->row['option_id'],
@@ -84,11 +122,20 @@ class Cart {
 									'price_prefix'            => $option_value_query->row['price_prefix'],
 									'weight'                  => $option_value_query->row['weight'],
 									'weight_prefix'           => $option_value_query->row['weight_prefix']
-								);
+								];
 							}
 						} elseif ($option_query->row['type'] == 'checkbox' && is_array($value)) {
 							foreach ($value as $product_option_value_id) {
-								$option_value_query = $this->db->query("SELECT pov.option_value_id, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix, ovd.name FROM oc_product_option_value pov LEFT JOIN oc_option_value_description ovd ON (pov.option_value_id = ovd.option_value_id) WHERE pov.product_option_value_id = '" . (int)$product_option_value_id . "' AND pov.product_option_id = '" . (int)$product_option_id . "' AND ovd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+							    // LJK TODO: one of the parameters is $this->config->get('config_language_id') which is not set in the config currently,
+                                // only $this->config->get('language') - need to examine this
+								$option_value_query = $this->db->query("SELECT pov.option_value_id, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, 
+pov.weight_prefix, ovd.name FROM oc_product_option_value pov LEFT JOIN oc_option_value_description ovd ON (pov.option_value_id = ovd.option_value_id) WHERE 
+pov.product_option_value_id = :product_option_value_id AND pov.product_option_id = :product_option_id AND ovd.language_id = :language_id",
+                                    [
+                                        ':product_option_value_id' => $product_option_value_id,
+                                        ':product_option_id' => $product_option_id,
+                                        ':language_id' => $this->config->get('config_language_id')
+                                    ]);
 
 								if ($option_value_query->num_rows) {
 									if ($option_value_query->row['price_prefix'] == '+') {
@@ -107,7 +154,7 @@ class Cart {
 										$stock = false;
 									}
 
-									$option_data[] = array(
+									$option_data[] = [
 										'product_option_id'       => $product_option_id,
 										'product_option_value_id' => $product_option_value_id,
 										'option_id'               => $option_query->row['option_id'],
@@ -121,11 +168,11 @@ class Cart {
 										'price_prefix'            => $option_value_query->row['price_prefix'],
 										'weight'                  => $option_value_query->row['weight'],
 										'weight_prefix'           => $option_value_query->row['weight_prefix']
-									);
+									];
 								}
 							}
 						} elseif ($option_query->row['type'] == 'text' || $option_query->row['type'] == 'textarea' || $option_query->row['type'] == 'file' || $option_query->row['type'] == 'date' || $option_query->row['type'] == 'datetime' || $option_query->row['type'] == 'time') {
-							$option_data[] = array(
+							$option_data[] = [
 								'product_option_id'       => $product_option_id,
 								'product_option_value_id' => '',
 								'option_id'               => $option_query->row['option_id'],
@@ -139,7 +186,7 @@ class Cart {
 								'price_prefix'            => '',
 								'weight'                  => '',
 								'weight_prefix'           => ''
-							);
+							];
 						}
 					}
 				}
@@ -155,14 +202,23 @@ class Cart {
 					}
 				}
 
-				$product_discount_query = $this->db->query("SELECT price FROM oc_product_discount WHERE product_id = '" . (int)$cart['product_id'] . "' AND customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND quantity <= '" . (int)$discount_quantity . "' AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1");
+				$product_discount_query = $this->db->query("SELECT price FROM oc_product_discount WHERE product_id = :product_id AND customer_group_id = :customer_group_id AND quantity <= :quantity AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY quantity DESC, priority ASC, price ASC LIMIT 1",
+                    [
+                        ':product_id' => $cart['product_id'],
+                        ':customer_group_id' => $this->config->get('config_customer_group_id'),
+                        ':quantity' => $discount_quantity
+                    ]);
 
 				if ($product_discount_query->num_rows) {
 					$price = $product_discount_query->row['price'];
 				}
 
 				// Product Specials
-				$product_special_query = $this->db->query("SELECT price FROM oc_product_special WHERE product_id = '" . (int)$cart['product_id'] . "' AND customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "' AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1");
+				$product_special_query = $this->db->query("SELECT price FROM oc_product_special WHERE product_id = :product_id AND customer_group_id = :customer_group_id AND ((date_start = '0000-00-00' OR date_start < NOW()) AND (date_end = '0000-00-00' OR date_end > NOW())) ORDER BY priority ASC, price ASC LIMIT 1",
+                    [
+                        ':product_id' => $cart['product_id'],
+                        ':customer_group_id' => $this->config->get('config_customer_group_id')
+                    ]);
 
 				if ($product_special_query->num_rows) {
 					$price = $product_special_query->row['price'];
@@ -171,15 +227,19 @@ class Cart {
 				// Downloads
 				$download_data = [];
 
-				$download_query = $this->db->query("SELECT * FROM oc_product_to_download p2d LEFT JOIN oc_download d ON (p2d.download_id = d.download_id) LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE p2d.product_id = '" . (int)$cart['product_id'] . "' AND dd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+				$download_query = $this->db->query("SELECT * FROM oc_product_to_download p2d LEFT JOIN oc_download d ON (p2d.download_id = d.download_id) LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE p2d.product_id = :product_id AND dd.language_id = :langauge_id",
+                    [
+                        ':product_id' => $cart['product_id'],
+                        ':language_id' => $this->config->get('config_language_id'),
+                    ]);
 
 				foreach ($download_query->rows as $download) {
-					$download_data[] = array(
+					$download_data[] = [
 						'download_id' => $download['download_id'],
 						'name'        => $download['name'],
 						'filename'    => $download['filename'],
 						'mask'        => $download['mask']
-					);
+                    ];
 				}
 
 				// Stock
@@ -187,10 +247,17 @@ class Cart {
 					$stock = false;
 				}
 
-				$recurring_query = $this->db->query("SELECT * FROM oc_recurring r LEFT JOIN oc_product_recurring pr ON (r.recurring_id = pr.recurring_id) LEFT JOIN oc_recurring_description rd ON (r.recurring_id = rd.recurring_id) WHERE r.recurring_id = '" . (int)$cart['recurring_id'] . "' AND pr.product_id = '" . (int)$cart['product_id'] . "' AND rd.language_id = " . (int)$this->config->get('config_language_id') . " AND r.status = 1 AND pr.customer_group_id = '" . (int)$this->config->get('config_customer_group_id') . "'");
+				$recurring_query = $this->db->query("SELECT * FROM oc_recurring r LEFT JOIN oc_product_recurring pr ON (r.recurring_id = pr.recurring_id) LEFT JOIN oc_recurring_description rd ON (r.recurring_id = rd.recurring_id) WHERE r.recurring_id = :recurring_id AND pr.product_id = :product_id AND rd.language_id = :language_id AND r.status = :status AND pr.customer_group_id = :customer_group_id",
+                    [
+                        ':recurring_id' => $cart['recurring_id'],
+                        ':product_id' => $cart['product_id'],
+                        ':language_id' => $this->config->get('config_language_id'),
+                        ':status' => 1,
+                        ':customer_group_id' => $this->config->get('config_customer_group_id')
+                    ]);
 
 				if ($recurring_query->num_rows) {
-					$recurring = array(
+					$recurring = [
 						'recurring_id'    => $cart['recurring_id'],
 						'name'            => $recurring_query->row['name'],
 						'frequency'       => $recurring_query->row['frequency'],
@@ -202,12 +269,12 @@ class Cart {
 						'trial_price'     => $recurring_query->row['trial_price'],
 						'trial_cycle'     => $recurring_query->row['trial_cycle'],
 						'trial_duration'  => $recurring_query->row['trial_duration']
-					);
+					];
 				} else {
 					$recurring = false;
 				}
 
-				$product_data[] = array(
+				$product_data[] = [
 					'cart_id'         => $cart['cart_id'],
 					'product_id'      => $product_query->row['product_id'],
 					'name'            => $product_query->row['name'],
@@ -230,7 +297,7 @@ class Cart {
 					'height'          => $product_query->row['height'],
 					'length_class_id' => $product_query->row['length_class_id'],
 					'recurring'       => $recurring
-				);
+				];
 			} else {
 				$this->remove($cart['cart_id']);
 			}
@@ -240,25 +307,70 @@ class Cart {
 	}
 
 	public function add($product_id, $quantity = 1, $option = [], $recurring_id = 0) {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_cart WHERE api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "' AND product_id = '" . (int)$product_id . "' AND recurring_id = '" . (int)$recurring_id . "' AND `option` = '" . $this->db->escape(json_encode($option)) . "'");
+		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_cart WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id AND product_id = :product_id AND recurring_id = :recurring_id  AND `option` = :option",
+            [
+                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                ':customer_id' => $this->customer->getId(),
+                ':session_id' => $this->session->getId(),
+                ':product_id' => $product_id,
+                ':recurring_id' => $recurring_id,
+                ':option' => json_encode($option)
+            ]);
 
 		if (!$query->row['total']) {
-			$this->db->query("INSERT oc_cart SET api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "', customer_id = '" . (int)$this->customer->getId() . "', session_id = '" . $this->db->escape($this->session->getId()) . "', product_id = '" . (int)$product_id . "', recurring_id = '" . (int)$recurring_id . "', `option` = '" . $this->db->escape(json_encode($option)) . "', quantity = '" . (int)$quantity . "'");
+			$this->db->query("INSERT oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = ::option, quantity = :quantity",
+                [
+                    ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                    ':customer_id' => $this->customer->getId(),
+                    ':session_id' => $this->session->getId(),
+                    ':product_id' => $product_id,
+                    ':recurring_id' => $recurring_id,
+                    ':option' => json_encode($option),
+                    ':quantity' => $quantity ,
+                ]);
 		} else {
-			$this->db->query("UPDATE oc_cart SET quantity = (quantity + " . (int)$quantity . ") WHERE api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "' AND product_id = '" . (int)$product_id . "' AND recurring_id = '" . (int)$recurring_id . "' AND `option` = '" . $this->db->escape(json_encode($option)) . "'");
+			$this->db->query("UPDATE oc_cart SET quantity = (quantity + :quantity) WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id AND product_id = :product_id AND recurring_id = :recurring_id AND `option` = :option",
+                [
+                    ':quantity' => $quantity,
+                    ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                    ':customer_id' => $this->customer->getId() ,
+                    ':session_id' => $this->session->getId(),
+                    ':product_id' => $product_id,
+                    ':recurring_id' => $recurring_id,
+                    ':option' => json_encode($option)
+                ]);
 		}
 	}
 
 	public function update($cart_id, $quantity) {
-		$this->db->query("UPDATE oc_cart SET quantity = '" . (int)$quantity . "' WHERE cart_id = '" . (int)$cart_id . "' AND api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+	    // LJK TODO: why isn't session_id or cart_id sufficent to identify the customer?
+		$this->db->query("UPDATE oc_cart SET quantity = :quantity WHERE cart_id = :cart_id  AND api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
+            [
+                ':quantity' => $quantity,
+                ':cart_id' => $cart_id,
+                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                ':customer_id' => $this->customer->getId(),
+                ':session_id' => $this->session->getId(),
+            ]);
 	}
 
 	public function remove($cart_id) {
-		$this->db->query("DELETE FROM oc_cart WHERE cart_id = '" . (int)$cart_id . "' AND api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+		$this->db->query("DELETE FROM oc_cart WHERE cart_id = :cart_id AND api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
+            [
+                ':cart_id' => $cart_id,
+                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                ':customer_id' => $this->customer->getId(),
+                ':session_id' => $this->session->getId()
+            ]);
 	}
 
 	public function clear() {
-		$this->db->query("DELETE FROM oc_cart WHERE api_id = '" . (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0) . "' AND customer_id = '" . (int)$this->customer->getId() . "' AND session_id = '" . $this->db->escape($this->session->getId()) . "'");
+		$this->db->query("DELETE FROM oc_cart WHERE api_id = :api_id AND customer_id = :customer_id  AND session_id = :session_id",
+            [
+                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                ':customer_id' => $this->customer->getId(),
+                ':session_id' => $this->session->getId()
+            ]);
 	}
 
 	public function getRecurringProducts() {

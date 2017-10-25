@@ -7,15 +7,18 @@ class Weight {
 		$this->db = $registry->get('db');
 		$this->config = $registry->get('config');
 
-		$weight_class_query = $this->db->query("SELECT * FROM oc_weight_class wc LEFT JOIN oc_weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = '" . (int)$this->config->get('config_language_id') . "'");
+		$weight_class_query = $this->db->query("SELECT * FROM oc_weight_class wc LEFT JOIN oc_weight_class_description wcd ON (wc.weight_class_id = wcd.weight_class_id) WHERE wcd.language_id = :language_id",
+            [
+                ':language_id' => $this->config->get('config_language_id')
+            ]);
 
 		foreach ($weight_class_query->rows as $result) {
-			$this->weights[$result['weight_class_id']] = array(
+			$this->weights[$result['weight_class_id']] = [
 				'weight_class_id' => $result['weight_class_id'],
 				'title'           => $result['title'],
 				'unit'            => $result['unit'],
 				'value'           => $result['value']
-			);
+            ];
 		}
 	}
 

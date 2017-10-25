@@ -10,18 +10,20 @@ class Currency {
 		$query = $this->db->query("SELECT * FROM `oc_currency`");
 
 		foreach ($query->rows as $result) {
-			$this->currencies[$result['code']] = array(
+			$this->currencies[$result['code']] = [
 				'currency_id'   => $result['currency_id'],
 				'title'         => $result['title'],
 				'symbol_left'   => $result['symbol_left'],
 				'symbol_right'  => $result['symbol_right'],
 				'decimal_place' => $result['decimal_place'],
 				'value'         => $result['value']
-			);
+            ];
 		}
 	}
 
 	public function format($number, $currency, $value = '', $format = true) {
+	    // LJK TODO: Are there ANY currencies with a symbol before and after?
+        // If not, lets just do symbol and symbol_position
 		$symbol_left = $this->currencies[$currency]['symbol_left'];
 		$symbol_right = $this->currencies[$currency]['symbol_right'];
 		$decimal_place = $this->currencies[$currency]['decimal_place'];
