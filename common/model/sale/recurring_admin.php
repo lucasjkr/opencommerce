@@ -23,7 +23,7 @@ class ModelSaleRecurringAdmin extends Model {
 
 		if (!empty($data['filter_customer'])) {
 			$implode[] = "CONCAT(o.firstname, ' ', o.lastname) LIKE :customer";
-            $args[':customer'] = $this->db->escape((string)$data['filter_customer']) . '%';
+            $args[':customer'] = $data['filter_customer']) . '%';
 		}
 
 		if (!empty($data['filter_status'])) {
