@@ -127,17 +127,19 @@ class ControllerCommonColumnLeft extends Controller {
 					'children' => $catalog
 				);		
 			}
-			
+
+
 			// Extension
 			$marketplace = [];
-			
-			if ($this->user->hasPermission('access', 'marketplace/marketplace')) {		
-				$marketplace[] = array(
-					'name'	   => $this->language->get('text_marketplace'),
-					'href'     => $this->url->link('marketplace/marketplace', 'user_token=' . $this->session->data['user_token'], true),
-					'children' => []
-				);					
-			}
+
+//  Remove access to Opencart Marketplace (still need to refactor the controllers to actually remove it)
+//			if ($this->user->hasPermission('access', 'marketplace/marketplace')) {
+//				$marketplace[] = array(
+//					'name'	   => $this->language->get('text_marketplace'),
+//					'href'     => $this->url->link('marketplace/marketplace', 'user_token=' . $this->session->data['user_token'], true),
+//					'children' => []
+//				);
+//			}
 			
 			if ($this->user->hasPermission('access', 'marketplace/installer')) {		
 				$marketplace[] = array(
