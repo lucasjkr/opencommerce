@@ -2,7 +2,10 @@
 class ControllerStartupStartup extends Controller {
 	public function index() {
 		// Settings
-		$query = $this->db->query("SELECT * FROM oc_setting WHERE store_id = '0'");
+		$query = $this->db->query("SELECT * FROM oc_setting WHERE store_id = :store_id",
+            [
+                ':store_id' => 0
+            ]);
 		
 		foreach ($query->rows as $setting) {
 			if (!$setting['serialized']) {
@@ -62,9 +65,5 @@ class ControllerStartupStartup extends Controller {
 		// Encryption
 		$this->registry->set('encryption', new Encryption($this->config->get('config_encryption')));
 
-        // LJK TODO remove this
-        // Even if extension is useful, it shouldn't be hard coded in,
-		// OpenBay Pro
-		$this->registry->set('openbay', new Openbay($this->registry));
 	}
 }

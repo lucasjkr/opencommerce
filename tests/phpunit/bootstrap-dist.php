@@ -27,7 +27,3 @@ define('PP_EXPRESS_PASSWORD', '');
 
 // Settings for SagePay Direct's selenium tests
 define('SAGEPAY_DIRECT_VENDOR', '');
-
-// Settings for OpenBay Pro
-define('OPENBAY_EBAY_TOKEN', '');
-define('OPENBAY_EBAY_SECRET', '');
