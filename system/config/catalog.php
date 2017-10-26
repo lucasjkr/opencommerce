@@ -25,11 +25,6 @@ $_['template_engine']    = 'twig';
 $_['template_directory'] = '';
 $_['template_cache']     = true;
 
-// Autoload Libraries
-$_['library_autoload']   = array(
-	'openbay'
-);
-
 // Actions
 $_['action_pre_action']  = array(
 	'startup/session',
