@@ -192,7 +192,10 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 				$this->session->data['shipping_postcode'] = $result['PAYMENTREQUEST_0_SHIPTOZIP'];
 
-				$country_info = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($result['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE']) . "' AND `status` = '1' LIMIT 1")->row;
+				$country_info = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = :iso_code_2 AND `status` = '1' LIMIT 1",
+                    [
+                        ':iso_code_2' => $result['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE']
+                    ])->row;
 
 				if ($country_info) {
 					$this->session->data['guest']['shipping']['country_id'] = $country_info['country_id'];
@@ -226,7 +229,13 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$returned_shipping_zone = '';
 				}
 
-				$zone_info = $this->db->query("SELECT * FROM `oc_zone` WHERE (`name` = '" . $this->db->escape($returned_shipping_zone) . "' OR `code` = '" . $this->db->escape($returned_shipping_zone) . "') AND `status` = '1' AND `country_id` = '" . (int)$country_info['country_id'] . "' LIMIT 1")->row;
+				$zone_info = $this->db->query("SELECT * FROM `oc_zone` WHERE (`name` = :name OR `code` = :code) AND `status` = :status AND `country_id` = :country_id LIMIT 1",
+                    [
+                        ':name' => $returned_shipping_zone,
+                        ':code' => $returned_shipping_zone,
+                        ':status' => 1,
+                        ':country_id' => $country_info['country_id']
+                    ])->row;
 
 				if ($zone_info) {
 					$this->session->data['guest']['shipping']['zone'] = $zone_info['name'];
@@ -311,8 +320,19 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					unset($shipping_name[0]);
 					$shipping_last_name = implode(' ', $shipping_name);
 
-					$country_info = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = '" . $this->db->escape($result['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE']) . "' AND `status` = '1' LIMIT 1")->row;
-					$zone_info = $this->db->query("SELECT * FROM `oc_zone` WHERE (`name` = '" . $this->db->escape($result['PAYMENTREQUEST_0_SHIPTOSTATE']) . "' OR `code` = '" . $this->db->escape($result['PAYMENTREQUEST_0_SHIPTOSTATE']) . "') AND `status` = '1' AND `country_id` = '" . (int)$country_info['country_id'] . "'")->row;
+					$country_info = $this->db->query("SELECT * FROM `oc_country` WHERE `iso_code_2` = :iso_code_2 AND `status` = :status LIMIT 1",
+                        [
+                            ':iso_code_2' => $result['PAYMENTREQUEST_0_SHIPTOCOUNTRYCODE'],
+                            ':status' => 1
+                        ])->row;
+					$zone_info = $this->db->query("SELECT * FROM `oc_zone` WHERE (`name` = :name OR `code` = :code) AND `status` = :status AND `country_id` = country_id",
+                        [
+                            ':name' => $result['PAYMENTREQUEST_0_SHIPTOSTATE'],
+                            ':code' => $result['PAYMENTREQUEST_0_SHIPTOSTATE'],
+                            ':status' => 1,
+                            ':country_id' => $country_info['country_id']
+
+                        ])->row;
 
 					$address_data = array(
 						'firstname'  => $shipping_first_name,
@@ -1003,40 +1023,12 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			$data['comment'] = $this->session->data['comment'];
 			$data['total'] = $total;
 
-			if (isset($this->request->cookie['tracking'])) {
-				$data['tracking'] = $this->request->cookie['tracking'];
-
-				$subtotal = $this->cart->getSubTotal();
-
-				// Affiliate
-				$this->load->model('account/affiliate');
-
-				$affiliate_info = $this->model_account_affiliate->getAffiliateByTracking($this->request->cookie['tracking']);
-
-				if ($affiliate_info) {
-					$data['affiliate_id'] = $affiliate_info['affiliate_id'];
-					$data['commission'] = ($subtotal / 100) * $affiliate_info['commission'];
-				} else {
-					$data['affiliate_id'] = 0;
-					$data['commission'] = 0;
-				}
-
-				// Marketing
-				$this->load->model('marketing/marketing');
-
-				$marketing_info = $this->model_marketing_marketing->getMarketingByCode($this->request->cookie['tracking']);
-
-				if ($marketing_info) {
-					$data['marketing_id'] = $marketing_info['marketing_id'];
-				} else {
-					$data['marketing_id'] = 0;
-				}
-			} else {
+            // LJK TODO = These 4 fields left over from old affiliate/marketing code - left these in place just in case
+            // another fuction is looking for them
 				$data['affiliate_id'] = 0;
 				$data['commission'] = 0;
 				$data['marketing_id'] = 0;
 				$data['tracking'] = '';
-			}
 
 			$data['language_id'] = $this->config->get('config_language_id');
 			$data['currency_id'] = $this->currency->getId($this->session->data['currency']);
@@ -1634,11 +1626,20 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 				$this->model_extension_payment_pp_express->log('Transaction exists', 'IPN data');
 
 				//if the transaction is pending but the new status is completed
+                // LJK TODO - Is the LIMIT 1 necessary? Need to look at table definition, if transaction_id is unique or primary key, then we don't need.
 				if ($transaction['payment_status'] != $this->request->post['payment_status']) {
-					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = '" . $this->db->escape($this->request->post['payment_status']) . "' WHERE `transaction_id` = '" . $this->db->escape($transaction['transaction_id']) . "' LIMIT 1");
+					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = :payment_status WHERE `transaction_id` = :transaction_id LIMIT 1",
+                        [
+                            ':payment_status' => $this->request->post['payment_status'],
+                            ':transaction_id' => $transaction['transaction_id']
+                        ]);
 				} elseif ($transaction['payment_status'] == 'Pending' && ($transaction['pending_reason'] != $this->request->post['pending_reason'])) {
 					//payment is still pending but the pending reason has changed, update it.
-					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `pending_reason` = '" . $this->db->escape($this->request->post['pending_reason']) . "' WHERE `transaction_id` = '" . $this->db->escape($transaction['transaction_id']) . "' LIMIT 1");
+					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `pending_reason` = :pending_reason WHERE `transaction_id` = :transaction_id LIMIT 1",
+                        [
+                            ':pending_reason' => $this->request->post['pending_reason'],
+                            ':transaction_id' => $transaction['transaction_id'],
+                        ]);
 				}
 			} else {
 				$this->model_extension_payment_pp_express->log('Transaction does not exist', 'IPN data');
@@ -1669,10 +1670,21 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					 * If there has been a refund, log this against the parent transaction.
 					 */
 					if (isset($this->request->post['payment_status']) && $this->request->post['payment_status'] == 'Refunded') {
+					    // LJK TODO:
+                        // #1 - Probably don't need LIMIT 1 in these queries
+                        // #2 - We probably don't need an if/else here - we just need to set the ':payment_status' parameter
 						if (($this->request->post['mc_gross'] * -1) == $parent_transaction['amount']) {
-							$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Refunded' WHERE `transaction_id` = '" . $this->db->escape($parent_transaction['transaction_id']) . "' LIMIT 1");
+							$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = :payment_status WHERE `transaction_id` = :transaction_id LIMIT 1",
+                                [
+                                    ':payment_status' => 'Refunded',
+                                    ':transaction_id' => $parent_transaction['transaction_id']
+                                ]);
 						} else {
-							$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Partially-Refunded' WHERE `transaction_id` = '" . $this->db->escape($parent_transaction['transaction_id']) . "' LIMIT 1");
+                            $this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = :payment_status WHERE `transaction_id` = :transaction_id LIMIT 1",
+                                [
+                                    ':payment_status' => 'Partially-Refunded',
+                                    ':transaction_id' => $parent_transaction['transaction_id']
+                                ]);
 						}
 					}
 
@@ -1726,18 +1738,30 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 			if (isset($this->request->post['txn_type'])) {
 				$this->model_extension_payment_pp_express->log($this->request->post['txn_type'], 'IPN data');
 
-				//payment
+                // LJK TODO All of this stuff is stupid. There don't need to be all of these if clauses. Just set a couple variables and then do the insert.
+                // Unfortunately, until I set up a paypal express account, I can't test so I'll just leave it as it is
+
+                //payment
 				if ($this->request->post['txn_type'] == 'recurring_payment') {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					$this->model_extension_payment_pp_express->log($recurring, 'IPN data');
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `amount` = '" . (float)$this->request->post['amount'] . "', `type` = '1'");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = :order_recurring_id, `amount` = :amount, `type` = :type",
+                            [
+                                ':order_recurring_id' => $recurring['order_recurring_id'],
+                                ':amount' => $this->request->post['amount'],
+                                ':type' => 1
+                            ]);
 
 						//as there was a payment the recurring is active, ensure it is set to active (may be been suspended before)
 						if ($recurring['status'] != 1) {
-							$this->db->query("UPDATE `oc_order_recurring` SET `status` = 2 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "'");
+							$this->db->query("UPDATE `oc_order_recurring` SET `status` = :status WHERE `order_recurring_id` = :order_recurring_id",
+                                [
+                                    ':status' => 2,
+                                    ':order_recurring_id' => $recurring['order_recurring_id'],
+                                ]);
 						}
 					}
 				}
@@ -1747,8 +1771,17 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 					$recurring = $this->model_account_recurring->getOrderRecurringByReference($this->request->post['recurring_payment_id']);
 
 					if ($recurring != false) {
-						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "', `type` = '6'");
-						$this->db->query("UPDATE `oc_order_recurring` SET `status` = 3 WHERE `order_recurring_id` = '" . (int)$recurring['order_recurring_id'] . "' LIMIT 1");
+						$this->db->query("INSERT INTO `oc_order_recurring_transaction` SET `order_recurring_id` = :order_recurring_id, `type` = :type",
+                            [
+                                ':type' => 6,
+                                ':order_recurring_id' => $recurring['order_recurring_id']
+                            ]);
+                        // LJK TODO: Verify whether LIMIT is needed here
+						$this->db->query("UPDATE `oc_order_recurring` SET `status` = :status WHERE `order_recurring_id` = :order_recurring_id LIMIT 1",
+                            [
+                                ':status' => 3,
+                                ':order_recurring_id' => $recurring['order_recurring_id']
+                            ]);
 					}
 				}
 
