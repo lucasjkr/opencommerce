@@ -3,14 +3,19 @@ class ControllerStartupStartup extends Controller {
 	public function index() {
 		// Store
         // LJK TODO: There was more logic here, need to check what this is doing (why is it hardcoding http://???
-        $query = $this->db->query("SELECT * FROM oc_store WHERE REPLACE(`url`, 'www.', '') = '" . $this->db->escape('http://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/') . "'");
+        $query = $this->db->query("SELECT * FROM oc_store WHERE REPLACE(`url`, 'www.', '') = :string",
+            [
+                ':string' => 'http://' . str_replace('www.', '', $_SERVER['HTTP_HOST']) . rtrim(dirname($_SERVER['PHP_SELF']), '/.\\') . '/'
+            ]);
 
-		if (isset($this->request->get['store_id'])) {
+        // LJK originally, default was set below by having the default setting be in the else clause, now its set first and only changed if
+        // the other criteria are met
+        // LJK TODO: I'd like to do this throughout the site.
+        $this->config->set('config_store_id', 0);
+        if (isset($this->request->get['store_id'])) {
 			$this->config->set('config_store_id', (int)$this->request->get['store_id']);
 		} else if ($query->num_rows) {
 			$this->config->set('config_store_id', $query->row['store_id']);
-		} else {
-			$this->config->set('config_store_id', 0);
 		}
 
 		// LJK TODO: Investigating if this is needed
@@ -20,7 +25,10 @@ class ControllerStartupStartup extends Controller {
 		}
 
 		// Settings
-		$query = $this->db->query("SELECT * FROM `oc_setting` WHERE store_id = '0' OR store_id = '" . (int)$this->config->get('config_store_id') . "' ORDER BY store_id ASC");
+		$query = $this->db->query("SELECT * FROM `oc_setting` WHERE store_id = 0 OR store_id = :store_id ORDER BY store_id ASC",
+            [
+                ':store_id' => $this->config->get('config_store_id')
+            ]);
 
 		foreach ($query->rows as $result) {
 			if (!$result['serialized']) {
