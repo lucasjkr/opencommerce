@@ -35,12 +35,12 @@ class ControllerExtensionModulePPLogin extends Controller {
 				$data['locale'] = 'en-gb';
 			}
 
-			$scopes = array(
+			$scopes = [
 				'profile',
 				'email',
 				'address',
 				'phone'
-			);
+			];
 
 			if ($this->config->get('module_pp_login_seamless')) {
 				$scopes[] = 'https://uri.paypal.com/services/expresscheckout';
@@ -86,12 +86,19 @@ class ControllerExtensionModulePPLogin extends Controller {
 					echo '<script type="text/javascript">window.opener.location = "' . $this->url->link('account/login', '', true) . '"; window.close();</script>';
 				}
 			} else {
-				$country = $this->db->query("SELECT `country_id` FROM `oc_country` WHERE iso_code_2 = '" . $this->db->escape($user->address->country) . "'");
+				$country = $this->db->query("SELECT `country_id` FROM `oc_country` WHERE iso_code_2 = :iso_code_2",
+                    [
+                        ':iso_code_2' => $this->db->escape($user->address->country)
+                    ]);
 
 				if ($country->num_rows) {
 					$country_id = $country->row['country_id'];
 
-					$zone = $this->db->query("SELECT `zone_id` FROM `oc_zone` WHERE country_id = '" . (int)$country_id . "' AND name = '" . $this->db->escape($user->address->region) . "'");
+					$zone = $this->db->query("SELECT `zone_id` FROM `oc_zone` WHERE country_id = :country_id AND name = :name",
+                        [
+                            ':country_id' => $country_id,
+                            ':name' => $user->address->region
+                        ]);
 
 					if ($zone->num_rows) {
 						$zone_id = $zone->row['zone_id'];
@@ -109,7 +116,7 @@ class ControllerExtensionModulePPLogin extends Controller {
 					$customer_group_id = $this->config->get('config_customer_group_id');
 				}
 
-				$data = array(
+				$data = [
 					'customer_group_id' => (int)$customer_group_id,
 					'firstname'         => $user->given_name,
 					'lastname'          => $user->family_name,
@@ -123,7 +130,7 @@ class ControllerExtensionModulePPLogin extends Controller {
 					'postcode'          => $user->address->postal_code,
 					'country_id'        => (int)$country_id,
 					'zone_id'           => (int)$zone_id,
-				);
+                ];
 
 				$customer_id = $this->model_account_customer->addCustomer($data);
 
