@@ -155,7 +155,7 @@ class ModelLocalisationCurrencyAdmin extends Model {
 		}
 
 		//LJK TODO:
-        // Convert to Gulp
+        // Convert to Guzzle
         // Add more methods (yahoo could be just one, coincap, google, etc.
 		$curl = curl_init();
 

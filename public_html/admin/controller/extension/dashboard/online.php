@@ -27,7 +27,7 @@ class ControllerExtensionDashboardOnline extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
 		);
 
 		$data['breadcrumbs'][] = array(
@@ -40,7 +40,7 @@ class ControllerExtensionDashboardOnline extends Controller {
 			'href' => $this->url->link('extension/dashboard/online', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/dashboard/online', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/dashboard/online', 'user_token=' . $this->session->data['user_token']);
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=dashboard', true);
 
@@ -106,7 +106,7 @@ class ControllerExtensionDashboardOnline extends Controller {
 			$data['total'] = $online_total;
 		}
 
-		$data['online'] = $this->url->link('report/online', 'user_token=' . $this->session->data['user_token'], true);
+		$data['online'] = $this->url->link('report/online', 'user_token=' . $this->session->data['user_token']);
 
 		return $this->load->view('extension/dashboard/online_info', $data);
 	}

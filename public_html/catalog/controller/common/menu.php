@@ -40,9 +40,7 @@ class ControllerCommonMenu extends Controller {
 				];
 			}
 		}
-        echo "<pre>";
-		print_r($data);
-        echo "</pre>";
+
 		return $this->load->view('common/menu', $data);
 	}
 }

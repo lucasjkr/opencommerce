@@ -38,7 +38,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url));
 		}
 
 		$this->getForm();
@@ -70,7 +70,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url));
 		}
 
 		$this->getForm();
@@ -104,7 +104,7 @@ class ControllerCustomerCustomerGroup extends Controller {
 				$url .= '&page=' . $this->request->get['page'];
 			}
 
-			$this->response->redirect($this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true));
+			$this->response->redirect($this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url));
 		}
 
 		$this->getList();
@@ -147,16 +147,16 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url)
 		);
 
-		$data['add'] = $this->url->link('customer/customer_group/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['delete'] = $this->url->link('customer/customer_group/delete', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['add'] = $this->url->link('customer/customer_group/add', 'user_token=' . $this->session->data['user_token'] . $url);
+		$data['delete'] = $this->url->link('customer/customer_group/delete', 'user_token=' . $this->session->data['user_token'] . $url);
 
 		$data['customer_groups'] = [];
 
@@ -278,21 +278,21 @@ class ControllerCustomerCustomerGroup extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url)
 		);
 
 		if (!isset($this->request->get['customer_group_id'])) {
-			$data['action'] = $this->url->link('customer/customer_group/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$data['action'] = $this->url->link('customer/customer_group/add', 'user_token=' . $this->session->data['user_token'] . $url);
 		} else {
 			$data['action'] = $this->url->link('customer/customer_group/edit', 'user_token=' . $this->session->data['user_token'] . '&customer_group_id=' . $this->request->get['customer_group_id'] . $url, true);
 		}
 
-		$data['cancel'] = $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['cancel'] = $this->url->link('customer/customer_group', 'user_token=' . $this->session->data['user_token'] . $url);
 
 		if (isset($this->request->get['customer_group_id']) && ($this->request->server['REQUEST_METHOD'] != 'POST')) {
 			$customer_group_info = $this->model_customer_customer_group_admin->getCustomerGroup($this->request->get['customer_group_id']);

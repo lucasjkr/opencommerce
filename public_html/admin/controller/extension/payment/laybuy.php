@@ -25,7 +25,7 @@ class ControllerExtensionPaymentLaybuy extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
 		);
 
 		$data['breadcrumbs'][] = array(
@@ -38,7 +38,7 @@ class ControllerExtensionPaymentLaybuy extends Controller {
 			'href' => $this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token']);
 
 		$data['fetch'] = $this->url->link('extension/payment/laybuy/fetch', 'user_token=' . $this->session->data['user_token'] . '#reportstab', true);
 
@@ -626,13 +626,13 @@ class ControllerExtensionPaymentLaybuy extends Controller {
 					$this->session->data['success'] = $this->language->get('text_fetched_none');
 				}
 
-				$this->response->redirect($this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token'], true));
+				$this->response->redirect($this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token']));
 			} else {
 				$this->model_extension_payment_laybuy_admin->log('No PayPal Profile IDs to update');
 
 				$this->session->data['success'] = $this->language->get('text_fetched_none');
 
-				$this->response->redirect($this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token'], true));
+				$this->response->redirect($this->url->link('extension/payment/laybuy', 'user_token=' . $this->session->data['user_token']));
 			}
 		} else {
 			$this->model_extension_payment_laybuy_admin->log('User does not have permission');
@@ -676,7 +676,7 @@ class ControllerExtensionPaymentLaybuy extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
 		);
 
 		$data['breadcrumbs'][] = array(

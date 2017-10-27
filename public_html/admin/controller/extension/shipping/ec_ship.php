@@ -45,7 +45,7 @@ class ControllerExtensionShippingECShip extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
 		);
 
 		$data['breadcrumbs'][] = array(
@@ -58,7 +58,7 @@ class ControllerExtensionShippingECShip extends Controller {
 			'href' => $this->url->link('extension/shipping/ec_ship', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/shipping/ec_ship', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/shipping/ec_ship', 'user_token=' . $this->session->data['user_token']);
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=shipping', true);
 

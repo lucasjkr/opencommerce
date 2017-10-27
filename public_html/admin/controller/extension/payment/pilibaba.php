@@ -61,7 +61,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
 		);
 
 		$data['breadcrumbs'][] = array(
@@ -74,7 +74,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 			'href' => $this->url->link('extension/payment/pilibaba', 'user_token=' . $this->session->data['user_token'], true)
 		);
 
-		$data['action'] = $this->url->link('extension/payment/pilibaba', 'user_token=' . $this->session->data['user_token'], true);
+		$data['action'] = $this->url->link('extension/payment/pilibaba', 'user_token=' . $this->session->data['user_token']);
 
 		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=payment', true);
 
@@ -157,7 +157,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 		$data['order_statuses'] = $this->model_localisation_order_status_admin->getOrderStatuses();
 
 		if ($this->config->get('config_weight_class_id') != '2') {
-			$data['error_weight'] = sprintf($this->language->get('error_weight'), $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token'], true));
+			$data['error_weight'] = sprintf($this->language->get('error_weight'), $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token']));
 		} else {
 			$data['error_weight'] = '';
 		}
@@ -224,7 +224,7 @@ class ControllerExtensionPaymentPilibaba extends Controller {
 
 						$this->session->data['success'] = $this->language->get('text_register_success');
 
-						$json['redirect'] = $this->url->link('extension/payment/pilibaba', 'user_token=' . $this->session->data['user_token'], true);
+						$json['redirect'] = $this->url->link('extension/payment/pilibaba', 'user_token=' . $this->session->data['user_token']);
 					} else {
 						$json['error'] = $response['message'];
 					}

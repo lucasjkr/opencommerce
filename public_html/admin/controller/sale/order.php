@@ -81,7 +81,7 @@ class ControllerSaleOrder extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true));
+		$this->response->redirect($this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url));
 	}
 			
 	protected function getList() {
@@ -191,18 +191,18 @@ class ControllerSaleOrder extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url)
 		);
 
-		$data['invoice'] = $this->url->link('sale/order/invoice', 'user_token=' . $this->session->data['user_token'], true);
-		$data['shipping'] = $this->url->link('sale/order/shipping', 'user_token=' . $this->session->data['user_token'], true);
-		$data['add'] = $this->url->link('sale/order/add', 'user_token=' . $this->session->data['user_token'] . $url, true);
-		$data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url, true));
+		$data['invoice'] = $this->url->link('sale/order/invoice', 'user_token=' . $this->session->data['user_token']);
+		$data['shipping'] = $this->url->link('sale/order/shipping', 'user_token=' . $this->session->data['user_token']);
+		$data['add'] = $this->url->link('sale/order/add', 'user_token=' . $this->session->data['user_token'] . $url);
+		$data['delete'] = str_replace('&amp;', '&', $this->url->link('sale/order/delete', 'user_token=' . $this->session->data['user_token'] . $url));
 
 		$data['orders'] = [];
 
@@ -450,15 +450,15 @@ class ControllerSaleOrder extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
 		);
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true)
+			'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url)
 		);
 
-		$data['cancel'] = $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true);
+		$data['cancel'] = $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url);
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -773,18 +773,18 @@ class ControllerSaleOrder extends Controller {
 
 			$data['breadcrumbs'][] = array(
 				'text' => $this->language->get('text_home'),
-				'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+				'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
 			);
 
 			$data['breadcrumbs'][] = array(
 				'text' => $this->language->get('heading_title'),
-				'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true)
+				'href' => $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url)
 			);
 
 			$data['shipping'] = $this->url->link('sale/order/shipping', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . (int)$this->request->get['order_id'], true);
 			$data['invoice'] = $this->url->link('sale/order/invoice', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . (int)$this->request->get['order_id'], true);
 			$data['edit'] = $this->url->link('sale/order/edit', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . (int)$this->request->get['order_id'], true);
-			$data['cancel'] = $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url, true);
+			$data['cancel'] = $this->url->link('sale/order', 'user_token=' . $this->session->data['user_token'] . $url);
 
 			$data['user_token'] = $this->session->data['user_token'];
 
