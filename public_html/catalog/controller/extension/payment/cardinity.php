@@ -75,50 +75,49 @@ class ControllerExtensionPaymentCardinity extends Controller {
 			} catch (Cardinity\Exception\Declined $exception) {
 				$this->failedOrder($this->language->get('error_payment_declined'), $this->language->get('error_payment_declined'));
 
-				$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+				$json['redirect'] = $this->url->link('checkout/checkout', '');
 			} catch (Exception $exception) {
 				$this->failedOrder();
 
-				$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+				$json['redirect'] = $this->url->link('checkout/checkout', '');
 			}
 
-			$successful_order_statuses = array(
+			$successful_order_statuses = [
 				'approved',
 				'pending'
-			);
+            ];
 
 			if ($payment) {
 				if (!in_array($payment->getStatus(), $successful_order_statuses)) {
 					$this->failedOrder($payment->getStatus());
 
-					$json['redirect'] = $this->url->link('checkout/checkout', '', true);
+					$json['redirect'] = $this->url->link('checkout/checkout', '');
 				} else {
-					$this->model_extension_payment_cardinity->addOrder(array(
+					$this->model_extension_payment_cardinity->addOrder([
 						'order_id'   => $this->session->data['order_id'],
 						'payment_id' => $payment->getId()
-					));
+					]);
 
 					if ($payment->getStatus() == 'pending') {
 						//3ds
 						$authorization_information = $payment->getAuthorizationInformation();
 
-						$encryption_data = array(
+						$encryption_data = [
 							'order_id' => $this->session->data['order_id'],
 							'secret'   => $this->config->get('payment_cardinity_secret')
-						);
+                        ];
 
 						$hash = $this->encryption->encrypt($this->config->get('config_encryption'), json_encode($encryption_data));
 
 						$json['3ds'] = array(
 							'url'     => $authorization_information->getUrl(),
 							'PaReq'   => $authorization_information->getData(),
-							'TermUrl' => $this->url->link('extension/payment/cardinity/threeDSecureCallback', '', true),
+							'TermUrl' => $this->url->link('extension/payment/cardinity/threeDSecureCallback', ''),
 							'hash'    => $hash
 						);
 					} elseif ($payment->getStatus() == 'approved') {
 						$this->finalizeOrder($payment);
-
-						$json['redirect'] = $this->url->link('checkout/success', '', true);
+						$json['redirect'] = $this->url->link('checkout/success', '');
 					}
 				}
 			}
@@ -155,7 +154,7 @@ class ControllerExtensionPaymentCardinity extends Controller {
 		} else {
 			$this->failedOrder($this->language->get('error_invalid_hash'));
 
-			$redirect = $this->url->link('checkout/checkout', '', true);
+			$redirect = $this->url->link('checkout/checkout', '');
 		}
 
 		$data['success'] = $success;
@@ -200,12 +199,10 @@ class ControllerExtensionPaymentCardinity extends Controller {
 
 		if ($success) {
 			$this->finalizeOrder($payment);
-
-			$this->response->redirect($this->url->link('checkout/success', '', true));
+			$this->response->redirect($this->url->link('checkout/success', ''));
 		} else {
 			$this->failedOrder($error);
-
-			$this->response->redirect($this->url->link('checkout/checkout', '', true));
+			$this->response->redirect($this->url->link('checkout/checkout', ''));
 		}
 	}
 

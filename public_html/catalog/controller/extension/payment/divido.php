@@ -201,25 +201,25 @@ class ControllerExtensionPaymentDivido extends Controller {
         // 1 - do we need full URL, or just Http root? And is response only on https?
 		$shop_url = STORE_URL;
 
-		$callback_url = $this->url->link('extension/payment/divido/update', '', true);
-		$return_url = $this->url->link('checkout/success', '', true);
-		$checkout_url = $this->url->link('checkout/checkout', '', true);
+		$callback_url = $this->url->link('extension/payment/divido/update', '');
+		$return_url = $this->url->link('checkout/success', '');
+		$checkout_url = $this->url->link('checkout/checkout', '');
 
 		$salt = uniqid('', true);
 		$hash = $this->model_extension_payment_divido->hashOrderId($order_id, $salt);
 
-		$request_data = array(
+		$request_data = [
 			'merchant' => $api_key,
 			'deposit'  => $deposit_amount,
 			'finance'  => $finance,
 			'country'  => $country,
 			'language' => $language,
 			'currency' => $currency,
-			'metadata' => array(
+			'metadata' => [
 				'order_id'   => $order_id,
 				'order_hash' => $hash,
-			),
-			'customer' => array(
+            ],
+			'customer' => [
 				'title'         => '',
 				'first_name'    => $firstname,
 				'middle_name'   => '',
@@ -229,12 +229,12 @@ class ControllerExtensionPaymentDivido extends Controller {
 				'email'         => $email,
 				'mobile_number' => '',
 				'phone_number'  => $telephone,
-			),
+			],
 			'products'     => $products,
 			'response_url' => $callback_url,
 			'redirect_url' => $return_url,
 			'checkout_url' => $checkout_url,
-		);
+		];
 
 		$response = Divido_CreditRequest::create($request_data);
 

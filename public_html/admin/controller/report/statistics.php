@@ -26,7 +26,7 @@ class ControllerReportStatistics extends Controller {
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 			
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));
 		}
 		
 		$this->getList();	
@@ -46,7 +46,7 @@ class ControllerReportStatistics extends Controller {
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 			
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));
 		}
 		
 		$this->getList();	
@@ -66,7 +66,7 @@ class ControllerReportStatistics extends Controller {
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));
 		}		
 		
 		$this->getList();	
@@ -98,7 +98,7 @@ class ControllerReportStatistics extends Controller {
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 			
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));
 		}
 		
 		$this->getList();	
@@ -118,7 +118,7 @@ class ControllerReportStatistics extends Controller {
 		
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));		
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));		
 		}
 		
 		$this->getList();	
@@ -138,7 +138,7 @@ class ControllerReportStatistics extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));
 		}
 		
 		$this->getList();
@@ -158,7 +158,7 @@ class ControllerReportStatistics extends Controller {
 			
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('report/statistics', 'user_token=' . $this->session->data['user_token']));
 		}
 
 		$this->getList();
@@ -169,7 +169,7 @@ class ControllerReportStatistics extends Controller {
 
 		$data['breadcrumbs'][] = array(
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
 		);
 
 		$data['breadcrumbs'][] = array(

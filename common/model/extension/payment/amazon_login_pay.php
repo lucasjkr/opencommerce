@@ -71,7 +71,7 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 			$message .= $this->language->get('text_approval') . "\n";
 		}
 
-		$message .= $this->url->link('account/login', '', true) . "\n\n";
+		$message .= $this->url->link('account/login', '') . "\n\n";
 		$message .= $this->language->get('text_services') . "\n\n";
 		$message .= $this->language->get('text_thanks') . "\n";
 		$message .= html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
@@ -478,7 +478,10 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 
 		list($protocol, $code, $text) = explode(' ', trim(array_shift($other)), 3);
 
-		return array('Status' => (int)$code, 'ResponseBody' => $responseBody);
+		return [
+		    'Status' => (int)$code,
+            'ResponseBody' => $responseBody
+            ];
 	}
 
 	private function getParametersAsString(array $parameters) {

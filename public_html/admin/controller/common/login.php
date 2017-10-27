@@ -8,7 +8,7 @@ class ControllerCommonLogin extends Controller {
 		$this->document->setTitle($this->language->get('heading_title'));
 
 		if ($this->user->isLogged() && isset($this->request->get['user_token']) && ($this->request->get['user_token'] == $this->session->data['user_token'])) {
-			$this->response->redirect($this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true));
+			$this->response->redirect($this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) );
 		}
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
@@ -17,7 +17,7 @@ class ControllerCommonLogin extends Controller {
 			if (isset($this->request->post['redirect']) && (strpos($this->request->post['redirect'], HTTP_ADMIN) === 0 || strpos($this->request->post['redirect'], HTTP_ADMIN) === 0)) {
 				$this->response->redirect($this->request->post['redirect'] . '&user_token=' . $this->session->data['user_token']);
 			} else {
-				$this->response->redirect($this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'], true));
+				$this->response->redirect($this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) );
 			}
 		}
 

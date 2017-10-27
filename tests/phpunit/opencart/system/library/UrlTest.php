@@ -7,11 +7,6 @@ class UrlTest extends OpenCartTest {
 		$this->assertEquals("https://" . STORE_URL . 'index.php?route=common/home', $link, "Could not construct homepage's URL");
 	}
 
-	public function testSecureHomeUrl() {
-		$link = $this->url->link('common/home', '', true);
-		$this->assertEquals("https://" . STORE_URL . 'index.php?route=common/home', $link, "Could not construct secure homepage's URL");
-	}
-
 	public function testProductUrl() {
 		$link = $this->url->link('product/product', 'product_id=1');
 		$this->assertEquals("https://" . STORE_URL . 'index.php?route=product/product&amp;product_id=1', $link, "Could not construct product's URL");

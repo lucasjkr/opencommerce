@@ -50,7 +50,7 @@ class ControllerExtensionExtensionMenu extends Controller {
 	}
 
 	protected function getList() {
-		$data['text_layout'] = sprintf($this->language->get('text_layout'), $this->url->link('design/layout', 'user_token=' . $this->session->data['user_token'], true));
+		$data['text_layout'] = sprintf($this->language->get('text_layout'), $this->url->link('design/layout', 'user_token=' . $this->session->data['user_token']));
 
 		if (isset($this->error['warning'])) {
 			$data['error_warning'] = $this->error['warning'];
