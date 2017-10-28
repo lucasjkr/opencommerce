@@ -49,8 +49,7 @@ class Cart {
 
 		$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
             [
-                // LJK TODO - should this be in parenthesis?
-                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
+                ':api_id' => isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0,
                 ':customer_id' => $this->customer->getId(),
                 ':session_id' => $this->session->getId()
             ]);
