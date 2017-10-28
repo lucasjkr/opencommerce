@@ -31,6 +31,11 @@ class ControllerMailRegister extends Controller {
         // LJK TODO: This is all OC's native mail system which is crap.
         // Also, it breaks registration since some of the stettings are gone.
         // Therefore disabling this altogether by exiting script
+
+        $this->mailer = new Mailer();
+        $this->mailer->subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+        $this->mailer->body = $this->load->view('mail/register', $data);
+        $this->mailer->send($args[0]['email']);
 //
 //		$mail = new Mail($this->config->get('config_mail_engine'));
 //		$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
