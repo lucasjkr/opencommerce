@@ -38,6 +38,10 @@ class Mailer {
 
 
     public function send($email){
+        // Turn off emails during development
+        if(!defined('SUPPRESS_SMTP') && SUPPRESS_MAIL == 1) {
+            return;
+        }
         try {
             $this->mailer->addAddress($email);
             $this->mailer->addReplyTo(SMTP_REPLYTO, SMTP_NAME);
@@ -45,11 +49,6 @@ class Mailer {
             $this->mailer->Subject = $this->subject;
             $this->mailer->Body = $this->body;
             $this->mailer->Altbody = $this->altbody;
-            $methods = get_class_methods($this->mailer);
-            print_r($methods);
-            $result = $this->mailer->send();
-            echo "<pre>" . $result . "</pre>";
-            exit();
             return $this->mailer->send();
         } catch (Exception $e) {
             echo "Mailer error: " . $this->mailer->ErrorInfo;
