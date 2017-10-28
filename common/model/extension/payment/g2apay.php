@@ -4,7 +4,12 @@ class ModelExtensionPaymentG2APay extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/g2apay');
 
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_g2apay_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id OR zone_id = '0')",
+            [
+                ':geo_zone_id' => $this->config->get('payment_g2apay_geo_zone_id'),
+                ':country_id' => $address['country_id'],
+                ':zone_id' => $address['zone_id']
+            ]);
 
 		if ($this->config->get('payment_g2apay_total') > 0 && $this->config->get('payment_g2apay_total') > $total) {
 			$status = false;
@@ -19,34 +24,51 @@ class ModelExtensionPaymentG2APay extends Model {
 		$method_data = [];
 
 		if ($status) {
-			$method_data = array(
+			$method_data = [
 				'code' => 'g2apay',
 				'title' => $this->language->get('text_title'),
 				'terms' => '',
 				'sort_order' => $this->config->get('payment_g2apay_sort_order')
-			);
+            ];
 		}
 
 		return $method_data;
 	}
 
 	public function addG2aOrder($order_info) {
-		$this->db->query("INSERT INTO `oc_g2apay_order` SET `order_id` = '" . (int)$order_info['order_id'] . "', `modified` = now(), `currency_code` = '" . $this->db->escape($order_info['currency_code']) . "', `total` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_g2apay_order` SET `order_id` = :order_id, `currency_code` = :currency_code, `total` =  :total",
+            [
+                ':order_id' => $order_info['order_id'],
+                ':currency_code' => $order_info['currency_code'],
+                ':total' => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false)
+            ]);
 	}
 
 	public function updateOrder($g2apay_order_id, $g2apay_transaction_id, $type, $order_info) {
-		$this->db->query("UPDATE `oc_g2apay_order` SET `g2apay_transaction_id` = '" . $this->db->escape($g2apay_transaction_id) . "', `modified` = now() WHERE `order_id` = '" . (int)$order_info['order_id'] . "'");
+		$this->db->query("UPDATE `oc_g2apay_order` SET `g2apay_transaction_id` = :transaction_id WHERE `order_id` = :order_id",
+            [
+                ':transaction_id' => $g2apay_transaction_id,
+                ':order_id' => $order_info['order_id']
+            ]);
 
 		$this->addTransaction($g2apay_order_id, $type, $order_info);
 
 	}
 
 	public function addTransaction($g2apay_order_id, $type, $order_info) {
-		$this->db->query("INSERT INTO `oc_g2apay_order_transaction` SET `g2apay_order_id` = '" . (int)$g2apay_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_g2apay_order_transaction` SET `g2apay_order_id` = :order_id, `type` = :type, `amount` = :amount",
+            [
+                ':order_id' => $g2apay_order_id,
+                ':type' => $type,
+                ':amount' => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false)
+            ]);
 	}
 
 	public function getG2aOrder($order_id) {
-		$qry = $this->db->query("SELECT * FROM `oc_g2apay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_g2apay_order` WHERE `order_id` = :order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		if ($qry->num_rows) {
 			return $qry->row;
@@ -56,6 +78,7 @@ class ModelExtensionPaymentG2APay extends Model {
 	}
 
 	public function sendCurl($url, $fields) {
+	    // LJK TODO: Guzzle
 		$curl = curl_init($url);
 
 		curl_setopt($curl, CURLOPT_URL, $url);

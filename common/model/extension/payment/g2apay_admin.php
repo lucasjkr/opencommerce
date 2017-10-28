@@ -8,7 +8,6 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 				`g2apay_order_id` INT(11) NOT NULL AUTO_INCREMENT,
 				`order_id` int(11) NOT NULL,
 				`g2apay_transaction_id` varchar(255) NOT NULL,
-				`modified` DATETIME NOT NULL,
 				`refund_status` INT(1) DEFAULT NULL,
 				`currency_code` CHAR(3) NOT NULL,
 				`total` DECIMAL( 10, 2 ) NOT NULL,
@@ -39,7 +38,10 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 
 	public function getOrder($order_id) {
 
-		$qry = $this->db->query("SELECT * FROM `oc_g2apay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_g2apay_order` WHERE `order_id` = : order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -51,7 +53,10 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 	}
 
 	public function getTotalReleased($g2apay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_g2apay_order_transaction` WHERE `g2apay_order_id` = '" . (int)$g2apay_order_id . "' AND (`type` = 'payment' OR `type` = 'refund')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_g2apay_order_transaction` WHERE `g2apay_order_id` = :order_id AND (`type` = 'payment' OR `type` = 'refund')",
+            [
+                ':order_id' => $g2apay_order_id
+            ]);
 
 		return (double)$query->row['total'];
 	}
@@ -69,11 +74,11 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 			$string = $g2apay_order['g2apay_transaction_id'] . $g2apay_order['order_id'] . round($g2apay_order['total'], 2) . $refunded_amount . html_entity_decode($this->config->get('payment_g2apay_secret'));
 			$hash = hash('sha256', $string);
 
-			$fields = array(
+			$fields = [
 				'action' => 'refund',
 				'amount' => $refunded_amount,
 				'hash' => $hash,
-			);
+            ];
 
 			return $this->sendCurl($url, $fields);
 		} else {
@@ -82,11 +87,18 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 	}
 
 	public function updateRefundStatus($g2apay_order_id, $status) {
-		$this->db->query("UPDATE `oc_g2apay_order` SET `refund_status` = '" . (int)$status . "' WHERE `g2apay_order_id` = '" . (int)$g2apay_order_id . "'");
+		$this->db->query("UPDATE `oc_g2apay_order` SET `refund_status` = :refund_status WHERE `g2apay_order_id` = :order_id",
+            [
+                ':refund_status' => $status,
+                ':order_id' => $g2apay_order_id
+            ]);
 	}
 
 	private function getTransactions($g2apay_order_id, $currency_code) {
-		$query = $this->db->query("SELECT * FROM `oc_g2apay_order_transaction` WHERE `g2apay_order_id` = '" . (int)$g2apay_order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_g2apay_order_transaction` WHERE `g2apay_order_id` = :order_id",
+            [
+                ':order_id' => $g2apay_order_id
+            ]);
 
 		$transactions = [];
 		if ($query->num_rows) {
@@ -101,16 +113,25 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 	}
 
 	public function addTransaction($g2apay_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `oc_g2apay_order_transaction` SET `g2apay_order_id` = '" . (int)$g2apay_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . (double)$total . "'");
+		$this->db->query("INSERT INTO `oc_g2apay_order_transaction` SET `g2apay_order_id` = :order_id, `type` = :type, `amount` = :amount",
+            [
+                ':order_id' => $g2apay_order_id,
+                ':type' => $type,
+                ':amount' => $total
+            ]);
 	}
 
 	public function getTotalRefunded($g2apay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_g2apay_order_transaction` WHERE `g2apay_order_id` = '" . (int)$g2apay_order_id . "' AND 'refund'");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_g2apay_order_transaction` WHERE `g2apay_order_id` = :order_id AND 'refund'",
+            [
+                ':order_id' => $g2apay_order_id
+            ]);
 
 		return (double)$query->row['total'];
 	}
 
 	public function sendCurl($url, $fields) {
+	    // LJK TODO Guzzle
 		$curl = curl_init($url);
 		curl_setopt($curl, CURLOPT_URL, $url);
 		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
@@ -120,9 +141,9 @@ class ModelExtensionPaymentG2aPayAdmin extends Model {
 		$auth_hash = hash('sha256', $this->config->get('payment_g2apay_api_hash') . $this->config->get('payment_g2apay_username') . html_entity_decode($this->config->get('payment_g2apay_secret')));
 		$authorization = $this->config->get('payment_g2apay_api_hash') . ";" . $auth_hash;
 		curl_setopt(
-				$curl, CURLOPT_HTTPHEADER, array(
+				$curl, CURLOPT_HTTPHEADER, [
 			"Authorization: " . $authorization
-				)
+            ]
 		);
 
 		$response = json_decode(curl_exec($curl));
