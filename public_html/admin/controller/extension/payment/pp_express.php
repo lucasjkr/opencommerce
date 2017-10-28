@@ -729,14 +729,18 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 						$this->model_extension_payment_pp_express_admin->addTransaction($transaction);
 
 						//edit transaction to refunded status
+                        $payment_status = 'Partially-Refunded';
 						if ($result['TOTALREFUNDEDAMOUNT'] == $this->request->post['amount_original']) {
-							$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Refunded' WHERE `transaction_id` = '" . $this->db->escape($this->request->post['transaction_id']) . "' LIMIT 1");
-						} else {
-							$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Partially-Refunded' WHERE `transaction_id` = '" . $this->db->escape($this->request->post['transaction_id']) . "' LIMIT 1");
-						}
+                            $payment_status = 'Refunded';
+                        }
+                        $this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = ::payment_status WHERE `transaction_id` = :transaction_id LIMIT 1",
+                            [
+                                ':transaction_id' => $this->request->post['transaction_id'],
+                                ':payment_status' => $payment_status
+                            ]);
 
 						//redirect back to the order
-						$this->response->redirect($this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $paypal_order['order_id'], true));
+						$this->response->redirect($this->url->link('sale/order/info', 'user_token=' . $this->session->data['user_token'] . '&order_id=' . $paypal_order['order_id']));
 					} else {
 						$this->model_extension_payment_pp_express_admin->log(json_encode($result));
 						$this->session->data['error'] = (isset($result['L_SHORTMESSAGE0']) ? $result['L_SHORTMESSAGE0'] : 'There was an error') . (isset($result['L_LONGMESSAGE0']) ? '<br />' . $result['L_LONGMESSAGE0'] : '');
@@ -918,11 +922,15 @@ class ControllerExtensionPaymentPPExpress extends Controller {
 
 				$parent_transaction = $this->model_extension_payment_pp_express_admin->getLocalTransaction($transaction['parent_id']);
 
-				if ($parent_transaction['amount'] == abs($transaction['amount'])) {
-					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Refunded' WHERE `transaction_id` = '" . $this->db->escape($transaction['parent_id']) . "' LIMIT 1");
-				} else {
-					$this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = 'Partially-Refunded' WHERE `transaction_id` = '" . $this->db->escape($transaction['parent_id']) . "' LIMIT 1");
-				}
+                $payment_status = 'Partially-Refunded';
+ 				if ($parent_transaction['amount'] == abs($transaction['amount'])) {
+                    $payment_status = 'Refunded';
+                }
+                $this->db->query("UPDATE `oc_paypal_order_transaction` SET `payment_status` = :payment_status WHERE `transaction_id` = :transaction_id LIMIT 1",
+                    [
+                        ':payment_status' => $payment_status,
+                        ':transaction_id' => $transaction['parent_id']
+                    ]);
 
 				if (isset($result['REFUNDTRANSACTIONID'])) {
 					$transaction['transaction_id'] = $result['REFUNDTRANSACTIONID'];
