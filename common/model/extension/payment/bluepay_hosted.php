@@ -20,12 +20,12 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 		$method_data = [];
 
 		if ($status) {
-			$method_data = array(
+			$method_data = [
 				'code' => 'bluepay_hosted',
 				'title' => $this->language->get('text_title'),
 				'terms' => '',
 				'sort_order' => $this->config->get('payment_bluepay_hosted_sort_order')
-			);
+            ];
 		}
 
 		return $method_data;
@@ -38,13 +38,25 @@ class ModelExtensionPaymentBluePayHosted extends Model {
 			$release_status = null;
 		}
 
-		$this->db->query("INSERT INTO `oc_bluepay_hosted_order` SET `order_id` = '" . (int)$order_info['order_id'] . "', `transaction_id` = '" . $this->db->escape($response_data['RRNO']) . "', `release_status` = '" . (int)$release_status . "', `currency_code` = '" . $this->db->escape($order_info['currency_code']) . "', `total` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_bluepay_hosted_order` SET `order_id` = :order_id, `transaction_id` = :transaction_id, `release_status` = :release_status, `currency_code` = :currency_code, `total` = :total",
+            [
+                ':order_id' => $order_info['order_id'],
+                ':transaction_id' => $response_data['RRNO'],
+                ':release_status' => $release_status,
+                ':currency_code' => $order_info['currency_code'],
+                ':total' => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false)
+            ]);
 
 		return $this->db->getLastId();
 	}
 
 	public function addTransaction($bluepay_hosted_order_id, $type, $order_info) {
-		$this->db->query("INSERT INTO `oc_bluepay_hosted_order_transaction` SET `bluepay_hosted_order_id` = '" . (int)$bluepay_hosted_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . $this->currency->format($order_info['total'], $order_info['currency_code'], false, false) . "'");
+		$this->db->query("INSERT INTO `oc_bluepay_hosted_order_transaction` SET `bluepay_hosted_order_id` = :hosted_order_id, `type` = :type, `amount` = :amount",
+            [
+                ':hosted_order_id' => $bluepay_hosted_order_id,
+                ':type' => $type,
+                ':amount' => $this->currency->format($order_info['total'], $order_info['currency_code'], false, false)
+            ]);
 	}
 
 	public function logger($message) {
