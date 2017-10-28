@@ -4,7 +4,7 @@ class ModelUserUserGroupAdmin extends Model {
 		$this->db->query("INSERT INTO `oc_user_group` SET `name` = :name, `permission` = :permission",
             [
                 ':name' => $data['name'],
-                ':permission' => isset($data['permission']) ? $this->db->escape(json_encode($data['permission'])) : ''
+                ':permission' => isset($data['permission']) ? json_encode($data['permission']) : ''
             ]);
 	
 		return $this->db->getLastId();
@@ -14,7 +14,7 @@ class ModelUserUserGroupAdmin extends Model {
 		$this->db->query("UPDATE `oc_user_group` SET `name` = :name, `permission` = :permission WHERE `user_group_id` = :user_group_id",
             [
                 ':name' => $data['name'],
-                ':permission' => isset($data['permission']) ? $this->db->escape(json_encode($data['permission'])) : '',
+                ':permission' => isset($data['permission']) ? json_encode($data['permission']) : '',
                 ':user_group_id' => $user_group_id
             ]);
 	}
