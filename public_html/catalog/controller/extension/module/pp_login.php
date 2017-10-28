@@ -88,7 +88,7 @@ class ControllerExtensionModulePPLogin extends Controller {
 			} else {
 				$country = $this->db->query("SELECT `country_id` FROM `oc_country` WHERE iso_code_2 = :iso_code_2",
                     [
-                        ':iso_code_2' => $this->db->escape($user->address->country)
+                        ':iso_code_2' => $user->address->country
                     ]);
 
 				if ($country->num_rows) {
