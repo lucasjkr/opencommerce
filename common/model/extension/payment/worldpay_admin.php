@@ -83,16 +83,22 @@ class ModelExtensionPaymentWorldpayAdmin extends Model {
 	}
 
 	public function updateRefundStatus($worldpay_order_id, $status) {
-		$this->db->query("UPDATE `oc_worldpay_order` SET `refund_status` = '" . (int)$status . "' WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "'");
+		$this->db->query("UPDATE `oc_worldpay_order` SET `refund_status` = :status WHERE `worldpay_order_id` = :order_id",
+            [
+                ':status' => $status,
+                ':order_id' => $worldpay_order_id
+            ]);
 	}
 
 	public function getOrder($order_id) {
+		$query = $this->db->query("SELECT * FROM `oc_worldpay_order` WHERE `order_id` = ::order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
-		$qry = $this->db->query("SELECT * FROM `oc_worldpay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
-
-		if ($qry->num_rows) {
-			$order = $qry->row;
-			$order['transactions'] = $this->getTransactions($order['worldpay_order_id'], $qry->row['currency_code']);
+		if ($query->num_rows) {
+			$order = $query->row;
+			$order['transactions'] = $this->getTransactions($order['worldpay_order_id'], $query->row['currency_code']);
 
 			return $order;
 		} else {
@@ -101,7 +107,10 @@ class ModelExtensionPaymentWorldpayAdmin extends Model {
 	}
 
 	private function getTransactions($worldpay_order_id, $currency_code) {
-		$query = $this->db->query("SELECT * FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = :order_id",
+            [
+                ':order_id' = $worldpay_order_id
+            ]);
 
 		$transactions = [];
 		if ($query->num_rows) {
@@ -116,17 +125,29 @@ class ModelExtensionPaymentWorldpayAdmin extends Model {
 	}
 
 	public function addTransaction($worldpay_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `oc_worldpay_order_transaction` SET `worldpay_order_id` = '" . (int)$worldpay_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . (double)$total . "'");
+		$this->db->query("INSERT INTO `oc_worldpay_order_transaction` SET `worldpay_order_id` = :order_id, `type` = :type, `amount` = :total",
+            [
+                ':order_id' => $worldpay_order_id,
+                ':type' => $type,
+                ':total' => $total
+            ]);
 	}
 
 	public function getTotalReleased($worldpay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "' AND (`type` = 'payment' OR `type` = 'refund')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = :order_id AND (`type` = 'payment' OR `type` = 'refund')",
+            [
+                ':order_id' => $worldpay_order_id
+            ]);
 
 		return (double)$query->row['total'];
 	}
 
 	public function getTotalRefunded($worldpay_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = '" . (int)$worldpay_order_id . "' AND 'refund'");
+	    // LJK TODO - original query didn't have type, just refund. It should be migrated up to the rest of code
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = :order_id AND `type` = 'refund'",
+            [
+                ':order_id' => $worldpay_order_id
+            ]);
 
 		return (double)$query->row['total'];
 	}
@@ -135,6 +156,7 @@ class ModelExtensionPaymentWorldpayAdmin extends Model {
 
 		$json = json_encode($order);
 
+        // LJK TODO: Guzzle
 		$curl = curl_init();
 
 		curl_setopt($curl, CURLOPT_URL, 'https://api.worldpay.com/v1/orders/' . $url);
@@ -145,11 +167,11 @@ class ModelExtensionPaymentWorldpayAdmin extends Model {
 		curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
 		curl_setopt($curl, CURLOPT_TIMEOUT, 10);
 		curl_setopt(
-				$curl, CURLOPT_HTTPHEADER, array(
+				$curl, CURLOPT_HTTPHEADER, [
 			"Authorization: " . $this->config->get('payment_worldpay_service_key'),
 			"Content-Type: application/json",
 			"Content-Length: " . strlen($json)
-				)
+            ]
 		);
 
 		$result = json_decode(curl_exec($curl));
