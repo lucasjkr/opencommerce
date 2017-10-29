@@ -28,7 +28,7 @@ class ControllerMailRegister extends Controller {
 		$data['login'] = $this->url->link('account/login', '', true);		
 		$data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
 
-        // LJK TODO: Rewrite to use new Mailer
+        // LJK Note: This has been rewritten to use new Mailer
         $subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
         $message = $this->load->view('mail/register', $data);
         $email   = $args[0]['email'];
