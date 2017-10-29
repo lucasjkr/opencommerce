@@ -10,6 +10,8 @@
 /**
 * Mail class
 */
+
+// THIS CLASS IS NOW REDUNDANT AND WILL BE DELETED SOON.
 class Mail {
 	protected $to;
 	protected $from;

@@ -1,5 +1,9 @@
 <?php
 
+// This class is nothing more than a wrapper for PHPMailer. Only advantages are:
+// 1 - Less repeated code throughtout the project
+// 2 - Responsibility for development of the mailing code is removed from us.
+
 class Mailer {
     public  $subject = null;
     public  $message = null;
@@ -45,10 +49,11 @@ class Mailer {
         }
 
         if(!defined('SMTP_PORT')) {
-            // LJK TODO: We COULD try to send via port 25, or have a table of known SMTP ports for different service,
             throw new Exception('Error: ' . 'SMTP_PORT not defined in config.php');
         }
 
+        // Perhaps there COULD be an "admin_alerts" table - where alerts here would be written to that table, and a
+        // new module would check that table whenever the Admin user(s) login to the back end?
         $this->mailer->isSMTP();
         $this->mailer->isHTML(true);
 
@@ -59,7 +64,6 @@ class Mailer {
         $this->mailer->SMTPSecure = 'tls';
         $this->mailer->SMTPAuth   = true;
     }
-
 
     public function send($email){
         // Turn off emails during development
