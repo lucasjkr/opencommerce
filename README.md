@@ -28,6 +28,10 @@ to modify the base tables.
 
 ## In process
 
+- Remove OC's native mail function and replacing with a wrapper around PHPMailer (Complete) 
+    - Needs more testing
+    - Controllers neeed to be re-written to use the new wrapper.
+
 - Converting queries to parameterized queries, which will clean up a LOT of messiness `($this->db->escape((int)$value)`
 
 - Merging Admin and Catalog models into a single Model where applicable
