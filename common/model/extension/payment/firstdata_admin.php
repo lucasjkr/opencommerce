@@ -96,7 +96,11 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 	}
 
 	public function updateVoidStatus($firstdata_order_id, $status) {
-		$this->db->query("UPDATE `oc_firstdata_order` SET `void_status` = '" . (int)$status . "' WHERE `firstdata_order_id` = '" . (int)$firstdata_order_id . "'");
+		$this->db->query("UPDATE `oc_firstdata_order` SET `void_status` = :status WHERE `firstdata_order_id` = :order_id",
+            [
+                ':status' => $status,
+                ':order_id' => $firstdata_order_id,
+            ]);
 	}
 
 	public function capture($order_id, $amount) {
@@ -118,7 +122,6 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 				$settle_type = 'multisettle';
 				$xml_amount = '<amount currency="' . (string)$firstdata_order['currency_code'] . '">' . (int)round($amount*100) . '</amount>';
 			} else {
-				//$this->logger('Capture hash construct: ' . $timestamp . ' . ' . $merchant_id . ' . ' . $firstdata_order['order_ref'] . ' . . . ');
 				$this->logger('Capture hash construct: ' . $timestamp . ' . ' . $merchant_id . ' . ' . $firstdata_order['order_ref'] . ' . ' . (int)round($amount*100) . ' . ' . (string)$firstdata_order['currency_code'] . ' . ');
 
 				$tmp = $timestamp . ' . ' . $merchant_id . ' . ' . $firstdata_order['order_ref'] . ' . ' . (int)round($amount*100) . ' . ' . (string)$firstdata_order['currency_code'] . ' . ';
@@ -144,6 +147,7 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 
 			$this->logger('Settle XML request:\r\n' . print_r(simplexml_load_string($xml), 1));
 
+            // LJKR TODO: Guzzle
 			$ch = curl_init();
 			curl_setopt($ch, CURLOPT_URL, "https://epage.payandshop.com/epage-remote.cgi");
 			curl_setopt($ch, CURLOPT_POST, 1);
@@ -161,13 +165,20 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 	}
 
 	public function updateCaptureStatus($firstdata_order_id, $status) {
-		$this->db->query("UPDATE `oc_firstdata_order` SET `capture_status` = '" . (int)$status . "' WHERE `firstdata_order_id` = '" . (int)$firstdata_order_id . "'");
+		$this->db->query("UPDATE `oc_firstdata_order` SET `capture_status` = :status WHERE `firstdata_order_id` = :order_id",
+            [
+                ':status' => $status,
+                ':order_id' => $firstdata_order_id
+            ]);
 	}
 
 	public function getOrder($order_id) {
 		$this->logger('getOrder - ' . $order_id);
 
-		$qry = $this->db->query("SELECT * FROM `oc_firstdata_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_firstdata_order` WHERE `order_id` = :order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -182,7 +193,10 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 	}
 
 	private function getTransactions($firstdata_order_id) {
-		$qry = $this->db->query("SELECT * FROM `oc_firstdata_order_transaction` WHERE `firstdata_order_id` = '" . (int)$firstdata_order_id . "'");
+		$qry = $this->db->query("SELECT * FROM `oc_firstdata_order_transaction` WHERE `firstdata_order_id` = :order_id",
+            [
+                ':order_id' = $firstdata_order_id
+            ]);
 
 		if ($qry->num_rows) {
 			return $qry->rows;
@@ -192,7 +206,12 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 	}
 
 	public function addTransaction($firstdata_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `oc_firstdata_order_transaction` SET `firstdata_order_id` = '" . (int)$firstdata_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
+		$this->db->query("INSERT INTO `oc_firstdata_order_transaction` SET `firstdata_order_id` = :order_id, `type` = :type, `amount` = :total",
+            [
+                ':order_id' => $firstdata_order_id,
+                ':type' => $type,
+                ':total' => $total
+            ]);
 	}
 
 	public function logger($message) {
@@ -203,17 +222,20 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 	}
 
 	public function getTotalCaptured($firstdata_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_firstdata_order_transaction` WHERE `firstdata_order_id` = '" . (int)$firstdata_order_id . "' AND (`type` = 'payment' OR `type` = 'refund')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_firstdata_order_transaction` WHERE `firstdata_order_id` = :order_id AND (`type` = 'payment' OR `type` = 'refund')",
+            [
+                ':order_id' => $firstdata_order_id
+            ]);
 
 		return (float)$query->row['total'];
 	}
 
 	public function mapCurrency($code) {
-		$currency = array(
+		$currency = [
 			'GBP' => 826,
 			'USD' => 840,
 			'EUR' => 978,
-		);
+		];
 
 		if (array_key_exists($code, $currency)) {
 			return $currency[$code];

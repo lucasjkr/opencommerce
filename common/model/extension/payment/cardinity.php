@@ -5,20 +5,27 @@ use Cardinity\Exception as CardinityException;
 
 class ModelExtensionPaymentCardinity extends Model {
 	public function addOrder($data) {
-		$this->db->query("INSERT INTO `oc_cardinity_order` SET `order_id` = '" . (int)$data['order_id'] . "', `payment_id` = '" . $this->db->escape((string)$data['payment_id']) . "'");
+		$this->db->query("INSERT INTO `oc_cardinity_order` SET `order_id` = :order_id, `payment_id` = :payment_id",
+            [
+                ':order_id' => $data['order_id'],
+                ':payment_id' => $data['payment_id']
+            ]);
 	}
 
 	public function getOrder($order_id) {
-		$query = $this->db->query("SELECT * FROM `oc_cardinity_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$query = $this->db->query("SELECT * FROM `oc_cardinity_order` WHERE `order_id` = :order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		return $query->row;
 	}
 
 	public function createPayment($key, $secret, $payment_data) {
-		$client = Client::create(array(
+		$client = Client::create([
 			'consumerKey'    => $key,
 			'consumerSecret' => $secret,
-		));
+		]);
 
 		$method = new Payment\Create($payment_data);
 
@@ -34,10 +41,10 @@ class ModelExtensionPaymentCardinity extends Model {
 	}
 
 	public function finalizePayment($key, $secret, $payment_id, $pares) {
-		$client = Client::create(array(
+		$client = Client::create([
 			'consumerKey'    => $key,
 			'consumerSecret' => $secret,
-		));
+        ]);
 
 		$method = new Payment\Finalize($payment_id, $pares);
 
@@ -55,7 +62,12 @@ class ModelExtensionPaymentCardinity extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/cardinity');
 
-		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = '" . (int)$this->config->get('payment_cardinity_geo_zone_id') . "' AND country_id = '" . (int)$address['country_id'] . "' AND (zone_id = '" . (int)$address['zone_id'] . "' OR zone_id = '0')");
+		$query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id OR zone_id = '0')",
+            [
+                ':geo_zone_id' => $this->config->get('payment_cardinity_geo_zone_id'),
+                ':country_id' => $address['country_id'],
+                ':zone_id' => $address['zone_id']
+            ]);
 
 		if ($this->config->get('payment_cardinity_total') > 0 && $this->config->get('payment_cardinity_total') > $total) {
 			$status = false;
@@ -74,23 +86,23 @@ class ModelExtensionPaymentCardinity extends Model {
 		$method_data = [];
 
 		if ($status) {
-			$method_data = array(
+			$method_data = [
 				'code'		 => 'cardinity',
 				'title'		 => $this->language->get('text_title'),
 				'terms'		 => '',
 				'sort_order' => $this->config->get('payment_cardinity_sort_order')
-			);
+			];
 		}
 
 		return $method_data;
 	}
 
 	public function getSupportedCurrencies() {
-		return array(
+		return [
 			'USD',
 			'GBP',
 			'EUR'
-		);
+        ];
 	}
 
 	public function log($data, $class_step = 6, $function_step = 6) {

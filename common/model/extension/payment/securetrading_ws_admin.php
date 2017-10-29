@@ -183,7 +183,7 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 		$post_data['accounttypedescriptions'] = 'ECOM';
 
 		if ($data['detail']) {
-			$post_data['optionalfields'] = array(
+			$post_data['optionalfields'] = [
 				'parenttransactionreference',
 				'accounttypedescription',
 				'requesttypedescription',
@@ -227,9 +227,9 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 				'customercountryiso2a',
 				'customerpostcode',
 				'customertelephones',
-			);
+			];
 		} else {
-			$post_data['optionalfields'] = array(
+			$post_data['optionalfields'] = [
 				'orderreference',
 				'currencyiso3a',
 				'errorcode',
@@ -239,7 +239,7 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 				'mainamount',
 				'billingfirstname',
 				'billinglastname',
-			);
+            ];
 		}
 
 		if (isset($data['currency']) && !empty($data['currency'])) {
@@ -262,7 +262,7 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 			$post_data['settlestatuss'] = $data['settle_status'];
 		}
 
-		$defaults = array(
+		$defaults = [
 			CURLOPT_POST => 1,
 			CURLOPT_HEADER => 0,
 			CURLOPT_SSL_VERIFYPEER => 0,
@@ -271,12 +271,12 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 			CURLOPT_RETURNTRANSFER => 1,
 			CURLOPT_FORBID_REUSE => 1,
 			CURLOPT_TIMEOUT => 15,
-			CURLOPT_HTTPHEADER => array(
+			CURLOPT_HTTPHEADER => [
 				'User-Agent: OpenCart - Secure Trading WS',
 				'Authorization: Basic ' . base64_encode($this->config->get('payment_securetrading_ws_csv_username') . ':' . $this->config->get('payment_securetrading_ws_csv_password')),
-			),
+            ],
 			CURLOPT_POSTFIELDS => $this->encodePost($post_data),
-		);
+        ];
 
 		curl_setopt_array($ch, $defaults);
 
@@ -318,7 +318,8 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 	public function call($data) {
 		$ch = curl_init();
 
-		$defaults = array(
+        // LJK TODO Guzzle
+		$defaults = [
 			CURLOPT_POST => 1,
 			CURLOPT_HEADER => 0,
 			CURLOPT_SSL_VERIFYPEER => 0,
@@ -327,13 +328,13 @@ class ModelExtensionPaymentSecureTradingWsAdmin extends Model {
 			CURLOPT_RETURNTRANSFER => 1,
 			CURLOPT_FORBID_REUSE => 1,
 			CURLOPT_TIMEOUT => 15,
-			CURLOPT_HTTPHEADER => array(
+			CURLOPT_HTTPHEADER => [
 				'User-Agent: OpenCart - Secure Trading WS',
 				'Content-Length: ' . strlen($data),
 				'Authorization: Basic ' . base64_encode($this->config->get('payment_securetrading_ws_username') . ':' . $this->config->get('payment_securetrading_ws_password')),
-			),
+			],
 			CURLOPT_POSTFIELDS => $data,
-		);
+		];
 
 		curl_setopt_array($ch, $defaults);
 
