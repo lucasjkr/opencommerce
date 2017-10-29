@@ -27,12 +27,12 @@ class ModelCatalogReview extends Model {
 			$message .= $this->language->get('text_review') . "\n";
 			$message .= html_entity_decode($data['text'], ENT_QUOTES, 'UTF-8') . "\n\n";
 
-            $this->mailer = $this->registry->get('Mailer');
+            $this->mailer          = $this->registry->get('Mailer');
             $this->mailer->subject = $subject;
             $this->mailer->message = $message;
             $this->mailer->send($this->config->get('config_email'));
 
-			// Send to additional alert emails
+			// Send additional alert emails
 			$emails = explode(',', $this->config->get('config_mail_alert_email'));
 			foreach ($emails as $email) {
 				if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
