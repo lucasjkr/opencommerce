@@ -62,6 +62,7 @@ class ModelCustomerCustomerApprovalAdmin extends Model {
 		$sql = "SELECT COUNT(*) AS total FROM `oc_customer_approval` ca LEFT JOIN `oc_customer` c ON (ca.`customer_id` = c.`customer_id`)";
 
 		$implode = [];
+        $args = [];
 
 		if (!empty($data['filter_name'])) {
 			$implode[] = "CONCAT(c.`firstname`, ' ', c.`lastname`) LIKE :name";
