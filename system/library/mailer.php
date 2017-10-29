@@ -2,9 +2,9 @@
 
 class Mailer {
     public  $subject = null;
-    public  $body    = null;
+    public  $message = null;
     public  $altbody = null;
-    private $mailer = null;
+    private $mailer  = null;
 
     public function __get($property)
     {
@@ -22,19 +22,16 @@ class Mailer {
         return $this;
     }
 
-
     public function __construct() {
         $this->mailer = new PHPMailer\PHPMailer\PHPMailer(true);
         // if we're set to suppress mail, then we don't need to make sure all of the other settings are correct
         if(defined('SUPPRESS_MAIL') && SUPPRESS_MAIL == 1) {
             return;
         }
-
         // It would be nice to do more validation of the settings here, but I'm not sure how we'd give useful feedback
         // since a visitor could trigger an email and therefore see these messages.
 
         // Could write to log and say "please look at the log for more details"
-
         if(!defined('SMTP_SERVER')) {
             throw new Exception('Error: ' . 'SMTP_SERVER not defined in config.php');
         }
@@ -76,9 +73,9 @@ class Mailer {
 
             // Need to make sure subject is not superlong. At least send a warning to the admin if we think the subject
             // is too long
-            $this->mailer->Subject = $this->subject;
-            $this->mailer->Body = $this->body;
-            $this->mailer->Altbody = $this->altbody;
+            $this->mailer->Subject  = $this->subject;
+            $this->mailer->Body     = $this->message;
+            $this->mailer->Altbody  = $this->altbody;
             return $this->mailer->send();
         } catch (Exception $e) {
             echo "Mailer error: " . $this->mailer->ErrorInfo;
