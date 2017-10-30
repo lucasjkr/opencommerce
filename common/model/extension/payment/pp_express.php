@@ -3,7 +3,12 @@ class ModelExtensionPaymentPPExpress extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/pp_express');
 
-		$query = $this->db->query("SELECT * FROM `oc_zone_to_geo_zone` WHERE `geo_zone_id` = '" . (int)$this->config->get('payment_pp_express_geo_zone_id') . "' AND `country_id` = '" . (int)$address['country_id'] . "' AND (`zone_id` = '" . (int)$address['zone_id'] . "' OR `zone_id` = '0')");
+		$query = $this->db->query("SELECT * FROM `oc_zone_to_geo_zone` WHERE `geo_zone_id` = :geo_zone_id AND `country_id` = :country_id AND (`zone_id` = :zone_id OR `zone_id` = '0')",
+            [
+                ':geo_zone_id' => $this->config->get('payment_pp_express_geo_zone_id'),
+                ':country_id' => $address['country_id'],
+                ':zone_id' => (int)$address['zone_id']
+            ]);
 
 		if ($this->config->get('payment_pp_express_total') > $total) {
 			$status = false;
@@ -18,12 +23,12 @@ class ModelExtensionPaymentPPExpress extends Model {
 		$method_data = [];
 
 		if ($status) {
-			$method_data = array(
+			$method_data = [
 				'code'       => 'pp_express',
 				'title'      => $this->language->get('text_title'),
 				'terms'      => '',
 				'sort_order' => $this->config->get('payment_pp_express_sort_order')
-			);
+            ];
 		}
 
 		return $method_data;
@@ -34,12 +39,14 @@ class ModelExtensionPaymentPPExpress extends Model {
 		 * 1 to 1 relationship with order table (extends order info)
 		 */
 
-		$this->db->query("INSERT INTO `oc_paypal_order` SET
-			`order_id` = '" . (int)$order_data['order_id'] . "',
-			`capture_status` = '" . $this->db->escape($order_data['capture_status']) . "',
-			`currency_code` = '" . $this->db->escape($order_data['currency_code']) . "',
-			`total` = '" . (float)$order_data['total'] . "',
-			`authorization_id` = '" . $this->db->escape($order_data['authorization_id']) . "'");
+		$this->db->query("INSERT INTO `oc_paypal_order` SET `order_id` = :order_id, `capture_status` = :capture_status, `currency_code` = :currency_code, `total` = :total, `authorization_id` = :authorization_id",
+            [
+                ':order_id' => $order_data['order_id'],
+                ':capture_status' => $order_data['capture_status'],
+                ':currency_code' => $order_data['currency_code'],
+                ':total' => $order_data['total'],
+                ':authorization_id' => $order_data['authorization_id']
+            ]);
 
 		return $this->db->getLastId();
 	}
@@ -49,19 +56,33 @@ class ModelExtensionPaymentPPExpress extends Model {
 		 * 1 to many relationship with paypal order table, many transactions per 1 order
 		 */
 
-		$this->db->query("INSERT INTO `oc_paypal_order_transaction` SET
-			`paypal_order_id` = '" . (int)$transaction_data['paypal_order_id'] . "',
-			`transaction_id` = '" . $this->db->escape($transaction_data['transaction_id']) . "',
-			`parent_id` = '" . $this->db->escape($transaction_data['parent_id']) . "',
-			`note` = '" . $this->db->escape($transaction_data['note']) . "',
-			`msgsubid` = '" . $this->db->escape($transaction_data['msgsubid']) . "',
-			`receipt_id` = '" . $this->db->escape($transaction_data['receipt_id']) . "',
-			`payment_type` = '" . $this->db->escape($transaction_data['payment_type']) . "',
-			`payment_status` = '" . $this->db->escape($transaction_data['payment_status']) . "',
-			`pending_reason` = '" . $this->db->escape($transaction_data['pending_reason']) . "',
-			`transaction_entity` = '" . $this->db->escape($transaction_data['transaction_entity']) . "',
-			`amount` = '" . (float)$transaction_data['amount'] . "',
-			`debug_data` = '" . $this->db->escape($transaction_data['debug_data']) . "'");
+		$this->db->query("INSERT INTO `oc_paypal_order_transaction` SET 
+            `paypal_order_id` = :paypal_order_id,
+            `transaction_id` = :transaction_id,
+			`parent_id` = :parent_id,
+			`note` = :note,
+			`msgsubid` = :msgsubid,
+			`receipt_id` = :receipt_id,
+			`payment_type` = :payment_type,
+			`payment_status` = :payment_status,
+			`pending_reason` = :pending_reason,
+			`transaction_entity` = :transaction_entity,
+			`amount` = :amount,
+			`debug_data` = :debug_data",
+            [
+            ':paypal_order_id' => $transaction_data['paypal_order_id'],
+            ':transaction_id' => $transaction_data['transaction_id'],
+			':parent_id' => $transaction_data['parent_id'],
+			':note' => $transaction_data['note'],
+			':msgsubid' => $transaction_data['msgsubid'],
+			':receipt_id' => $transaction_data['receipt_id'],
+			':payment_type' => $transaction_data['payment_type'],
+			':payment_status' => $transaction_data['payment_status'],
+			':pending_reason' => $transaction_data['pending_reason'],
+			':transaction_entity' => $transaction_data['transaction_entity'],
+			':amount' => $transaction_data['amount'],
+			':debug_data' => $transaction_data['debug_data']
+            ]);
 	}
 
 	public function paymentRequestInfo() {
@@ -97,6 +118,7 @@ class ModelExtensionPaymentPPExpress extends Model {
 			$data['L_PAYMENTREQUEST_0_NUMBER' . $i] = $item['model'];
 			$data['L_PAYMENTREQUEST_0_AMT' . $i] = $item_price;
 
+            // LJK TODO: This rounding should account for decimals set by the currency (ie - cryptos need 8 not 2 places)
 			$item_total += number_format($item_price * $item['quantity'], 2, '.', '');
 
 			$data['L_PAYMENTREQUEST_0_QTY' . $i] = $item['quantity'];
@@ -231,19 +253,29 @@ class ModelExtensionPaymentPPExpress extends Model {
 	}
 
 	public function getTotalCaptured($paypal_order_id) {
-		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `oc_paypal_order_transaction` WHERE `paypal_order_id` = '" . (int)$paypal_order_id . "' AND `pending_reason` != 'authorization' AND `pending_reason` != 'paymentreview' AND (`payment_status` = 'Partially-Refunded' OR `payment_status` = 'Completed' OR `payment_status` = 'Pending') AND `transaction_entity` = 'payment'");
+		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `oc_paypal_order_transaction` WHERE `paypal_order_id` = :order_id AND `pending_reason` != 'authorization' AND `pending_reason` != 'paymentreview' AND (`payment_status` = 'Partially-Refunded' OR `payment_status` = 'Completed' OR `payment_status` = 'Pending') AND `transaction_entity` = 'payment'",
+            [
+                ':order_id' => $paypal_order_id
+            ]);
 
 		return $qry->row['amount'];
 	}
 
 	public function getTotalRefunded($paypal_order_id) {
-		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `oc_paypal_order_transaction` WHERE `paypal_order_id` = '" . (int)$paypal_order_id . "' AND `payment_status` = 'Refunded'");
+		$qry = $this->db->query("SELECT SUM(`amount`) AS `amount` FROM `oc_paypal_order_transaction` WHERE `paypal_order_id` = :order_id AND `payment_status` = 'Refunded'",
+            [
+                ':order_id' => $paypal_order_id
+            ]);
 
 		return $qry->row['amount'];
 	}
 
 	public function getTransactionRow($transaction_id) {
-		$qry = $this->db->query("SELECT * FROM `oc_paypal_order_transaction` `pt` LEFT JOIN `oc_paypal_order` `po` ON `pt`.`paypal_order_id` = `po`.`paypal_order_id`  WHERE `pt`.`transaction_id` = '" . $this->db->escape($transaction_id) . "' LIMIT 1");
+	    // LJK TODO - verify, but this LIMIT is probably unncessary
+		$qry = $this->db->query("SELECT * FROM `oc_paypal_order_transaction` `pt` LEFT JOIN `oc_paypal_order` `po` ON `pt`.`paypal_order_id` = `po`.`paypal_order_id`  WHERE `pt`.`transaction_id` = :transaction_id LIMIT 1",
+            [
+                ':transaction_id' => $transaction_id,
+            ]);
 
 		if ($qry->num_rows > 0) {
 			return $qry->row;
@@ -253,7 +285,11 @@ class ModelExtensionPaymentPPExpress extends Model {
 	}
 
 	public function updateOrder($capture_status, $order_id) {
-		$this->db->query("UPDATE `oc_paypal_order` SET `capture_status` = '" . $this->db->escape($capture_status) . "' WHERE `order_id` = '" . (int)$order_id . "'");
+		$this->db->query("UPDATE `oc_paypal_order` SET `capture_status` = :capture_status WHERE `order_id` = :order_id",
+            [
+                ':capture_status' => $capture_status,
+                ':order_id' => $order_id
+            ]);
 	}
 
 	public function call($data) {
@@ -269,17 +305,17 @@ class ModelExtensionPaymentPPExpress extends Model {
 			$api_signature = $this->config->get('payment_pp_express_signature');
 		}
 
-		$settings = array(
+		$settings = [
 			'USER'         => $api_user,
 			'PWD'          => $api_password,
 			'SIGNATURE'    => $api_signature,
 			'VERSION'      => '109.0',
 			'BUTTONSOURCE' => 'OpenCart_2.0_EC'
-		);
+		];
 
 		$this->log($data, 'Call data');
 
-		$defaults = array(
+		$defaults = [
 			CURLOPT_POST => 1,
 			CURLOPT_HEADER => 0,
 			CURLOPT_URL => $api_url,
@@ -291,14 +327,17 @@ class ModelExtensionPaymentPPExpress extends Model {
 			CURLOPT_SSL_VERIFYPEER => 0,
 			CURLOPT_SSL_VERIFYHOST => 0,
 			CURLOPT_POSTFIELDS => http_build_query(array_merge($data, $settings), '', "&"),
-		);
+        ];
 
 		$curl = curl_init();
 
 		curl_setopt_array($curl, $defaults);
 
 		if (!$curl_response = curl_exec($curl)) {
-			$this->log(array('error' => curl_error($curl), 'errno' => curl_errno($curl)), 'cURL failed');
+			$this->log([
+			    'error' => curl_error($curl),
+                'errno' => curl_errno($curl)
+            ], 'cURL failed');
 		}
 
 		$this->log($curl_response, 'Result');

@@ -78,7 +78,10 @@ class ModelExtensionPaymentPPExpressAdmin extends Model {
 	public function addTransaction($transaction_data, $request_data = []) {
 		if ($request_data) {
 			$serialized_data = json_encode($request_data);
-
+            // LJK TODO: Invalid variable here - paypal_order_transaction_id
+            // UPDATE query is going first?
+            // I believe the INSERT query should run first, then return a row ID, and use that to update the call_data.
+            // Even better, just set the call data based on the content of that field.
 			$this->db->query("UPDATE oc_paypal_order_transaction SET call_data = '" . $this->db->escape($serialized_data) . "' WHERE paypal_order_transaction_id = " . (int)$paypal_order_transaction_id . " LIMIT 1");
 		}
 
