@@ -75,12 +75,15 @@ class Mailer {
             $this->mailer->addReplyTo(SMTP_REPLYTO, SMTP_NAME);
             $this->mailer->setFrom(SMTP_REPLYTO, SMTP_NAME);
 
-            // Need to make sure subject is not superlong. At least send a warning to the admin if we think the subject
-            // is too long
+            // Should send or log a warning for the admin if the subject is too long
             $this->mailer->Subject  = $this->subject;
             $this->mailer->Body     = $this->message;
             $this->mailer->Altbody  = $this->altbody;
+
+            // Sends the email
             $this->mailer->send();
+
+            // Resets the addresses, so we can send additional emails without including the previous recipient(s)
             $this->mailer->ClearAddresses();
 
             return true;
