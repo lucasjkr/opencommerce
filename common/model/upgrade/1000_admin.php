@@ -17,22 +17,6 @@ class ModelUpgrade1000Admin extends Model {
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
 		}
 
-		// customer_affiliate_report
-		$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = 'oc_customer_affiliate_report'");
-
-		if (!$query->num_rows) {
-			$this->db->query("
-			CREATE TABLE `oc_customer_affiliate_report` (
-				`customer_affiliate_report_id` int(11) NOT NULL AUTO_INCREMENT,
-				`customer_id` int(11) NOT NULL,
-				`store_id` int(11) NOT NULL,
-				`ip` varchar(40) NOT NULL,
-				`country` varchar(2) NOT NULL,
-				`date_added` datetime NOT NULL,
-				PRIMARY KEY (`customer_affiliate_report_id`)
-			) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
-		}
-
 		// download_report
 		$query = $this->db->query("SELECT * FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = '" . DB_DATABASE . "' AND TABLE_NAME = 'oc_download_report'");
 
