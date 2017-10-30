@@ -38,9 +38,7 @@ class ModelExtensionPaymentAmazonLoginPay extends Model {
 
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 
-		$this->db->query("INSERT INTO oc_customer SET customer_group_id = :customer_group_id, store_id = :store_id, 
-firstname = :firstname, lastname = :lastname, email = :email, telephone = :telephone, fax = :fax, custom_field = :custom_field, 
-password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved = :approved",
+		$this->db->query("INSERT INTO oc_customer SET customer_group_id = :customer_group_id, store_id = :store_id, firstname = :firstname, lastname = :lastname, email = :email, telephone = :telephone, fax = :fax, custom_field = :custom_field, password = :password, newsletter = :newsletter, ip = :ip, status = :status, approved = :approved",
             [
                 ':customer_group_ip' => $customer_group_id,
                 ':store_id' => $this->config->get('config_store_id'),
@@ -122,7 +120,20 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	public function addAddress($address) {
-		$query = $this->db->query("SELECT * FROM `oc_address` WHERE `firstname` = '" . $this->db->escape($address['firstname']) . "' AND `lastname` = '" . $this->db->escape($address['lastname']) . "' AND `address_1` = '" . $this->db->escape($address['address_1']) . "' AND `address_2` = '" . $this->db->escape($address['address_2']) . "' AND `postcode` = '" . $this->db->escape($address['postcode']) . "' AND `city` = '" . $this->db->escape($address['city']) . "' AND `zone_id` = '" . $this->db->escape($address['zone_id']) . "' AND `country_id` = '" . $this->db->escape($address['country_id']) . "'");
+	    // LJK TODO:
+        // This is supposed to prevent you from adding a duplicate address - however, it will also prevent you from adding an address that someone else added.
+        // Two people wouldn't be able to send gifts to the same person, for instance.
+		$query = $this->db->query("SELECT * FROM `oc_address` WHERE `firstname` = :firstname AND `lastname` = :lastname AND `address_1` = :address_1 AND `address_2` = :address_2 AND `postcode` = :postcode AND `city` = :city AND `zone_id` = :zone_id AND `country_id` = :country_id",
+            [
+                ':firstname' => $address['firstname'],
+                ':lastname' => $address['lastname'],
+                ':address_1' => $address['address_1'],
+                ':address_2' => $address['address_2'],
+                ':postcode' => $address['postcode'],
+                ':city' => $address['city'],
+                ':zone_id' => $address['zone_id'],
+                ':country_id' => $address['country_id']
+            ]);
 		if (!$query->num_rows) {
 			$this->load->model('account/address');
 			$this->model_account_address->addAddress($this->session->data['lpa']['address']);
@@ -130,31 +141,65 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	public function setOrderShipping($order_id, $has_free_shipping) {
-		$this->db->query("INSERT INTO `oc_amazon_login_pay_order` SET `order_id` = '" . (int)$order_id . "', `free_shipping` = '" . (int)$has_free_shipping . "', `modified` = now() ");
+	    // LJK TODO: modified column here. Need to analyze Amazon controllers and replace any need for `modified` with `date_modified`
+		$this->db->query("INSERT INTO `oc_amazon_login_pay_order` SET `order_id` = :order_id, `free_shipping` = :free_shipping, `modified` = now()",
+            [
+                ':order_id' => $order_id,
+                ':free_shipping' => $has_free_shipping
+            ]);
 		return $this->db->getLastId();
 	}
 
 	public function hasFreeShipping($order_id) {
-		return $this->db->query("SELECT `free_shipping` FROM `oc_amazon_login_pay_order` WHERE `order_id` = " . (int)$order_id)->row['free_shipping'] == '1';
+	    // LJK TODO: Need to analyze, query does not look correct
+		return $this->db->query("SELECT `free_shipping` FROM `oc_amazon_login_pay_order` WHERE `order_id` = :order_id",
+            [
+                ':order_id' => $order_id
+            ])->row['free_shipping'] == '1';
 	}
 
 	public function getShippingPrice($order_id) {
-		$query = $this->db->query("SELECT `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `oc_order_total` `ot` LEFT JOIN `oc_amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`) WHERE `ot`.`code` = 'shipping' AND `order_id` = " . (int)$order_id);
+	    // LJK TODO: Need to analyze - would rather NOT have this logic (price = tax + value) in the query. Just return raw data and do the math after the data is selected,
+        // Or do it in the controller. But further along in the models is fine too
+		$query = $this->db->query("SELECT `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `oc_order_total` `ot` LEFT JOIN `oc_amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`) WHERE `ot`.`code` = 'shipping' AND `order_id` = :order_id",
+            [
+                ':order_id' => $order_id
+            ]);
 		if ($query->num_rows) {
 			return $query->row['price'];
 		}
 	}
 
 	public function getAdditionalCharges($order_id) {
-		return $this->db->query("SELECT `ot`.`title`, `ot`.`order_total_id`, `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `oc_order_total` `ot` LEFT JOIN `oc_amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`)  WHERE `ott`.`code` NOT IN ('shipping', 'total', 'sub_total', 'tax') AND `order_id` = " . (int)$order_id)->rows;
+		return $this->db->query("SELECT `ot`.`title`, `ot`.`order_total_id`, `value` + IF(`tax` IS NULL, 0, `tax`) AS 'price' FROM `oc_order_total` `ot` LEFT JOIN `oc_amazon_login_pay_order_total_tax` `ott` USING(`order_total_id`)  WHERE `ott`.`code` NOT IN ('shipping', 'total', 'sub_total', 'tax') AND `order_id` = :order_id",
+            [
+                ':order_id' => $order_id
+            ])->rows;
 	}
 
 	public function addAmazonOrderId($order_id, $amazon_authorization_id, $capture_status, $total, $currency_code) {
-		$this->db->query("UPDATE `oc_amazon_login_pay_order` SET `amazon_order_reference_id` = '" . $this->db->escape($this->session->data['lpa']['AmazonOrderReferenceId']) . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `modified` = now(), `capture_status` = '" . $this->db->escape($capture_status) . "', `currency_code` = '" . $this->db->escape($currency_code) . "', `total` = '" . $total . "' WHERE `order_id` = '" . (int)$order_id . "'");
+	    // LJK TODO: Modified column in this query
+		$this->db->query("UPDATE `oc_amazon_login_pay_order` SET `amazon_order_reference_id` = :amazon_order_reference, `amazon_authorization_id` = :amazon_authorization_id, `modified` = now(), `capture_status` = :capture_status, `currency_code` = :currency_code, `total` = :total WHERE `order_id` = :order_id",
+            [
+                ':order_id' => $order_id,
+                ':amazon_order_reference' => $this->session->data['lpa']['AmazonOrderReferenceId'],
+                ':amazon_authorization_id' => $amazon_authorization_id,
+                ':capture_status' => $capture_status,
+                ':currency_code' => $currency_code,
+                ':total' => $total
+            ]);
 	}
 
 	public function addTransaction($amazon_login_pay_order_id, $amazon_authorization_id, $amazon_capture_id, $type, $status, $total) {
-		$this->db->query("INSERT INTO `oc_amazon_login_pay_order_transaction` SET `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "', `amazon_authorization_id` = '" . $this->db->escape($amazon_authorization_id) . "', `amazon_capture_id` = '" . $this->db->escape($amazon_capture_id) . "', `type` = '" . $this->db->escape($type) . "', `status` = '" . $this->db->escape($status) . "', `amount` = '" . $total . "'");
+		$this->db->query("INSERT INTO `oc_amazon_login_pay_order_transaction` SET `amazon_login_pay_order_id` = :amazon_login_pay_order_id, `amazon_authorization_id` = :amazon_authorization_id, `amazon_capture_id` = :amazon_capture_id, `type` = :type, `status` = :status, `amount` = :amount",
+            [
+                ':amazon_login_pay_order_id' => $amazon_login_pay_order_id,
+                ':amazon_authorization_id' => $amazon_authorization_id,
+                ':amazon_capture_id' => $amazon_capture_id,
+                ':type' => $type,
+                ':status' => $status,
+                ':amount' => $total
+            ]);
 	}
 
 	public function closeOrderRef($amazon_order_reference_id) {
@@ -233,11 +278,30 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	public function editOrder($order_id, $order) {
-		$this->db->query("UPDATE `oc_order` SET  payment_firstname = '" . $this->db->escape($order['payment_firstname']) . "', payment_lastname = '" . $this->db->escape($order['payment_lastname']) . "', payment_address_1 = '" . $this->db->escape($order['payment_address_1']) . "', payment_address_2 = '" . $this->db->escape($order['payment_address_2']) . "', payment_city = '" . $this->db->escape($order['payment_city']) . "', payment_zone = '" . $this->db->escape($order['payment_zone']) . "', payment_zone_id = " . (int)$order['payment_zone_id'] . ", payment_country = '" . $this->db->escape($order['payment_country']) . "', payment_country_id = " . (int)$order['payment_country_id'] . ", payment_postcode = '" . $this->db->escape($order['payment_postcode']) . "' WHERE order_id = " . (int)$order_id);
+		$this->db->query("UPDATE `oc_order` SET payment_firstname = :payment_firstname, payment_lastname = :payment_lastname, payment_address_1 = :payment_address_1, payment_address_2 = :payment_address_2, payment_city = :payment_city, payment_zone = :payment_zone, payment_zone_id = :payment_zone_id, payment_country = :payment_country, payment_country_id = :payment_country_id, payment_postcode = :payment_postcode WHERE order_id = :order_id",
+            [
+                ':payment_firstname' => $order['payment_firstname'],
+                ':payment_lastname' => $order['payment_lastname'],
+                ':payment_address_1' => $order['payment_address_1'],
+                ':payment_address_2' => $order['payment_address_2'],
+                ':payment_city' => $order['payment_city'],
+                ':payment_zone' => $order['payment_zone'],
+                ':payment_zone_id' => $order['payment_zone_id'],
+                ':payment_country' => $order['payment_country'],
+                ':payment_country_id' => $order['payment_country_id'],
+                ':payment_postcode' => $order['payment_postcode'],
+                ':order_id' => $order_id
+            ]);
 	}
 
 	public function updateStatus($amazon_id, $type, $status) {
-		$this->db->query("UPDATE `oc_amazon_login_pay_order_transaction` SET `status` = '" . $this->db->escape($status) . "' WHERE `amazon_" . $type . "_id` = '" . $this->db->escape($amazon_id) . "' AND `type` = '" . $this->db->escape($type) . "'");
+        // LJK TODO: What's up with this 'dynamic' column name? Surely it can be done better than that?
+		$this->db->query("UPDATE `oc_amazon_login_pay_order_transaction` SET `status` = :status WHERE `amazon_" . $type . "_id` = :amazon_id AND `type` = :type",
+            [
+                ':status' => $status,
+                ':amazon_id' => $amazon_id,
+                ':type' => $type
+            ]);
 	}
 
 	public function authorizationIpn($xml) {
@@ -294,12 +358,19 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	public function updateCaptureStatus($amazon_login_pay_order_id, $status) {
-		$this->db->query("UPDATE `oc_amazon_login_pay_order` SET `capture_status` = '" . (int)$status . "' WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "'");
+		$this->db->query("UPDATE `oc_amazon_login_pay_order` SET `capture_status` = :status WHERE `amazon_login_pay_order_id` = ':order_id",
+            [
+                ':status' => $status,
+                ':order_id' => $amazon_login_pay_order_id
+            ]);
 	}
 
 	public function getOrder($order_id) {
 
-		$qry = $this->db->query("SELECT * FROM `oc_amazon_login_pay_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_amazon_login_pay_order` WHERE `order_id` = :order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -311,7 +382,10 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	private function getTransactions($amazon_login_pay_order_id, $currency_code) {
-		$query = $this->db->query("SELECT * FROM `oc_amazon_login_pay_order_transaction` WHERE `amazon_login_pay_order_id` = '" . (int)$amazon_login_pay_order_id . "'");
+		$query = $this->db->query("SELECT * FROM `oc_amazon_login_pay_order_transaction` WHERE `amazon_login_pay_order_id` = :order_id",
+            [
+                ':order_id' => $amazon_login_pay_order_id
+            ]);
 
 		$transactions = [];
 
@@ -328,6 +402,7 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	public function getUserInfo($access_token) {
+	    // LJK TODO: Guzzle!
 		if ($this->config->get('payment_amazon_login_pay_test') == 'sandbox') {
 			if ($this->config->get('payment_amazon_login_pay_payment_region') == 'GBP') {
 				$curl_token = curl_init('https://api.sandbox.amazon.co.uk/auth/o2/tokeninfo?access_token=' . urlencode($access_token));
@@ -440,6 +515,7 @@ password = :password, newsletter = :newsletter, ip = :ip, status = '1', approved
 	}
 
 	public function sendCurl($url, $parameters) {
+	    // LJK TODO: Guzzle
 		$query = $this->getParametersAsString($parameters);
 
 		$curl = curl_init($url);
