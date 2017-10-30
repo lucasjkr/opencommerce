@@ -68,7 +68,7 @@ class Mailer {
     public function send($email){
         // Turn off emails during development
         if(defined('SUPPRESS_MAIL') && SUPPRESS_MAIL == 1) {
-            return;
+            return true;
         }
         try {
             $this->mailer->addAddress($email);
@@ -80,7 +80,10 @@ class Mailer {
             $this->mailer->Subject  = $this->subject;
             $this->mailer->Body     = $this->message;
             $this->mailer->Altbody  = $this->altbody;
-            return $this->mailer->send();
+            $this->mailer->send();
+            $this->mailer->ClearAddresses();
+
+            return true;
         } catch (Exception $e) {
             echo "Mailer error: " . $this->mailer->ErrorInfo;
         }
