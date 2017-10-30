@@ -126,7 +126,7 @@ $registry->set('language', $language);
 $registry->set('document', new Document());
 
 // Mailer - requires PHPMailer - not a problem so long as your ran composer install
-$registry->set('Mailer', new Mailer(true));
+$registry->set('Mail', new Mail());
 
 // Config Autoload
 if ($config->has('config_autoload')) {
