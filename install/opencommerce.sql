@@ -1168,54 +1168,6 @@ CREATE TABLE `oc_customer_activity` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 
-
-# Dump of table oc_customer_affiliate
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `oc_customer_affiliate`;
-
-CREATE TABLE `oc_customer_affiliate` (
-  `customer_id` int(11) NOT NULL,
-  `company` varchar(40) NOT NULL,
-  `website` varchar(255) NOT NULL,
-  `tracking` varchar(64) NOT NULL,
-  `commission` decimal(4,2) NOT NULL DEFAULT '0.00',
-  `tax` varchar(64) NOT NULL,
-  `payment` varchar(6) NOT NULL,
-  `cheque` varchar(100) NOT NULL,
-  `paypal` varchar(64) NOT NULL,
-  `bank_name` varchar(64) NOT NULL,
-  `bank_branch_number` varchar(64) NOT NULL,
-  `bank_swift_code` varchar(64) NOT NULL,
-  `bank_account_name` varchar(64) NOT NULL,
-  `bank_account_number` varchar(64) NOT NULL,
-  `custom_field` text NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`customer_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
-# Dump of table oc_customer_affiliate_report
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `oc_customer_affiliate_report`;
-
-CREATE TABLE `oc_customer_affiliate_report` (
-  `customer_affiliate_report_id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_id` int(11) NOT NULL,
-  `store_id` int(11) NOT NULL,
-  `ip` varchar(40) NOT NULL,
-  `country` varchar(2) NOT NULL,
-  `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `date_modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`customer_affiliate_report_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
-
-
 # Dump of table oc_customer_approval
 # ------------------------------------------------------------
 
@@ -1491,24 +1443,18 @@ VALUES
 	(7,'activity_address_add','catalog/model/account/address/addAddress/after','event/activity/addAddress',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(8,'activity_address_edit','catalog/model/account/address/editAddress/after','event/activity/editAddress',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(9,'activity_address_delete','catalog/model/account/address/deleteAddress/after','event/activity/deleteAddress',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
-	(10,'activity_affiliate_add','catalog/model/account/affiliate/addAffiliate/after','event/activity/addAffiliate',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
-	(11,'activity_affiliate_edit','catalog/model/account/affiliate/editAffiliate/after','event/activity/editAffiliate',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(12,'activity_order_add','catalog/model/checkout/order/addOrderHistory/before','event/activity/addOrderHistory',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(13,'activity_return_add','catalog/model/account/return/addReturn/after','event/activity/addReturn',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(14,'mail_transaction','catalog/model/account/customer/addTransaction/after','mail/transaction',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(15,'mail_forgotten','catalog/model/account/customer/editCode/after','mail/forgotten',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(16,'mail_customer_add','catalog/model/account/customer/addCustomer/after','mail/register',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(17,'mail_customer_alert','catalog/model/account/customer/addCustomer/after','mail/register/alert',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
-	(18,'mail_affiliate_add','catalog/model/account/customer/addAffiliate/after','mail/affiliate',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
-	(19,'mail_affiliate_alert','catalog/model/account/customer/addAffiliate/after','mail/affiliate/alert',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(20,'mail_voucher','catalog/model/checkout/order/addOrderHistory/after','extension/total/voucher/send',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(21,'mail_order_add','catalog/model/checkout/order/addOrderHistory/before','mail/order',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(22,'mail_order_alert','catalog/model/checkout/order/addOrderHistory/before','mail/order/alert',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(23,'statistics_review_add','catalog/model/catalog/review/addReview/after','event/statistics/addReview',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(24,'statistics_return_add','catalog/model/account/return/addReturn/after','event/statistics/addReturn',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(25,'statistics_order_history','catalog/model/checkout/order/addOrderHistory/after','event/statistics/addOrderHistory',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
-	(26,'admin_mail_affiliate_approve','admin/model/customer/customer_approval/approveAffiliate/after','mail/affiliate/approve',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
-	(27,'admin_mail_affiliate_deny','admin/model/customer/customer_approval/denyAffiliate/after','mail/affiliate/deny',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(28,'admin_mail_customer_approve','admin/model/customer/customer_approval/approveCustomer/after','mail/customer/approve',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(29,'admin_mail_customer_deny','admin/model/customer/customer_approval/denyCustomer/after','mail/customer/deny',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
 	(31,'admin_mail_transaction','admin/model/customer/customer/addTransaction/after','mail/transaction',1,0,'2017-10-06 10:23:42','2017-10-06 10:23:42'),
