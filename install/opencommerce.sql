@@ -1812,8 +1812,6 @@ CREATE TABLE `oc_language` (
   `name` varchar(32) NOT NULL,
   `code` varchar(5) NOT NULL,
   `locale` varchar(255) NOT NULL,
-  `image` varchar(64) NOT NULL,
-  `directory` varchar(32) NOT NULL,
   `sort_order` int(3) NOT NULL DEFAULT '0',
   `status` tinyint(1) NOT NULL,
   `date_added` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -1825,9 +1823,9 @@ CREATE TABLE `oc_language` (
 LOCK TABLES `oc_language` WRITE;
 /*!40000 ALTER TABLE `oc_language` DISABLE KEYS */;
 
-INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `image`, `directory`, `sort_order`, `status`, `date_added`, `date_modified`)
+INSERT INTO `oc_language` (`language_id`, `name`, `code`, `locale`, `sort_order`, `status`)
 VALUES
-	(1,'English','en-gb','en-gb,en','gb.png','english',1,1,'2017-10-06 10:23:43','2017-10-06 10:23:43');
+	(1,'English','en-gb','en-gb,en',1,1);
 
 /*!40000 ALTER TABLE `oc_language` ENABLE KEYS */;
 UNLOCK TABLES;
