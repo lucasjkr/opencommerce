@@ -5,8 +5,8 @@
 // 2 - Responsibility for development of the mailing code is removed from us.
 
 class Mailer {
-    public  $subject = null;
-    public  $message = null;
+    public  $setSubject = null;
+    public  $setText    = null;
     public  $altbody = null;
     private $mailer  = null;
 
@@ -76,8 +76,8 @@ class Mailer {
             $this->mailer->setFrom(SMTP_REPLYTO, SMTP_NAME);
 
             // Should send or log a warning for the admin if the subject is too long
-            $this->mailer->Subject  = $this->subject;
-            $this->mailer->Body     = $this->message;
+            $this->mailer->Subject  = $this->setSubject;
+            $this->mailer->Body     = $this->setText;
             $this->mailer->Altbody  = $this->altbody;
 
             // Sends the email
