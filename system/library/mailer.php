@@ -6,9 +6,9 @@
 
 class Mailer {
     public  $setSubject = null;
+    public  $setHtml    = null;
     public  $setText    = null;
-    public  $altbody = null;
-    private $mailer  = null;
+    private $mailer     = null;
 
     public function __get($property)
     {
@@ -77,8 +77,8 @@ class Mailer {
 
             // Should send or log a warning for the admin if the subject is too long
             $this->mailer->Subject  = $this->setSubject;
-            $this->mailer->Body     = $this->setText;
-            $this->mailer->Altbody  = $this->altbody;
+            $this->mailer->Body     = $this->setHtml;
+            $this->mailer->Altbody  = $this->setText;
 
             // Sends the email
             $this->mailer->send();
