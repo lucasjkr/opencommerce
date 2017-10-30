@@ -22,19 +22,6 @@ $_['db_database']          = '';
 $_['db_port']              = 3306;
 $_['db_autostart']         = false;
 
-// Mail
-$_['mail_engine']          = 'mail'; // mail or smtp
-$_['mail_from']            = ''; // Your E-Mail
-$_['mail_sender']          = ''; // Your name or company name
-$_['mail_reply_to']        = ''; // Reply to E-Mail
-$_['mail_smtp_hostname']   = '';
-$_['mail_smtp_username']   = '';
-$_['mail_smtp_password']   = '';
-$_['mail_smtp_port']       = 25;
-$_['mail_smtp_timeout']    = 5;
-$_['mail_verp']            = false;
-$_['mail_parameter']       = '';
-
 // Cache
 $_['cache_engine']         = 'file'; // apc, file, mem or memcached
 $_['cache_expire']         = 3600;

@@ -39,20 +39,21 @@ class ControllerMailCustomer extends Controller {
 			$data['login'] = $store_url . 'index.php?route=account/login';	
 			$data['store'] = $store_name;
 
-            // LJK: TODO use PHP Mailer to set all this stuff
-			$mail = new Mail($this->config->get('config_mail_engine'));
-			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-			$mail->smtp_username = $this->config->get('config_mail_smtp_username');
-			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-			$mail->smtp_port = $this->config->get('config_mail_smtp_port');
-			$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
-	
-			$mail->setTo($customer_info['email']);
-			$mail->setFrom($this->config->get('config_email'));
-			$mail->setSender($store_name);
-			$mail->setSubject($subject);
-			$mail->setText($this->load->view('mail/customer_approve', $data));
-			$mail->send(); 
+            // LJK Note: This has been rewritten to use new Mailer
+            $subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
+            $message = $this->load->view('mail/customer_approve', $data);
+
+            $mail = $this->registry->get('Mail');
+            $mail->setSubject($subject);
+            $mail->setText($message);
+            $mail->send($customer_info['email']);
+
+            $emails = explode(',', $this->config->get('config_mail_alert_email'));
+            foreach ($emails as $email) {
+                if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $mail->send($email);
+                }
+            }
 		}
 	}
 	
@@ -87,27 +88,27 @@ class ControllerMailCustomer extends Controller {
 			$language = new Language($language_code);
 			$language->load($language_code);
 			$language->load('mail/customer_deny');
-				
-			$subject = sprintf($language->get('text_subject'), $store_name);
-				
+
 			$data['text_welcome'] = sprintf($language->get('text_welcome'), $store_name);
-				
-			$data['contact'] = $store_url . 'index.php?route=information/contact';	
+
+			$data['contact'] = $store_url . 'index.php?route=information/contact';
 			$data['store'] = $store_name;
 
-			$mail = new Mail($this->config->get('config_mail_engine'));
-			$mail->smtp_hostname = $this->config->get('config_mail_smtp_hostname');
-			$mail->smtp_username = $this->config->get('config_mail_smtp_username');
-			$mail->smtp_password = html_entity_decode($this->config->get('config_mail_smtp_password'), ENT_QUOTES, 'UTF-8');
-			$mail->smtp_port = $this->config->get('config_mail_smtp_port');
-			$mail->smtp_timeout = $this->config->get('config_mail_smtp_timeout');
+			$subject = sprintf($language->get('text_subject'), $store_name);
+            $message = $this->load->view('mail/customer_deny', $data);
+            $email   = $customer_info['email'];
 
-			$mail->setTo($customer_info['email']);
-			$mail->setFrom($this->config->get('config_email'));
-			$mail->setSender($store_name);
-			$mail->setSubject($subject);
-			$mail->setText($this->load->view('mail/customer_deny', $data));
-			$mail->send();
+            $mail = $this->registry->get('Mail');
+            $mail->setSubject($subject);
+            $mail->setText($message);
+            $mail->send($email);
+
+            $emails = explode(',', $this->config->get('config_mail_alert_email'));
+            foreach ($emails as $email) {
+                if ($email && filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                    $mail->send($email);
+                }
+            }
 		}
 	}
 }	
