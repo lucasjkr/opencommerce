@@ -51,10 +51,12 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	public function call($xml) {
+	    // LJK TODO: Guzzle
 		$ch = curl_init();
+        // LJK - CURL address is a test site?
 		curl_setopt($ch, CURLOPT_URL, "https://test.ipg-online.com/ipgapi/services");
 		curl_setopt($ch, CURLOPT_POST, 1);
-		curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: text/xml"));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, ["Content-Type: text/xml"]);
 		curl_setopt($ch, CURLOPT_HTTPAUTH, 'CURLAUTH_BASIC');
 		curl_setopt($ch, CURLOPT_USERPWD, $this->config->get('payment_firstdata_remote_user_id') . ':' . $this->config->get('payment_firstdata_remote_password'));
 		curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 1);
@@ -121,7 +123,11 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	public function updateVoidStatus($firstdata_remote_order_id, $status) {
-		$this->db->query("UPDATE `oc_firstdata_remote_order` SET `void_status` = '" . (int)$status . "' WHERE `firstdata_remote_order_id` = '" . (int)$firstdata_remote_order_id . "'");
+		$this->db->query("UPDATE `oc_firstdata_remote_order` SET `void_status` = :status WHERE `firstdata_remote_order_id` = :order_id",
+            [
+                ':status' => $status,
+                ':order_id' => $firstdata_remote_order_id
+            ]);
 	}
 
 	public function capture($order_ref, $total, $currency_code) {
@@ -168,10 +174,15 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	public function updateCaptureStatus($firstdata_remote_order_id, $status) {
-		$this->db->query("UPDATE `oc_firstdata_remote_order` SET `capture_status` = '" . (int)$status . "' WHERE `firstdata_remote_order_id` = '" . (int)$firstdata_remote_order_id . "'");
+		$this->db->query("UPDATE `oc_firstdata_remote_order` SET `capture_status` = :status WHERE `firstdata_remote_order_id` = :status ",
+            [
+                ':status' => $status,
+                ':order_id' => $firstdata_remote_order_id
+            ]);
 	}
 
 	public function refund($order_ref, $total, $currency_code) {
+	    // LJK TODO: verify that the refund gets recorded in the DB?
 		$xml = '<?xml version="1.0" encoding="UTF-8"?>';
 		$xml .= '<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">';
 		$xml .= '<SOAP-ENV:Header />';
@@ -215,11 +226,18 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	public function updateRefundStatus($firstdata_remote_order_id, $status) {
-		$this->db->query("UPDATE `oc_firstdata_remote_order` SET `refund_status` = '" . (int)$status . "' WHERE `firstdata_remote_order_id` = '" . (int)$firstdata_remote_order_id . "'");
+		$this->db->query("UPDATE `oc_firstdata_remote_order` SET `refund_status` = :status WHERE `firstdata_remote_order_id` = :order_id",
+            [
+                ':status' => $status,
+                ':order_id' => $firstdata_remote_order_id
+            ]);
 	}
 
 	public function getOrder($order_id) {
-		$qry = $this->db->query("SELECT * FROM `oc_firstdata_remote_order` WHERE `order_id` = '" . (int)$order_id . "' LIMIT 1");
+		$qry = $this->db->query("SELECT * FROM `oc_firstdata_remote_order` WHERE `order_id` = :order_id LIMIT 1",
+            [
+                ':order_id' => $order_id
+            ]);
 
 		if ($qry->num_rows) {
 			$order = $qry->row;
@@ -232,7 +250,10 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	private function getTransactions($firstdata_remote_order_id) {
-		$qry = $this->db->query("SELECT * FROM `oc_firstdata_remote_order_transaction` WHERE `firstdata_remote_order_id` = '" . (int)$firstdata_remote_order_id . "'");
+		$qry = $this->db->query("SELECT * FROM `oc_firstdata_remote_order_transaction` WHERE `firstdata_remote_order_id` = :order_id",
+            [
+                ':order_id' => $firstdata_remote_order_id
+            ]);
 
 		if ($qry->num_rows) {
 			return $qry->rows;
@@ -242,7 +263,12 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	public function addTransaction($firstdata_remote_order_id, $type, $total) {
-		$this->db->query("INSERT INTO `oc_firstdata_remote_order_transaction` SET `firstdata_remote_order_id` = '" . (int)$firstdata_remote_order_id . "', `type` = '" . $this->db->escape($type) . "', `amount` = '" . (float)$total . "'");
+		$this->db->query("INSERT INTO `oc_firstdata_remote_order_transaction` SET `firstdata_remote_order_id` = :order_id, `type` = :type, `amount` = :amount",
+            [
+                ':order_id' => $firstdata_remote_order_id,
+                ':type' => $type,
+                ':amount' => $total
+            ]);
 	}
 
 	public function logger($message) {
@@ -253,23 +279,29 @@ class ModelExtensionPaymentFirstdataRemoteAdmin extends Model {
 	}
 
 	public function getTotalCaptured($firstdata_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_firstdata_remote_order_transaction` WHERE `firstdata_remote_order_id` = '" . (int)$firstdata_order_id . "' AND (`type` = 'payment' OR `type` = 'refund')");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_firstdata_remote_order_transaction` WHERE `firstdata_remote_order_id` = :order_id AND (`type` = 'payment' OR `type` = 'refund')",
+            [
+                ':order_id' => $firstdata_order_id
+            ]);
 
 		return (float)$query->row['total'];
 	}
 
 	public function getTotalRefunded($firstdata_order_id) {
-		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_firstdata_remote_order_transaction` WHERE `firstdata_remote_order_id` = '" . (int)$firstdata_order_id . "' AND 'refund'");
+		$query = $this->db->query("SELECT SUM(`amount`) AS `total` FROM `oc_firstdata_remote_order_transaction` WHERE `firstdata_remote_order_id` = :order_id AND 'refund'",
+            [
+                ':order_id' => $firstdata_order_id
+            ]);
 
 		return (float)$query->row['total'];
 	}
 
 	public function mapCurrency($code) {
-		$currency = array(
+		$currency = [
 			'GBP' => 826,
 			'USD' => 840,
 			'EUR' => 978,
-		);
+        ];
 
 		if (array_key_exists($code, $currency)) {
 			return $currency[$code];
