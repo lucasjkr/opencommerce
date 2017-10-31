@@ -72,7 +72,7 @@ class ModelCatalogProduct extends Model {
 	}
 
 	public function getProducts($data = array()) {
-	    // LJK TODO: This SQL is going to be a pain to parameterize, come back to it later
+        $i = 1; // Counter for dynamic number of parameters in queries
 		$sql = "SELECT p.product_id, (SELECT AVG(rating) AS total FROM oc_review r1 WHERE r1.product_id = p.product_id AND r1.status = '1' GROUP BY r1.product_id) AS rating, (SELECT price FROM oc_product_discount pd2 WHERE pd2.product_id = p.product_id AND pd2.customer_group_id = :customer_group_id_1 AND pd2.quantity = '1' AND ((pd2.date_start = '0000-00-00' OR pd2.date_start < NOW()) AND (pd2.date_end = '0000-00-00' OR pd2.date_end > NOW())) ORDER BY pd2.priority ASC, pd2.price ASC LIMIT 1) AS discount, (SELECT price FROM oc_product_special ps WHERE ps.product_id = p.product_id AND ps.customer_group_id = :customer_group_id_2 AND ((ps.date_start = '0000-00-00' OR ps.date_start < NOW()) AND (ps.date_end = '0000-00-00' OR ps.date_end > NOW())) ORDER BY ps.priority ASC, ps.price ASC LIMIT 1) AS special";
         $args[':customer_group_id_1'] = $this->config->get('config_customer_group_id');
         $args[':customer_group_id_2'] = $this->config->get('config_customer_group_id');
@@ -105,14 +105,17 @@ class ModelCatalogProduct extends Model {
 				$sql .= " AND p2c.category_id = :category_id";
                 $args[':category_id'] = $data['filter_category_id'];
 			}
-            // LJK TODO: Need to add dynamic number of placeholders and parameters here.
+
 			if (!empty($data['filter_filter'])) {
 				$implode = [];
 
 				$filters = explode(',', $data['filter_filter']);
 
+                // LJK - Adding dynamic number of placeholders
 				foreach ($filters as $filter_id) {
-					$implode[] = (int)$filter_id;
+					$implode[] = ':filter_id_' . $i;
+                    $args[':filter_id_' . $i ] = $filter_id;
+                    $i++;
 				}
 
 				$sql .= " AND pf.filter_id IN (" . implode(',', $implode) . ")";
@@ -127,9 +130,11 @@ class ModelCatalogProduct extends Model {
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_name'])));
 
-                // LJK TODO: Need to add dynamic number of placeholders and parameters here.
+                // LJK - Adding dynamic number of placeholders
 				foreach ($words as $word) {
-					$implode[] = "pd.name LIKE '%" . $this->db->escape($word) . "%'";
+					$implode[] = 'pd.name LIKE :name_' . $i;
+                    $args[':name_' . $i ] = '%' . $word . '%';
+                    $i++;
 				}
 
 				if ($implode) {
@@ -151,9 +156,11 @@ class ModelCatalogProduct extends Model {
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_tag'])));
 
-                // LJK TODO: Need to add dynamic number of placeholders and parameters here.
+                // LJK - Adding dynamic number of placeholders
                 foreach ($words as $word) {
-					$implode[] = "pd.tag LIKE '%" . $this->db->escape($word) . "%'";
+					$implode[] = 'pd.tag LIKE :tag_' . $i;
+                    $args[':tag_' . $i ] = '%' . $word . '%';
+                    $i++;
 				}
 
 				if ($implode) {
@@ -480,6 +487,7 @@ class ModelCatalogProduct extends Model {
 	public function getTotalProducts($data = array()) {
 		$sql = "SELECT COUNT(DISTINCT p.product_id) AS total";
         $args = [];
+        $i = 1; // Counter for dynamic number of parameters in queries
 
 		if (!empty($data['filter_category_id'])) {
 			if (!empty($data['filter_sub_category'])) {
@@ -531,9 +539,12 @@ class ModelCatalogProduct extends Model {
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_name'])));
 
-				foreach ($words as $word) {
-					$implode[] = "pd.name LIKE '%" . $this->db->escape($word) . "%'";
-				}
+                // LJK - Adding dynamic number of placeholders
+                foreach ($words as $word) {
+                    $implode[] = 'pd.name LIKE :name_' . $i;
+                    $args[':name_' . $i ] = '%' . $word . '%';
+                    $i++;
+                }
 
 				if ($implode) {
 					$sql .= " " . implode(" AND ", $implode) . "";
@@ -554,9 +565,12 @@ class ModelCatalogProduct extends Model {
 
 				$words = explode(' ', trim(preg_replace('/\s+/', ' ', $data['filter_tag'])));
 
-				foreach ($words as $word) {
-					$implode[] = "pd.tag LIKE '%" . $this->db->escape($word) . "%'";
-				}
+                // LJK - Adding dynamic number of placeholders
+                foreach ($words as $word) {
+                    $implode[] = 'pd.name LIKE :name_' . $i;
+                    $args[':name_' . $i ] = '%' . $word . '%';
+                    $i++;
+                }
 
 				if ($implode) {
 					$sql .= " " . implode(" AND ", $implode) . "";
