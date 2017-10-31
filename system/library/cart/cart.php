@@ -317,7 +317,7 @@ pov.product_option_value_id = :product_option_value_id AND pov.product_option_id
             ]);
 
 		if (!$query->row['total']) {
-			$this->db->query("INSERT oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = ::option, quantity = :quantity",
+            $this->db->query("INSERT oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = :option, quantity = :quantity",
                 [
                     ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
                     ':customer_id' => $this->customer->getId(),
