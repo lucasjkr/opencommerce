@@ -53,7 +53,7 @@ class Customer {
             ]);
         if ($customer_query->num_rows) {
             if (password_verify($password, $customer_query->row['password'])) {
-                $this->session->data['customer_id'] = $customer_query->row['custome r_id'];
+                $this->session->data['customer_id'] = $customer_query->row['customer_id'];
 
                 $this->customer_id = $customer_query->row['customer_id'];
                 $this->firstname = $customer_query->row['firstname'];
