@@ -52,7 +52,7 @@ class ModelCustomerCustomerAdmin extends Model {
 	}
 
 	public function editCustomer($customer_id, $data) {
-		$this->db->query("UPDATE `oc_customer` SET `customer_group_id` = :customer_group_id, `firstname` = :firstname, `lastname` = :lastname, `email` = :email, `telephone` = :telephone, `custom_field` = :custom_field, `newsletter` = :newsletter', status = :status, safe = :safe WHERE customer_id = :customer_id",
+		$this->db->query("UPDATE `oc_customer` SET `customer_group_id` = :customer_group_id, `firstname` = :firstname, `lastname` = :lastname, `email` = :email, `telephone` = :telephone, `custom_field` = :custom_field, `newsletter` = :newsletter, status = :status, safe = :safe WHERE customer_id = :customer_id",
             [
                 ':customer_group_id' => $data['customer_group_id'],
                 ':firstname' => $data['firstname'],
