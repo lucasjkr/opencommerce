@@ -398,15 +398,17 @@ class ModelSaleOrderAdmin extends Model {
 	
 	public function getTotalSales($data = []) {
 		$sql = "SELECT SUM(total) AS total FROM `oc_order`";
+        $i = 1; // (for iterations/dynamic built queries
+        $args = [];
 
-		if (!empty($data['filter_order_status'])) {
+        if (!empty($data['filter_order_status'])) {
 			$implode = [];
-            $args = [];
 
 			$order_statuses = explode(',', $data['filter_order_status']);
-
 			foreach ($order_statuses as $order_status_id) {
-				$implode[] = "order_status_id = '" . (int)$order_status_id . "'";
+				$implode[] = "order_status_id = :order_status_id_" . $i;
+                $args[':order_status_id_' . $i ] = $order_status_id;
+                $i++;
 			}
 
 			if ($implode) {

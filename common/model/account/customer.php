@@ -122,6 +122,7 @@ class ModelAccountCustomer extends Model {
 	}
 
 	public function getCustomerByToken($token) {
+	    // LJK TODO: Is this even making a selction?
 		$query = $this->db->query("SELECT * FROM oc_customer WHERE token = :token AND token != :token",
             [
                 ':token_1' => $token,
