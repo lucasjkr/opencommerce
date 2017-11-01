@@ -145,27 +145,27 @@ class ControllerCustomerCustomField extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
-		);
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . $url)
-		);
+        ];
 
 		$data['add'] = $this->url->link('customer/custom_field/add', 'user_token=' . $this->session->data['user_token'] . $url);
 		$data['delete'] = $this->url->link('customer/custom_field/delete', 'user_token=' . $this->session->data['user_token'] . $url);
 
 		$data['custom_fields'] = [];
 
-		$filter_data = array(
+		$filter_data = [
 			'sort'  => $sort,
 			'order' => $order,
 			'start' => ($page - 1) * $this->config->get('config_limit_admin'),
 			'limit' => $this->config->get('config_limit_admin')
-		);
+        ];
 
 		$custom_field_total = $this->model_customer_custom_field_admin->getTotalCustomFields();
 
@@ -207,15 +207,15 @@ class ControllerCustomerCustomField extends Controller {
 					break;
 			}
 
-			$data['custom_fields'][] = array(
+			$data['custom_fields'][] = [
 				'custom_field_id' => $result['custom_field_id'],
 				'name'            => $result['name'],
 				'location'        => $this->language->get('text_' . $result['location']),
 				'type'            => $type,
 				'status'          => $result['status'],
 				'sort_order'      => $result['sort_order'],
-				'edit'            => $this->url->link('customer/custom_field/edit', 'user_token=' . $this->session->data['user_token'] . '&custom_field_id=' . $result['custom_field_id'] . $url, true)
-			);
+				'edit'            => $this->url->link('customer/custom_field/edit', 'user_token=' . $this->session->data['user_token'] . '&custom_field_id=' . $result['custom_field_id'] . $url)
+            ];
 		}
 
 		if (isset($this->error['warning'])) {
@@ -250,11 +250,11 @@ class ControllerCustomerCustomField extends Controller {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
-		$data['sort_name'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cfd.name' . $url, true);
-		$data['sort_location'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.location' . $url, true);
-		$data['sort_type'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.type' . $url, true);
-		$data['sort_status'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.status' . $url, true);
-		$data['sort_sort_order'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.sort_order' . $url, true);
+		$data['sort_name'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cfd.name' . $url);
+		$data['sort_location'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.location' . $url);
+		$data['sort_type'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.type' . $url);
+		$data['sort_status'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.status' . $url);
+		$data['sort_sort_order'] = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . '&sort=cf.sort_order' . $url);
 
 		$url = '';
 
@@ -270,7 +270,7 @@ class ControllerCustomerCustomField extends Controller {
 		$pagination->total = $custom_field_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_limit_admin');
-		$pagination->url = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}', true);
+		$pagination->url = $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}');
 
 		$data['pagination'] = $pagination->render();
 
@@ -323,15 +323,15 @@ class ControllerCustomerCustomField extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
-		);
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('customer/custom_field', 'user_token=' . $this->session->data['user_token'] . $url)
-		);
+        ];
 
 		if (!isset($this->request->get['custom_field_id'])) {
 			$data['action'] = $this->url->link('customer/custom_field/add', 'user_token=' . $this->session->data['user_token'] . $url);
@@ -418,11 +418,11 @@ class ControllerCustomerCustomField extends Controller {
 		$data['custom_field_values'] = [];
 
 		foreach ($custom_field_values as $custom_field_value) {
-			$data['custom_field_values'][] = array(
+			$data['custom_field_values'][] = [
 				'custom_field_value_id'          => $custom_field_value['custom_field_value_id'],
 				'custom_field_value_description' => $custom_field_value['custom_field_value_description'],
 				'sort_order'                     => $custom_field_value['sort_order']
-			);
+            ];
 		}
 
 		if (isset($this->request->post['custom_field_customer_group'])) {
