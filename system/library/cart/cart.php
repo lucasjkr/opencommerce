@@ -49,7 +49,7 @@ class Cart {
 
 		$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
             [
-                ':api_id' => isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0,
+                ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
                 ':customer_id' => $this->customer->getId(),
                 ':session_id' => $this->session->getId()
             ]);
@@ -226,7 +226,7 @@ pov.product_option_value_id = :product_option_value_id AND pov.product_option_id
 				// Downloads
 				$download_data = [];
 
-				$download_query = $this->db->query("SELECT * FROM oc_product_to_download p2d LEFT JOIN oc_download d ON (p2d.download_id = d.download_id) LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE p2d.product_id = :product_id AND dd.language_id = :langauge_id",
+				$download_query = $this->db->query("SELECT * FROM oc_product_to_download p2d LEFT JOIN oc_download d ON (p2d.download_id = d.download_id) LEFT JOIN oc_download_description dd ON (d.download_id = dd.download_id) WHERE p2d.product_id = :product_id AND dd.language_id = :language_id",
                     [
                         ':product_id' => $cart['product_id'],
                         ':language_id' => $this->config->get('config_language_id'),
@@ -317,7 +317,8 @@ pov.product_option_value_id = :product_option_value_id AND pov.product_option_id
             ]);
 
 		if (!$query->row['total']) {
-            $this->db->query("INSERT oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = :option, quantity = :quantity",
+            $this->db->query("--Insert Query--
+INSERT INTO oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = :option, quantity = :quantity",
                 [
                     ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
                     ':customer_id' => $this->customer->getId(),
@@ -330,20 +331,20 @@ pov.product_option_value_id = :product_option_value_id AND pov.product_option_id
 		} else {
 			$this->db->query("UPDATE oc_cart SET quantity = (quantity + :quantity) WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id AND product_id = :product_id AND recurring_id = :recurring_id AND `option` = :option",
                 [
-                    ':quantity' => $quantity,
                     ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
                     ':customer_id' => $this->customer->getId() ,
                     ':session_id' => $this->session->getId(),
                     ':product_id' => $product_id,
                     ':recurring_id' => $recurring_id,
-                    ':option' => json_encode($option)
+                    ':option' => json_encode($option),
+                    ':quantity' => $quantity,
                 ]);
 		}
 	}
 
 	public function update($cart_id, $quantity) {
 	    // LJK TODO: why isn't session_id or cart_id sufficent to identify the customer?
-		$this->db->query("UPDATE oc_cart SET quantity = :quantity WHERE cart_id = :cart_id  AND api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
+		$this->db->query("UPDATE oc_cart SET quantity = :quantity WHERE cart_id = :cart_id AND api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
             [
                 ':quantity' => $quantity,
                 ':cart_id' => $cart_id,
