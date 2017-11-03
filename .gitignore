@@ -1,7 +1,3 @@
-# Config files
-/public_html/config.php
-/public_html/admin/config.php
-
 # Image File
 !/public_html/image/no_image.jpg
 
@@ -10,40 +6,30 @@
 !/public_html/image/cache/index.html
 
 # System Cache Files
-/public_html/system/storage/cache/*
-!/public_html/system/storage/cache/index.html
+/system/storage/cache/*
 
 # Modification Files
-/public_html/system/storage/modification/*
-!/public_html/system/storage/modification/index.html
+/system/storage/modification/*
 
 # Templates Files
-/public_html/image/templates/*
-/public_html/image/templates/default.jpg
+/image/templates/*
+/image/templates/default.jpg
 
 # Download Files
-/public_html/system/storage/download/*
-!/public_html/system/storage/download/index.html
+/system/storage/download/*
 
 # Session Files
-/public_html/system/storage/session/*
-!/public_html/system/storage/session/index.html
+/system/storage/session/*
 
 # Upload Files
-/public_html/system/storage/upload/*
-!/public_html/system/storage/upload/index.html
+/system/storage/upload/*
 
 # Flags 
 # remove sharp char if you want to add flags to gitignore
 # /public_html/flags/*
 
 # Log Files
-/upload/system/storage/logs/*
-!/upload/system/storage/logs/index.html
-
-# If you want to ignore install file use following lines [on development mode]
-# /public_html/backup.install/*
-# /public_html/install/*
+/system/storage/logs/*
 
 /tests/phpunit/vendor/*
 /tests/phpunit/composer.lock
@@ -56,6 +42,15 @@ vendor/*
 system/storage/cache/*
 
 # Config files
-config/config.php
-public_html/admin/config.php
-config/credentials.php
+/config/config.php
+/system/storage/cache/*
+/system/storage/logs/*
+system/storage/logs/error.log
+.DS_Store
+*.log
+work files/opencart-logo.psd
+system/storage/logs/error.log
+public_html/admin/language/en-us/*
+public_html/catalog/language/en-us/*
+phinx.yml
+stupidities to fix.txt
