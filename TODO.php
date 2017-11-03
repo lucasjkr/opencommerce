@@ -60,3 +60,25 @@ if (isset($this->request->post['config_maintenance'])) {
 
 ControllerStartupError is reminiscent of error catching in framework.php
 ---
+
+Now that all tables have date_added and date_modified fields, remove all instances where the query is setting the values of these fields manually
+
+---
+
+There are lots of methods like:
+
+getSomething
+and
+getTotalSomething
+
+Why not count the objects in the array of getSomething, rather than have a duplicate method?
+
+----
+
+TODO
+products-> viewed column to new table, products_viewed or product_views
+
+---
+
+TODO
+Move squareup payments to the rest of the payment processors
