@@ -12,7 +12,7 @@ class ControllerExtensionReportProductViewed extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report', true));
+			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report'));
 		}
 
 		if (isset($this->error['warning'])) {
@@ -23,24 +23,24 @@ class ControllerExtensionReportProductViewed extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
-		);
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report', true)
-		);
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report')
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('extension/report/product_viewed', 'user_token=' . $this->session->data['user_token'], true)
-		);
+			'href' => $this->url->link('extension/report/product_viewed', 'user_token=' . $this->session->data['user_token'])
+        ];
 
 		$data['action'] = $this->url->link('extension/report/product_viewed', 'user_token=' . $this->session->data['user_token']);
 
-		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report', true);
+		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report');
 
 		if (isset($this->request->post['report_product_viewed_status'])) {
 			$data['report_product_viewed_status'] = $this->request->post['report_product_viewed_status'];
@@ -70,6 +70,7 @@ class ControllerExtensionReportProductViewed extends Controller {
 	}
 		
 	public function report() {
+	    // LJK TODOL This should load the admin model - or probably just need to rename the admin model to become a regular model
 		$this->load->language('extension/report/product_viewed');
 
 		if (isset($this->request->get['page'])) {
@@ -78,14 +79,14 @@ class ControllerExtensionReportProductViewed extends Controller {
 			$page = 1;
 		}
 		
-		$data['reset'] = $this->url->link('extension/report/product_viewed/reset', 'user_token=' . $this->session->data['user_token'] . '&page={page}', true);
+		$data['reset'] = $this->url->link('extension/report/product_viewed/reset', 'user_token=' . $this->session->data['user_token'] . '&page={page}');
 
 		$this->load->model('extension/report/product');
 
-		$filter_data = array(
+		$filter_data = [
 			'start' => ($page - 1) * $this->config->get('config_limit_admin'),
 			'limit' => $this->config->get('config_limit_admin')
-		);
+        ];
 
 		$data['products'] = [];
 
@@ -102,12 +103,12 @@ class ControllerExtensionReportProductViewed extends Controller {
 				$percent = 0;
 			}
 
-			$data['products'][] = array(
+			$data['products'][] = [
 				'name'    => $result['name'],
 				'model'   => $result['model'],
 				'viewed'  => $result['viewed'],
 				'percent' => $percent . '%'
-			);
+            ];
 		}
 		
 		$data['user_token'] = $this->session->data['user_token'];
@@ -122,7 +123,7 @@ class ControllerExtensionReportProductViewed extends Controller {
 		$pagination->total = $product_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_limit_admin');
-		$pagination->url = $this->url->link('report/report', 'user_token=' . $this->session->data['user_token'] . '&code=product_viewed&page={page}', true);
+		$pagination->url = $this->url->link('report/report', 'user_token=' . $this->session->data['user_token'] . '&code=product_viewed&page={page}');
 
 		$data['pagination'] = $pagination->render();
 
@@ -143,7 +144,7 @@ class ControllerExtensionReportProductViewed extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 		}
-
-		$this->response->redirect($this->url->link('report/report', 'user_token=' . $this->session->data['user_token'] . '&code=product_viewed' . $url, true));
+        // LJK TODO: check to see if this missing $url variable was missing before.
+		$this->response->redirect($this->url->link('report/report', 'user_token=' . $this->session->data['user_token'] . '&code=product_viewed' . $url));
 	}
 }
