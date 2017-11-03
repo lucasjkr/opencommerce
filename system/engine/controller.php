@@ -64,7 +64,6 @@
  * @property ModelDesignBanner $model_design_banner
  * @property ModelDesignLayout $model_design_layout
  * @property ModelDesignTheme $model_design_theme
- * @property ModelDesignTranslation $model_design_translation
  *
  * @property ModelExtensionEvent $model_extension_event
  * @property ModelExtensionExtension $model_extension_extension

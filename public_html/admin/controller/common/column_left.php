@@ -209,15 +209,7 @@ class ControllerCommonColumnLeft extends Controller {
 					'children' => []
 				);	
 			}
-			
-			if ($this->user->hasPermission('access', 'design/translation')) {
-				$design[] = array(
-					'name'	   => $this->language->get('text_language_editor'),
-					'href'     => $this->url->link('design/translation', 'user_token=' . $this->session->data['user_token']),
-					'children' => []
-				);	
-			}
-						
+
 			if ($this->user->hasPermission('access', 'design/banner')) {
 				$design[] = array(
 					'name'	   => $this->language->get('text_banner'),
