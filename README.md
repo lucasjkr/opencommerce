@@ -67,3 +67,22 @@ Update `/config/config.php` with your SMTP Server credentials (if you want to se
 Log into your stores admin to continue setting it up:
 
      https://your-site.com/admin/
+     
+ ## Developer Notes
+ 
+ ####Phinx Usage
+ Now using Rob Morgan's [Phinx](https://phinx.org) for database migrations
+  
+ To run new migrations, go to home directory and execute:
+ `vendor/bin/phinx migrate`
+ 
+ ####Phinx Generator
+ Also using Daniel Opitz's [Phinx Migrations Generator](https://github.com/odan/phinx-migrations-generator)
+ 
+ To get the current state of the database structure, execute the following:
+ `vendor/bin/phinx-migrations generate`
+ 
+ It will ask for a name, and that migration will serve as a "checkpoint". Importantly, add THAT migration to your `.gitignore`
+ 
+ Thereafter, you can make changes directly to the database structure, and just need to re-run the generator to create a new migration to commit:
+ `vendor/bin/phinx-migrations generate`. It's not perfect - I recommend you edit the existing migration and delete the data that isn't needed.
