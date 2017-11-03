@@ -435,7 +435,7 @@ class ControllerCatalogOption extends Controller {
 				'limit'       => 5
 			);
 
-			$options = $this->model_catalog_option_admin_admin->getOptions($filter_data);
+			$options = $this->model_catalog_option_admin->getOptions($filter_data);
 
 			foreach ($options as $option) {
 				$option_value_data = [];
