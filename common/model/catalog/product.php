@@ -1,8 +1,8 @@
 <?php
 class ModelCatalogProduct extends Model {
 	public function updateViewed($product_id) {
-	    // This will got to a new table eventually, just product_id, user_id and timestamps, so we can check views over time eventually.
-		$this->db->query("UPDATE oc_product SET viewed = (viewed + 1) WHERE product_id = :product_id",
+	    // this table COULD hold a lot more - could eventually become an analytics table
+        $this->db->query("INSERT INTO oc_product_views SET product_id = :product_id",
             [
                 ':product_id' => $product_id
             ]);

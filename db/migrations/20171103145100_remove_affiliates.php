@@ -24,5 +24,8 @@ class RemoveAffiliates extends AbstractMigration
         // Remove Table Entries
         $this->execute("DELETE FROM `oc_layout` WHERE `name` = 'Affiliate'");
         $this->execute("DELETE FROM `oc_layout_route` WHERE `route` LIKE 'affiliate%'");
+        $this->execute("DELETE FROM `oc_event` WHERE `code` LIKE '%affiliate%'");
+        $this->execute("DELETE FROM `oc_setting` WHERE `code` LIKE '%affiliate%'");
+
     }
 }
