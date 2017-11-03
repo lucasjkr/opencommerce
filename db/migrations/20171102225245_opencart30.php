@@ -54,7 +54,7 @@ class Opencart30 extends AbstractMigration
         $table = $this->table("oc_attribute", ['id' => false, 'primary_key' => ["attribute_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('attribute_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('attribute_group_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'attribute_id']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'attribute_group_id']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => 0, 'limit' => 9, 'precision' => 10, 'after' => 'attribute_group_id']);
         $table->save();
 
         $table = $this->table("oc_attribute_description", ['id' => false, 'primary_key' => ["attribute_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -65,7 +65,7 @@ class Opencart30 extends AbstractMigration
 
         $table = $this->table("oc_attribute_group", ['id' => false, 'primary_key' => ["attribute_group_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('attribute_group_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'attribute_group_id']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => 0, 'limit' => 9, 'precision' => 10, 'after' => 'attribute_group_id']);
         $table->save();
 
         $table = $this->table("oc_attribute_group_description", ['id' => false, 'primary_key' => ["attribute_group_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -233,7 +233,7 @@ class Opencart30 extends AbstractMigration
         $table->addColumn('validation', 'string', ['null' => false, 'limit' => 255, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'value']);
         $table->addColumn('location', 'string', ['null' => false, 'limit' => 10, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'validation']);
         $table->addColumn('status', 'boolean', ['null' => false, 'limit' => 1, 'precision' => 3, 'after' => 'location']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'status']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'status']);
         $table->save();
 
         $table = $this->table("oc_custom_field_customer_group", ['id' => false, 'primary_key' => ["custom_field_id", "customer_group_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -251,7 +251,7 @@ class Opencart30 extends AbstractMigration
         $table = $this->table("oc_custom_field_value", ['id' => false, 'primary_key' => ["custom_field_value_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('custom_field_value_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('custom_field_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'custom_field_value_id']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'custom_field_id']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'custom_field_id']);
         $table->save();
 
         $table = $this->table("oc_custom_field_value_description", ['id' => false, 'primary_key' => ["custom_field_value_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -334,7 +334,7 @@ class Opencart30 extends AbstractMigration
         $table = $this->table("oc_customer_group", ['id' => false, 'primary_key' => ["customer_group_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('customer_group_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('approval', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'customer_group_id']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'approval']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'approval']);
         $table->save();
 
         $table = $this->table("oc_customer_group_description", ['id' => false, 'primary_key' => ["customer_group_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -455,7 +455,7 @@ class Opencart30 extends AbstractMigration
         $table->addColumn('trigger', 'text', ['null' => false, 'limit' => 65535, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'code']);
         $table->addColumn('action', 'text', ['null' => false, 'limit' => 65535, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'trigger']);
         $table->addColumn('status', 'boolean', ['null' => false, 'limit' => 1, 'precision' => 3, 'after' => 'action']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'status']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'status']);
         $table->save();
 
         $table = $this->table("oc_extension", ['id' => false, 'primary_key' => ["extension_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -482,7 +482,7 @@ class Opencart30 extends AbstractMigration
         $table = $this->table("oc_filter", ['id' => false, 'primary_key' => ["filter_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('filter_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('filter_group_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'filter_id']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'filter_group_id']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'filter_group_id']);
         $table->save();
 
         $table = $this->table("oc_filter_description", ['id' => false, 'primary_key' => ["filter_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -494,7 +494,7 @@ class Opencart30 extends AbstractMigration
 
         $table = $this->table("oc_filter_group", ['id' => false, 'primary_key' => ["filter_group_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('filter_group_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'filter_group_id']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'filter_group_id']);
         $table->save();
 
         $table = $this->table("oc_filter_group_description", ['id' => false, 'primary_key' => ["filter_group_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -546,7 +546,7 @@ class Opencart30 extends AbstractMigration
         $table->addColumn('locale', 'string', ['null' => false, 'limit' => 255, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'code']);
         $table->addColumn('image', 'string', ['null' => false, 'limit' => 64, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'locale']);
         $table->addColumn('directory', 'string', ['null' => false, 'limit' => 32, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'image']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'directory']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'directory']);
         $table->addColumn('status', 'boolean', ['null' => false, 'limit' => 1, 'precision' => 3, 'after' => 'sort_order']);
         $table->save();
         if($this->table('oc_language')->hasIndex('name')) {
@@ -564,7 +564,7 @@ class Opencart30 extends AbstractMigration
         $table->addColumn('layout_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'layout_module_id']);
         $table->addColumn('code', 'string', ['null' => false, 'limit' => 64, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'layout_id']);
         $table->addColumn('position', 'string', ['null' => false, 'limit' => 14, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'code']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'position']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'position']);
         $table->save();
 
         $table = $this->table("oc_layout_route", ['id' => false, 'primary_key' => ["layout_route_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -606,7 +606,7 @@ class Opencart30 extends AbstractMigration
         $table->addColumn('manufacturer_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('name', 'string', ['null' => false, 'limit' => 64, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'manufacturer_id']);
         $table->addColumn('image', 'string', ['null' => true, 'limit' => 255, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'name']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'image']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'image']);
         $table->save();
 
         $table = $this->table("oc_manufacturer_to_store", ['id' => false, 'primary_key' => ["manufacturer_id", "store_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -656,7 +656,7 @@ class Opencart30 extends AbstractMigration
         $table = $this->table("oc_option", ['id' => false, 'primary_key' => ["option_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
         $table->addColumn('option_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('type', 'string', ['null' => false, 'limit' => 32, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'option_id']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'type']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'type']);
         $table->save();
 
         $table = $this->table("oc_option_description", ['id' => false, 'primary_key' => ["option_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
@@ -669,7 +669,7 @@ class Opencart30 extends AbstractMigration
         $table->addColumn('option_value_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'identity' => 'enable']);
         $table->addColumn('option_id', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'option_value_id']);
         $table->addColumn('image', 'string', ['null' => false, 'limit' => 255, 'collation' => "utf8_general_ci", 'encoding' => "utf8", 'after' => 'option_id']);
-        $table->addColumn('sort_order', 'integer', ['null' => false, 'limit' => 9, 'precision' => 10, 'after' => 'image']);
+        $table->addColumn('sort_order', 'integer', ['null' => false, 'default' => '0', 'limit' => 9, 'precision' => 10, 'after' => 'image']);
         $table->save();
 
         $table = $this->table("oc_option_value_description", ['id' => false, 'primary_key' => ["option_value_id", "language_id"], 'engine' => "InnoDB", 'encoding' => "utf8", 'collation' => "utf8_general_ci", 'comment' => ""]);
