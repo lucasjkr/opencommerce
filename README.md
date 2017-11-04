@@ -14,6 +14,8 @@ of containers spread across different boxes.
 - Added timestamps columns (added, modified) to all tables
 - Fixed issue where columns with DATE type had invalid default values. which could cause issues for developers attempting 
 to modify the base tables.
+- Database is based on Opencart 3.0 database, but installation is as a series of Phinx migrations, which apply that database, 
+then make changes subsequent to that.
 
 #### File Organization
 - Moved `/system/` directory outside of the public accessible path
@@ -39,7 +41,7 @@ to modify the base tables.
 - Apache 2.4 with mod_rewrite
 - PHP 7.0
 - MySQL 5.7
-- PDO extension
+- PDO Extension
 - PHP Composer
 
 
@@ -70,13 +72,15 @@ Log into your stores admin to continue setting it up:
      
  ## Developer Notes
  
- ####Phinx Usage
+ ####
+ Phinx Usage
  Now using Rob Morgan's [Phinx](https://phinx.org) for database migrations
   
  To run new migrations, go to home directory and execute:
  `vendor/bin/phinx migrate`
  
- ####Phinx Generator
+ ####
+ Phinx Generator
  Also using Daniel Opitz's [Phinx Migrations Generator](https://github.com/odan/phinx-migrations-generator)
  
  To get the current state of the database structure, execute the following:
