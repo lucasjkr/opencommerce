@@ -1,56 +1,13 @@
-# Image File
-!/public_html/image/no_image.jpg
 
-# Image Cache Files
-/public_html/image/cache/*
-!/public_html/image/cache/index.html
-
-# System Cache Files
-/system/storage/cache/*
-
-# Modification Files
-/system/storage/modification/*
-
-# Templates Files
-/image/templates/*
-/image/templates/default.jpg
-
-# Download Files
-/system/storage/download/*
-
-# Session Files
-/system/storage/session/*
-
-# Upload Files
-/system/storage/upload/*
-
-# Flags 
-# remove sharp char if you want to add flags to gitignore
-# /public_html/flags/*
-
-# Log Files
-/system/storage/logs/*
-
-/tests/phpunit/vendor/*
-/tests/phpunit/composer.lock
-/tests/phpunit/bootstrap.php
-
-# IDE Project files
-/.idea
-
-vendor/*
-system/storage/cache/*
-
-# Config files
-/config/config.php
-/system/storage/cache/*
-/system/storage/logs/*
-system/storage/logs/error.log
+.idea/*
 .DS_Store
-*.log
-work files/opencart-logo.psd
-system/storage/logs/error.log
+config/config.php
+phinx.yml
+work files/*
+vendor/*
 public_html/admin/language/en-us/*
 public_html/catalog/language/en-us/*
-phinx.yml
-stupidities to fix.txt
+public_html/image/cache/*
+public_html/image/catalog/demo/*
+system/storage/cache/*
+system/storage/logs/*
