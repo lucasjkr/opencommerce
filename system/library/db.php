@@ -42,20 +42,18 @@ class DB {
 	 * @return	array
      */
 	public function query($sql, $params = null) {
-
         // Begin Development Code
         // This records the query to a file on disk BEFORE trying execute it.  Useful for seeing where a function failed.
-        if (!file_exists(DIR_LOGS . 'queries.log')) {
-            touch(DIR_LOGS . 'queries.log');
-        }
+	    if(defined('DEBUG_SQL') && DEBUG_SQL == 1) {
+            if (!file_exists(DIR_LOGS . 'queries.log')) {
+                touch(DIR_LOGS . 'queries.log');
+            }
 
-        $file = fopen(DIR_LOGS . 'queries.log', 'a');
-        fwrite($file, $sql . "\n");
-//        foreach($params as $p => $k){
-//            fwrite($file, $p . ' => ' . $k . "\n");
-//        }
-        fwrite($file, json_encode($params) . "\n");
-        fclose($file);
+            $file = fopen(DIR_LOGS . 'queries.log', 'a');
+            fwrite($file, $sql . "\n");
+            fwrite($file, json_encode($params) . "\n");
+            fclose($file);
+        }
         // End Development Code
 
         if(defined('DEBUG_SQL') && DEBUG_SQL == 1){
