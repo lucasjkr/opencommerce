@@ -59,7 +59,6 @@ Run the command line installer:
       --db_password database_password \
       --db_database opencommerce \
       --db_port 3306 \
-      --username admin_username \
       --password admin_password \
       --email admin@email.com \
 
