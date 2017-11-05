@@ -1,6 +1,5 @@
 <?php
 // Text
-$_['text_affiliate']            = 'Affiliate';
 $_['text_api']                  = 'API';
 $_['text_attribute']            = 'Attributes';
 $_['text_attribute_group']      = 'Attribute Groups';
@@ -33,7 +32,7 @@ $_['text_localisation']         = 'Localisation';
 $_['text_location']             = 'Store Location';
 $_['text_contact']              = 'Mail';
 $_['text_marketing']            = 'Marketing';
-$_['text_marketplace']          = 'Marketplace';
+$_['text_marketplace']          = 'Marketplace';        //LJK Todo: Should be fine to delete
 $_['text_maintenance']          = 'Maintenance';
 $_['text_menu']                 = 'Menu Manager';
 $_['text_modification']         = 'Modifications';

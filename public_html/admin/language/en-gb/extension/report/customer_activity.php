@@ -20,9 +20,6 @@ $_['text_activity_return_account'] = '<a href="customer_id=%d">%s</a> submitted 
 $_['text_activity_return_guest']   = '%s submitted a product return.';
 $_['text_activity_order_account']  = '<a href="customer_id=%d">%s</a> created a <a href="order_id=%d">new order</a>.';
 $_['text_activity_order_guest']    = '%s created a <a href="order_id=%d">new order</a>.';
-$_['text_activity_affiliate_add']  = '<a href="customer_id=%d">%s</a> registered for a affiliate account.';
-$_['text_activity_affiliate_edit'] = '<a href="customer_id=%d">%s</a> updated their affiliate details.';
-$_['text_activity_transaction']    = '<a href="customer_id=%d">%s</a> received commission from an new <a href="order_id=%d">order</a>.';
 
 // Column
 $_['column_customer']              = 'Customer';
