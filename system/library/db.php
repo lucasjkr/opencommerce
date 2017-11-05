@@ -11,74 +11,100 @@
 * DB class
 */
 class DB {
-	private $adaptor;
+    private $connection = null;
+    private $statement  = null;
 
-	/**
-	 * Constructor
-	 *
-	 * @param	string	$adaptor
-	 * @param	string	$hostname
-	 * @param	string	$username
+    // Debug settings
+    private $debug      = false;  // If this gets set to true, then it turns on lots of logging features
+    private $querylog   = DIR_LOGS . 'database.log';  // Location of database log - eventually this should not be here.
+    private $wrap       = 100;   // Wordwrap width of queries saved
+
+    /**
+     * Constructor
+     *
+     * @param	string	$adaptor
+     * @param	string	$hostname
+     * @param	string	$username
      * @param	string	$password
-	 * @param	string	$database
-	 * @param	int		$port
-	 *
- 	*/
+     * @param	string	$database
+     * @param	int		$port
+     *
+     */
 	public function __construct($adaptor, $hostname, $username, $password, $database, $port = NULL) {
-		$class = 'DB\\' . $adaptor;
+        try {
+            $this->connection = new \PDO("mysql:host=" . $hostname . ";port=" . $port . ";dbname=" . $database, $username, $password, array(\PDO::ATTR_PERSISTENT => true));
+        } catch(\PDOException $e) {
+            throw new \Exception('Failed to connect to database. Reason: \'' . $e->getMessage() . '\'');
+        }
 
-		if (class_exists($class)) {
-			$this->adaptor = new $class($hostname, $username, $password, $database, $port);
-		} else {
-			throw new \Exception('Error: Could not load database adaptor ' . $adaptor . '!');
-		}
+        $this->connection->exec("SET NAMES 'utf8'");
+        $this->connection->exec("SET CHARACTER SET utf8");
+        $this->connection->exec("SET CHARACTER_SET_CONNECTION=utf8");
+        $this->connection->exec("SET SQL_MODE = ''");
+
+        if(defined('DEBUG_SQL') && DEBUG_SQL == 1) {
+            $this->debug = true;
+        }
+
+        // Create the file to save database logs to, if it doesn't exist
+        if($this->debug == true && !file_exists($this->querylog)) {
+            touch($this->querylog);
+        }
 	}
 
-	/**
-     * 
-     *
-     * @param	string	$sql
-	 * 
-	 * @return	array
-     */
-	public function query($sql, $params = null) {
-        // Begin Development Code
-        // This records the query to a file on disk BEFORE trying execute it.  Useful for seeing where a function failed.
-	    if(defined('DEBUG_SQL') && DEBUG_SQL == 1) {
-            if (!file_exists(DIR_LOGS . 'queries.log')) {
-                touch(DIR_LOGS . 'queries.log');
-            }
+    public function prepare($sql) {
+        $this->statement = $this->connection->prepare($sql);
+    }
 
-            $file = fopen(DIR_LOGS . 'queries.log', 'a');
-            fwrite($file, $sql . "\n");
-            fwrite($file, json_encode($params) . "\n");
-            fclose($file);
+    public function bindParam($parameter, $variable, $data_type = \PDO::PARAM_STR, $length = 0) {
+        if ($length) {
+            $this->statement->bindParam($parameter, $variable, $data_type, $length);
+        } else {
+            $this->statement->bindParam($parameter, $variable, $data_type);
         }
-        // End Development Code
+    }
 
-        if(defined('DEBUG_SQL') && DEBUG_SQL == 1){
+    public function execute() {
+        try {
+            if ($this->statement && $this->statement->execute()) {
+                $data = [];
+
+                while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                }
+
+                $result = new \stdClass();
+                $result->row = (isset($data[0])) ? $data[0] : [];
+                $result->rows = $data;
+                $result->num_rows = $this->statement->rowCount();
+            }
+        } catch(\PDOException $e) {
+            throw new \Exception('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode());
+        }
+    }
+
+    public function query($sql, $params = null) {
+        if($this->debug == true) {
+            $output = $sql . "\n" . json_encode($params);
+
+            //  Record the query to a logfile BEFORE executing
+            //  This way we can see what the last query was that we tried to execute, even if there's an error in it
+            $file = fopen($this->querylog, 'a');
+            fwrite($file, wordwrap($output, $this->wrap, "\n", true) . "\n");
+            $output = '';
+
             // get starttime in microseconds
             $start    = microtime(true);
 
             // execute query
-            $result   = $this->adaptor->query($sql, $params);
+            $result   = $this->run($sql, $params);
 
             // get time
             $time     = number_format((microtime(true) - $start) * 1000, 4, '.', ',');
 
             // create output
-            $output   = date("Y-m-d h:i:s"). " \t";
-            $output  .= $time . " msec \t";
-            $output  .= preg_replace('!\s+!', ' ', $sql) . "\n";
+            $output  .= $time . " msec \n\n";
 
-
-            // create log file if it doesn't already exit
-            if (!file_exists(DIR_LOGS . 'database.log')) {
-                touch(DIR_LOGS . 'database.log');
-            }
-
-            // write data to file
-            $file = fopen(DIR_LOGS . 'database.log', 'a');
             fwrite($file, $output);
             fclose($file);
 
@@ -86,44 +112,72 @@ class DB {
             return $result;
         }
 
-        return $this->adaptor->query($sql, $params);
+        return $this->run($sql, $params);
 	}
 
+	private function run($sql, $params = null) {
+        $this->statement = $this->connection->prepare($sql);
+
+        $result = false;
+
+        try {
+            if ($this->statement && $this->statement->execute($params)) {
+                $data = [];
+
+                while ($row = $this->statement->fetch(\PDO::FETCH_ASSOC)) {
+                    $data[] = $row;
+                }
+
+                $result = new \stdClass();
+                $result->row = (isset($data[0]) ? $data[0] : []);
+                $result->rows = $data;
+                $result->num_rows = $this->statement->rowCount();
+            }
+        } catch (\PDOException $e) {
+            throw new \Exception('Error: ' . $e->getMessage() . ' Error Code : ' . $e->getCode() . ' <br />' . $sql);
+        }
+
+        if ($result) {
+            return $result;
+        } else {
+            $result = new \stdClass();
+            $result->row = [];
+            $result->rows = [];
+            $result->num_rows = 0;
+            return $result;
+        }
+    }
+
 	/**
-     * 
-     *
      * @param	string	$value
 	 * 
 	 * @return	string
      */
-	public function escape($value) {
-		return $this->adaptor->escape($value);
-	}
+    public function escape($value) {
+        return str_replace(array("\\", "\0", "\n", "\r", "\x1a", "'", '"'), array("\\\\", "\\0", "\\n", "\\r", "\Z", "\'", '\"'), $value);
+    }
 
 	/**
-     * 
-	 * 
 	 * @return	int
      */
-	public function countAffected() {
-		return $this->adaptor->countAffected();
-	}
+    public function countAffected() {
+        if ($this->statement) {
+            return $this->statement->rowCount();
+        } else {
+            return 0;
+        }
+    }
 
 	/**
-     * 
-	 * 
+     *
 	 * @return	int
      */
-	public function getLastId() {
-		return $this->adaptor->getLastId();
-	}
-	
-	/**
-     * 
-	 * 
-	 * @return	bool
-     */	
-	public function connected() {
-		return $this->adaptor->connected();
-	}
+    public function getLastId() {
+        return $this->connection->lastInsertId();
+    }
+
+    public function __destruct() {
+        $this->connection = null;
+    }
+
 }
