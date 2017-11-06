@@ -492,7 +492,8 @@ input[type="checkbox"]:checked::after, .checkbox input[type="checkbox"]:checked:
 	transition: all 1s;
 }
 .tile-primary {
-	background-color: #1b80c2;
+	/*background-color: #1b80c2;*/
+	background-color: #6162a3;
 }
 .tile-success {
 	background-color: #53b953;
@@ -607,7 +608,8 @@ input[type="checkbox"]:checked::after, .checkbox input[type="checkbox"]:checked:
 	padding: 10px;
 }
 #extension-list section:hover {
-	border: 1px solid #1b80c2;
+	/*border: 1px solid #1b80c2;*/
+	border: 1px solid #6162a3;
 }
 #extension-list > .row {
 	margin-top: 40px;
@@ -677,14 +679,14 @@ input[type="checkbox"]:checked::after, .checkbox input[type="checkbox"]:checked:
 #extension-list span {
 	font-weight: 600;
 }
-
-}
+ /* LJK there was a } here, but was causing error in analyzer */
 #marketplace-extension-info #banner img {
 	margin-left: auto;
 	margin-right: auto;
 }
 #marketplace-extension-info .extension-review {
-	border-top: 5px solid #1b80c2;
+	/*border-top: 5px solid #1b80c2;*/
+	border-top: 5px solid #6162a3;
 	padding-top: 50px;
 	margin-top: 50px;
 	margin-bottom: 50px;
@@ -826,3 +828,81 @@ input[type="checkbox"]:checked::after, .checkbox input[type="checkbox"]:checked:
 .opencart-icon-cart-mini:before {
 	content: "\e91c";
 }
+
+/* LJK Color Overrides */
+.btn-primary {
+	background-color: #6162a3;
+	border-color: #464787;
+}
+
+.btn-primary:hover {
+	background-color: #3e3f87;
+}
+
+.btn-primary:active {
+	background-color: #5d5e9c;
+}
+
+.btn-info {
+	background-color: #6162a3;
+	border-color: #464787;
+}
+
+.btn-info:hover {
+	background-color: #3e3f87;
+}
+
+.btn-info:active {
+	background-color: #5d5e9c;
+}
+
+a {
+	color: #2d2f9c;
+}
+a:hover {
+	color: #1d20a3;
+}
+
+.breadcrumb > li > a {
+	color: #2d2f9c;
+}
+
+.breadcrumb > li:last-child > a {
+	color: #2d2f9c;
+}
+
+#menu > li > a {
+	color: #cacae0;
+}
+
+#menu > li > a:hover {
+	color: #c3c3e8;
+}
+
+#menu > li.active > a,
+#menu li li.active > a {
+	color: #e1e1eb;
+}
+
+.pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+	background-color: #6162a3;
+	border-color: #464787;
+}
+.pagination > li > a, .pagination > li > span, .pagination > li > a, .pagination > li > span {
+	color: #1d20a3;
+}
+.pagination > li > a:hover, .pagination > li > span:hover, .pagination > li > a:focus, .pagination > li > span:focus {
+	color: #1d20a3;
+}
+
+.table thead td span[data-toggle="tooltip"]:after, label.control-label span:after {
+	color: #464787;
+}
+
+#container {
+	background-color: #ebf1f6;
+}
+/* key
+#1e91cf -> #2d2f9c  (a)
+#14628c -> ##1d20a3 (a hover)
+#1872a2 ->          (btn primary hover)
