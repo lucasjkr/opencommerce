@@ -12,7 +12,7 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
-			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report', true));
+			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report'));
 		}
 
 		if (isset($this->error['warning'])) {
@@ -23,24 +23,24 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
-		);
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_extension'),
-			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report', true)
-		);
+			'href' => $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report')
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
 			'href' => $this->url->link('extension/report/customer_search', 'user_token=' . $this->session->data['user_token'], true)
-		);
+        ];
 
 		$data['action'] = $this->url->link('extension/report/customer_search', 'user_token=' . $this->session->data['user_token']);
 
-		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report', true);
+		$data['cancel'] = $this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=report');
 
 		if (isset($this->request->post['report_customer_search_status'])) {
 			$data['report_customer_search_status'] = $this->request->post['report_customer_search_status'];
@@ -119,8 +119,8 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 			'filter_keyword'    => $filter_keyword,
 			'filter_customer'   => $filter_customer,
 			'filter_ip'         => $filter_ip,
-			'start'             => ($page - 1) * 20,
-			'limit'             => 20
+            'start'             => ($page - 1) * $this->config->get('config_limit_admin'),
+            'limit'             => $this->config->get('config_limit_admin')
 		);
 
 		$search_total = $this->model_extension_report_customer->getTotalCustomerSearches($filter_data);
@@ -142,14 +142,14 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 				$customer = $this->language->get('text_guest');
 			}
 
-			$data['searches'][] = array(
+			$data['searches'][] = [
 				'keyword'     => $result['keyword'],
 				'products'    => $result['products'],
 				'category'    => $category,
 				'customer'    => $customer,
 				'ip'          => $result['ip'],
 				'date_added'  => date($this->language->get('datetime_format'), strtotime($result['date_added']))
-			);
+            ];
 		}
 
 		$data['user_token'] = $this->session->data['user_token'];
@@ -184,7 +184,7 @@ class ControllerExtensionReportCustomerSearch extends Controller {
 		$pagination->total = $search_total;
 		$pagination->page = $page;
 		$pagination->limit = $this->config->get('config_limit_admin');
-		$pagination->url = $this->url->link('report/report', 'user_token=' . $this->session->data['user_token'] . '&code=customer_search' . $url . '&page={page}', true);
+		$pagination->url = $this->url->link('report/report', 'user_token=' . $this->session->data['user_token'] . '&code=customer_search' . $url . '&page={page}');
 
 		$data['pagination'] = $pagination->render();
 
