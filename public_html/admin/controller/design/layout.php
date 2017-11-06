@@ -383,7 +383,7 @@ class ControllerDesignLayout extends Controller {
 					$data['layout_modules'][] = array(
 						'name'       => strip_tags($module_info['name']),
 						'code'       => $layout_module['code'],
-						'edit'       => $this->url->link('extension/module/' . $part[0], 'user_token=' . $this->session->data['user_token'] . '&module_id=' . $part[1], true),
+						'edit'       => $this->url->link('extension/module/' . $part[0], 'user_token=' . $this->session->data['user_token'] . '&module_id=' . $part[1]),
 						'position'   => $layout_module['position'],
 						'sort_order' => $layout_module['sort_order']
 					);

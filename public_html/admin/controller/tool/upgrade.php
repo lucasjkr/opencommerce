@@ -42,15 +42,15 @@ class ControllerToolUpgrade extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
-		);
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('tool/upgrade', 'user_token=' . $this->session->data['user_token'], true)
-		);
+			'href' => $this->url->link('tool/upgrade', 'user_token=' . $this->session->data['user_token'])
+        ];
 
 		$data['user_token'] = $this->session->data['user_token'];
 
@@ -120,12 +120,12 @@ class ControllerToolUpgrade extends Controller {
 								}
 							}
 
-							$data['extensions'][] = array(
+							$data['extensions'][] = [
 								'name'       => $extension['name'],
-								'link'       => $this->url->link('marketplace/marketplace/info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id'], true),
+								'link'       => $this->url->link('marketplace/marketplace/info', 'user_token=' . $this->session->data['user_token'] . '&extension_id=' . $result['extension_id']),
 								'compatible' => $compatible,
 								'available'  => $available
-							);
+                            ];
 						}
 					}
 				}
@@ -336,10 +336,10 @@ class ControllerToolUpgrade extends Controller {
 		}
 
 		if (!$json) {
-			$ignore = array(
+			$ignore = [
 				'config-dist.php',
 				'admin/config-dist.php'
-			);
+            ];
 
 			$files = [];
 

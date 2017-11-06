@@ -70,7 +70,7 @@ class ControllerCustomerCustomerApproval extends Controller {
 
 		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('customer/customer_approval', 'user_token=' . $this->session->data['user_token'], true)
+			'href' => $this->url->link('customer/customer_approval', 'user_token=' . $this->session->data['user_token'])
         ];
 				
 		$data['filter_name'] = $filter_name;
