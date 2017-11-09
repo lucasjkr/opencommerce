@@ -8,6 +8,18 @@ class ControllerMailForgotten extends Controller {
 
 			$data['reset'] = str_replace('&amp;', '&', $this->url->link('common/reset', 'email=' . urlencode($args[0]) . '&code=' . $args[1], true));
 			$data['ip'] = $this->request->server['REMOTE_ADDR'];
+            $data['btn_reset'] = $this->language->get('btn_reset');
+            $data['store_url'] = HTTP_SERVER;
+
+            $data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+
+            $this->load->model('tool/image');
+
+            if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
+                $data['logo'] = $this->model_tool_image->resize($this->config->get('config_logo'), $this->config->get('theme_default_image_location_width'), $this->config->get('theme_default_image_cart_height'));
+            } else {
+                $data['logo'] = '';
+            }
 
             // Using new mailer method
             $email   = $args[0];
@@ -16,7 +28,7 @@ class ControllerMailForgotten extends Controller {
 
             $mail = $this->registry->get('Mail');
             $mail->setSubject($subject);
-            $mail->setText($message);
+            $mail->setHtml($message);
             $mail->send($email);
 
         }
