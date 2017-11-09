@@ -10,13 +10,13 @@ class ControllerMailRegister extends Controller {
 		$data['text_thanks'] = $this->language->get('text_thanks');
 
 		$this->load->model('account/customer_group');
-			
+
 		if (isset($args[0]['customer_group_id'])) {
 			$customer_group_id = $args[0]['customer_group_id'];
 		} else {
 			$customer_group_id = $this->config->get('config_customer_group_id');
 		}
-					
+
 		$customer_group_info = $this->model_account_customer_group->getCustomerGroup($customer_group_id);
 		
 		if ($customer_group_info) {
@@ -24,9 +24,17 @@ class ControllerMailRegister extends Controller {
 		} else {
 			$data['approval'] = '';
 		}
-			
-		$data['login'] = $this->url->link('account/login', '', true);		
+        $data['store_url'] = HTTP_SERVER;
+        $data['login'] = $this->url->link('account/login', '');
 		$data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+
+        $this->load->model('tool/image');
+
+        if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
+            $data['logo'] = $this->model_tool_image->resize($this->config->get('config_logo'), $this->config->get('theme_default_image_location_width'), $this->config->get('theme_default_image_cart_height'));
+        } else {
+            $data['logo'] = '';
+        }
 
         // LJK Note: This has been rewritten to use new Mailer - this sends notification to the user
         $subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
@@ -35,7 +43,7 @@ class ControllerMailRegister extends Controller {
 
         $mail = $this->registry->get('Mail');
         $mail->setSubject($subject);
-        $mail->setText($message);
+        $mail->setHtml($message);
         $mail->send($email);
 
         $emails = explode(',', $this->config->get('config_mail_alert_email'));
@@ -60,7 +68,19 @@ class ControllerMailRegister extends Controller {
 			
 			$data['firstname'] = $args[0]['firstname'];
 			$data['lastname'] = $args[0]['lastname'];
-			
+
+            $data['store_url'] = HTTP_SERVER;
+            $data['login'] = $this->url->link('account/login', '');
+            $data['store'] = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
+
+            $this->load->model('tool/image');
+
+            if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
+                $data['logo'] = $this->model_tool_image->resize($this->config->get('config_logo'), $this->config->get('theme_default_image_location_width'), $this->config->get('theme_default_image_cart_height'));
+            } else {
+                $data['logo'] = '';
+            }
+
 			$this->load->model('account/customer_group');
 			
 			if (isset($args[0]['customer_group_id'])) {
@@ -88,7 +108,7 @@ class ControllerMailRegister extends Controller {
 
             $mail = $this->registry->get('Mail');
             $mail->setSubject($subject);
-            $mail->setText($message);
+            $mail->setHtml($message);
             $mail->send($email);
 
             // Send additional alert emails

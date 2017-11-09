@@ -13,3 +13,4 @@ $_['text_firstname']      = 'First Name:';
 $_['text_lastname']       = 'Last Name:';
 $_['text_email']          = 'E-Mail:';
 $_['text_telephone']      = 'Telephone:';
+$_['btn_login']           = 'Login';

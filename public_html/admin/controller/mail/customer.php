@@ -7,15 +7,15 @@ class ControllerMailCustomer extends Controller {
 
 		if ($customer_info) {
 			$this->load->model('setting/store');
-	
+
 			$store_info = $this->model_setting_store->getStore($customer_info['store_id']);
-	
+
 			if ($store_info) {
 				$store_name = html_entity_decode($store_info['name'], ENT_QUOTES, 'UTF-8');
-				$store_url = $store_info['url'] . 'index.php?route=account/login';
+				$store_url = $store_info['url'];
 			} else {
 				$store_name = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
-				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
+				$store_url = HTTP_CATALOG;
 			}
 			
 			$this->load->model('localisation/language_admin');
@@ -36,8 +36,9 @@ class ControllerMailCustomer extends Controller {
 								
 			$data['text_welcome'] = sprintf($language->get('text_welcome'), $store_name);
 				
-			$data['login'] = $store_url . 'index.php?route=account/login';	
+			$data['login'] = $store_url . 'index.php?route=account/login';
 			$data['store'] = $store_name;
+            $data['store_url'] = HTTP_SERVER;
 
             // LJK Note: This has been rewritten to use new Mailer
             $subject = sprintf($this->language->get('text_subject'), html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8'));
@@ -45,7 +46,7 @@ class ControllerMailCustomer extends Controller {
 
             $mail = $this->registry->get('Mail');
             $mail->setSubject($subject);
-            $mail->setText($message);
+            $mail->setHtml($message);
             $mail->send($customer_info['email']);
 
             $emails = explode(',', $this->config->get('config_mail_alert_email'));
@@ -69,10 +70,10 @@ class ControllerMailCustomer extends Controller {
 
 			if ($store_info) {
 				$store_name = html_entity_decode($store_info['name'], ENT_QUOTES, 'UTF-8');
-				$store_url = $store_info['url'] . 'index.php?route=account/login';
+				$store_url = $store_info['url'];
 			} else {
 				$store_name = html_entity_decode($this->config->get('config_name'), ENT_QUOTES, 'UTF-8');
-				$store_url = HTTP_CATALOG . 'index.php?route=account/login';
+				$store_url = HTTP_CATALOG;
 			}
 
 			$this->load->model('localisation/language_admin');
@@ -91,8 +92,23 @@ class ControllerMailCustomer extends Controller {
 
 			$data['text_welcome'] = sprintf($language->get('text_welcome'), $store_name);
 
-			$data['contact'] = $store_url . 'index.php?route=information/contact';
 			$data['store'] = $store_name;
+			$data['contact'] = $store_url . 'index.php?route=information/contact';
+
+            $data['text_denied'] = $language->get('text_denied');
+            $data['text_thanks'] = $language->get('text_thanks');
+            $data['btn_contact'] = $language->get('btn_contact');
+
+
+            $data['store_url'] = HTTP_SERVER;
+
+            $this->load->model('tool/image');
+
+            if (is_file(DIR_IMAGE . $this->config->get('config_logo'))) {
+                $data['logo'] = $this->model_tool_image->resize($this->config->get('config_logo'), $this->config->get('theme_default_image_location_width'), $this->config->get('theme_default_image_cart_height'));
+            } else {
+                $data['logo'] = '';
+            }
 
 			$subject = sprintf($language->get('text_subject'), $store_name);
             $message = $this->load->view('mail/customer_deny', $data);
@@ -100,7 +116,7 @@ class ControllerMailCustomer extends Controller {
 
             $mail = $this->registry->get('Mail');
             $mail->setSubject($subject);
-            $mail->setText($message);
+            $mail->setHtml($message);
             $mail->send($email);
 
             $emails = explode(',', $this->config->get('config_mail_alert_email'));
@@ -111,4 +127,4 @@ class ControllerMailCustomer extends Controller {
             }
 		}
 	}
-}	
+}
