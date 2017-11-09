@@ -48,13 +48,18 @@ require_once(DIR_ROOT . 'config/paths.php');
 define('DIR_APPLICATION',   '');
 define('DIR_LANGUAGE',      '');
 
-$application_config = 'cron';
+$application_config = 'catalog';
+
+// Turn off sessions
+$_['session_autostart']    = false;
 
 /****************************************************************************/
 /* Load the Opencommerce Framework                                          */
 /****************************************************************************/
 require_once(DIR_SYSTEM . 'startup.php');
 require_once(DIR_SYSTEM . 'framework.php');
+
+start($application_config);
 
 /****************************************************************************/
 /* Run scheduled jobs                                                       */
