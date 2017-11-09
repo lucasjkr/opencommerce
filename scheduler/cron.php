@@ -5,6 +5,9 @@
 // php /path/to/cron.php interval=minute
 // php /path/to/cron.php interval=hour
 // php /path/to/cron.php interval=day
+//
+// You can specifiy a single job to run by executing:
+// php /path/to/cron.php name=JobName
 
 // Change working directory to location script is located, Since everything the script depends on is relatitve to it.
 chdir(dirname(__FILE__));
@@ -26,9 +29,9 @@ foreach($_SERVER['argv'] as $argument) {
 }
 unset($explode);
 
-/***********************************************************************/
-/* Initialize the Opencommerce Framework                               */
-/***********************&***********************************************/
+/****************************************************************************/
+/* Initialize the Opencommerce Framework                                    */
+/***********************&****************************************************/
 // Check for standard config.php file
 if(!is_file('../config/config.php')){
     exit("/config/config.php not found, please re-run installer");
@@ -47,15 +50,15 @@ define('DIR_LANGUAGE',      '');
 
 $application_config = 'cron';
 
-/***********************************************************************/
-/* Load the Opencommerce Framework                                     */
-/***********************&***********************************************/
+/****************************************************************************/
+/* Load the Opencommerce Framework                                          */
+/****************************************************************************/
 require_once(DIR_SYSTEM . 'startup.php');
 require_once(DIR_SYSTEM . 'framework.php');
 
-/***********************************************************************/
-/* Run scheduled jobs                                                  */
-/***********************&***********************************************/
+/****************************************************************************/
+/* Run scheduled jobs                                                       */
+/****************************************************************************/
 // We'll run the scheduled tasks found in the 'jobs' directory
 $jobs = scandir('jobs/');
 
