@@ -15,3 +15,6 @@ $_['db_port']           = DB_PORT;
 
 // Session
 $_['session_autostart']    = false;
+
+// Autoload Configs
+$_['config_autoload']      = [];
