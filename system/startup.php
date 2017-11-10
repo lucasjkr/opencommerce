@@ -1,4 +1,20 @@
 <?php
+// Load Autoloader first, so we can activate Whoops error handler
+if (is_file(DIR_ROOT . 'vendor/autoload.php')) {
+    require_once(DIR_ROOT. 'vendor/autoload.php');
+}
+
+if(PHP_ERROR_DISPLAY == 1) {
+    $whoops = new \Whoops\Run;
+
+    if(php_sapi_name() == 'cli'){
+        $whoops->pushHandler(new \Whoops\Handler\PlainTextHandler);
+    } else {
+        $whoops->pushHandler(new \Whoops\Handler\PrettyPageHandler);
+    }
+    $whoops->register();
+}
+
 // Error Reporting
 // TODO: Turn off error reporting if global MODE is defined and set to 'production'
 ini_set('display_errors', 1);
@@ -61,11 +77,6 @@ function modification($filename) {
 	}
 
 	return $filename;
-}
-
-// Autoloader
-if (is_file(DIR_ROOT . 'vendor/autoload.php')) {
-	require_once(DIR_ROOT. 'vendor/autoload.php');
 }
 
 function library($class) {

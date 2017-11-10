@@ -25,6 +25,7 @@ then make changes subsequent to that.
 
 #### Other Changes
 - OpenCart's Mail class has been rewritten to function as a wrapper for PHPMailer.
+- Filp/Whoops error handler
 
 ## In process
 - Converting queries to parameterized queries, which will clean up a LOT of messiness `($this->db->escape((int)$value)`
@@ -33,6 +34,7 @@ then make changes subsequent to that.
 
 
 ## Coming up soon
+- Task scheduling through cron
 - Drop the old CURL requests and implement Guzzle
 
 
