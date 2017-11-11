@@ -101,7 +101,6 @@ $_['entry_file_mime_allowed']        = 'Allowed File Mime Types';
 $_['entry_maintenance']              = 'Maintenance Mode';
 $_['entry_password']                 = 'Allow Forgotten Password';
 $_['entry_encryption']               = 'Encryption Key';
-$_['entry_compression']              = 'Output Compression Level';
 $_['entry_error_display']            = 'Display Errors';
 $_['entry_error_log']                = 'Log Errors';
 $_['entry_error_filename']           = 'Error Log Filename';
@@ -158,7 +157,6 @@ $_['help_file_mime_allowed']         = 'Add which file mime types are allowed to
 $_['help_maintenance']               = 'Prevents customers from browsing your store. They will instead see a maintenance message. If logged in as admin, you will see the store as normal.';
 $_['help_password']                  = 'Allow forgotten password to be used for the admin. This will be disabled automatically if the system detects a hack attempt.';
 $_['help_encryption']                = 'Please provide a secret key that will be used to encrypt private information when processing orders.';
-$_['help_compression']               = 'GZIP for more efficient transfer to requesting clients. Compression level must be between 0 - 9.';
 
 // Error
 $_['error_warning']                  = 'Warning: Please check the form carefully for errors!';
