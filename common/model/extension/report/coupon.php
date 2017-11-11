@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionReportCouponAdmin extends Model {
+class ModelExtensionReportCoupon extends Model {
 	public function getCoupons($data = []) {
 		$sql = "SELECT ch.coupon_id, c.name, c.code, COUNT(DISTINCT ch.order_id) AS `orders`, SUM(ch.amount) AS total FROM `oc_coupon_history` ch LEFT JOIN `oc_coupon` c ON (ch.coupon_id = c.coupon_id)";
 
