@@ -1,7 +1,8 @@
 <?php
-class ModelExtensionReportProductAdmin extends Model {
+class ModelExtensionReportProduct extends Model {
 	public function getProductsViewed($data = []) {
-		$sql = "SELECT pd.name, p.model, p.viewed FROM oc_product p LEFT JOIN oc_product_description pd ON (p.product_id = pd.product_id) WHERE pd.language_id = :language_id AND p.viewed > 0 ORDER BY p.viewed DESC";
+		$sql = "SELECT p.product_id, pd.name, p.model, COUNT(pv.`product_id`) as viewed FROM oc_product p LEFT JOIN oc_product_description pd ON p.product_id = pd.product_id LEFT JOIN oc_product_views pv ON p.product_id = pv.product_id WHERE pd.language_id = :language_id GROUP BY product_id ORDER BY viewed DESC";
+
         $args[':language_id'] = $this->config->get('config_language_id');
 
 		if (isset($data['start']) || isset($data['limit'])) {
@@ -22,19 +23,19 @@ class ModelExtensionReportProductAdmin extends Model {
 	}
 
 	public function getTotalProductViews() {
-		$query = $this->db->query("SELECT SUM(viewed) AS total FROM oc_product");
+		$query = $this->db->query("SELECT COUNT(product_id) AS total FROM oc_product_views");
 
 		return $query->row['total'];
 	}
 
 	public function getTotalProductsViewed() {
-		$query = $this->db->query("SELECT COUNT(*) AS total FROM oc_product WHERE viewed > 0");
+		$query = $this->db->query("SELECT COUNT(pv.product_id) FROM (SELECT DISTINCT product_id FROM oc_product_views) pv");
 
 		return $query->row['total'];
 	}
 
 	public function reset() {
-		$this->db->query("UPDATE oc_product SET viewed = '0'");
+		$this->db->query("DELETE FROM oc_product_views");
 	}
 
 	public function getPurchased($data = []) {

@@ -1,5 +1,5 @@
 <?php
-class ModelExtensionReportSaleAdmin extends Model {
+class ModelExtensionReportSale extends Model {
 	public function getTotalSales($data = []) {
 		$sql = "SELECT SUM(total) AS total FROM `oc_order` WHERE order_status_id > '0'";
         $args = [];
