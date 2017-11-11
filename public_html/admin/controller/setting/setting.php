@@ -809,12 +809,6 @@ class ControllerSettingSetting extends Controller {
 			$data['config_encryption'] = $this->config->get('config_encryption');
 		}
 
-		if (isset($this->request->post['config_compression'])) {
-			$data['config_compression'] = $this->request->post['config_compression'];
-		} else {
-			$data['config_compression'] = $this->config->get('config_compression');
-		}
-
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
