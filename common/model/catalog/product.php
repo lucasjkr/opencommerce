@@ -305,7 +305,13 @@ class ModelCatalogProduct extends Model {
 		$product_data = $this->cache->get('product.popular.' . (int)$this->config->get('config_language_id') . '.' . (int)$this->config->get('config_store_id') . '.' . $this->config->get('config_customer_group_id') . '.' . (int)$limit);
 	
 		if (!$product_data) {
-			$query = $this->db->query("SELECT p.product_id FROM oc_product p LEFT JOIN oc_product_to_store p2s ON (p.product_id = p2s.product_id) WHERE p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = :store_id ORDER BY p.viewed DESC, p.date_added DESC LIMIT " . (int)$limit,
+			$query = $this->db->query("SELECT p.product_id, COUNT(pv.product_id) as viewed FROM oc_product p 
+LEFT JOIN oc_product_to_store p2s ON (p.product_id = p2s.product_id) 
+LEFT JOIN oc_product_views pv ON (p.product_id = pv.product_id)
+WHERE p.status = '1' AND p.date_available <= NOW() AND p2s.store_id = :store_id
+GROUP BY p.product_id
+ORDER BY viewed DESC, 
+p.date_added DESC LIMIT " . (int)$limit,
                 [
                     ':store_id' => $this->config->get('config_store_id')
                 ]);
