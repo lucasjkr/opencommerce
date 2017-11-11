@@ -609,7 +609,6 @@ class ModelCatalogProductAdmin extends Model {
 		if ($query->num_rows) {
 			$data = $query->row;
 
-			$data['viewed'] = '0';
 			$data['keyword'] = '';
 			$data['status'] = '0';
 
