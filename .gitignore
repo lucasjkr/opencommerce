@@ -1,13 +1,22 @@
-
 .idea/*
 .DS_Store
 config/config.php
 phinx.yml
 work files/*
 vendor/*
-public_html/admin/language/en-us/*
-public_html/catalog/language/en-us/*
+/public_html/image/cache/*
 public_html/image/cache/*
-public_html/image/catalog/demo/*
+/system/storage/cache/*
 system/storage/cache/*
+/system/storage/logs/*
 system/storage/logs/*
+/install.txt
+install.txt
+/public_html/image/catalog/*
+public_html/image/catalog/*
+/public_html/image/payment/*
+public_html/image/payment/*
+system/storage/session/sess_7dee06040bb938d261631b3edd
+stupidities to fix.txt
+public_html/admin/view/stylesheet/bootstrap.css
+public_html/image/no_image.png
