@@ -83,7 +83,7 @@ class ControllerSettingStore extends Controller {
 	}
 
 	protected function getList() {
-        $url = 1;
+        $page = 1;
         if (isset($this->request->get['page'])) {
             $page = $this->request->get['page'];
         }
