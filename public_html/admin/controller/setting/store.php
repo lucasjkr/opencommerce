@@ -83,47 +83,51 @@ class ControllerSettingStore extends Controller {
 	}
 
 	protected function getList() {
-		$url = '';
+        $page = 1;
+        if (isset($this->request->get['page'])) {
+            $page = $this->request->get['page'];
+        }
 
+        $url = '';
 		if (isset($this->request->get['page'])) {
 			$url .= '&page=' . $this->request->get['page'];
 		}
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
-			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
-		);
+			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token'])
+        ];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true)
-		);
+			'href' => $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'])
+        ];
 
 		$data['add'] = $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token']);
 		$data['delete'] = $this->url->link('setting/store/delete', 'user_token=' . $this->session->data['user_token']);
 
 		$data['stores'] = [];
 
-		$data['stores'][] = array(
+		$data['stores'][] = [
 			'store_id' => 0,
 			'name'     => $this->config->get('config_name') . $this->language->get('text_default'),
 			'url'      => $this->config->get('config_secure') ? HTTPS_CATALOG : HTTP_CATALOG,
-			'edit'     => $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token'], true)
-		);
+			'edit'     => $this->url->link('setting/setting', 'user_token=' . $this->session->data['user_token'])
+        ];
 
 		$store_total = $this->model_setting_store->getTotalStores();
 
 		$results = $this->model_setting_store->getStores();
 
 		foreach ($results as $result) {
-			$data['stores'][] = array(
+			$data['stores'][] = [
 				'store_id' => $result['store_id'],
 				'name'     => $result['name'],
 				'url'      => $result['url'],
-				'edit'     => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $result['store_id'], true)
-			);
+				'edit'     => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $result['store_id'])
+            ];
 		}
 
 		if (isset($this->error['warning'])) {
@@ -145,6 +149,18 @@ class ControllerSettingStore extends Controller {
 		} else {
 			$data['selected'] = [];
 		}
+
+        $pagination = new Pagination();
+        $pagination->total = $store_total;
+        $pagination->page = $page;
+        $pagination->limit = $this->config->get('config_limit_admin');
+        $pagination->url = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'] . $url . '&page={page}');
+
+        $data['pagination'] = $pagination->render();
+
+        $items_per_page = $this->config->get('config_limit_admin');
+
+        $data['results'] = sprintf($this->language->get('text_pagination'), ($store_total) ? (($page - 1) * $items_per_page) + 1 : 0, ((($page - 1) * $items_per_page) > ($store_total - $items_per_page)) ? $store_total : ((($page - 1) * $items_per_page) + $items_per_page), $store_total, ceil($store_total / $items_per_page));
 
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
@@ -212,26 +228,26 @@ class ControllerSettingStore extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true)
-		);
+			'href' => $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'])
+        ];
 
 		if (!isset($this->request->get['store_id'])) {
-			$data['breadcrumbs'][] = array(
+			$data['breadcrumbs'][] = [
 				'text' => $this->language->get('text_settings'),
-				'href' => $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token'], true)
-			);
+				'href' => $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token'])
+            ];
 		} else {
-			$data['breadcrumbs'][] = array(
+			$data['breadcrumbs'][] = [
 				'text' => $this->language->get('text_settings'),
-				'href' => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id'], true)
-			);
+				'href' => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id'])
+            ];
 		}
 
 		if (isset($this->session->data['success'])) {
@@ -245,7 +261,7 @@ class ControllerSettingStore extends Controller {
 		if (!isset($this->request->get['store_id'])) {
 			$data['action'] = $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token']);
 		} else {
-			$data['action'] = $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id'], true);
+			$data['action'] = $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id']);
 		}
 
 		$data['cancel'] = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token']);
@@ -318,10 +334,10 @@ class ControllerSettingStore extends Controller {
 		foreach ($extensions as $code) {
 			$this->load->language('extension/theme/' . $code, 'extension');
 
-			$data['themes'][] = array(
+			$data['themes'][] = [
 				'text'  => $this->language->get('extension')->get('heading_title'),
 				'value' => $code
-			);
+            ];
 		}
 
 		if (isset($this->request->post['config_layout_id'])) {
