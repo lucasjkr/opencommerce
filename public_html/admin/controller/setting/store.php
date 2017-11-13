@@ -158,10 +158,10 @@ class ControllerSettingStore extends Controller {
 
         $data['pagination'] = $pagination->render();
 
-        $items_per_page = $this->config->get('config_limit_admin'));
+        $items_per_page = $this->config->get('config_limit_admin');
 
         $data['results'] = sprintf($this->language->get('text_pagination'), ($store_total) ? (($page - 1) * $items_per_page) + 1 : 0, ((($page - 1) * $items_per_page) > ($store_total - $items_per_page)) ? $store_total : ((($page - 1) * $items_per_page) + $items_per_page), $store_total, ceil($store_total / $items_per_page));
-		
+
 		$data['header'] = $this->load->controller('common/header');
 		$data['column_left'] = $this->load->controller('common/column_left');
 		$data['footer'] = $this->load->controller('common/footer');
@@ -228,26 +228,26 @@ class ControllerSettingStore extends Controller {
 
 		$data['breadcrumbs'] = [];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('text_home'),
 			'href' => $this->url->link('common/dashboard', 'user_token=' . $this->session->data['user_token']) 
-		);
+		];
 
-		$data['breadcrumbs'][] = array(
+		$data['breadcrumbs'][] = [
 			'text' => $this->language->get('heading_title'),
-			'href' => $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'], true)
-		);
+			'href' => $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token'])
+        ];
 
 		if (!isset($this->request->get['store_id'])) {
-			$data['breadcrumbs'][] = array(
+			$data['breadcrumbs'][] = [
 				'text' => $this->language->get('text_settings'),
-				'href' => $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token'], true)
-			);
+				'href' => $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token'])
+            ];
 		} else {
-			$data['breadcrumbs'][] = array(
+			$data['breadcrumbs'][] = [
 				'text' => $this->language->get('text_settings'),
-				'href' => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id'], true)
-			);
+				'href' => $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id'])
+            ];
 		}
 
 		if (isset($this->session->data['success'])) {
@@ -261,7 +261,7 @@ class ControllerSettingStore extends Controller {
 		if (!isset($this->request->get['store_id'])) {
 			$data['action'] = $this->url->link('setting/store/add', 'user_token=' . $this->session->data['user_token']);
 		} else {
-			$data['action'] = $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id'], true);
+			$data['action'] = $this->url->link('setting/store/edit', 'user_token=' . $this->session->data['user_token'] . '&store_id=' . $this->request->get['store_id']);
 		}
 
 		$data['cancel'] = $this->url->link('setting/store', 'user_token=' . $this->session->data['user_token']);
@@ -334,10 +334,10 @@ class ControllerSettingStore extends Controller {
 		foreach ($extensions as $code) {
 			$this->load->language('extension/theme/' . $code, 'extension');
 
-			$data['themes'][] = array(
+			$data['themes'][] = [
 				'text'  => $this->language->get('extension')->get('heading_title'),
 				'value' => $code
-			);
+            ];
 		}
 
 		if (isset($this->request->post['config_layout_id'])) {
