@@ -11,3 +11,5 @@ public_html/image/cache/*
 public_html/image/catalog/demo/*
 system/storage/cache/*
 system/storage/logs/*
+storage/cache/*
+storage/logs/*

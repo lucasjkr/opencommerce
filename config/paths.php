@@ -1,5 +1,6 @@
 <?php
 // Any modifications to this file are at your own risk!
+define('DIR_COMMON',        DIR_ROOT    . 'common/');
 define('DIR_SYSTEM',        DIR_ROOT    . 'system/');
 define('DIR_STORAGE',       DIR_ROOT    . 'storage/');
 define('DIR_CONFIG',        DIR_SYSTEM  . 'config/');

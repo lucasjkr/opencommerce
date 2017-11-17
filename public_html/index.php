@@ -20,6 +20,6 @@ define('DIR_LANGUAGE',      DIR_APPLICATION . 'language/');
 define('DIR_TEMPLATE',      DIR_APPLICATION . 'view/theme/');
 
 // Startup
-require_once(DIR_SYSTEM . 'startup.php');
+require_once(DIR_COMMON . 'startup.php');
 
 start('catalog');
