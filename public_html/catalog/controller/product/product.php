@@ -238,6 +238,7 @@ class ControllerProductProduct extends Controller {
 			$data['manufacturer'] = $product_info['manufacturer'];
 			$data['manufacturers'] = $this->url->link('product/manufacturer/info', 'manufacturer_id=' . $product_info['manufacturer_id']);
 			$data['model'] = $product_info['model'];
+            $data['viewed'] = $product_info['viewed'];
 			$data['description'] = html_entity_decode($product_info['description'], ENT_QUOTES, 'UTF-8');
 
 			if ($product_info['quantity'] <= 0) {
@@ -302,9 +303,11 @@ class ControllerProductProduct extends Controller {
                 ];
 			}
 
-			$data['options'] = [];
+            $options = $this->model_catalog_product->getProductOptions(($this->request->get['product_id']));
 
-			foreach ($this->model_catalog_product->getProductOptions($this->request->get['product_id']) as $option) {
+            $data['options'] = [];
+
+			foreach ($options as $option) {
 				$product_option_value_data = [];
 
 				foreach ($option['product_option_value'] as $option_value) {
@@ -352,10 +355,10 @@ class ControllerProductProduct extends Controller {
 			}
 
 			if ($this->customer->isLogged()) {
-				$data['customer_name'] = $this->customer->getFirstName() . '&nbsp;' . $this->customer->getLastName();
-			} else {
-				$data['customer_name'] = '';
-			}
+                $data['customer_name'] = $this->customer->getFirstName() . '&nbsp;' . $this->customer->getLastName();
+            } else {
+                $data['customer_name'] = '';
+            }
 
 			$data['reviews'] = sprintf($this->language->get('text_reviews'), (int)$product_info['reviews']);
 			$data['rating'] = (int)$product_info['rating'];

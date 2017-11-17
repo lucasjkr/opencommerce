@@ -1,0 +1,12 @@
+SQL file, has FTP settings in there, but there's no actual way to change them. DELETE
+
+admin/lanauge/en-gb/setting/setting.php - two keys for $_['help_login_attempts']; first one has typos. DELETE.
+admin/model/extensions/report/customer.php -> getOrders - 1st half of method useless - SQL gets overwritten by second part. DELETE.
+
+admin/language/*/extension/dashboard/activity.php vs customer_activity.php
+
+and controllers that load:
+mail/transaction.php
+marketing/affiliate.php
+
+statistics affiliates waiting
