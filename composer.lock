@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4c4ea88b26b3b5bb144c6a33b0a8fae5",
+    "content-hash": "ac6ca056efffeb87c8fe7f0cacdbda45",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -585,6 +585,82 @@
                 "wrapper"
             ],
             "time": "2017-11-20T00:33:08+00:00"
+        },
+        {
+            "name": "librecommerce/lib-registry",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/librecommerce/lib-registry.git",
+                "reference": "520b773798a457e876aeed1dfb8b7d8b53c1b282"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/librecommerce/lib-registry/zipball/520b773798a457e876aeed1dfb8b7d8b53c1b282",
+                "reference": "520b773798a457e876aeed1dfb8b7d8b53c1b282",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Librecommerce\\Components\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Lucas Krupinski",
+                    "email": "lucasjkr@me.com"
+                }
+            ],
+            "description": "Simple Registry",
+            "keywords": [
+                "librecommerce",
+                "registry"
+            ],
+            "time": "2017-11-20T16:42:22+00:00"
+        },
+        {
+            "name": "librecommerce/lib-session",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/librecommerce/lib-session.git",
+                "reference": "a47fcf00a547b5ad0ae42bd38ec3aa7db059ae7b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/librecommerce/lib-session/zipball/a47fcf00a547b5ad0ae42bd38ec3aa7db059ae7b",
+                "reference": "a47fcf00a547b5ad0ae42bd38ec3aa7db059ae7b",
+                "shasum": ""
+            },
+            "require": {
+                "librecommerce/lib-db": "^1.0|^2.0",
+                "librecommerce/lib-registry": "^1.0|^2.0",
+                "php": ">=7.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Librecommerce\\Components\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Lucas Krupinski",
+                    "email": "lucasjkr@me.com"
+                }
+            ],
+            "description": "Simple Registry",
+            "keywords": [
+                "librecommerce",
+                "session"
+            ],
+            "time": "2017-11-20T17:28:34+00:00"
         },
         {
             "name": "odan/phinx-migrations-generator",

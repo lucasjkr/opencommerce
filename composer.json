@@ -21,6 +21,8 @@
 		"odan/phinx-migrations-generator": "^2.3",
 		"robmorgan/phinx": "^0.9.1",
 		"filp/whoops": "^2.1",
-		"librecommerce/lib-db": "^1.0"
+		"librecommerce/lib-db": "^1.0",
+		"librecommerce/lib-registry": "^1.0",
+		"librecommerce/lib-session": "^1.0"
     }
 }
