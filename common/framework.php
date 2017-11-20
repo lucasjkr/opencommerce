@@ -47,8 +47,8 @@ if ($config->get('db_autostart')) {
 }
 
 // Session
-$session = new Session($config->get('session_engine'), $registry);
-$registry->set('session', $session);
+$registry->set('session', new Session($config->get('session_engine'), $registry));
+$session = $registry->get('session');
 
 if ($config->get('session_autostart')) {
 	/*
