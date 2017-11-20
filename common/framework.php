@@ -1,6 +1,6 @@
 <?php
 // Registry
-$registry = new Registry();
+$registry = new Librecommerce\Components\Registry();
 
 // Config
 $config = new Config();
