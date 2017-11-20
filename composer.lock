@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c9ce261679d5905f8f2704ec9ab9cf36",
+    "content-hash": "4c4ea88b26b3b5bb144c6a33b0a8fae5",
     "packages": [
         {
             "name": "braintree/braintree_php",
@@ -546,6 +546,45 @@
             "description": "scssphp is a compiler for SCSS written in PHP.",
             "homepage": "http://leafo.net/scssphp/",
             "time": "2014-07-07T01:51:39+00:00"
+        },
+        {
+            "name": "librecommerce/lib-db",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/librecommerce/lib-db.git",
+                "reference": "e00de4c01911abdd0810c81d469833ff921c86c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/librecommerce/lib-db/zipball/e00de4c01911abdd0810c81d469833ff921c86c2",
+                "reference": "e00de4c01911abdd0810c81d469833ff921c86c2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "type": "project",
+            "autoload": {
+                "psr-4": {
+                    "Librecommerce\\Components\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Lucas Krupinski",
+                    "email": "lucasjkr@me.com"
+                }
+            ],
+            "description": "Simple PDO wrapper",
+            "keywords": [
+                "database",
+                "librecommerce",
+                "pdo",
+                "wrapper"
+            ],
+            "time": "2017-11-20T00:33:08+00:00"
         },
         {
             "name": "odan/phinx-migrations-generator",
