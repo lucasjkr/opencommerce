@@ -47,7 +47,7 @@ class Cart {
 	public function getProducts() {
 		$product_data = [];
 
-		$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id",
+		$cart_query = $this->db->query("SELECT * FROM `oc_cart` WHERE api_id = :api_id AND customer_id = :customer_id OR session_id = :session_id",
             [
                 ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
                 ':customer_id' => $this->customer->getId(),
@@ -81,9 +81,17 @@ class Cart {
 
 					if ($option_query->num_rows) {
 						if ($option_query->row['type'] == 'select' || $option_query->row['type'] == 'radio') {
-							$option_value_query = $this->db->query("SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix FROM oc_product_option_value pov 
-LEFT JOIN oc_option_value ov ON (pov.option_value_id = ov.option_value_id) LEFT JOIN oc_option_value_description ovd ON (ov.option_value_id = ovd.option_value_id) 
-WHERE pov.product_option_value_id =  :product_option_value_id AND pov.product_option_id = :product_option_id AND ovd.language_id = :language_id",
+							$option_value_query = $this->db->query("
+SELECT pov.option_value_id, ovd.name, pov.quantity, pov.subtract, pov.price, pov.price_prefix, pov.weight, pov.weight_prefix 
+FROM oc_product_option_value pov 
+   LEFT JOIN oc_option_value ov 
+     ON (pov.option_value_id = ov.option_value_id) 
+   LEFT JOIN oc_option_value_description ovd 
+     ON (ov.option_value_id = ovd.option_value_id) 
+WHERE 
+   pov.product_option_value_id = :product_option_value_id AND 
+   pov.product_option_id = :product_option_id AND 
+   ovd.language_id = :language_id",
                                 [
                                     ':product_option_value_id' => $value,
                                     ':product_option_id' => $product_option_id,
@@ -317,8 +325,7 @@ pov.product_option_value_id = :product_option_value_id AND pov.product_option_id
             ]);
 
 		if (!$query->row['total']) {
-            $this->db->query("--Insert Query--
-INSERT INTO oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = :option, quantity = :quantity",
+            $this->db->query("INSERT INTO oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id = :session_id, product_id = :product_id, recurring_id = :recurring_id, `option` = :option, quantity = :quantity",
                 [
                     ':api_id' => (isset($this->session->data['api_id']) ? (int)$this->session->data['api_id'] : 0),
                     ':customer_id' => $this->customer->getId(),
@@ -326,7 +333,7 @@ INSERT INTO oc_cart SET api_id = :api_id, customer_id = :customer_id, session_id
                     ':product_id' => $product_id,
                     ':recurring_id' => $recurring_id,
                     ':option' => json_encode($option),
-                    ':quantity' => $quantity ,
+                    ':quantity' => $quantity,
                 ]);
 		} else {
 			$this->db->query("UPDATE oc_cart SET quantity = (quantity + :quantity) WHERE api_id = :api_id AND customer_id = :customer_id AND session_id = :session_id AND product_id = :product_id AND recurring_id = :recurring_id AND `option` = :option",
