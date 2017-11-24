@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationLanguageAdmin extends Model {
 	public function addLanguage($data) {
 		$this->db->query("INSERT INTO oc_language SET name = :name, code = :code, locale = :locale, sort_order = :sort_order, status = :status",

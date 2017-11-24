@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelDesignLayout extends Model {
 	public function getLayout($route) {
 		$query = $this->db->query("SELECT * FROM oc_layout_route WHERE :route LIKE route AND store_id = :store_id ORDER BY route DESC LIMIT 1",

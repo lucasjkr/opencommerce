@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionTotalVoucher extends Controller {
 	public function index() {
 		if ($this->config->get('total_voucher_status')) {

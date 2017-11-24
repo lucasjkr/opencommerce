@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionPaymentPaymate extends Controller {
 	public function index() {
 		if (!$this->config->get('payment_paymate_test')) {

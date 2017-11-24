@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationCurrency extends Model {
 	public function getCurrencyByCode($currency) {
 		$query = $this->db->query("SELECT DISTINCT * FROM oc_currency WHERE code = :code",

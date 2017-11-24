@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerStartupSession extends Controller {
 	public function index() {
 		if (isset($this->request->get['route']) && substr((string)$this->request->get['route'], 0, 4) == 'api/') {
@@ -6,9 +10,8 @@ class ControllerStartupSession extends Controller {
 					
 			// Make sure the IP is allowed
 			$api_query = $this->db->query("SELECT DISTINCT * FROM `oc_api` `a` LEFT JOIN `oc_api_session` `as` ON (a.api_id = as.api_id) LEFT JOIN oc_api_ip `ai` ON (a.api_id = ai.api_id) 
-WHERE a.status = :status AND `as`.`session_id` = :session_id AND ai.ip = :ip",
+WHERE a.status = '1' AND `as`.`session_id` = :session_id AND ai.ip = :ip",
                 [
-                    ':status' => 1,
                     ':session_id' => $this->request->get['api_token'],
                     ':ip' => $this->request->server['REMOTE_ADDR']
 

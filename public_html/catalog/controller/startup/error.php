@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerStartupError extends Controller {
     public function index() {
         $this->registry->set('log', DIR_LOGS . 'error.log');
@@ -33,14 +37,14 @@ class ControllerStartupError extends Controller {
         if (defined('PHP_ERROR_DISPLAY') && PHP_ERROR_DISPLAY == 1) {
             echo '<b>' . $error . '</b>: ' . $message . ' in <b>' . $file . '</b> on line <b>' . $line . '</b>';
         }
-
-        if (defined('PHP_ERROR_LOG') && PHP_ERROR_LOG == 1) {
-            $this->log->write('PHP ' . $error . ':  ' . $message . ' in ' . $file . ' on line ' . $line);
-        }
-
-        if (defined('PHP_ERROR_HALT') && PHP_ERROR_HALT == 1) {
-            exit();
-        }
+//
+//        if (defined('PHP_ERROR_LOG') && PHP_ERROR_LOG == 1) {
+//            $this->log->write('PHP ' . $error . ':  ' . $message . ' in ' . $file . ' on line ' . $line);
+//        }
+//
+//        if (defined('PHP_ERROR_HALT') && PHP_ERROR_HALT == 1) {
+//            exit();
+//        }
 
         return true;
     }

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerStartupRouter extends Controller {
 	public function index() {
 		// Route
@@ -19,7 +23,7 @@ class ControllerStartupRouter extends Controller {
 		}
 		
 		// We dont want to use the loader class as it would make an controller callable.
-		$action = new Action($route);
+		$action = new Librecommerce\Components\Action($route);
 		
 		// Any output needs to be another Action object.
 		$output = $action->execute($this->registry); 

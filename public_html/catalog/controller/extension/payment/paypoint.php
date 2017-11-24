@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionPaymentPaypoint extends Controller {
 	public function index() {
 		$data['button_confirm'] = $this->language->get('button_confirm');

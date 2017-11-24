@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerMailTransaction extends Controller {
 	public function index(&$route, &$args, &$output) {
 		$this->load->language('mail/transaction');

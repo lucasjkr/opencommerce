@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSettingModule extends Model {
 	public function addModule($code, $data) {
 		$this->db->query("INSERT INTO `oc_module` SET `name` = :name, `code` = :code, `setting` = :setting",

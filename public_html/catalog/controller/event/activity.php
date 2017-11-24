@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerEventActivity extends Controller {
 	// model/account/customer/addCustomer/after
 	public function addCustomer(&$route, &$args, &$output) {

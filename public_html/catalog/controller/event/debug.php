@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerEventDebug extends Controller {
 	public function before(&$route, &$args) {
 		if ($route == 'common/home') { // add the route you want to test
