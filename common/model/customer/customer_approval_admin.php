@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCustomerCustomerApprovalAdmin extends Model {
 	public function getCustomerApprovals($data = []) {
 		$sql = "SELECT *, CONCAT(c.`firstname`, ' ', c.`lastname`) AS name, cgd.`name` AS customer_group, ca.`type` FROM `oc_customer_approval` ca LEFT JOIN `oc_customer` c ON (ca.`customer_id` = c.`customer_id`) LEFT JOIN `oc_customer_group_description` cgd ON (c.`customer_group_id` = cgd.`customer_group_id`) WHERE cgd.`language_id` = :language_id";

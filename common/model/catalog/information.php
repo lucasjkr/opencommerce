@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogInformation extends Model {
 	public function getInformation($information_id) {
 		$query = $this->db->query("SELECT DISTINCT * FROM oc_information i LEFT JOIN oc_information_description id ON (i.information_id = id.information_id) LEFT JOIN oc_information_to_store i2s ON (i.information_id = i2s.information_id) WHERE i.information_id = :information_id AND id.language_id = :language_id AND i2s.store_id = :store_id AND i.status = :status",

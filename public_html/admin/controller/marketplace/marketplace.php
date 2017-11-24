@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 // LJK TODO: This is for accessing the OC extension store - should be safe to delete entirely
 class ControllerMarketplaceMarketplace extends Controller {
 	public function index() {

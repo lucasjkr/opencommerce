@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogAttributeGroup extends Model {
 	public function addAttributeGroup($data) {
 		$this->db->query("INSERT INTO oc_attribute_group SET sort_order = :sort_order",

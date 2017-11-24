@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogDownload extends Model {
 	public function addDownload($data) {
 		$this->db->query("INSERT INTO `oc_download` SET `filename` = :filename, `mask` = :mask",

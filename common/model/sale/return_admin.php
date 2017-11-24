@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSaleReturnAdmin extends Model {
 	public function addReturn($data) {
 		$this->db->query("INSERT INTO `oc_return` SET order_id = :order_id, product_id = :product_id , customer_id = :customer_id,

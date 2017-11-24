@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountCustomField extends Model {
 	public function getCustomField($custom_field_id) {
 		$query = $this->db->query("SELECT * FROM `oc_custom_field` cf LEFT JOIN `oc_custom_field_description` cfd ON (cf.custom_field_id = cfd.custom_field_id) WHERE cf.status = :status AND cf.custom_field_id = :custom_field_id AND cfd.language_id = :language_id",

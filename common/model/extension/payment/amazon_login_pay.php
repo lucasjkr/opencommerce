@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionPaymentAmazonLoginPay extends Model {
 	public function getCountry($iso2) {
 		return $this->db->query("SELECT `country_id`, `name`, `iso_code_2`, `iso_code_3`, `address_format` FROM `oc_country` WHERE `iso_code_2` = :iso_code_2 AND `status` = 1 LIMIT 1",

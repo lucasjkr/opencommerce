@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelDesignLayoutAdmin extends Model {
 	public function addLayout($data) {
 		$this->db->query("INSERT INTO oc_layout SET name = :name",

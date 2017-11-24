@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSettingEventAdmin extends Model {
 	public function addEvent($code, $trigger, $action, $status = 1, $sort_order = 0) {
 		$this->db->query("INSERT INTO `oc_event` SET `code` = :code, `trigger` = :trigger, `action` = :action, `sort_order` = :sort_order, `status` = :status",

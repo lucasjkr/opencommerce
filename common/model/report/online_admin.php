@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelReportOnlineAdmin extends Model {
 	public function getOnline($data = []) {
 		$sql = "SELECT co.ip, co.customer_id, co.url, co.referer, co.date_added FROM oc_customer_online co LEFT JOIN oc_customer c ON (co.customer_id = c.customer_id)";

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCheckoutRecurring extends Model {
 	public function addRecurring($order_id, $description, $data) {
 		$this->db->query("INSERT INTO `oc_order_recurring` SET `order_id` = :order_id, `status` = :status, `product_id` = :product_id, `product_name` = :product_name, `product_quantity` = :product_quantity, `recurring_id` = :recurring_id, `recurring_name` = :recurring_name, `recurring_description` = :recurring_description, `recurring_frequency` = :recurring_frequency, `recurring_cycle` = :recurring_cycle, `recurring_duration` = :recurring_duration, `recurring_price` = :recurring_price, `trial` = :trial, `trial_frequency` = :trial_frequency, `trial_cycle` = :trial_cycle, `trial_duration` = :trial_duration, `trial_price` = :trial_price, `reference` = :reference",

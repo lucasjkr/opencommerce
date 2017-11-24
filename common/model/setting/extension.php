@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSettingExtension extends Model {
     function getExtensions($type) {
         $query = $this->db->query("SELECT * FROM oc_extension WHERE `type` = :type",

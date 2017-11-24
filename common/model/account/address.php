@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountAddress extends Model {
 	public function addAddress($customer_id, $data) {
 		$this->db->query("INSERT INTO oc_address SET customer_id = :customer_id , firstname = :firstname, lastname = :lastname, company = :company, address_1 = :address_1, address_2 = :address_2, postcode = :postcode, city = :city, zone_id = :zone_id, country_id = :country_id, custom_field = :custom_field",

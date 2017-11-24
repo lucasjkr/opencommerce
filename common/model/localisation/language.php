@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationLanguage extends Model {
 	public function getLanguage($language_id) {
 		$query = $this->db->query("SELECT * FROM oc_language WHERE language_id = :language_id",

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCustomerCustomFieldAdmin extends Model {
 	public function addCustomField($data) {
 		$this->db->query("INSERT INTO `oc_custom_field` SET `type` = :type, `value` = :value, `validation` = :validation, `location` = :location, `status` = :status, `sort_order` = :sort_order",

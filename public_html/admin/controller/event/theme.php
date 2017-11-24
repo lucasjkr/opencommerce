@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerEventTheme extends Controller {
 	public function index(&$route, &$args) {
 		// This is only here for compatibility with old templates

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationReturnActionAdmin extends Model {
 	public function addReturnAction($data) {
 		foreach ($data['return_action'] as $language_id => $value) {

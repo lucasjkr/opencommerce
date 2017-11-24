@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionPaymentSecureTradingWs extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/securetrading_ws');

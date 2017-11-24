@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionPaymentPPPayflowIframe extends Model {
 	public function getMethod($address, $total) {
 		$this->load->language('extension/payment/pp_payflow_iframe');

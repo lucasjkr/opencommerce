@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelUserUserAdmin extends Model {
 	public function addUser($data) {
         $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);

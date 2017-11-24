@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationTaxClass extends Model {
 	public function addTaxClass($data) {
 	    // LJK TODO: for consistency, title should be renamed to name

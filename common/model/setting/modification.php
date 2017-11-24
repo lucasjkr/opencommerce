@@ -1,8 +1,11 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSettingModification extends Model {
 	public function addModification($data) {
-		$this->db->query("INSERT INTO `oc_modification` SET `extension_install_id` = extension_install_id, `name` = :name, `code` = :code, 
-`author` = :author, `version` = :version, `link` = :link, `xml` = :xml, `status` = :status",
+		$this->db->query("INSERT INTO `oc_modification` SET `extension_install_id` = extension_install_id, `name` = :name, `code` = :code, `author` = :author, `version` = :version, `link` = :link, `xml` = :xml, `status` = :status",
             [
                 ':extension_install_id' => $data['extension_install_id'],
                 ':name' => $data['name'],

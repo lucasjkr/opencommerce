@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationOrderStatus extends Model {
 	public function getOrderStatus($order_status_id) {
 		$query = $this->db->query("SELECT * FROM oc_order_status WHERE order_status_id = :order_status_id AND language_id = :language_id",

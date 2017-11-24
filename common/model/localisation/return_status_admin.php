@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationReturnStatusAdmin extends Model {
 	public function addReturnStatus($data) {
 		foreach ($data['return_status'] as $language_id => $value) {

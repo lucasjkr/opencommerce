@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionModuleSagepayDirectCards extends Controller {
 	public function index() {
 		if ($this->config->get('module_sagepay_direct_cards_status') && $this->config->get('payment_sagepay_direct_status') && $this->customer->isLogged()) {

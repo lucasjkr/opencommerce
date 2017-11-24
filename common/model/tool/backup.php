@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelToolBackup extends Model {
     // LJK TODO: These are admin-only functions; should add a check somewhere within to make sure that the logged in
     // user is allowed to access it. Leaving it only to the controller for the page means that a stupid dev or bad

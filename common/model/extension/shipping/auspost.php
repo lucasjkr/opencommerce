@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 /**
  * @version    N/A, base on AUSPOST API update on 18 April 2016
  * @link       https://developers.auspost.com.au/docs/reference

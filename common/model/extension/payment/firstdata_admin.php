@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionPaymentFirstdataAdmin extends Model {
 	public function install() {
 		$this->db->query("
@@ -195,7 +199,7 @@ class ModelExtensionPaymentFirstdataAdmin extends Model {
 	private function getTransactions($firstdata_order_id) {
 		$qry = $this->db->query("SELECT * FROM `oc_firstdata_order_transaction` WHERE `firstdata_order_id` = :order_id",
             [
-                ':order_id' = $firstdata_order_id
+                ':order_id' => $firstdata_order_id
             ]);
 
 		if ($qry->num_rows) {

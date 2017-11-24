@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationWeightClass extends Model {
 	public function addWeightClass($data) {
 		$this->db->query("INSERT INTO oc_weight_class SET `value` = :value",

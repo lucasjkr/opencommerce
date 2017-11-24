@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogOptionAdmin extends Model {
 	public function addOption($data) {
 		$this->db->query("INSERT INTO `oc_option` SET `type` = :type, sort_order = :sort_order",

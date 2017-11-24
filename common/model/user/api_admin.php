@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelUserApiAdmin extends Model {
 	public function addApi($data) {
 		$this->db->query("INSERT INTO `oc_api` SET username = :username, `key` = :key, status = :status",

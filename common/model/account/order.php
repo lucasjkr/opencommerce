@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountOrder extends Model {
 	public function getOrder($order_id) {
 		$order_query = $this->db->query("SELECT * FROM `oc_order` WHERE order_id = :order_id  AND customer_id = :customer_id AND order_status_id > '0'",

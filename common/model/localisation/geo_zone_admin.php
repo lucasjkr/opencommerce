@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationGeoZoneAdmin extends Model {
 	public function addGeoZone($data) {
 		$this->db->query("INSERT INTO oc_geo_zone SET name = :name, description = :description",

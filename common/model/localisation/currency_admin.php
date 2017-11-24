@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationCurrencyAdmin extends Model {
 	public function addCurrency($data) {
 		$this->db->query("INSERT INTO oc_currency SET title = :title, code = :code, symbol_left = :symbol_left, symbol_right = :symbol_right, decimal_place = :decimal_place, value = :value, status = :status",

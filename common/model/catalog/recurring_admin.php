@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogRecurringAdmin extends Model {
 	public function addRecurring($data) {
 		$this->db->query("INSERT INTO `oc_recurring` SET `sort_order` = :sort_order, `status` = :status, `price` = :price, `frequency` = :frequency, `duration` = :duration, `cycle` = :cycle, `trial_status` = :trial_status, `trial_price` = :trial_price, `trial_frequency` = :trial_frequency, `trial_duration` = :trial_duration, `trial_cycle` = :trial_cycle",

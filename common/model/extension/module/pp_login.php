@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionModulePPLogin extends Model {
 	public function getTokens($code) {
 		if ($this->config->get('module_pp_login_sandbox')) {

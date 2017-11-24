@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionReportProduct extends Model {
 	public function getProductsViewed($data = []) {
 		$sql = "SELECT p.product_id, pd.name, p.model, COUNT(pv.`product_id`) as viewed FROM oc_product p LEFT JOIN oc_product_description pd ON p.product_id = pd.product_id LEFT JOIN oc_product_views pv ON p.product_id = pv.product_id WHERE pd.language_id = :language_id GROUP BY product_id ORDER BY viewed DESC";

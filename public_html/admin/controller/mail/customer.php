@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerMailCustomer extends Controller {
 	public function approve(&$route, &$args, &$output) {
 		$this->load->model('customer/customer_admin');

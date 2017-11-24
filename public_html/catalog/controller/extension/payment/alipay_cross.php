@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionPaymentAlipayCross extends Controller {
 	var $alipay_gateway = 'https://mapi.alipay.com/gateway.do?';
 	var $alipay_gateway_test = 'https://openapi.alipaydev.com/gateway.do?';
@@ -20,7 +24,7 @@ class ControllerExtensionPaymentAlipayCross extends Controller {
 		$alipay_config = array (
 			'partner'              => $this->config->get('payment_alipay_cross_app_id'),
 			'key'                  => $this->config->get('payment_alipay_cross_merchant_private_key'),
-			'notify_url'           => "https://" . STORE_URL . . "payment_callback/alipay_cross",
+			'notify_url'           => "https://" . STORE_URL . "payment_callback/alipay_cross",
 			'return_url'           => $this->url->link('checkout/success'),
 			'sign_type'            => strtoupper('MD5'),
 			'input_charset'        => strtolower('utf-8'),

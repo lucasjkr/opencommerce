@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelDesignSeoUrlAdmin extends Model {
 	public function addSeoUrl($data) {
 		$this->db->query("INSERT INTO `oc_seo_url` SET store_id = :store_id, language_id = :language_id, query = :query, keyword = :keyword",

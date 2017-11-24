@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionTotalVoucherTheme extends Model {
 	public function getVoucherTheme($voucher_theme_id) {
 		$query = $this->db->query("SELECT * FROM oc_voucher_theme vt LEFT JOIN oc_voucher_theme_description vtd ON (vt.voucher_theme_id = vtd.voucher_theme_id) WHERE vt.voucher_theme_id = :voucher_theme_id AND vtd.language_id = :language_id",

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogReviewAdmin extends Model {
 	public function addReview($data) {
 		$this->db->query("INSERT INTO `oc_review` SET author = :author, product_id = :product_id, text = :text, rating = :rating, status = :status",

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelReportStatistics extends Model {
 	public function getStatistics() {
 		$query = $this->db->query("SELECT * FROM oc_statistics");

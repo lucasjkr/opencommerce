@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionTotalShipping extends Model {
 	public function getTotal($total) {
 		if ($this->cart->hasShipping() && isset($this->session->data['shipping_method'])) {

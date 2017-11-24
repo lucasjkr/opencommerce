@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountActivity extends Model {
 	public function addActivity($key, $data) {
 		if (isset($data['customer_id'])) {

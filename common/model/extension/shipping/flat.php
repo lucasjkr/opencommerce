@@ -3,12 +3,11 @@ class ModelExtensionShippingFlat extends Model {
 	function getQuote($address) {
 		$this->load->language('extension/shipping/flat');
 
-        $query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id_1 OR zone_id = :zone_id_2)",
+        $query = $this->db->query("SELECT * FROM oc_zone_to_geo_zone WHERE geo_zone_id = :geo_zone_id AND country_id = :country_id AND (zone_id = :zone_id_1 OR zone_id = '0')",
             [
                 ':geo_zone_id' => $this->config->get('shipping_flat_geo_zone_id'),
                 ':country_id' => $address['country_id'],
                 ':zone_id_1' => $address['zone_id'],
-                ':zone_id_2' => 0,
             ]);
 
 		if (!$this->config->get('shipping_flat_geo_zone_id')) {

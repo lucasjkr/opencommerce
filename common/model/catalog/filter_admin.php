@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogFilterAdmin extends Model {
 	public function addFilter($data) {
 		$this->db->query("INSERT INTO `oc_filter_group` SET `sort_order` = :sort_order",

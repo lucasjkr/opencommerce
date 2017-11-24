@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionShippingPilibaba extends Model {
 	function getQuote($address) {
 	    // LJK TODO - can't see how this one works - it doesn't use the $address that was passed into it?

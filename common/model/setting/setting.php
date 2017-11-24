@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSettingSetting extends Model {
 	public function getSetting($code, $store_id = 0) {
 		$setting_data = [];

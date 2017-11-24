@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionReportSale extends Model {
 	public function getTotalSales($data = []) {
 		$sql = "SELECT SUM(total) AS total FROM `oc_order` WHERE order_status_id > '0'";

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerCommonLanguage extends Controller {
 	public function index() {
 		$this->load->language('common/language');
@@ -15,10 +19,10 @@ class ControllerCommonLanguage extends Controller {
 
 		foreach ($results as $result) {
 			if ($result['status']) {
-				$data['languages'][] = array(
+				$data['languages'][] = [
 					'name' => $result['name'],
 					'code' => $result['code']
-				);
+				];
 			}
 		}
 

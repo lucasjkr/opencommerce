@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSaleVoucherTheme extends Model {
 	public function addVoucherTheme($data) {
 		$this->db->query("INSERT INTO oc_voucher_theme SET image = :image",

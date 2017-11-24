@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogProductAdmin extends Model {
 	public function addProduct($data) {
 		$this->db->query("INSERT INTO `oc_product` SET model = :model, location = :location, quantity = :quantity, minimum = :minimum, subtract = :subtract, stock_status_id = :stock_status_id, date_available = :date_available, manufacturer_id = :manufacturer_id, shipping = :shipping, price = :price, weight = :weight, weight_class_id = :weight_class_id, length = :length, width = :width, height = :height, length_class_id = :length_class_id, status = :status, tax_class_id = :tax_class_id, sort_order = :sort_order",

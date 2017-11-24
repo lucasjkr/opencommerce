@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationTaxRate extends Model {
 	public function addTaxRate($data) {
 		$this->db->query("INSERT INTO oc_tax_rate SET name = :name, rate = :rate, `type` = :type, geo_zone_id = '" . (int)$data['geo_zone_id'] . "'",

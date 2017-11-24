@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogManufacturer extends Model {
 	public function getManufacturer($manufacturer_id) {
 		$query = $this->db->query("SELECT * FROM oc_manufacturer m LEFT JOIN oc_manufacturer_to_store m2s ON (m.manufacturer_id = m2s.manufacturer_id) WHERE m.manufacturer_id = :manufacturer_id AND m2s.store_id = :store_id",

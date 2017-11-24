@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCatalogManufacturerAdmin extends Model {
 	public function addManufacturer($data) {
 		$this->db->query("INSERT INTO oc_manufacturer SET name = :name, sort_order = :sort_order",

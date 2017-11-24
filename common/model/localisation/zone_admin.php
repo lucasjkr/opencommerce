@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationZoneAdmin extends Model {
 	public function addZone($data) {
 		$this->db->query("INSERT INTO oc_zone SET status = :status, name = :name, code = :code, country_id = :country_id",

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationCountryAdmin extends Model {
 	public function addCountry($data) {
 		$this->db->query("INSERT INTO oc_country SET name = :name, iso_code_2 = :iso_code_2, iso_code_3 = :iso_code_3, address_format = :address_format, postcode_required = :postcode_required, status = :status",

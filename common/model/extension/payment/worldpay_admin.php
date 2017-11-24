@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 
 class ModelExtensionPaymentWorldpayAdmin extends Model {
 
@@ -109,7 +113,7 @@ class ModelExtensionPaymentWorldpayAdmin extends Model {
 	private function getTransactions($worldpay_order_id, $currency_code) {
 		$query = $this->db->query("SELECT * FROM `oc_worldpay_order_transaction` WHERE `worldpay_order_id` = :order_id",
             [
-                ':order_id' = $worldpay_order_id
+                ':order_id' => $worldpay_order_id
             ]);
 
 		$transactions = [];

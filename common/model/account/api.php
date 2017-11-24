@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountApi extends Model {
 	public function login($username, $key) {
 		$query = $this->db->query("SELECT * FROM `oc_api` WHERE `username` = :username AND `key` = :key AND status = '1'",

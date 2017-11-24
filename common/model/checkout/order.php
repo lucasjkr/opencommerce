@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCheckoutOrder extends Model {
 	public function addOrder($data) {
 		$this->db->query("INSERT INTO `oc_order` SET invoice_prefix = :invoice_prefix, store_id = :store_id, store_name = :store_name, 

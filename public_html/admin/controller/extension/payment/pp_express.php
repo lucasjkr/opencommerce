@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionPaymentPPExpress extends Controller {
 	private $error = [];
 	private $opencart_connect_url = 'https://www.opencart.com/index.php?route=external/paypal_auth/connect';

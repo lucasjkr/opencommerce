@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelToolOnline extends Model {
 	public function addOnline($ip, $customer_id, $url, $referer) {
 		$this->db->query("DELETE FROM `oc_customer_online` WHERE date_added < :date_added",

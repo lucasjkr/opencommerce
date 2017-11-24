@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelCustomerCustomerAdmin extends Model {
 	public function addCustomer($data) {
 		$this->db->query("INSERT INTO `oc_customer` SET `customer_group_id` = :customer_group_id, `firstname` = :firstname, `lastname` = :lastname, `email` = :email, `telephone` = :telephone, `custom_field` = :custom_field, `newsletter` = :newsletter, `password` = :password, `status` = :status, `safe` = :safe",

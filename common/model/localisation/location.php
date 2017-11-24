@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationLocation extends Model {
 	public function addLocation($data) {
 		$this->db->query("INSERT INTO oc_location SET name = :name, address = :address, geocode = :geocode, telephone = :telephone, fax = :fax, image = :image, open = :open, comment = :comment",

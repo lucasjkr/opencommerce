@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountWishlist extends Model {
 	public function addWishlist($product_id) {
 		$this->db->query("DELETE FROM oc_customer_wishlist WHERE customer_id = :customer_id AND product_id = :product_id",

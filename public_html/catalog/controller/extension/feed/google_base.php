@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionFeedGoogleBase extends Controller {
 	public function index() {
 		if ($this->config->get('feed_google_base_status')) {

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerStartupLogin extends Controller {
 	public function index() {
 		$route = isset($this->request->get['route']) ? $this->request->get['route'] : '';

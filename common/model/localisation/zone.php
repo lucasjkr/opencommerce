@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationZone extends Model {
 	public function getZone($zone_id) {
 		$query = $this->db->query("SELECT * FROM oc_zone WHERE zone_id = :zone_id AND status = '1'",

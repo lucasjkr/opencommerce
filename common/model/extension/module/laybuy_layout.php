@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelExtensionModuleLaybuyLayout extends Model {
 	public function getStatusLabel($id) {
 		$statuses = $this->getTransactionStatuses();

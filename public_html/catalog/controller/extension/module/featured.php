@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerExtensionModuleFeatured extends Controller {
 	public function index($setting) {
 		$this->load->language('extension/module/featured');

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationCountry extends Model {
 	public function getCountry($country_id) {
 		$query = $this->db->query("SELECT * FROM oc_country WHERE country_id = :country_id AND status = '1'",

@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSaleRecurringAdmin extends Model {
 	public function getRecurrings($data) {
 		$sql = "SELECT `or`.order_recurring_id, `or`.order_id, `or`.reference, `or`.`status`, `or`.`date_added`, CONCAT(`o`.firstname, ' ', `o`.lastname) AS customer FROM `oc_order_recurring` `or` LEFT JOIN `oc_order` `o` ON (`or`.order_id = `o`.order_id)";

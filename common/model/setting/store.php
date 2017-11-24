@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSettingStore extends Model {
     // getStores appears to be used by model and catalog.
     public function getStores($data = []) {

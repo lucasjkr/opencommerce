@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountTransaction extends Model {
 	public function getTransactions($data = []) {
 		$sql = "SELECT * FROM `oc_customer_transaction` WHERE customer_id = :customer_id";

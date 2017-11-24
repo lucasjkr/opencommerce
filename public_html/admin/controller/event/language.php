@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ControllerEventLanguage extends Controller {
 	public function index(&$route, &$args) {
 		foreach ($this->language->all() as $key => $value) {

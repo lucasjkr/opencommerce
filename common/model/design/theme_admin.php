@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelDesignThemeAdmin extends Model {
 	public function editTheme($store_id, $theme, $route, $code) {
 		// LJK TODO: What is code for?

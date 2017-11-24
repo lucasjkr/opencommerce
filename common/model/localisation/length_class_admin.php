@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelLocalisationLengthClassAdmin extends Model {
 	public function addLengthClass($data) {
 		$this->db->query("INSERT INTO oc_length_class SET value = :value",

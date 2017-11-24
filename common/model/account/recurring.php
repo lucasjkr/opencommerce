@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelAccountRecurring extends Model {
 	public function getOrderRecurring($order_recurring_id) {
 		$query = $this->db->query("SELECT `or`.*,`o`.`payment_method`,`o`.`payment_code`,`o`.`currency_code` FROM `oc_order_recurring` `or` LEFT JOIN `oc_order` `o` ON `or`.`order_id` = `o`.`order_id` WHERE `or`.`order_recurring_id` = :order_recurring_id AND `o`.`customer_id` = :customer_id",

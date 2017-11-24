@@ -1,4 +1,8 @@
 <?php
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Event as Event;
+use Librecommerce\Components\Model as Model;
+
 class ModelSaleVoucher extends Model {
 	public function addVoucher($data) {
 		$this->db->query("INSERT INTO oc_voucher SET code = :code, from_name = :from_name, from_email = :from_email, to_name = :to_name, to_email = :to_email, voucher_theme_id = :voucher_theme_id, message = :message, amount = :amount, status = :status",
