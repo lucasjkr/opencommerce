@@ -94,18 +94,12 @@ function library($class) {
 spl_autoload_register('library');
 spl_autoload_extensions('.php');
 
-// Engine
-require_once(modification(DIR_SYSTEM . 'engine/action.php'));
-require_once(modification(DIR_SYSTEM . 'engine/controller.php'));
-require_once(modification(DIR_SYSTEM . 'engine/event.php'));
-require_once(modification(DIR_SYSTEM . 'engine/router.php'));
-require_once(modification(DIR_SYSTEM . 'engine/loader.php'));
-require_once(modification(DIR_SYSTEM . 'engine/model.php'));
-require_once(modification(DIR_SYSTEM . 'engine/proxy.php'));
-
 // Helper
 require_once(DIR_SYSTEM . 'helper/general.php');
 require_once(DIR_SYSTEM . 'helper/utf8.php');
+
+use Librecommerce\Components\Controller as Controller;
+use Librecommerce\Components\Model as Model;
 
 function start($application_config) {
 	require_once(DIR_COMMON . 'framework.php');

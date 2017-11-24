@@ -17,20 +17,20 @@ $registry->set('log', $log);
 date_default_timezone_set($config->get('date_timezone'));
 
 // Event
-$event = new Event($registry);
+$event = new Librecommerce\Components\Event($registry);
 $registry->set('event', $event);
 
 // Event Register
 if ($config->has('action_event')) {
 	foreach ($config->get('action_event') as $key => $value) {
 		foreach ($value as $priority => $action) {
-			$event->register($key, new Action($action), $priority);
+			$event->register($key, new Librecommerce\Components\Action($action), $priority);
 		}
 	}
 }
 
 // Loader
-$loader = new Loader($registry);
+$loader = new Librecommerce\Components\Loader($registry);
 $registry->set('load', $loader);
 
 // Request
@@ -121,17 +121,17 @@ if ($config->has('model_autoload')) {
 }
 
 // Route
-$route = new Router($registry);
+$route = new Librecommerce\Components\Router($registry);
 
 // Pre Actions
 if ($config->has('action_pre_action')) {
 	foreach ($config->get('action_pre_action') as $value) {
-		$route->addPreAction(new Action($value));
+		$route->addPreAction(new Librecommerce\Components\Action($value));
 	}
 }
 
 // Dispatch
-$route->dispatch(new Action($config->get('action_router')), new Action($config->get('action_error')));
+$route->dispatch(new Librecommerce\Components\Action($config->get('action_router')), new Librecommerce\Components\Action($config->get('action_error')));
 
 // Output
 $response->output();
